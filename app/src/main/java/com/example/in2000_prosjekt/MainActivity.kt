@@ -6,11 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
+
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.in2000_prosjekt.ui.screens.FavoriteScreen
+import com.example.in2000_prosjekt.ui.screens.RulesScreen
+import com.example.in2000_prosjekt.ui.screens.ShowMap
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("IN2000")
+                    MultipleScreenApp()
                 }
             }
         }
@@ -30,14 +36,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+fun MultipleScreenApp() {
+    val navController = rememberNavController()
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    IN2000_ProsjektTheme {
-        Greeting("Android")
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Map") {
+        composable("Map") { ShowMap( onNavigateToNext = { navController.navigate("Favorite") })  }
+        composable("Favorite") { FavoriteScreen(onNavigateToNext = { navController.navigate("Rules") }) }
+        composable("Rules") { RulesScreen(onNavigateToNext = { navController.navigate("Rules") }) }
     }
 }
+
