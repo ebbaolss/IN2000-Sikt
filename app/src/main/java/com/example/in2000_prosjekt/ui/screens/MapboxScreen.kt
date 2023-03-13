@@ -12,22 +12,22 @@ import com.mapbox.maps.dsl.cameraOptions
 @Composable
     fun ShowMap(onNavigateToNext: () -> Unit){
 
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        AndroidView(
-            modifier = Modifier,
-            factory = {context ->
-                MapView(context).apply {
-                    getMapboxMap().loadStyleUri("mapbox://styles/elisabethb/clf6t1z9z00b101pen0rvc1fu/draft") {
-                        cameraOptions{
-                            zoom(19.9)
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            AndroidView(
+                modifier = Modifier,
+                factory = {context ->
+                    MapView(context).apply {
+                        getMapboxMap().loadStyleUri("mapbox://styles/elisabethb/clf6t1z9z00b101pen0rvc1fu/draft") {
+                            cameraOptions{
+                                zoom(19.9)
+                            }
                         }
                     }
                 }
-            }
-        )
-    }
+            )
+        }
 }

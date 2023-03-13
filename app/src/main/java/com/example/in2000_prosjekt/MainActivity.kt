@@ -17,7 +17,6 @@ import com.example.in2000_prosjekt.ui.screens.FavoriteScreen
 import com.example.in2000_prosjekt.ui.screens.RulesScreen
 import com.example.in2000_prosjekt.ui.screens.ShowMap
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +38,7 @@ class MainActivity : ComponentActivity() {
 fun MultipleScreenApp() {
     val navController = rememberNavController()
 
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Map") {
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Rules") {
         composable("Map") { ShowMap( onNavigateToNext = { navController.navigate("Favorite") })  }
         composable("Favorite") { FavoriteScreen(onNavigateToNext = { navController.navigate("Rules") }) }
         composable("Rules") { RulesScreen(onNavigateToNext = { navController.navigate("Rules") }) }
