@@ -38,8 +38,9 @@ fun API_test(apiViewModel: ViewModel = viewModel(),
 
         Spacer(Modifier.height(25.dp))
 
-        Text(text = "Temperature = ${appUiState.locationForecast.air_temp}\n" +
-                "Cloud Area = ${appUiState.locationForecast.cloud_area_fraction}")
+        Text(text = "locationforecast = ${appUiState.locationForecast.toString()}\n"
+                // + "Cloud Area = ${appUiState.locationForecast[0].cloud_area_fraction}"
+        )
     }
 
 }

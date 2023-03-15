@@ -8,5 +8,5 @@ data class Nowcast(
     @SerializedName("precipitation_rate") var nedbor_rate : String,
     @SerializedName("relative_humidity") var humidity : String,
     @SerializedName("wind_from_direction") var wind_direction : String,
-    @SerializedName("wind_speed") var wind_speed : String,
+    @SerializedName("wind_speed") var wind_speed : String
 )

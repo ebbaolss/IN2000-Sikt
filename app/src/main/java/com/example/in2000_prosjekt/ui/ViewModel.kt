@@ -21,7 +21,7 @@ class ViewModel : ViewModel() {
 
     private val appUIstate = MutableStateFlow(
         AppUiState(
-            locationForecast = LocationForecast(),
+            locationForecast = listOf(),
             // nowcast =
         )
     )
