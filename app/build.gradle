@@ -69,4 +69,14 @@ dependencies {
     def nav_version = "2.5.3"
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    def ktor_version  = "2.2.3"
+
+    implementation "io.ktor:ktor-client-android:$ktor_version"
+    implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
+    implementation "io.ktor:ktor-serialization-gson:$ktor_version"
+
+    implementation("io.coil-kt:coil-compose:2.2.2")
 }
