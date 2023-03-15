@@ -34,7 +34,7 @@ class ViewModel : ViewModel() {
     private fun getLocation(){
         viewModelScope.launch (Dispatchers.IO) {
             val locationForecast = dataSource.fetchLocationForecast()
-            val nowCast = dataSource.fetchNowCast()
+            //val nowCast = dataSource.fetchNowCast()
         }
     }
 }

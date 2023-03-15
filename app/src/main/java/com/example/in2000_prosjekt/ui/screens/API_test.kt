@@ -10,15 +10,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.example.in2000_prosjekt.ui.ViewModel
 import com.example.in2000_prosjekt.ui.data.DataSource
 import com.example.in2000_prosjekt.ui.data.LocationForecast
 
 @Composable
-fun API_test(apiViewModel: ViewModel = viewModel(), onNavigateToNext: () -> Unit){
+fun API_test(apiViewModel: ViewModel = viewModel(),
+             onNavigateToNext: () -> Unit
+){
 
     val appUiState by apiViewModel.appUiState.collectAsState()
 
@@ -34,8 +38,10 @@ fun API_test(apiViewModel: ViewModel = viewModel(), onNavigateToNext: () -> Unit
 
         Spacer(Modifier.height(25.dp))
 
-        Text(text = "Temperature = ${appUiState.locationForecast.air_temp}")
-
+        Text(text = "Temperature = ${appUiState.locationForecast.air_temp}\n" +
+                "Cloud Area = ${appUiState.locationForecast.cloud_area_fraction}")
     }
 
 }
+
+

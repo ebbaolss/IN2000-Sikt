@@ -16,7 +16,7 @@ class DataSource (private val latitude: String,
         }
     }
     suspend fun fetchLocationForecast(): LocationForecast {
-        var coordinates: String = "lat=$latitude&long=$longtitude"
+        var coordinates: String = "lat=$latitude&lon=$longtitude"
         if (altitude != null) {
             coordinates += "&altitude=$altitude"
         }
@@ -26,7 +26,7 @@ class DataSource (private val latitude: String,
     suspend fun fetchNowCast(): Nowcast{
 
         //PLACEHOLDER NOT CORRECT URL
-        var coordinates: String = "lat=$latitude&long=$longtitude"
+        var coordinates: String = "lat=$latitude&lon=$longtitude"
         if (altitude != null) {
             coordinates += "&altitude=$altitude"
         }
