@@ -15,7 +15,11 @@ class DataSource (private val latitude: String,
             gson()
         }
     }
-    suspend fun fetchLocationForecast(): List<DayForecast> {
+    suspend fun fetchLocationForecast():
+            //test time:
+            //LocationForecast
+            List<DayForecast>
+    {
         var coordinates: String = "lat=$latitude&lon=$longtitude"
         if (altitude != null) {
             coordinates += "&altitude=$altitude"

@@ -4,8 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class DayForecast (
 
+        @SerializedName("time") var time : String
         //Valgt ut de viktigste parameterne til å begynne med
-        @SerializedName("time") var time : String,
+        /*  @SerializedName("time") var time : String,
         @SerializedName("symbol_code") var symbol : String,
         @SerializedName("air_temperature") var air_temp : Float,
         @SerializedName("air_temperature_max") var air_temp_max: Float,
@@ -22,4 +23,5 @@ data class DayForecast (
         @SerializedName("relative_humidity") var relative_humidity: Float,
         @SerializedName("wind_from_direction") var wind_direction: Float
 
+         */
 )
