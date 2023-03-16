@@ -46,7 +46,6 @@ fun MultipleScreenApp() {
         composable("Favorite") { FavoriteScreen(onNavigateToNext = { navController.navigate("Rules") }) }
         composable("Rules") { RulesScreen(onNavigateToNext = { navController.navigate("Rules") }) }
         composable("API") { API_test(onNavigateToNext = { navController.navigate("API") }) }
-
     }
 }
 

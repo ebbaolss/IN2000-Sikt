@@ -26,17 +26,15 @@ class APIViewModel : ViewModel() {
         getLocation()
     }
 
-    //exception handler for logging
-    val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
-        throwable.printStackTrace()
-    }
     private fun getLocation(){
         viewModelScope.launch (Dispatchers.IO) {
-            //Log.d(dataSource.fetchLocationForecast().toString(),"hei")
+
             _appUistate.update {
                 it.copy(locationForecast = dataSource.fetchLocationForecast()
                 )
             }
+            val model = dataSource.fetchLocationForecast()
+            println(model.properties?.timeseries?.get(0)!!.time)
             //val nowCast = dataSource.fetchNowCast()
         }
     }

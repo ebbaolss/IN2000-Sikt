@@ -19,8 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.data.DataSource
-import com.example.in2000_prosjekt.ui.data.LocationForecast
+
 
 @Composable
 fun API_test(
