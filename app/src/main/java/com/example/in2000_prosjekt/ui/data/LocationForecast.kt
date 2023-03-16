@@ -4,5 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class LocationForecast(
     //Valgt ut de viktigste parameterne til å begynne med
-    @SerializedName("time") var time : List<DayForecast> = listOf()
+    //@SerializedName("data") var data : List<DayForecast> = listOf(),
+    @SerializedName("time") var time : String
 )
