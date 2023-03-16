@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class DayForecast (
 
-        @SerializedName("time") var time : String
+        @SerializedName("symbol_code") var symbol : String
         //Valgt ut de viktigste parameterne til å begynne med
         /*  @SerializedName("time") var time : String,
         @SerializedName("symbol_code") var symbol : String,

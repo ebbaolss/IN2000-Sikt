@@ -7,6 +7,6 @@ import com.example.in2000_prosjekt.ui.data.Nowcast
 data class AppUiState(
     //test med time:
     //val locationForecast: String
-    val locationForecast: List<DayForecast>,
+    val locationForecast: List<DayForecast> = emptyList(),
     //val nowcast: Nowcast
 )
