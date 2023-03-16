@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.in2000_prosjekt.ui.data.DataSource
@@ -34,6 +35,7 @@ class ViewModel : ViewModel() {
     }
     private fun getLocation(){
         viewModelScope.launch (Dispatchers.IO+ coroutineExceptionHandler) {
+            Log.d(dataSource.fetchLocationForecast().toString(),"hei")
             appUIstate.update {
                 it.copy(locationForecast = dataSource.fetchLocationForecast()
                 )

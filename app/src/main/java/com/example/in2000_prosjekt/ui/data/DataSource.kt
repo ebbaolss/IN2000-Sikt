@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui.data
 
+import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -24,7 +25,9 @@ class DataSource (private val latitude: String,
         if (altitude != null) {
             coordinates += "&altitude=$altitude"
         }
-        return client.get("https://api.met.no/weatherapi/locationforecast/2.0/complete?$coordinates").body()
+        val ret : LocationForecast = client.get("https://api.met.no/weatherapi/locationforecast/2.0/complete?$coordinates").body()
+        Log.d(ret.data.toString(),"ret")
+        return ret.data
     }
 
     suspend fun fetchNowCast(): Nowcast{
