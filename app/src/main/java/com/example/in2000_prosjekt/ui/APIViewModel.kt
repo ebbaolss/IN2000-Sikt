@@ -1,11 +1,8 @@
 package com.example.in2000_prosjekt.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.in2000_prosjekt.ui.data.DataSource
-import com.example.in2000_prosjekt.ui.data.LocationForecast
-import com.example.in2000_prosjekt.ui.data.Nowcast
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ViewModel : ViewModel() {
+class APIViewModel : ViewModel() {
 
     val latitude : String = "61.6370"
     val longtitude: String = "8.3092"
@@ -22,8 +19,8 @@ class ViewModel : ViewModel() {
 
     val dataSource = DataSource(latitude, longtitude, altitude)
 
-    private val appUIstate = MutableStateFlow(AppUiState())
-    val appUiState: StateFlow<AppUiState> = appUIstate.asStateFlow()
+    private val _appUistate = MutableStateFlow(AppUiState())
+    val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
     init {
         getLocation()
@@ -34,9 +31,9 @@ class ViewModel : ViewModel() {
         throwable.printStackTrace()
     }
     private fun getLocation(){
-        viewModelScope.launch (Dispatchers.IO+ coroutineExceptionHandler) {
-            Log.d(dataSource.fetchLocationForecast().toString(),"hei")
-            appUIstate.update {
+        viewModelScope.launch (Dispatchers.IO) {
+            //Log.d(dataSource.fetchLocationForecast().toString(),"hei")
+            _appUistate.update {
                 it.copy(locationForecast = dataSource.fetchLocationForecast()
                 )
             }

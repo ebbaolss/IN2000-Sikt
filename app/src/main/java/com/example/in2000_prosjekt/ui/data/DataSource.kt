@@ -19,7 +19,7 @@ class DataSource (private val latitude: String,
     suspend fun fetchLocationForecast():
             //test time:
             //LocationForecast
-            List<DayForecast>
+            Map<String,Any>
     {
         var coordinates: String = "lat=$latitude&lon=$longtitude"
         if (altitude != null) {
