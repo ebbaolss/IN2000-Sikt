@@ -8,11 +8,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.in2000_prosjekt.ui.screens.API_test
 import com.example.in2000_prosjekt.ui.screens.FavoriteScreen
 import com.example.in2000_prosjekt.ui.screens.RulesScreen
 import com.example.in2000_prosjekt.ui.screens.ShowMap
@@ -26,7 +29,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {
+                ) { 
                     MultipleScreenApp()
                 }
             }
@@ -38,10 +41,12 @@ class MainActivity : ComponentActivity() {
 fun MultipleScreenApp() {
     val navController = rememberNavController()
 
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Map") {
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "API") {
         composable("Map") { ShowMap( onNavigateToNext = { navController.navigate("Favorite") })  }
         composable("Favorite") { FavoriteScreen(onNavigateToNext = { navController.navigate("Rules") }) }
         composable("Rules") { RulesScreen(onNavigateToNext = { navController.navigate("Rules") }) }
+        composable("API") { API_test(onNavigateToNext = { navController.navigate("API") }) }
     }
 }
+
 
