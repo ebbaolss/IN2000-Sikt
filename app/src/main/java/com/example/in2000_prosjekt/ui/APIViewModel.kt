@@ -3,6 +3,7 @@ package com.example.in2000_prosjekt.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.in2000_prosjekt.ui.data.DataSource
+import com.example.in2000_prosjekt.ui.data.DataSourceAlerts
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,9 +17,15 @@ class APIViewModel : ViewModel() {
     val latitude : String = "61.6370"
     val longtitude: String = "8.3092"
     val altitude: String = "2469"
+    /*
+    kommunenr for galhøpiggen
+    val county : String = "3434"
+    */
+    //kommunenr med farevarsler nå
+    val county : String = "54"
 
     val dataSource = DataSource(latitude, longtitude, altitude)
-    val testMet = DataSource("26.0832","70.4667","")
+    val dataMet = DataSourceAlerts(county)
 
     private val _appUistate = MutableStateFlow(AppUiState())
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
@@ -64,13 +71,14 @@ class APIViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _appUistate.update {
                 it.copy(
-                    metAlerts = dataSource.fetchMetAlert()
+                    metAlerts = dataMet.fetchMetAlert()
                 )
             }
-            val build = dataSource.fetchMetAlert()
-            println(" ALERT (Should say \"no\" ) : " + build.lang )
-            val build_test = testMet.fetchMetAlert()
-            println(" ALERT TESTMET : " + build_test.features?.get(0)?.data?.properties?.area)
+            val build = dataMet.fetchMetAlert()
+            println(" ALERT lang (Should say \"no\" ) : " + build.lang )
+            println(" ALERT TESTMET : " + build.features?.toString())
+            println(" ALERT type : " + build.type )
+            println(" ALERT lastChange : " + build.lastChange )
         }
     }
 }

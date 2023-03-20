@@ -2,6 +2,7 @@ package com.example.in2000_prosjekt.ui.data
 
 import android.icu.util.DateInterval
 import android.net.wifi.aware.AwareResources
+import com.google.gson.annotations.SerializedName
 
 data class Build (
     val features: List<Features>?,
@@ -10,20 +11,19 @@ data class Build (
     val type: String?
     )
 
-data class Features (
-    val data : AlertData?
-    )
-
+data class Features(
+    @SerializedName("") val feature: AlertData?
+)
 data class AlertData (
     val geometry: GeoData?,
     val properties: PropData?,
     val type: String?,
     //val interval burde være val when, men when er en operasjon..
-    val interval : Map<String, List<String>>?
+    @SerializedName("when") val tid : TimeInterval?
     )
 
 data class GeoData (
-    val coordinates : Coordinates?,
+    val coordinates : List<Coordinates>?,
     val type : String?
     )
 
@@ -36,7 +36,7 @@ data class PropData (
     val certainty : String?,
     val consequences : String?,
     // usikker på om county vil være Int eller List siden doku sier Int men viser list i json fil
-    val county: Integer?,
+    val county: List<Int?>?,
     val description : String?,
     val event : String?,
     val eventAwarenessName : String?,
@@ -52,9 +52,14 @@ data class PropData (
 )
 
 data class Resources (
-    val res : Map<String,String>?
+    val description: String?,
+    val mimeType : String?,
+    val uri : String?
     )
 
 data class Coordinates(
-    val coordinates: List<List<Float>>?
+    val coordinates: List<Float>?
+)
+data class TimeInterval(
+    val interval : List<String>?
 )
