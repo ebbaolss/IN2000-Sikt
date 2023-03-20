@@ -7,6 +7,6 @@ data class AppUiState(
     //test med time:
     //val locationForecast: String
     val locationForecast: Model? = null,
-    //val nowcast: Nowcas
+    val nowcast: Model? = null,
     val metAlerts : Build? = null
 )

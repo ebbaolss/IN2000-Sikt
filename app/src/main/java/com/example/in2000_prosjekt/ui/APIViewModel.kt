@@ -18,6 +18,7 @@ class APIViewModel : ViewModel() {
     val altitude: String = "2469"
 
     val dataSource = DataSource(latitude, longtitude, altitude)
+    val testMet = DataSource("26.0832","70.4667","")
 
     private val _appUistate = MutableStateFlow(AppUiState())
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
@@ -25,6 +26,7 @@ class APIViewModel : ViewModel() {
     init {
         getLocation()
         getAlert()
+        getNowCast()
     }
 
     private fun getLocation() {
@@ -36,8 +38,25 @@ class APIViewModel : ViewModel() {
                 )
             }
             val model = dataSource.fetchLocationForecast()
-            println("LOCATION : " + model.properties?.timeseries?.toString())
+            /* println("LOCATION TEMP : " + model.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature.toString())
+            println("WINDSPEED: " + model.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed.toString())
+            */
             //val nowCast = dataSource.fetchNowCast()
+        }
+    }
+
+    private fun getNowCast() {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            _appUistate.update {
+                it.copy(
+                    nowcast = dataSource.fetchNowCast()
+                )
+            }
+            val mod = dataSource.fetchNowCast()
+            /* println("NOWCAST TEMP : " + mod.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature.toString())
+            println("NOWCAST WIND : " + mod.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed.toString())
+             */
         }
     }
 
@@ -50,6 +69,8 @@ class APIViewModel : ViewModel() {
             }
             val build = dataSource.fetchMetAlert()
             println(" ALERT (Should say \"no\" ) : " + build.lang )
+            val build_test = testMet.fetchMetAlert()
+            println(" ALERT TESTMET : " + build_test.features?.get(0)?.data?.properties?.area)
         }
     }
 }
