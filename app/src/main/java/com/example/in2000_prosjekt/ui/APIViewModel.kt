@@ -24,18 +24,32 @@ class APIViewModel : ViewModel() {
 
     init {
         getLocation()
+        getAlert()
     }
 
-    private fun getLocation(){
-        viewModelScope.launch (Dispatchers.IO) {
+    private fun getLocation() {
+        viewModelScope.launch(Dispatchers.IO) {
 
             _appUistate.update {
-                it.copy(locationForecast = dataSource.fetchLocationForecast()
+                it.copy(
+                    locationForecast = dataSource.fetchLocationForecast()
                 )
             }
             val model = dataSource.fetchLocationForecast()
-            println(model.properties?.timeseries?.get(0)!!.time)
+            println("LOCATION : " + model.properties?.timeseries?.toString())
             //val nowCast = dataSource.fetchNowCast()
+        }
+    }
+
+    private fun getAlert(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _appUistate.update {
+                it.copy(
+                    metAlerts = dataSource.fetchMetAlert()
+                )
+            }
+            val build = dataSource.fetchMetAlert()
+            println(" ALERT : " + build.lang)
         }
     }
 }
