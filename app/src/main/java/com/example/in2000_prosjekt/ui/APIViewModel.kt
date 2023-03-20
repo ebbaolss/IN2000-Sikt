@@ -49,7 +49,7 @@ class APIViewModel : ViewModel() {
                 )
             }
             val build = dataSource.fetchMetAlert()
-            println(" ALERT : " + build.lang)
+            println(" ALERT (Should say \"no\" ) : " + build.lang )
         }
     }
 }
