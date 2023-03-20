@@ -1,7 +1,5 @@
 package com.example.in2000_prosjekt.ui.screens
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height

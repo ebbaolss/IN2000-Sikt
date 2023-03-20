@@ -15,7 +15,7 @@ class DataSourceAlerts (private val county: String){
     }
 
     suspend fun fetchMetAlert() : Build {
-        var strCounty: String = "county=$county"
+        val strCounty: String = "county=$county"
 
         println("METALERT URL: https://api.met.no/weatherapi/metalerts/1.1/.json?$strCounty")
         return client.get("https://api.met.no/weatherapi/metalerts/1.1/.json?$strCounty").body()
