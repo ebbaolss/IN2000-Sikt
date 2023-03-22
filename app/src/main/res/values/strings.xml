@@ -3,15 +3,15 @@
     <string name="mapbox_access_token">pk.eyJ1IjoiZWxpc2FiZXRoYiIsImEiOiJjbGY2c3N3dDAxYWxsM3ludHY5em5wMnJxIn0.YVrKFoHYA1sCJhgBCbhudw</string>
 
     <string-array name="rules">
-        <item>1. Planlegg turen og meld fra hvor du går.</item>
-        <item>2. Tilpass turen etter evne og forhold.</item>
-        <item>3. Ta hensyn til vær- og skredvarsel.</item>
-        <item>4. Vær forberedt på uvær og kulde, selv på korte turer.</item>
-        <item>5. Ta med nødvendig utstyr for å kunne hjelpe deg selv og andre.</item>
-        <item>6. Ta trygge veivalg. Gjenkjenn skredfarlig terreng og usikker is.</item>
-        <item>7. Bruk kart og kompass. Vit alltid hvor du er.</item>
-        <item>8. Vend i tide, det er ingen skam å snu.</item>
-        <item>9. Spar på kreftene og søk ly om nødvendig.</item>
+        <item>Planlegg turen og meld fra hvor du går.</item>
+        <item>Tilpass turen etter evne og forhold.</item>
+        <item>Ta hensyn til vær- og skredvarsel.</item>
+        <item>Vær forberedt på uvær og kulde, selv på korte turer.</item>
+        <item>Ta med nødvendig utstyr for å kunne hjelpe deg selv og andre.</item>
+        <item>Ta trygge veivalg. Gjenkjenn skredfarlig terreng og usikker is.</item>
+        <item>Bruk kart og kompass. Vit alltid hvor du er.</item>
+        <item>Vend i tide, det er ingen skam å snu.</item>
+        <item>Spar på kreftene og søk ly om nødvendig.</item>
     </string-array>
 
 </resources>
