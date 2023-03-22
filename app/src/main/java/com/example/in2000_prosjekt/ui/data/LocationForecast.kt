@@ -67,5 +67,4 @@ data class Details(
     var wind_from_direction: Float?,
     var wind_speed: Float?,
     var wind_speed_of_gust: Float?
-
 )
