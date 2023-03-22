@@ -1,17 +1,19 @@
 package com.example.in2000_prosjekt.ui.screens
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.R
+import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 
 @Composable
 fun RulesScreen(onNavigateToNext: () -> Unit){
@@ -36,8 +38,67 @@ fun RulesScreen(onNavigateToNext: () -> Unit){
             )
         }
     }
-
 }
 
-//class Rules {
-//}
+@Preview(showSystemUi = true)
+@Composable
+fun RulesScreenPreview(){
+
+    val rules: Array<String> = stringArrayResource(id = R.array.rules)
+
+    Column(
+        modifier = Modifier
+            .background(Sikt_lyseblå)
+    ) {
+        Box(
+            modifier = Modifier
+        )
+
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = "Fjellvettreglene",
+            textAlign = TextAlign.Center, //den er fortsatt ikke i midten
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(Modifier.height(30.dp))
+
+        var counter = 1
+        rules.forEach {
+            Row(modifier = Modifier
+                .padding(10.dp)
+            ) {
+
+                Text(
+                    text = "$counter. ",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = it,
+                    fontSize = 22.sp,
+                    fontFamily = FontFamily.SansSerif
+                )
+                Spacer(Modifier.height(50.dp))
+                counter++
+            }
+        }
+
+//        rules.forEach {
+//            Text(
+//                modifier = Modifier
+//                    .fillMaxWidth(),
+//                text = it,
+//                fontSize = 24.sp,
+//                fontFamily = FontFamily.SansSerif
+//            )
+//        }
+    }
+}
+
