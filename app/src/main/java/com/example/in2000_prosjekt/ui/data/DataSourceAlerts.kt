@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui.data
 
+import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -17,7 +18,7 @@ class DataSourceAlerts (private val county: String){
     suspend fun fetchMetAlert() : Build {
         val strCounty: String = "county=$county"
 
-        println("METALERT URL: https://api.met.no/weatherapi/metalerts/1.1/.json?$strCounty")
+        Log.d("METALERT","METALERT URL: https://api.met.no/weatherapi/metalerts/1.1/.json?$strCounty")
         return client.get("https://api.met.no/weatherapi/metalerts/1.1/.json?$strCounty").body()
     }
 }

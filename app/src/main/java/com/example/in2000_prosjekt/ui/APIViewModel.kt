@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.in2000_prosjekt.ui.data.DataSource
 import com.example.in2000_prosjekt.ui.data.DataSourceAlerts
-import kotlinx.coroutines.CoroutineExceptionHandler
 import com.example.in2000_prosjekt.ui.data.DataSourceSunrise
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,10 +14,10 @@ import kotlinx.coroutines.launch
 
 class APIViewModel : ViewModel() {
 
+    //for å teste
     val latitude : String = "61.6370"
     val longtitude: String = "8.3092"
     val altitude: String = "2469"
-
     val latitude2 : String = "59.933333"
     val longtitude2: String = "10.716667"
     /*
@@ -81,10 +80,11 @@ class APIViewModel : ViewModel() {
                 )
             }
             val build = dataMet.fetchMetAlert()
-            println(" ALERT lang (Should say \"no\" ) : " + build.lang )
-            println(" ALERT TESTMET : " + build.features?.toString())
-            println(" ALERT type : " + build.type )
-            println(" ALERT lastChange : " + build.lastChange )
+
+//            println(" ALERT lang (Should say \"no\" ) : " + build.lang )
+//            println(" ALERT TESTMET : " + build.features?.toString())
+//            println(" ALERT type : " + build.type )
+//            println(" ALERT lastChange : " + build.lastChange )
         }
     }
 
@@ -97,10 +97,11 @@ class APIViewModel : ViewModel() {
                 )
             }
             val model = dataSunrise.fetchSunrise()
+
             //println("LOCATION TEMP : " + model.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature.toString())
-            println("Sunrise time : " + model.properties?.sunrise?.time.toString())
-            println("sjekke when : " + model.tid?.interval.toString())
-            println("sjekke when med sted : " + model.tid?.interval?.get(0))
+//            println("Sunrise time : " + model.properties?.sunrise?.time.toString())
+//            println("sjekke when : " + model.tid?.interval.toString())
+//            println("sjekke when med sted : " + model.tid?.interval?.get(0))
         }
     }
 }

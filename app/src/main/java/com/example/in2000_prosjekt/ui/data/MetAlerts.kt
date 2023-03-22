@@ -50,6 +50,6 @@ data class Resources(
 )
 
 data class GeometryAlert(
-    val coordinates : List<List<List<Float>>?>?,
+    val coordinates : List<List<List<Float>>?>?, //fikse dette senere til polygon
     val type : String?
 )

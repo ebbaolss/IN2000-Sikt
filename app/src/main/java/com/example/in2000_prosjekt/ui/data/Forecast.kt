@@ -1,7 +1,7 @@
 package com.example.in2000_prosjekt.ui.data
 
-//Satte ? bak alle typene for øyeblikket i tilfelle noe er null, men får se nærmere på dette senere.
-//Denne kan brukes for nowcast også
+//Denne brukes både for locationForecast og NowCast
+
 data class Model(
     val type : String?,
     val geometry: Geometry?,
