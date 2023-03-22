@@ -26,7 +26,7 @@ class DataSource (private val latitude: String,
         return client.get("https://api.met.no/weatherapi/locationforecast/2.0/complete?$coordinates").body()
     }
 
-    suspend fun fetchNowCast(): Nowcast{
+    suspend fun fetchNowCast(): Model{
 
         //PLACEHOLDER NOT CORRECT URL
         var coordinates: String = "lat=$latitude&lon=$longtitude"
@@ -36,9 +36,5 @@ class DataSource (private val latitude: String,
         return client.get("https://api.met.no/weatherapi/nowcast/2.0/complete?$coordinates").body()
     }
 
-    suspend fun fetchMetAlert() : Build {
-        var coordinates: String = "lat=$latitude&lon=$longtitude"
 
-        return client.get("https://api.met.no/weatherapi/metalerts/1.1/.json?$coordinates").body()
-    }
 }
