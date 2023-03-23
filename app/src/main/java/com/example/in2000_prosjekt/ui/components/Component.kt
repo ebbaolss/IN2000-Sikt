@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,7 @@ fun Sikt_BottomBar() {
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
-        containerColor = Sikt_hvit,
+        containerColor = Sikt_lyseblå,
 
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
@@ -91,6 +92,20 @@ fun Sikt_BottomBar() {
 @Composable
 fun Sikt_topBar() {
 
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Sikt_favoritter_card(){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .background(Sikt_lyseblå),
+        shape = RoundedCornerShape(50.dp),
+        colors = CardDefaults.cardColors(Color(0xFFCDDCEB)) // vil sette bagrunnsfargen til sikt_lyseblå men ????
+    ) {
+        //todoooo
+    }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
