@@ -21,10 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.in2000_prosjekt.R
-import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
+import com.example.in2000_prosjekt.ui.theme.*
 
 @Composable
 fun Sikt_BottomBar() {
@@ -108,6 +105,28 @@ fun Sikt_favoritter_card(){
     }
 }
 
+
+@Composable
+fun Sikt_BlueButton(title : String) {
+    Button(
+        onClick = { /*TODO*/ },
+        colors = ButtonDefaults.buttonColors(Sikt_lyseblå),
+        modifier = Modifier.width(172.dp)
+    ) {
+        Text(text = title, color = Sikt_mellomblå, fontWeight = FontWeight.Bold)
+    }
+}
+
+@Composable
+fun Sikt_GreyButton(title : String) {
+    Button(
+        onClick = { /*TODO*/ },
+        colors = ButtonDefaults.buttonColors(Sikt_grå),
+        modifier = Modifier.width(172.dp)
+    ) {
+        Text(text = title, color = Sikt_sort, fontWeight = FontWeight.Bold)
+    }
+}
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)

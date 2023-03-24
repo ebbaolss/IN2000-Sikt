@@ -15,10 +15,7 @@ import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.in2000_prosjekt.ui.screens.API_test
-import com.example.in2000_prosjekt.ui.screens.FavoriteScreen
-import com.example.in2000_prosjekt.ui.screens.RulesScreen
-import com.example.in2000_prosjekt.ui.screens.ShowMap
+import com.example.in2000_prosjekt.ui.screens.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,11 +38,12 @@ class MainActivity : ComponentActivity() {
 fun MultipleScreenApp() {
     val navController = rememberNavController()
 
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Rules") {
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "LandingPage") {
         composable("Map") { ShowMap( onNavigateToNext = { navController.navigate("Favorite") })  }
         composable("Favorite") { FavoriteScreen(onNavigateToNext = { navController.navigate("Rules") }) }
         composable("Rules") { RulesScreen(onNavigateToNext = { navController.navigate("Rules") }) }
         composable("API") { API_test(onNavigateToNext = { navController.navigate("API") }) }
+        composable("LandingPage") { LandingPage( onNavigateToNext = { navController.navigate("Map") })  }
     }
 }
 

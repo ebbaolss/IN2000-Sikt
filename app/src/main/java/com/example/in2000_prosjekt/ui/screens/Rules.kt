@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,102 +22,73 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.in2000_prosjekt.R
+import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RulesScreen(onNavigateToNext: () -> Unit){
 
-    val rules: Array<String> = stringArrayResource(id = R.array.rules)
-
-    Column()  {
-
-        Text(
-            modifier = Modifier,
-            text = "Fjellvettreglene",
-            textAlign = TextAlign.Center, //den er fortsatt ikke i midten
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(Modifier.height(25.dp))
-
-        rules.forEach {
-            Text(text = it,
-                fontSize = 18.sp
-            )
-        }
-    }
-}
-
-@Preview(showSystemUi = true)
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RulesScreenPreview(){
-
-    val rules: Array<String> = stringArrayResource(id = R.array.rules)
-    Card(
-        modifier = Modifier
-            .padding(20.dp),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(Color(0xFFCDDCEB))
-    )   {
-
-        Text(
+    Scaffold(bottomBar = { Sikt_BottomBar() }) {
+        val rules: Array<String> = stringArrayResource(id = R.array.rules)
+        Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp),
-            text = "Fjellvettreglene",       
-            textAlign = TextAlign.Center,    
-            fontSize = 32.sp,                
-            fontWeight = FontWeight.Bold     
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .padding(20.dp),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(Color(0xFFCDDCEB))
         ) {
-            Box(
+
+            Text(
                 modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
+                text = "Fjellvettreglene",
+                textAlign = TextAlign.Center,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold
             )
 
-            Spacer(Modifier.height(30.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                )
 
-            var counter = 1
-            rules.forEach {
-                Row(modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 5.dp),
-                ) {
+                Spacer(Modifier.height(30.dp))
 
-                    Text(
-                        text = "$counter. ",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-
-                    )
-                    Text(
+                var counter = 1
+                rules.forEach {
+                    Row(
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        text = it,
-                        fontSize = 18.sp,
-                        fontFamily = FontFamily.SansSerif
-                    )
-                    Spacer(Modifier.height(50.dp))
-                    counter++
+                            .padding(horizontal = 20.dp, vertical = 5.dp),
+                    ) {
+
+                        Text(
+                            text = "$counter. ",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+
+                        )
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = it,
+                            fontSize = 18.sp,
+                            fontFamily = FontFamily.SansSerif
+                        )
+                        Spacer(Modifier.height(50.dp))
+                        counter++
+                    }
                 }
             }
         }
-
-//        rules.forEach {
-//            Text(
-//                modifier = Modifier
-//                    .fillMaxWidth(),
-//                text = it,
-//                fontSize = 24.sp,
-//                fontFamily = FontFamily.SansSerif
-//            )
-//        }
     }
 }
+
+
 
