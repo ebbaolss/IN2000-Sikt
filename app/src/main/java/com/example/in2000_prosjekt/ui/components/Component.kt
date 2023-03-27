@@ -2,9 +2,12 @@ package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.shapes.Shape
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -17,9 +20,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.theme.*
 
@@ -106,6 +117,67 @@ fun Sikt_favoritter_card(){
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Sikt_Card() {
+    Card(
+        colors = CardDefaults.cardColors(Sikt_lyseblå),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+            Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp, textAlign = TextAlign.Center)
+        }
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ToppCard(temperatur: String, sikt: String, nedbør: String, vind: String, varsel: String, soloppgang: String, solnedgang: String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp),
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+            .background(
+                Sikt_lyseblå
+            )
+            .fillMaxWidth()) {
+            Spacer(modifier = Modifier
+                .height(20.dp))
+            Text(text = "Galdhøpiggen", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+
+            Spacer(modifier = Modifier
+                .height(20.dp))
+
+            Text(text = "Temperatur: $temperatur", fontFamily = FontFamily.Monospace)
+            Spacer(modifier = Modifier
+                .height(20.dp))
+            Text(text = "Sikt: $sikt", fontFamily = FontFamily.Monospace)
+            Spacer(modifier = Modifier
+                .height(20.dp))
+            Text(text = "Nedbør: $nedbør", fontFamily = FontFamily.Monospace)
+            Spacer(modifier = Modifier
+                .height(20.dp))
+            Text(text = "Vind: $vind", fontFamily = FontFamily.Monospace)
+            Spacer(modifier = Modifier
+                .height(20.dp))
+            Text(text = "Varsel: $varsel", fontFamily = FontFamily.Monospace)
+            Spacer(modifier = Modifier
+                .height(30.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Text(text = "Soloppgang: $varsel", fontFamily = FontFamily.Monospace)
+                Text(text = "Solnedgang: $varsel", fontFamily = FontFamily.Monospace)
+            }
+            Spacer(modifier = Modifier
+                .height(50.dp))
+        }
+    }
+}
 
 @Composable
 fun Sikt_BlueButton(title : String) {
@@ -135,8 +207,6 @@ fun Sikt_GreyButton(title : String) {
 fun testComponent() {
 
     Scaffold(topBar = { Sikt_topBar() }, bottomBar = { Sikt_BottomBar() }) {
-        Column {
-            Sikt_favoritter_card()
-        }
+        ToppCard(temperatur = "", sikt = "", nedbør = "", vind = "", varsel = "" , soloppgang = "" , solnedgang = "" )
     }
 }
