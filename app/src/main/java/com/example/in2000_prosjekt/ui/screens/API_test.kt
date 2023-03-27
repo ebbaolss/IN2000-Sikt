@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.in2000_prosjekt.ui.APIViewModel
+import com.example.in2000_prosjekt.ui.components.ToppCard
 
 
 @Composable
@@ -27,7 +28,18 @@ fun API_test(
 
     val appUiState by apiViewModel.appUiState.collectAsState()
 
-    Column {
+    val temperatur = appUiState.nowcast?.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature.toString()
+    val sikt = appUiState.locationForecast?.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction.toString()
+    val nedbor = appUiState.locationForecast?.properties?.timeseries?.get(0)?.data?.instant?.details?.precipitation_amount.toString()
+    val vind = appUiState.nowcast?.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed.toString()
+    val varsel = "0"
+    val soloppgang = appUiState.sunrise?.properties?.sunrise?.time.toString()
+    val solnedgang = appUiState.sunrise?.properties?.sunset?.time.toString()
+
+
+    ToppCard(temperatur, sikt, nedbor, vind, varsel, soloppgang, solnedgang)
+
+    /*Column {
 
         Text(
             modifier = Modifier,
@@ -48,7 +60,8 @@ fun API_test(
         Text(text = "locationforecast = ${appUiState.locationForecast?.properties?.timeseries?.get(1)?.data?.next_12_hours?.summary?.values}\n")
 
         Text(text = "nowcast = ${appUiState.nowcast?.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.values?.toString()}")
-    }
+
+     */
 
 }
 
