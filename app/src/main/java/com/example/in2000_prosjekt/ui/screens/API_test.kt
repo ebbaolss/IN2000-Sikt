@@ -39,10 +39,15 @@ fun API_test(
 
         Spacer(Modifier.height(25.dp))
 
-        Text(
-            text = "locationforecast = ${appUiState.locationForecast?.properties?.timeseries?.get(1)?.data?.next_12_hours?.summary?.values}\n"
+        /*Text(
+            //text = "metAlerts = ${appUiState.metAlerts?.features?.get(0).toString()}"
+            //"locationforecast = ${appUiState.locationForecast?.properties?.timeseries?.get(1)?.data?.next_12_hours?.summary?.values}\n"
             // + "Cloud Area = ${appUiState.locationForecast[0].cloud_area_fraction}"
-        )
+        )*/
+        Text(text = "sunrise = ${appUiState.sunrise?.properties?.sunrise.toString()}")
+        Text(text = "locationforecast = ${appUiState.locationForecast?.properties?.timeseries?.get(1)?.data?.next_12_hours?.summary?.values}\n")
+
+        Text(text = "nowcast = ${appUiState.nowcast?.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.values?.toString()}")
     }
 
 }
