@@ -40,8 +40,7 @@ fun API_test(
         Spacer(Modifier.height(25.dp))
 
         Text(
-            text = ""
-            // + "locationforecast = ${appUiState.locationForecast?.properties?.timeseries?.get(1)?.data?.next_12_hours?.summary?.values}\n"
+            text = "locationforecast = ${appUiState.locationForecast?.properties?.timeseries?.get(1)?.data?.next_12_hours?.summary?.values}\n"
             // + "Cloud Area = ${appUiState.locationForecast[0].cloud_area_fraction}"
         )
     }

@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.statement.*
 import io.ktor.serialization.gson.*
 
 class DataSourceSunrise(private val latitude: String,
@@ -15,12 +16,16 @@ class DataSourceSunrise(private val latitude: String,
         }
     }
 
+    suspend fun authURL(URL: String) : HttpResponse {
+        return client.get(URL) {
+            headers {append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")}}
+    }
     suspend fun fetchSunrise(): SunriseBuild{
 
         //PLACEHOLDER NOT CORRECT URL
         val coordinates: String = "lat=$latitude&lon=$longtitude"
 
-        return client.get("https://api.met.no/weatherapi/sunrise/3.0/sun?$coordinates&offset=+01:00").body()
+        return authURL("https://gw-uio.intark.uh-it.no/in2000/weatherapi/sunrise/3.0/sun?$coordinates&offset=+01:00").body()
     }
 
 
