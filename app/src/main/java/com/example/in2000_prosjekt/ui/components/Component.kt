@@ -102,6 +102,7 @@ fun Sikt_favoritter_card(){
         colors = CardDefaults.cardColors(Color(0xFFCDDCEB)) // vil sette bagrunnsfargen til sikt_lyseblå men ????
     ) {
         //todoooo
+        Text(text = "Hei hei sikt")
     }
 }
 
@@ -134,6 +135,8 @@ fun Sikt_GreyButton(title : String) {
 fun testComponent() {
 
     Scaffold(topBar = { Sikt_topBar() }, bottomBar = { Sikt_BottomBar() }) {
-
+        Column {
+            Sikt_favoritter_card()
+        }
     }
 }
