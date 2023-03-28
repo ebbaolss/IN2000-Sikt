@@ -23,14 +23,15 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
+import com.example.in2000_prosjekt.ui.components.Sikt_sol
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RulesScreen(onNavigateToNext: () -> Unit){
+fun RulesScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit){
 
-    Scaffold(bottomBar = { Sikt_BottomBar() }) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules) }) {
         val rules: Array<String> = stringArrayResource(id = R.array.rules)
         Card(
             modifier = Modifier
@@ -38,7 +39,7 @@ fun RulesScreen(onNavigateToNext: () -> Unit){
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(Color(0xFFCDDCEB))
         ) {
-
+            Sikt_sol()
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -59,7 +60,7 @@ fun RulesScreen(onNavigateToNext: () -> Unit){
                     modifier = Modifier
                 )
 
-                Spacer(Modifier.height(30.dp))
+                Spacer(Modifier.height(10.dp))
 
                 var counter = 1
                 rules.forEach {
@@ -81,7 +82,7 @@ fun RulesScreen(onNavigateToNext: () -> Unit){
                             fontSize = 18.sp,
                             fontFamily = FontFamily.SansSerif
                         )
-                        Spacer(Modifier.height(50.dp))
+                        Spacer(Modifier.height(30.dp))
                         counter++
                     }
                 }

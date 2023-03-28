@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Menu
@@ -22,6 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,7 +38,7 @@ import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.theme.*
 
 @Composable
-fun Sikt_BottomBar() {
+fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit) {
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
@@ -46,7 +49,7 @@ fun Sikt_BottomBar() {
             Column (horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.width(120.dp)
             ){
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { onNavigateToMap() }) {
                     Icon(
                         Icons.Outlined.LocationOn,
                         contentDescription = "Localized description",
@@ -62,7 +65,7 @@ fun Sikt_BottomBar() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.width(120.dp)
             ) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { onNavigateToFav() }) {
                     Icon(
                         Icons.Outlined.Favorite,
                         contentDescription = "Localized description",
@@ -79,7 +82,7 @@ fun Sikt_BottomBar() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.width(120.dp)
             ) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { onNavigateToRules() }) {
                     Icon(
                         Icons.Outlined.Menu,
                         "",
@@ -96,11 +99,86 @@ fun Sikt_BottomBar() {
     }
 }
 
+@Composable
+fun Sikt_BottomBar2( ) {
+
+    BottomAppBar(
+        modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
+        containerColor = Sikt_lyseblå,
+
+        ) {
+        Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+            Column (horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(120.dp)
+            ){
+                IconButton(onClick = {  }) {
+                    Icon(
+                        Icons.Outlined.LocationOn,
+                        contentDescription = "Localized description",
+                        tint = Sikt_mellomblå,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(Sikt_lyseblå)
+                            .padding(5.dp))
+                }
+                Text(text = "Utforsk")
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(120.dp)
+            ) {
+                IconButton(onClick = {  }) {
+                    Icon(
+                        Icons.Outlined.Favorite,
+                        contentDescription = "Localized description",
+                        tint = Sikt_mellomblå,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(Sikt_lyseblå)
+                            .padding(5.dp)
+                    )
+                }
+                Text(text = "Favoritter")
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(120.dp)
+            ) {
+                IconButton(onClick = {  }) {
+                    Icon(
+                        Icons.Outlined.Menu,
+                        "",
+                        tint = Sikt_mellomblå,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(Sikt_lyseblå)
+                            .padding(5.dp)
+                    )
+                }
+                Text(text = "Fjellvettreglene")
+            }
+        }
+    }
+}
 
 @Composable
-fun Sikt_topBar() {
-
+fun Sikt_favoritt_tekst() {
+    CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
+        Text(text = "Favoritter", fontSize = 40.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(10.dp))
+    })
 }
+
+@Composable
+fun Sikt_sol() {
+    Image(
+        painter = painterResource(id = R.drawable.sol),
+        contentDescription = "sol",
+        contentScale = ContentScale.FillWidth,
+        modifier = Modifier
+            .fillMaxWidth()
+        )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_favoritter_card(){
@@ -206,7 +284,5 @@ fun Sikt_GreyButton(title : String) {
 @Composable
 fun testComponent() {
 
-    Scaffold(topBar = { Sikt_topBar() }, bottomBar = { Sikt_BottomBar() }) {
-        ToppCard(temperatur = "", sikt = "", nedbør = "", vind = "", varsel = "" , soloppgang = "" , solnedgang = "" )
-    }
+
 }

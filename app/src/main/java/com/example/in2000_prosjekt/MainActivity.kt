@@ -38,10 +38,14 @@ class MainActivity : ComponentActivity() {
 fun MultipleScreenApp() {
     val navController = rememberNavController()
 
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "API") {
-        composable("Map") { ShowMap( onNavigateToNext = { navController.navigate("Favorite") })  }
-        composable("Favorite") { FavoriteScreen(onNavigateToNext = { navController.navigate("Rules") }) }
-        composable("Rules") { RulesScreen(onNavigateToNext = { navController.navigate("Rules") }) }
+    var map = { navController.navigate("Map") }
+    var favorite = { navController.navigate("Favorite") }
+    var rules = { navController.navigate("Rules") }
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
+        composable("Start") { StartPage( onNavigateToNext = { navController.navigate("LandingPage") })  }
+        composable("Map") { ShowMap(map, favorite, rules)  }
+        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToRules = rules) }
+        composable("Rules") { RulesScreen(map, favorite, rules) }
         composable("API") { API_test(onNavigateToNext = { navController.navigate("API") }) }
         composable("LandingPage") { LandingPage( onNavigateToNext = { navController.navigate("Map") })  }
     }
