@@ -16,9 +16,9 @@ import com.mapbox.maps.dsl.cameraOptions
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-    fun ShowMap(onNavigateToNext: () -> Unit){
+    fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit){
 
-        Scaffold(bottomBar = { Sikt_BottomBar()}) {
+        Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules)}) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
