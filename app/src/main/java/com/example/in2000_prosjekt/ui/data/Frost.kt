@@ -17,7 +17,7 @@ data class Frost_API_Respons(
     @SerializedName("offset"           ) var offset           : Int?            = null,
     @SerializedName("totalItemCount"   ) var totalItemCount   : Int?            = null,
     @SerializedName("currentLink"      ) var currentLink      : String?         = null,
-    @SerializedName("data"             ) var data             : ArrayList<Data> = arrayListOf()
+    @SerializedName("data"             ) var Frost_data             : ArrayList<DataFrost> = arrayListOf()
 
 )
 

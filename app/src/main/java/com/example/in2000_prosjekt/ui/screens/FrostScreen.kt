@@ -16,6 +16,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.in2000_prosjekt.ui.data.Frost_API_Respons
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,7 +105,7 @@ https://m3.material.io/components/date-pickers/overview
             var etUiState_MedRespons = UIState.Svar
 
             if (etUiState_MedRespons != null) {
-                VarResponsCard(Respons = etUiState_MedRespons)
+                VarResponsCard(Response = etUiState_MedRespons)
             }
 
         }
@@ -114,12 +115,12 @@ https://m3.material.io/components/date-pickers/overview
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun VarResponsCard (Respons: FrostViewModel) {
+fun VarResponsCard (Response: Frost_API_Respons) {
 
     Card (modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)) {
-        Text(Respons.data.get(0).observations.get(0).value.toString(), modifier = Modifier.padding (16.dp)) // velg først:data.get(0) fordi data bare har 1 eleemnt i data:  kl.1200. OGså .observations.size.toString(), F
+        Text(Response.Frost_data.get(0).observations.get(0).value.toString(), modifier = Modifier.padding (16.dp)) // velg først:data.get(0) fordi data bare har 1 eleemnt i data:  kl.1200. OGså .observations.size.toString(), F
 
     }
 }
