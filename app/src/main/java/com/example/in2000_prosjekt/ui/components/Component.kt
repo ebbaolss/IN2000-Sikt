@@ -38,7 +38,7 @@ import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.theme.*
 
 @Composable
-fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit) {
+fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, favoritt : Color, map : Color, rules : Color) {
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
@@ -50,13 +50,17 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.width(120.dp)
             ){
                 IconButton(onClick = { onNavigateToMap() }) {
+                    var iconfarge = Sikt_mellomblå
+                    if (map == Sikt_mellomblå) {
+                        iconfarge = Sikt_hvit
+                    }
                     Icon(
                         Icons.Outlined.LocationOn,
                         contentDescription = "Localized description",
-                        tint = Sikt_mellomblå,
+                        tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(Sikt_lyseblå)
+                            .background(map)
                             .padding(5.dp))
                 }
                 Text(text = "Utforsk")
@@ -65,14 +69,19 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.width(120.dp)
             ) {
+
                 IconButton(onClick = { onNavigateToFav() }) {
+                    var iconfarge = Sikt_mellomblå
+                    if (favoritt == Sikt_mellomblå) {
+                        iconfarge = Sikt_hvit
+                    }
                     Icon(
                         Icons.Outlined.Favorite,
                         contentDescription = "Localized description",
-                        tint = Sikt_mellomblå,
+                        tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(Sikt_lyseblå)
+                            .background(favoritt)
                             .padding(5.dp)
                     )
                 }
@@ -83,13 +92,17 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.width(120.dp)
             ) {
                 IconButton(onClick = { onNavigateToRules() }) {
+                    var iconfarge = Sikt_mellomblå
+                    if (rules == Sikt_mellomblå) {
+                        iconfarge = Sikt_hvit
+                    }
                     Icon(
                         Icons.Outlined.Menu,
                         "",
-                        tint = Sikt_mellomblå,
+                        tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(Sikt_lyseblå)
+                            .background(rules)
                             .padding(5.dp)
                     )
                 }

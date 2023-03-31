@@ -10,6 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.in2000_prosjekt.ui.components.Sikt_BlueButton
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
+import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
 import com.mapbox.maps.MapView
 import com.mapbox.maps.dsl.cameraOptions
 
@@ -18,7 +21,7 @@ import com.mapbox.maps.dsl.cameraOptions
 @Composable
     fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit){
 
-        Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules)}) {
+        Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_lyseblå, rules = Sikt_lyseblå, map = Sikt_mellomblå)}) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier

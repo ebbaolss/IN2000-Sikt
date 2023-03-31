@@ -22,9 +22,7 @@ import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_favoritt_tekst
 import com.example.in2000_prosjekt.ui.components.ToppCard
-import com.example.in2000_prosjekt.ui.theme.Sikt_grønn
-import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
+import com.example.in2000_prosjekt.ui.theme.*
 
 //class Favorite {
 //
@@ -44,7 +42,7 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
     val soloppgang = appUiState.sunrise?.properties?.sunrise?.time.toString()
     val solnedgang = appUiState.sunrise?.properties?.sunset?.time.toString()
 
-    Scaffold(topBar = { Sikt_favoritt_tekst()}, bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules)}) {
+    Scaffold(topBar = { Sikt_favoritt_tekst()}, bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_mellomblå, rules = Sikt_lyseblå, map = Sikt_lyseblå)}) {
         LazyColumn(
         ){
             item {
