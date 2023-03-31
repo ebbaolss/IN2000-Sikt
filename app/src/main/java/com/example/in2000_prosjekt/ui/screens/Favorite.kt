@@ -1,6 +1,7 @@
 package com.example.in2000_prosjekt.ui.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -53,6 +54,7 @@ fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, s
     //alertinfo: AlertInfo
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit
 ) {
+    Log.d("ebba", "her")
     /*Scaffold(topBar = { Sikt_favoritt_tekst()}, bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules)}) {
 
     val temperatur = appUiState.nowcast?.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature.toString()
