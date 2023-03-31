@@ -1,14 +1,29 @@
 package com.example.in2000_prosjekt.ui
 
-import com.example.in2000_prosjekt.ui.data.Build
-import com.example.in2000_prosjekt.ui.data.Model
-import com.example.in2000_prosjekt.ui.data.SunriseBuild
-
-data class AppUiState(
-    //test med time:
-    //val locationForecast: String
-    val locationForecast: Model? = null,
-    val nowcast: Model? = null,
-    val metAlerts : Build? = null,
-    val sunrise : SunriseBuild? = null
+data class LocationInfo( //gi ting navn med også L på slutten
+    val temperatureL: Float,
+    val fog_area_fractionL : Float,
+    val rainL : Float
 )
+data class NowCastInfo( //sette N eller Now på slutten
+    val temperatureNow: Float,
+    val windN : Float
+)
+data class SunriseInfo( //sett S på slutten
+    val sunriseS: String,
+    val sunsetS: String
+)
+//data class AlertInfo(
+//    val language: String,
+//)
+
+sealed interface AppUiState2 {
+    data class Success(
+        val locationInfo: LocationInfo,
+        val nowCastDef: NowCastInfo,
+        val sunrise: SunriseInfo,
+        //val alert: AlertInfo
+    ) : AppUiState2
+    object Error : AppUiState2
+    object Loading : AppUiState2
+}
