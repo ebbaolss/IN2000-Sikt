@@ -35,6 +35,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.in2000_prosjekt.R
+import com.example.in2000_prosjekt.ui.LocationInfo
+import com.example.in2000_prosjekt.ui.NowCastInfo
+import com.example.in2000_prosjekt.ui.SunriseInfo
 import com.example.in2000_prosjekt.ui.theme.*
 
 @Composable
@@ -224,7 +227,10 @@ fun Sikt_Card() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ToppCard(temperatur: String, sikt: String, nedbør: String, vind: String, varsel: String, soloppgang: String, solnedgang: String) {
+fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
+    //alertinfo: AlertInfo
+) {
+    val varsel = "0" //midlertidlig, egt metAlert som skal brukes
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -242,27 +248,27 @@ fun ToppCard(temperatur: String, sikt: String, nedbør: String, vind: String, va
             Spacer(modifier = Modifier
                 .height(20.dp))
 
-            Text(text = "Temperatur: $temperatur", fontFamily = FontFamily.Monospace)
+            Text(text = "Temperatur: ${nowcastinfo.temperatureNow}", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(20.dp))
-            Text(text = "Sikt: $sikt", fontFamily = FontFamily.Monospace)
+            Text(text = "Tåke: ${weatherinfo.fog_area_fractionL}", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(20.dp))
-            Text(text = "Nedbør: $nedbør", fontFamily = FontFamily.Monospace)
+            Text(text = "Nedbør: ${weatherinfo.rainL}", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(20.dp))
-            Text(text = "Vind: $vind", fontFamily = FontFamily.Monospace)
+            Text(text = "Vind: ${nowcastinfo.windN}", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(20.dp))
             Text(text = "Varsel: $varsel", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(30.dp))
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                //horizontalArrangement = Arrangement.SpaceEvenly  endret fra row til column, ds måtte denne kommenteres ut
             ) {
-                Text(text = "Soloppgang: $varsel", fontFamily = FontFamily.Monospace)
-                Text(text = "Solnedgang: $varsel", fontFamily = FontFamily.Monospace)
+                Text(text = "Soloppgang: ${sunriseinfo.sunriseS}", fontFamily = FontFamily.Monospace)
+                Text(text = "Solnedgang: ${sunriseinfo.sunsetS}", fontFamily = FontFamily.Monospace)
             }
             Spacer(modifier = Modifier
                 .height(50.dp))
@@ -296,6 +302,4 @@ fun Sikt_GreyButton(title : String) {
 @Preview(showSystemUi = true)
 @Composable
 fun testComponent() {
-
-
 }

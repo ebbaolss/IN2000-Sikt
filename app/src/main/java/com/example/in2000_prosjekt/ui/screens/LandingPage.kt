@@ -27,9 +27,9 @@ fun LandingPage(onNavigateToNext: () -> Unit){
         .background(Sikt_lyseblå)) {
         Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceEvenly) {
             Spacer(modifier = Modifier.height(50.dp))
-            Text(text = "planlegg tur", fontSize = 32.sp)
-            Text(text = "få informasjon", fontSize = 32.sp)
-            Text(text = "lagre favoritter", fontSize = 32.sp)
+            Text(text = "Planlegg tur", fontSize = 32.sp)
+            Text(text = "Få informasjon", fontSize = 32.sp)
+            Text(text = "Lagre favoritter", fontSize = 32.sp)
             Spacer(modifier = Modifier.height(100.dp))
             Sikt_BlueButton(title = "Kom igang")
             Spacer(modifier = Modifier.height(20.dp))

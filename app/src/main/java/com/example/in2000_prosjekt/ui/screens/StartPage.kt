@@ -16,7 +16,6 @@ import androidx.compose.ui.layout.ContentScale
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
-
 @Composable
 fun StartPage(onNavigateToNext: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {

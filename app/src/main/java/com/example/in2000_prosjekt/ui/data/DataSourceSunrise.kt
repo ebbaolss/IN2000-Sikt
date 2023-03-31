@@ -7,8 +7,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.statement.*
 import io.ktor.serialization.gson.*
 
-class DataSourceSunrise(private val latitude: String,
-                        private val longtitude: String) {
+class DataSourceSunrise(val basePath:String) {
 
     private val client = HttpClient() {
         install(ContentNegotiation) {
@@ -20,12 +19,12 @@ class DataSourceSunrise(private val latitude: String,
         return client.get(URL) {
             headers {append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")}}
     }
-    suspend fun fetchSunrise(): SunriseBuild{
+    suspend fun fetchSunrise(latitude: String, longtitude: String): SunriseBuild{
 
         //PLACEHOLDER NOT CORRECT URL
         val coordinates: String = "lat=$latitude&lon=$longtitude"
 
-        return authURL("https://gw-uio.intark.uh-it.no/in2000/weatherapi/sunrise/3.0/sun?$coordinates&offset=+01:00").body()
+        return authURL("$basePath/sunrise/3.0/sun?$coordinates&offset=+01:00").body()
     }
 
 
