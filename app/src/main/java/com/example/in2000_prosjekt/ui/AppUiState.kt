@@ -16,7 +16,10 @@ data class SunriseInfo( //sett S på slutten
 data class AlertInfo(
     val areaA: String,
     val typeA: String,
-    val consequenseA: String
+    val consequenseA: String,
+    val recomendationA : String,
+    val descriptionA : String,
+    val alertTypeA: String
 )
 
 sealed interface AppUiState2 {
@@ -24,7 +27,7 @@ sealed interface AppUiState2 {
         val locationInfo: LocationInfo,
         val nowCastDef: NowCastInfo,
         val sunrise: SunriseInfo,
-        val alert: AlertInfo
+        val alertList: MutableList<AlertInfo>
     ) : AppUiState2
     object Error : AppUiState2
     object Loading : AppUiState2

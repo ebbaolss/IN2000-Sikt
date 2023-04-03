@@ -36,7 +36,7 @@ fun AlertScreen(apiViewModel: APIViewModel = viewModel(),
         is AppUiState2.Error -> Text (text = "error")
         is AppUiState2.Success -> {
             AlertScreenSuccess(
-                alertinfo = (appUiState as AppUiState2.Success).alert,
+                alertinfo = (appUiState as AppUiState2.Success).alertList,
                 onNavigateToMap,
                 onNavigateToFav,
                 onNavigateToRules
@@ -48,7 +48,7 @@ fun AlertScreen(apiViewModel: APIViewModel = viewModel(),
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlertScreenSuccess(alertinfo: AlertInfo,
+fun AlertScreenSuccess(alertinfo: MutableList<AlertInfo>,
                        onNavigateToMap: () -> Unit,
                        onNavigateToFav: () -> Unit,
                        onNavigateToRules: () -> Unit){
@@ -56,7 +56,9 @@ fun AlertScreenSuccess(alertinfo: AlertInfo,
     Scaffold( bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_mellomblå, rules = Sikt_lyseblå, map = Sikt_lyseblå) })
     {
         Column{
-            Alert_Card(alert = alertinfo)
+            alertinfo.forEach {
+                Alert_Card(alert = it)
+            }
         }
     }
 

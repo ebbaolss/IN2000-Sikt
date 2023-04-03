@@ -230,7 +230,7 @@ fun Sikt_Card() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
-    //alertinfo: AlertInfo
+    alertinfo: MutableList<AlertInfo>
 ) {
     val varsel = "0" //midlertidlig, egt metAlert som skal brukes
     Card(
@@ -243,6 +243,12 @@ fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: S
                 Sikt_lyseblå
             )
             .fillMaxWidth()) {
+
+            if (alertinfo.size != 0){
+                AlertButton(alertinfo.get(0).alertTypeA){
+
+                }
+            }
             Spacer(modifier = Modifier
                 .height(20.dp))
             Text(text = "Galdhøpiggen", fontSize = 30.sp, fontWeight = FontWeight.Bold)
@@ -275,6 +281,15 @@ fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: S
             Spacer(modifier = Modifier
                 .height(50.dp))
         }
+    }
+}
+
+@Composable
+fun AlertButton(alertType : String, onButtonClick: () -> Unit){
+    Button(
+        onClick = { onButtonClick() }
+    ) {
+
     }
 }
 
@@ -314,7 +329,9 @@ fun Alert_Card(alert: AlertInfo){
             //Her skal det stå hvilket sted, placeholder nå
             Text(text = "Sted: " + alert.areaA , fontSize = 30.sp, fontWeight = FontWeight.Bold)
             Text(text = "Type: " + alert.typeA, fontFamily = FontFamily.Monospace)
+            Text(text = "Beskrivelse: "+ alert.descriptionA, fontFamily = FontFamily.Monospace)
             Text(text = "Konsekvens: " + alert.consequenseA, fontFamily = FontFamily.Monospace)
+            Text(text = "Anbefaling: " + alert.recomendationA, fontFamily = FontFamily.Monospace)
 
 
         //level, type, area, consequenses, instruction

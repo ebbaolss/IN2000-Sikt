@@ -28,7 +28,7 @@ class APIViewModel : ViewModel() {
     val county : String = "3434"
     */
     //kommunenr med farevarsler nå
-    val county : String = "45"
+    val county : String = "54"
 
     val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
@@ -57,7 +57,7 @@ class APIViewModel : ViewModel() {
                     locationInfo = locationP,
                     nowCastDef = nowCastP,
                     sunrise = sunsetP,
-                    alert = alertP
+                    alertList = alertP
                 )
             }
         }
@@ -117,33 +117,52 @@ class APIViewModel : ViewModel() {
         }
     }
 
-    private fun getAlert() : Deferred<AlertInfo>{
+    private fun getAlert() : Deferred<MutableList<AlertInfo>>{
         return viewModelScope.async(Dispatchers.IO) {
             val alert = dataMet.fetchMetAlert(county)
+
+            var alertList : MutableList<AlertInfo> = mutableListOf()
+            //Dette er klønete, men appen kræsjer ikke hvis det ikke er fare
             var area : String?
             var type : String?
             var cons : String?
+            var rec : String?
+            var desc: String?
+            var alertType: String?
 
-            if (alert.features?.size != 0) {
-                val prop = alert.features?.get(0)?.properties
+            alert.features?.forEach{
+                val prop = it.properties
 
                 area = prop?.area
                 type = prop?.eventAwarenessName
                 cons = prop?.consequences
-            } else {
+                rec = prop?.instruction
+                desc = prop?.description
+                alertType = prop?.awareness_type
+
+                val alertF = AlertInfo(
+                    areaA = area!!,
+                    typeA = type!!,
+                    consequenseA = cons!!,
+                    recomendationA = rec!!,
+                    descriptionA = desc!!,
+                    alertTypeA = alertType!!
+                )
+
+                alertList.add(alertF)
+            }
+
+            if (alert.features?.size == 0){
                 area = "Null"
                 type = "Null"
                 cons = "Null"
+                rec = "Null"
+                desc = "Null"
             }
 
-            //Log.d("area", area.toString())
 
-            val alertF = AlertInfo(
-                areaA = area!!,
-                typeA = type!!,
-                consequenseA = cons!!
-                )
-            return@async alertF
+            //Log.d("area", area.toString())
+            return@async alertList
         }
 }
 
