@@ -129,6 +129,7 @@ class APIViewModel : ViewModel() {
             var rec : String?
             var desc: String?
             var alertType: String?
+            var alertLevel: String?
 
             alert.features?.forEach{
                 val prop = it.properties
@@ -139,6 +140,7 @@ class APIViewModel : ViewModel() {
                 rec = prop?.instruction
                 desc = prop?.description
                 alertType = prop?.awareness_type
+                alertLevel = prop?.awareness_level
 
                 val alertF = AlertInfo(
                     areaA = area!!,
@@ -146,19 +148,13 @@ class APIViewModel : ViewModel() {
                     consequenseA = cons!!,
                     recomendationA = rec!!,
                     descriptionA = desc!!,
-                    alertTypeA = alertType!!
+                    alertTypeA = alertType!!,
+                    alertLevelA = alertLevel!!
                 )
 
                 alertList.add(alertF)
             }
 
-            if (alert.features?.size == 0){
-                area = "Null"
-                type = "Null"
-                cons = "Null"
-                rec = "Null"
-                desc = "Null"
-            }
 
 
             //Log.d("area", area.toString())

@@ -28,7 +28,7 @@ fun API_test(
                 weatherinfo = (appUiState as AppUiState2.Success).locationInfo,
                 nowcastinfo = (appUiState as AppUiState2.Success).nowCastDef,
                 sunriseinfo = (appUiState as AppUiState2.Success).sunrise,
-                //alertinfo = (appUiState as AppUiState2.Success).alert
+                alertinfo = (appUiState as AppUiState2.Success).alertList
             ) //endre dette til en bedre måte etterhvert?
 
         }

@@ -19,7 +19,8 @@ data class AlertInfo(
     val consequenseA: String,
     val recomendationA : String,
     val descriptionA : String,
-    val alertTypeA: String
+    val alertTypeA: String,
+    val alertLevelA: String
 )
 
 sealed interface AppUiState2 {
