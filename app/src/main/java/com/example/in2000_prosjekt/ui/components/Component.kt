@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -301,10 +302,12 @@ fun AlertButton(alertType : String, alertLevel : String, onButtonClick: () -> Un
     val type = typebind[1].split("-")
     val level = alertLevel.split("; ")
 
-
     val buttonimage = "${type[0]}_${level[1]}"
+    Log.d("ALERT: ", buttonimage)
+
     val context = LocalContext.current.applicationContext
     val id = context.resources.getIdentifier(buttonimage, "drawable", context.packageName)
+
 
     Image(modifier = Modifier.clickable { onButtonClick() },
         //hardkodet inn snow_yellow for test
