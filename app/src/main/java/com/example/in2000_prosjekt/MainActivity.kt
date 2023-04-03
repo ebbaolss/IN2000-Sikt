@@ -41,13 +41,14 @@ fun MultipleScreenApp() {
     var map = { navController.navigate("Map") }
     var favorite = { navController.navigate("Favorite") }
     var rules = { navController.navigate("Rules") }
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Alert") {
         composable("Start") { StartPage( onNavigateToNext = { navController.navigate("LandingPage") })  }
         composable("Map") { ShowMap(map, favorite, rules)  }
         composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToRules = rules) }
         composable("Rules") { RulesScreen(map, favorite, rules) }
         composable("API") { API_test(onNavigateToNext = { navController.navigate("API") }) }
         composable("LandingPage") { LandingPage( onNavigateToNext = { navController.navigate("Map") })  }
+        composable("Alert") { AlertScreen( onNavigateToMap = { map }, onNavigateToFav = { favorite }, onNavigateToRules = rules) }
     }
 }
 

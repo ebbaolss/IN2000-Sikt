@@ -35,6 +35,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.in2000_prosjekt.R
+import com.example.in2000_prosjekt.ui.AlertInfo
+import com.example.in2000_prosjekt.ui.data.Build
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.SunriseInfo
@@ -295,6 +297,28 @@ fun Sikt_GreyButton(title : String) {
         modifier = Modifier.width(172.dp)
     ) {
         Text(text = title, color = Sikt_sort, fontWeight = FontWeight.Bold)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Alert_Card(alert: AlertInfo){
+    Card(
+      modifier = Modifier.fillMaxWidth()
+    ){
+        Column(
+            //Spacer
+            modifier = Modifier
+                .padding(20.dp)
+        ){
+            //Her skal det stå hvilket sted, placeholder nå
+            Text(text = "Sted: " + alert.areaA , fontSize = 30.sp, fontWeight = FontWeight.Bold)
+            Text(text = "Type: " + alert.typeA, fontFamily = FontFamily.Monospace)
+            Text(text = "Konsekvens: " + alert.consequenseA, fontFamily = FontFamily.Monospace)
+
+
+        //level, type, area, consequenses, instruction
+        }
     }
 }
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

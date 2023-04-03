@@ -28,10 +28,10 @@ class APIViewModel : ViewModel() {
     val county : String = "3434"
     */
     //kommunenr med farevarsler nå
-    val county : String = "42"
+    val county : String = "45"
 
     val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    val dataMet = DataSourceAlerts(county)
+    val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
 
     private val _appUistate: MutableStateFlow< AppUiState2 > = MutableStateFlow(AppUiState2.Loading)
@@ -45,19 +45,19 @@ class APIViewModel : ViewModel() {
             val nowCastDeferred = getNowCast()
             val locationDeferred = getLocation()
             val sunsetDeferred = getSunrise()
-            //val alertDeferred = getAlert()
+            val alertDeferred = getAlert()
 
             val nowCastP = nowCastDeferred.await()
             val locationP = locationDeferred.await()
             val sunsetP = sunsetDeferred.await()
-            //val alertP = alertDeferred.await()
+            val alertP = alertDeferred.await()
 
             _appUistate.update {
                 AppUiState2.Success(
                     locationInfo = locationP,
                     nowCastDef = nowCastP,
                     sunrise = sunsetP,
-                    //alert = alertP
+                    alert = alertP
                 )
             }
         }
@@ -117,34 +117,34 @@ class APIViewModel : ViewModel() {
         }
     }
 
-//      IKKE FÅTT METALERT TIL Å FUNKE, DET KRASJER HELE APPEN NÅ
-//      SÅ HAR KOMMENTERT UT METALERT HER I VIEWMODEL, APPUISTATE OG API-TEST SCREEN
+    private fun getAlert() : Deferred<AlertInfo>{
+        return viewModelScope.async(Dispatchers.IO) {
+            val alert = dataMet.fetchMetAlert(county)
+            var area : String?
+            var type : String?
+            var cons : String?
 
-//    private fun getAlert() : Deferred<AlertInfo>{
-//        return viewModelScope.async(Dispatchers.IO) {
-//
-//              val alert = dataMet.fetchMetAlert(county)
-//
-//              val language = alert.type
-//              Log.d("alert", language.toString())
-//
-//              val alertF = AlertInfo(
-//                  language = language!!
-//              )
-//              return@async alertF
-//        }
-//    }
+            if (alert.features?.size != 0) {
+                val prop = alert.features?.get(0)?.properties
 
-// DET GAMLE METALERT
-//    private fun getAlert(){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            _appUistate.update {
-//                it.copy(
-//                    metAlerts = dataMet.fetchMetAlert()
-//                )
-//            }
-//            val build = dataMet.fetchMetAlert()
-//
-//        }
-//    }
+                area = prop?.area
+                type = prop?.eventAwarenessName
+                cons = prop?.consequences
+            } else {
+                area = "Null"
+                type = "Null"
+                cons = "Null"
+            }
+
+            //Log.d("area", area.toString())
+
+            val alertF = AlertInfo(
+                areaA = area!!,
+                typeA = type!!,
+                consequenseA = cons!!
+                )
+            return@async alertF
+        }
+}
+
 }
