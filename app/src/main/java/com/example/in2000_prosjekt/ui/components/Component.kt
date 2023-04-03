@@ -3,6 +3,8 @@ package com.example.in2000_prosjekt.ui.components
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContextCompat
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
@@ -291,17 +294,21 @@ fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: S
     }
 }
 
+@SuppressLint("DiscouragedApi")
 @Composable
 fun AlertButton(alertType : String, alertLevel : String, onButtonClick: () -> Unit){
-    val typebind = alertType.split(";")
+    val typebind = alertType.split("; ")
     val type = typebind[1].split("-")
-    val level = alertLevel.split(";")
+    val level = alertLevel.split("; ")
 
-    val buttonimage = "R.drawable.${type[0]}_${level}"
+
+    val buttonimage = "${type[0]}_${level[1]}"
+    val context = LocalContext.current.applicationContext
+    val id = context.resources.getIdentifier(buttonimage, "drawable", context.packageName)
 
     Image(modifier = Modifier.clickable { onButtonClick() },
         //hardkodet inn snow_yellow for test
-        painter = painterResource(id = R.drawable.snow_yellow),
+        painter = painterResource(id = id),
         contentDescription = "alert",
         alignment = Alignment.TopEnd)
 }
