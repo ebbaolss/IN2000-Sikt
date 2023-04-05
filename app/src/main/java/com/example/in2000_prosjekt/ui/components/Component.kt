@@ -177,12 +177,14 @@ fun Sikt_BottomBar2( ) {
     }
 }
 
+
 @Composable
 fun Sikt_favoritt_tekst() {
-    CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
+    //CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
         Text(text = "Favoritter", fontSize = 40.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(10.dp))
     })
 }
+
 
 @Composable
 fun Sikt_sol() {
