@@ -176,7 +176,8 @@ fun Sikt_BottomBar2( ) {
         }
     }
 }
-/*
+
+
 @Composable
 fun Sikt_favoritt_tekst() {
     //CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
@@ -185,7 +186,6 @@ fun Sikt_favoritt_tekst() {
 }
 
 
- */
 @Composable
 fun Sikt_sol() {
     Image(
