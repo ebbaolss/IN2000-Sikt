@@ -48,6 +48,7 @@ fun MultipleScreenApp() {
         composable("Rules") { RulesScreen(map, favorite, rules) }
         composable("API") { API_test(onNavigateToNext = { navController.navigate("API") }) }
         composable("LandingPage") { LandingPage( onNavigateToNext = { navController.navigate("Map") })  }
+        composable("Alert") { AlertScreen( onNavigateToMap = { map }, onNavigateToFav = { favorite }, onNavigateToRules = rules) }
     }
 }
 

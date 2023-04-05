@@ -8,7 +8,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.serialization.gson.*
 
-class DataSourceAlerts (private val county: String){
+class DataSourceAlerts (val basePath:String){
 
     private val client = HttpClient() {
         install(ContentNegotiation) {
@@ -21,10 +21,10 @@ class DataSourceAlerts (private val county: String){
             headers {append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")}}
     }
 
-    suspend fun fetchMetAlert() : Build {
+    suspend fun fetchMetAlert(county: String) : Build {
         val strCounty: String = "county=$county"
+        //hei
 
-        //Log.d("METALERT","METALERT URL: https://api.met.no/weatherapi/metalerts/1.1/.json?$strCounty")
-        return authURL("https://gw-uio.intark.uh-it.no/in2000/weatherapi/metalerts/1.1/.json?$strCounty").body()
+        return authURL("$basePath/metalerts/1.1/.json?$strCounty").body()
     }
 }

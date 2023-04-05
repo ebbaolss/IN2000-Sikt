@@ -12,14 +12,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+import android.util.Log
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+
 class APIViewModel : ViewModel() {
 
     //for å teste
     val latitude : String = "61.6370"
     val longtitude: String = "8.3092"
     val altitude: String = "2469"
-    val latitude2 : String = "59.933333"
-    val longtitude2: String = "10.716667"
+
     /*
     kommunenr for galhøpiggen
     val county : String = "3434"
@@ -27,81 +30,136 @@ class APIViewModel : ViewModel() {
     //kommunenr med farevarsler nå
     val county : String = "54"
 
-    val dataSource = DataSource(latitude, longtitude, altitude)
-    val dataMet = DataSourceAlerts(county)
-    val dataSunrise = DataSourceSunrise(latitude2, longtitude2)
+    val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
+    val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
+    val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
 
-    private val _appUistate = MutableStateFlow(AppUiState())
-    val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
+    private val _appUistate: MutableStateFlow< AppUiState2 > = MutableStateFlow(AppUiState2.Loading)
+    val appUiState: StateFlow<AppUiState2> = _appUistate.asStateFlow()
 
     init {
-        getLocation()
-        getAlert()
-        getNowCast()
-        getSunrise()
+        getAll()
     }
+    fun getAll() {
+        viewModelScope.launch() {
+            val nowCastDeferred = getNowCast()
+            val locationDeferred = getLocation()
+            val sunsetDeferred = getSunrise()
+            val alertDeferred = getAlert()
 
-    private fun getLocation() {
-        viewModelScope.launch(Dispatchers.IO) {
+            val nowCastP = nowCastDeferred.await()
+            val locationP = locationDeferred.await()
+            val sunsetP = sunsetDeferred.await()
+            val alertP = alertDeferred.await()
 
             _appUistate.update {
-                it.copy(
-                    locationForecast = dataSource.fetchLocationForecast()
+                AppUiState2.Success(
+                    locationInfo = locationP,
+                    nowCastDef = nowCastP,
+                    sunrise = sunsetP,
+                    alertList = alertP
                 )
             }
-            val model = dataSource.fetchLocationForecast()
-            /* println("LOCATION TEMP : " + model.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature.toString())
-            println("WINDSPEED: " + model.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed.toString())
-            */
-            //val nowCast = dataSource.fetchNowCast()
+        }
+    }
+    private fun getLocation() : Deferred<LocationInfo>{
+        return viewModelScope.async(Dispatchers.IO) {
+
+            val forecast = dataSource.fetchLocationForecast(latitude, longtitude, altitude)
+
+            val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
+            val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
+            //val rain = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.precipitation_amount
+            val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.get("precipitation_amount")
+            Log.d("location", temp.toString())
+            Log.d("rain next 1 hour:", rain.toString())
+
+            val locationF = LocationInfo(
+                temperatureL = (temp ?: -273.5) as Float,
+                fog_area_fractionL = airfog!!,
+                rainL = rain!!
+            )
+            return@async locationF
         }
     }
 
-    private fun getNowCast() {
-        viewModelScope.launch(Dispatchers.IO) {
+    private fun getNowCast() : Deferred<NowCastInfo> {
+        return viewModelScope.async(Dispatchers.IO) {
 
-            _appUistate.update {
-                it.copy(
-                    nowcast = dataSource.fetchNowCast()
-                )
-            }
-            val mod = dataSource.fetchNowCast()
-            /* println("NOWCAST TEMP : " + mod.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature.toString())
-            println("NOWCAST WIND : " + mod.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed.toString())
-             */
+            val forecastNow = dataSource.fetchNowCast(latitude, longtitude, altitude)
+
+            val tempNow = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
+            val windN = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed
+            Log.d("Tempnow", tempNow.toString()) //denne gir 19.9
+
+            val nowCastF = NowCastInfo(
+                temperatureNow = (tempNow ?: -273.5) as Float, //dette må fikses bedre
+                windN = windN!! //funker dette eller må jeg gjøre som over?
+            )
+            return@async nowCastF
         }
     }
 
-    private fun getAlert(){
-        viewModelScope.launch(Dispatchers.IO) {
-            _appUistate.update {
-                it.copy(
-                    metAlerts = dataMet.fetchMetAlert()
-                )
-            }
-            val build = dataMet.fetchMetAlert()
+    private fun getSunrise() : Deferred<SunriseInfo> {
+        return viewModelScope.async(Dispatchers.IO) {
 
-//            println(" ALERT lang (Should say \"no\" ) : " + build.lang )
-//            println(" ALERT TESTMET : " + build.features?.toString())
-//            println(" ALERT type : " + build.type )
-//            println(" ALERT lastChange : " + build.lastChange )
+            val sunrise = dataSunrise.fetchSunrise(latitude, longtitude)
+
+            val sunriseToday = sunrise.properties?.sunrise?.time
+            val sunsetToday = sunrise.properties?.sunset?.time
+            Log.d("sunrise", sunriseToday.toString())
+
+            val sunriseF = SunriseInfo(
+                sunriseS = sunriseToday!!,
+                sunsetS = sunsetToday!!
+            )
+            return@async sunriseF
         }
     }
 
-    private fun getSunrise() {
-        viewModelScope.launch(Dispatchers.IO) {
+    private fun getAlert() : Deferred<MutableList<AlertInfo>>{
+        return viewModelScope.async(Dispatchers.IO) {
+            val alert = dataMet.fetchMetAlert(county)
 
-            _appUistate.update {
-                it.copy(
-                    sunrise = dataSunrise.fetchSunrise()
+            var alertList : MutableList<AlertInfo> = mutableListOf()
+            //Dette er klønete, men appen kræsjer ikke hvis det ikke er fare
+            var area : String?
+            var type : String?
+            var cons : String?
+            var rec : String?
+            var desc: String?
+            var alertType: String?
+            var alertLevel: String?
+
+            alert.features?.forEach{
+                val prop = it.properties
+
+                area = prop?.area
+                type = prop?.eventAwarenessName
+                cons = prop?.consequences
+                rec = prop?.instruction
+                desc = prop?.description
+                alertType = prop?.awareness_type
+                alertLevel = prop?.awareness_level
+
+                val alertF = AlertInfo(
+                    areaA = area!!,
+                    typeA = type!!,
+                    consequenseA = cons!!,
+                    recomendationA = rec!!,
+                    descriptionA = desc!!,
+                    alertTypeA = alertType!!,
+                    alertLevelA = alertLevel!!
                 )
-            }
-            val model = dataSunrise.fetchSunrise()
 
-            //println("LOCATION TEMP : " + model.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature.toString())
-//            println("Sunrise time : " + model.properties?.sunrise?.time.toString())
-//            println("sjekke when : " + model.tid?.interval.toString())
-//            println("sjekke when med sted : " + model.tid?.interval?.get(0))
+                alertList.add(alertF)
+            }
+
+
+
+            //Log.d("area", area.toString())
+            return@async alertList
         }
-    }
+}
+
 }
