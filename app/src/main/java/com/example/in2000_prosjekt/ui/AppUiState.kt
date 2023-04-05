@@ -13,16 +13,22 @@ data class SunriseInfo( //sett S på slutten
     val sunriseS: String,
     val sunsetS: String
 )
-//data class AlertInfo(
-//    val language: String,
-//)
+data class AlertInfo(
+    val areaA: String,
+    val typeA: String,
+    val consequenseA: String,
+    val recomendationA : String,
+    val descriptionA : String,
+    val alertTypeA: String,
+    val alertLevelA: String
+)
 
 sealed interface AppUiState2 {
     data class Success(
         val locationInfo: LocationInfo,
         val nowCastDef: NowCastInfo,
         val sunrise: SunriseInfo,
-        //val alert: AlertInfo
+        val alertList: MutableList<AlertInfo>
     ) : AppUiState2
     object Error : AppUiState2
     object Loading : AppUiState2

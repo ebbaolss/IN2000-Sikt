@@ -38,7 +38,7 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
                 weatherinfo = (appUiState as AppUiState2.Success).locationInfo,
                 nowcastinfo = (appUiState as AppUiState2.Success).nowCastDef,
                 sunriseinfo = (appUiState as AppUiState2.Success).sunrise,
-                //alertinfo = (appUiState as AppUiState2.Success).alert
+                alertinfo = (appUiState as AppUiState2.Success).alertList,
                 onNavigateToMap,
                 onNavigateToFav,
                 onNavigateToRules
@@ -50,8 +50,7 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
-    //alertinfo: AlertInfo
+fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>,
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit
 ) {
     Log.d("ebba", "her")
@@ -71,11 +70,11 @@ fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, s
         ){
             item {
                 Spacer(modifier = Modifier.height(100.dp))
-                ToppCard(weatherinfo, nowcastinfo, sunriseinfo)
+                ToppCard(weatherinfo, nowcastinfo, sunriseinfo, alertinfo)
                 Spacer(modifier = Modifier.height(15.dp))
             }
             item {
-                ToppCard(weatherinfo, nowcastinfo, sunriseinfo)
+                ToppCard(weatherinfo, nowcastinfo, sunriseinfo, alertinfo)
                 Spacer(modifier = Modifier.height(15.dp))
             }
         }

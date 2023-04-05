@@ -28,10 +28,10 @@ class APIViewModel : ViewModel() {
     val county : String = "3434"
     */
     //kommunenr med farevarsler nå
-    val county : String = "42"
+    val county : String = "54"
 
     val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    val dataMet = DataSourceAlerts(county)
+    val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
 
     private val _appUistate: MutableStateFlow< AppUiState2 > = MutableStateFlow(AppUiState2.Loading)
@@ -45,19 +45,19 @@ class APIViewModel : ViewModel() {
             val nowCastDeferred = getNowCast()
             val locationDeferred = getLocation()
             val sunsetDeferred = getSunrise()
-            //val alertDeferred = getAlert()
+            val alertDeferred = getAlert()
 
             val nowCastP = nowCastDeferred.await()
             val locationP = locationDeferred.await()
             val sunsetP = sunsetDeferred.await()
-            //val alertP = alertDeferred.await()
+            val alertP = alertDeferred.await()
 
             _appUistate.update {
                 AppUiState2.Success(
                     locationInfo = locationP,
                     nowCastDef = nowCastP,
                     sunrise = sunsetP,
-                    //alert = alertP
+                    alertList = alertP
                 )
             }
         }
@@ -117,34 +117,49 @@ class APIViewModel : ViewModel() {
         }
     }
 
-//      IKKE FÅTT METALERT TIL Å FUNKE, DET KRASJER HELE APPEN NÅ
-//      SÅ HAR KOMMENTERT UT METALERT HER I VIEWMODEL, APPUISTATE OG API-TEST SCREEN
+    private fun getAlert() : Deferred<MutableList<AlertInfo>>{
+        return viewModelScope.async(Dispatchers.IO) {
+            val alert = dataMet.fetchMetAlert(county)
 
-//    private fun getAlert() : Deferred<AlertInfo>{
-//        return viewModelScope.async(Dispatchers.IO) {
-//
-//              val alert = dataMet.fetchMetAlert(county)
-//
-//              val language = alert.type
-//              Log.d("alert", language.toString())
-//
-//              val alertF = AlertInfo(
-//                  language = language!!
-//              )
-//              return@async alertF
-//        }
-//    }
+            var alertList : MutableList<AlertInfo> = mutableListOf()
+            //Dette er klønete, men appen kræsjer ikke hvis det ikke er fare
+            var area : String?
+            var type : String?
+            var cons : String?
+            var rec : String?
+            var desc: String?
+            var alertType: String?
+            var alertLevel: String?
 
-// DET GAMLE METALERT
-//    private fun getAlert(){
-//        viewModelScope.launch(Dispatchers.IO) {
-//            _appUistate.update {
-//                it.copy(
-//                    metAlerts = dataMet.fetchMetAlert()
-//                )
-//            }
-//            val build = dataMet.fetchMetAlert()
-//
-//        }
-//    }
+            alert.features?.forEach{
+                val prop = it.properties
+
+                area = prop?.area
+                type = prop?.eventAwarenessName
+                cons = prop?.consequences
+                rec = prop?.instruction
+                desc = prop?.description
+                alertType = prop?.awareness_type
+                alertLevel = prop?.awareness_level
+
+                val alertF = AlertInfo(
+                    areaA = area!!,
+                    typeA = type!!,
+                    consequenseA = cons!!,
+                    recomendationA = rec!!,
+                    descriptionA = desc!!,
+                    alertTypeA = alertType!!,
+                    alertLevelA = alertLevel!!
+                )
+
+                alertList.add(alertF)
+            }
+
+
+
+            //Log.d("area", area.toString())
+            return@async alertList
+        }
+}
+
 }
