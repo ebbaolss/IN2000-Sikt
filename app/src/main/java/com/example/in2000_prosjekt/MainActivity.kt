@@ -44,6 +44,7 @@ fun MultipleScreenApp() {
     NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
         composable("Start") { StartPage( onNavigateToNext = { navController.navigate("LandingPage") })  }
         composable("Map") { ShowMap(map, favorite, rules)  }
+        composable("Frost") { FrostScreen()  }
         composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToRules = rules) }
         composable("Rules") { RulesScreen(map, favorite, rules) }
         composable("API") { API_test(onNavigateToNext = { navController.navigate("API") }) }

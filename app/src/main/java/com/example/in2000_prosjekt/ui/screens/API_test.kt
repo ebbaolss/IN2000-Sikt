@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui.screens
 
+import androidx.compose.material.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -10,6 +11,7 @@ import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.components.ToppCard
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.Alert_Card
+import com.example.in2000_prosjekt.ui.components.SheetLayout
 import com.example.in2000_prosjekt.ui.data.DataSourceAlerts
 
 @Composable
@@ -18,7 +20,7 @@ fun API_test(
     onNavigateToNext: () -> Unit
 ){
 
-    val appUiState by apiViewModel.appUiState.collectAsState()
+    /*val appUiState by apiViewModel.appUiState.collectAsState()
 
     when(appUiState){
         is AppUiState2.Loading -> Text (text = "loading...", fontSize = 30.sp)
@@ -32,7 +34,7 @@ fun API_test(
             ) //endre dette til en bedre måte etterhvert?
 
         }
-    }
+    }*/
 }
 
 

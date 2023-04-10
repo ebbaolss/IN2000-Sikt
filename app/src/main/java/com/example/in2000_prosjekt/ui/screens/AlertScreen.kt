@@ -19,7 +19,6 @@ import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.AppUiState2
 import com.example.in2000_prosjekt.ui.components.Alert_Card
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
-import com.example.in2000_prosjekt.ui.components.Sikt_favoritt_tekst
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 

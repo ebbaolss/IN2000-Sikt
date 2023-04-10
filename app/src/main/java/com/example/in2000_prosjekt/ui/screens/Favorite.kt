@@ -3,14 +3,9 @@ package com.example.in2000_prosjekt.ui.screens
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,7 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.ui.components.SheetLayout
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
+import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar2
 //import com.example.in2000_prosjekt.ui.components.Sikt_favoritt_tekst
 import com.example.in2000_prosjekt.ui.components.ToppCard
 import com.example.in2000_prosjekt.ui.theme.*
@@ -53,7 +50,10 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
 fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>,
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit
 ) {
-    Scaffold(topBar = { Sikt_favoritt_tekst()}, bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_mellomblå, rules = Sikt_lyseblå, map = Sikt_lyseblå)}) {
+    Scaffold(topBar = { CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
+        Text(text = "Favoritter", fontSize = 40.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(10.dp))
+    })
+    }, bottomBar = {Sikt_BottomBar2()}) {
         LazyColumn(
         ){
             item {
@@ -66,7 +66,8 @@ fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, s
                 Spacer(modifier = Modifier.height(15.dp))
             }
         }
-    }   
+        SheetLayout()
+    }
 }
 
 
