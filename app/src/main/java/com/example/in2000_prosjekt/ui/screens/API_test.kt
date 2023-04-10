@@ -8,11 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.components.ToppCard
-import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.components.Alert_Card
-import com.example.in2000_prosjekt.ui.components.SheetLayout
-import com.example.in2000_prosjekt.ui.data.DataSourceAlerts
+
 
 @Composable
 fun API_test(

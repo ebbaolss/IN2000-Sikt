@@ -18,7 +18,7 @@ fun StartPage(onNavigateToNext: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.sikt_startpage),
-            contentDescription = "Andy Rubin",
+            contentDescription = "",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier.fillMaxSize(),
 

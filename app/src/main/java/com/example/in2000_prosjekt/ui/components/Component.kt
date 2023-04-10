@@ -1,10 +1,6 @@
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.Context
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -198,9 +194,31 @@ fun Sikt_BottomBar2( ) {
     }
 }
 
+@Composable
+fun Sikt_favoritter_card() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .padding(10.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(Sikt_lyseblå)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Galdhøpiggen", color = Sikt_sort, fontSize = 25.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(30.dp))
+            Sikt_sol()
+        }
+    }
+}
+
 
 @Composable
 fun Sikt_sol() {
+    //bilde til fjellvettregler-screen
     Image(
         painter = painterResource(id = R.drawable.sol),
         contentDescription = "sol",
@@ -495,17 +513,32 @@ fun ModalSheetWithAnchor(
 }
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
     Scaffold(bottomBar = { Sikt_BottomBar2()}) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .background(Sikt_lysegrønn)
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            Sikt_BottomSheet()
+            Text(
+                text = "Favoritter",
+                color = Sikt_sort,
+                fontSize = 40.sp
+            )
+            Divider(
+                modifier = Modifier.padding(5.dp),
+                color = Sikt_mellomblå)
+            Sikt_favoritter_card()
+            Sikt_favoritter_card()
+            Sikt_favoritter_card()
+            Sikt_favoritter_card()
         }
+
     }
 }
