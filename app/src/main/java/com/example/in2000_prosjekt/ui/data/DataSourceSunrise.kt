@@ -21,11 +21,8 @@ class DataSourceSunrise(val basePath:String) {
     }
     suspend fun fetchSunrise(latitude: String, longtitude: String): SunriseBuild{
 
-        //PLACEHOLDER NOT CORRECT URL
-        val coordinates: String = "lat=$latitude&lon=$longtitude"
+        val coordinates = "lat=$latitude&lon=$longtitude"
 
         return authURL("$basePath/sunrise/3.0/sun?$coordinates&offset=+01:00").body()
     }
-
-
 }

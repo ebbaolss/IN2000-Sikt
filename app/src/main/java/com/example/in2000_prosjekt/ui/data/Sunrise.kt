@@ -17,7 +17,7 @@ data class GeometrySun(
 )
 
 data class When(
-    val interval : List<String?>
+    val interval : List<String>?
 )
 
 data class PropertiesSun(

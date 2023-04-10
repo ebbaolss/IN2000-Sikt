@@ -38,9 +38,4 @@ class DataSource (val basePath:String) {
         }
         return authURL("$basePath/nowcast/2.0/complete?$coordinates").body()
     }
-
-
-
-
-
 }

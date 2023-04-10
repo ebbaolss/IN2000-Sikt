@@ -1,10 +1,6 @@
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.Context
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,12 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.core.content.ContextCompat
 import com.example.in2000_prosjekt.R
-import com.example.in2000_prosjekt.ui.AlertInfo
-import com.example.in2000_prosjekt.ui.LocationInfo
-import com.example.in2000_prosjekt.ui.NowCastInfo
-import com.example.in2000_prosjekt.ui.SunriseInfo
+import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.*
 
 @Composable
@@ -181,8 +173,13 @@ fun Sikt_BottomBar2( ) {
 @Composable
 fun Sikt_favoritt_tekst() {
     //CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
-        Text(text = "Favoritter", fontSize = 40.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(10.dp))
-    })
+    Text(
+        text = "Favoritter",
+        fontSize = 40.sp,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.
+        padding(10.dp)
+    )
 }
 
 
@@ -230,7 +227,7 @@ fun Sikt_Card() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
-    alertinfo: MutableList<AlertInfo>
+    alertinfo: MutableList<AlertInfo>, frostinfo: FrostInfo
 ) {
     val varsel = "0" //midlertidlig, egt metAlert som skal brukes
     Card(
@@ -282,6 +279,12 @@ fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: S
             Spacer(modifier = Modifier
                 .height(20.dp))
             Text(text = "Varsel: $varsel", fontFamily = FontFamily.Monospace)
+            Spacer(modifier = Modifier
+                .height(30.dp))
+            Text(text = "Type frost: ${frostinfo.typeFrost}", fontFamily = FontFamily.Monospace)
+            Spacer(modifier = Modifier
+                .height(30.dp))
+            Text(text = "Coordinates frost: ${frostinfo.latFrost}, ${frostinfo.longFrost}", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(30.dp))
             Column(
@@ -388,5 +391,5 @@ fun Alert_Card(alert: AlertInfo){
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
 @Composable
-fun testComponent() {
+fun TestComponent() {
 }

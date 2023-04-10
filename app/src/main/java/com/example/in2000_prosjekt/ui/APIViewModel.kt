@@ -2,9 +2,6 @@ package com.example.in2000_prosjekt.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.in2000_prosjekt.ui.data.DataSource
-import com.example.in2000_prosjekt.ui.data.DataSourceAlerts
-import com.example.in2000_prosjekt.ui.data.DataSourceSunrise
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +10,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 import android.util.Log
+import com.example.in2000_prosjekt.ui.data.*
+
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 
@@ -23,6 +22,14 @@ class APIViewModel : ViewModel() {
     val longtitude: String = "8.3092"
     val altitude: String = "2469"
 
+    //----------------------
+    //Frost:
+    var elements = "air_temperature"// Dette er værmålingen vi ønsker: For enkelthetsskyld så velges bare: air temperature
+    var referencetime ="2021-05-17%2F2021-05-17" // Frost API, bruker UTC-tidsformat, denne ønskes senere å kunne bestemmes av en bruker ved hjelp av en Date picker (en bibloteksfunskjon i jetpack compose)
+    //var url_med_Polygon ="https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=POLYGON((7.9982%2058.1447%20%2C%208.0982%2058.1447%20%2C7.9982%2058.2447%20%2C%208.0982%2058.2447%20))"
+    val source = "SN18700" //skjønner ikke denne, hvor får vi dette fra? Hva er det? Spørr Nebil
+    //----------------------
+
     /*
     kommunenr for galhøpiggen
     val county : String = "3434"
@@ -30,38 +37,44 @@ class APIViewModel : ViewModel() {
     //kommunenr med farevarsler nå
     val county : String = "54"
 
-    val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
+    val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") //dette er både forecast og nowcast
     val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
+    val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
 
-    private val _appUistate: MutableStateFlow< AppUiState2 > = MutableStateFlow(AppUiState2.Loading)
-    val appUiState: StateFlow<AppUiState2> = _appUistate.asStateFlow()
+    private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
+    val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
     init {
         getAll()
     }
+
     fun getAll() {
         viewModelScope.launch() {
             val nowCastDeferred = getNowCast()
             val locationDeferred = getLocation()
             val sunsetDeferred = getSunrise()
             val alertDeferred = getAlert()
+            val frostDeferred = getFrost()
 
             val nowCastP = nowCastDeferred.await()
             val locationP = locationDeferred.await()
             val sunsetP = sunsetDeferred.await()
             val alertP = alertDeferred.await()
+            val frostP = frostDeferred.await()
 
             _appUistate.update {
-                AppUiState2.Success(
-                    locationInfo = locationP,
-                    nowCastDef = nowCastP,
-                    sunrise = sunsetP,
-                    alertList = alertP
+                AppUiState.Success(
+                    locationF = locationP,
+                    nowCastF = nowCastP,
+                    sunriseF = sunsetP,
+                    alertListF = alertP,
+                    frostF = frostP
                 )
             }
         }
     }
+
     private fun getLocation() : Deferred<LocationInfo>{
         return viewModelScope.async(Dispatchers.IO) {
 
@@ -69,10 +82,7 @@ class APIViewModel : ViewModel() {
 
             val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
             val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
-            //val rain = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.precipitation_amount
             val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.get("precipitation_amount")
-            Log.d("location", temp.toString())
-            Log.d("rain next 1 hour:", rain.toString())
 
             val locationF = LocationInfo(
                 temperatureL = (temp ?: -273.5) as Float,
@@ -90,7 +100,6 @@ class APIViewModel : ViewModel() {
 
             val tempNow = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
             val windN = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed
-            Log.d("Tempnow", tempNow.toString()) //denne gir 19.9
 
             val nowCastF = NowCastInfo(
                 temperatureNow = (tempNow ?: -273.5) as Float, //dette må fikses bedre
@@ -107,7 +116,6 @@ class APIViewModel : ViewModel() {
 
             val sunriseToday = sunrise.properties?.sunrise?.time
             val sunsetToday = sunrise.properties?.sunset?.time
-            Log.d("sunrise", sunriseToday.toString())
 
             val sunriseF = SunriseInfo(
                 sunriseS = sunriseToday!!,
@@ -154,12 +162,31 @@ class APIViewModel : ViewModel() {
 
                 alertList.add(alertF)
             }
-
-
-
             //Log.d("area", area.toString())
             return@async alertList
         }
 }
 
+    private fun getFrost() : Deferred<FrostInfo> {
+        return viewModelScope.async(Dispatchers.IO) {
+
+            val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)
+            val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longtitude)
+
+            val typeFrost = frost.type
+            val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
+            val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
+
+            Log.d("typefrost", typeFrost.toString())
+            Log.d("lat", lat.toString())
+            Log.d("long", long.toString())
+
+            val frostF = FrostInfo(
+                typeFrost = typeFrost.toString(), //ikke egt ha toString her
+                longFrost = long!!,
+                latFrost = lat!!,
+            )
+            return@async frostF
+        }
+    }
 }
