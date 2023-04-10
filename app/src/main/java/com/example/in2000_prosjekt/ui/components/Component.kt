@@ -234,20 +234,6 @@ fun Sikt_FinnTurer_card(){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_Card() {
-    Card(
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp, textAlign = TextAlign.Center)
-        }
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
 fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
     alertinfo: MutableList<AlertInfo>
 ) {
@@ -406,7 +392,7 @@ fun Alert_Card(alert: AlertInfo){
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SheetLayout() {
+fun Sikt_BottomSheet() {
 
     val sheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -519,7 +505,7 @@ fun TestComponent() {
             .fillMaxSize()
             .background(Sikt_lysegrønn)
         ) {
-            SheetLayout()
+            Sikt_BottomSheet()
         }
     }
 }
