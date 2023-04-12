@@ -127,7 +127,7 @@ class APIViewModel : ViewModel() {
 
     private fun getAlert() : Deferred<MutableList<AlertInfo>>{
         return viewModelScope.async(Dispatchers.IO) {
-            val alert = dataMet.fetchMetAlert(county)
+            val alert = dataMet.fetchMetAlert(latitude, longtitude)
 
             var alertList : MutableList<AlertInfo> = mutableListOf()
             //Dette er klønete, men appen kræsjer ikke hvis det ikke er fare
