@@ -2,9 +2,8 @@ package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -380,6 +379,9 @@ fun Sikt_GreyButton(title : String) {
 @Composable
 fun Alert_Card(alert: AlertInfo){
 
+    //scrollstate for verticalScroll
+    val scrollState = rememberScrollState()
+
     val typebind = alert.alertTypeA.split("; ")
     val type = typebind[1].split("-")
     val level = alert.alertLevelA.split("; ")
@@ -392,7 +394,10 @@ fun Alert_Card(alert: AlertInfo){
     //level er 1,2,3,4 eller 5. Definerer hvilket fare bilde vi skal ha, eller skal vi ta det på level[1] som gir farge?
     val alertLevel = level[0]
     Card(
-      modifier = Modifier.fillMaxWidth()
+      modifier = Modifier
+          .fillMaxWidth()
+              //gjør cardet scrollable
+          .verticalScroll(scrollState)
     ){
         Column(
             //Spacer
@@ -415,7 +420,7 @@ fun Alert_Card(alert: AlertInfo){
 
             Spacer(modifier = Modifier
                 .height(10.dp))
-            /*
+
             Text(text = "Type: " + alert.typeA, fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(10.dp))
@@ -430,7 +435,23 @@ fun Alert_Card(alert: AlertInfo){
             Spacer(modifier = Modifier
                 .height(10.dp))
 
-             */
+            var highlight1 = Color.Gray
+            var highlight2 = Color.Gray
+            var highlight3 = Color.Gray
+            var highlight4 = Color.Gray
+            var highlight5 = Color.Gray
+
+            if (alertLevel == "1") {
+                highlight1 = Color.Black
+            } else if (alertLevel == "2"){
+                highlight2 = Color.Black
+            } else if (alertLevel == "3"){
+                highlight3 = Color.Black
+            } else if (alertLevel == "4"){
+                highlight4 = Color.Black
+            } else if (alertLevel == "5"){
+                highlight5 = Color.Black
+            }
 
             Text(text = "Faregrader ", fontFamily = FontFamily.Monospace)
             Row(
@@ -442,8 +463,58 @@ fun Alert_Card(alert: AlertInfo){
                     contentDescription = "green",
                     modifier = Modifier
                 )
-                Text(text = "Faregrad 1 - liten fare", fontFamily = FontFamily.Monospace)
+                Text(text = "Faregrad 1 - liten fare", fontFamily = FontFamily.Monospace,
+                color= highlight1)
             }
+            Row(
+                modifier = Modifier
+                    .padding(20.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.yellow),
+                    contentDescription = "yellow",
+                    modifier = Modifier
+                )
+                Text(text = "Faregrad 2 - liten fare", fontFamily = FontFamily.Monospace,
+                color = highlight2)
+            }
+            Row(
+                modifier = Modifier
+                    .padding(20.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.orange),
+                    contentDescription = "orange",
+                    modifier = Modifier
+                )
+                Text(text = "Faregrad 3 - liten fare", fontFamily = FontFamily.Monospace,
+                color = highlight3)
+            }
+            Row(
+                modifier = Modifier
+                    .padding(20.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.red),
+                    contentDescription = "green",
+                    modifier = Modifier
+                )
+                Text(text = "Faregrad 4 - liten fare", fontFamily = FontFamily.Monospace,
+                color = highlight4)
+            }
+            Row(
+                modifier = Modifier
+                    .padding(20.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.dark_red),
+                    contentDescription = "green",
+                    modifier = Modifier
+                )
+                Text(text = "Faregrad 5 - liten fare", fontFamily = FontFamily.Monospace,
+                color = highlight5)
+            }
+
 
 
             //level, type, area, consequenses, instruction
