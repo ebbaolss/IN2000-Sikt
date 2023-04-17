@@ -88,4 +88,13 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:$compose_version")
     // test frost
     implementation "androidx.compose.material3:material3:1.0.0-beta03"
+
+    //modal bottom bar
+    implementation "androidx.compose.ui:ui:1.2.0-beta02"
+    implementation "androidx.compose.material:material:1.2.0-beta02"
+
+
+    implementation "io.ktor:ktor-client-android:$ktor_version"
+    implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
+    implementation "io.ktor:ktor-serialization-gson:$ktor_version"
 }
