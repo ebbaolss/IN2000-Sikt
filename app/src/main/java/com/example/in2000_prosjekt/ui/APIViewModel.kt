@@ -145,9 +145,11 @@ class APIViewModel : ViewModel() {
             var desc: String?
             var alertType: String?
             var alertLevel: String?
+            var timeInterval: List<String?>?
 
             alert.features?.forEach{
                 val prop = it.properties
+                val tid = it.tid
 
                 area = prop?.area
                 type = prop?.eventAwarenessName
@@ -156,6 +158,7 @@ class APIViewModel : ViewModel() {
                 desc = prop?.description
                 alertType = prop?.awareness_type
                 alertLevel = prop?.awareness_level
+                timeInterval = tid?.interval
 
                 val alertF = AlertInfo(
                     areaA = area!!,
@@ -164,7 +167,8 @@ class APIViewModel : ViewModel() {
                     recomendationA = rec!!,
                     descriptionA = desc!!,
                     alertTypeA = alertType!!,
-                    alertLevelA = alertLevel!!
+                    alertLevelA = alertLevel!!,
+                    timeIntervalA = timeInterval!!
                 )
 
                 alertList.add(alertF)

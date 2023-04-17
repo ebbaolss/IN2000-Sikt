@@ -20,7 +20,8 @@ data class AlertInfo( //sett A på slutten
     val recomendationA : String,
     val descriptionA : String,
     val alertTypeA: String,
-    val alertLevelA: String
+    val alertLevelA: String,
+    val timeIntervalA: List<String?>
 )
 data class FrostInfo( //sett Frost på slutten, F brukes allerede
     val typeFrost : String,
