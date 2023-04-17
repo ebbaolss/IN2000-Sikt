@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
 fun MultipleScreenApp() {
     val navController = rememberNavController()
 
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Map") {
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
         composable("Map") { ShowMap( onNavigateToNext = { navController.navigate("Favorite") })  }
         composable("Favorite") { FavoriteScreen(onNavigateToNext = { navController.navigate("Rules") }) }
         composable("Rules") { RulesScreen(onNavigateToNext = { navController.navigate("Rules") }) }
