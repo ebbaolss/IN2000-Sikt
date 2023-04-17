@@ -227,7 +227,8 @@ fun Sikt_Card() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
-    alertinfo: MutableList<AlertInfo>, frostinfo: FrostInfo
+    alertinfo: MutableList<AlertInfo>
+             //, frostinfo: FrostInfo
 ) {
     val varsel = "0" //midlertidlig, egt metAlert som skal brukes
     Card(
@@ -281,13 +282,17 @@ fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: S
             Text(text = "Varsel: $varsel", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(30.dp))
+
+            /*
             Text(text = "Type frost: ${frostinfo.typeFrost}", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(30.dp))
             Text(text = "Coordinates frost: ${frostinfo.latFrost}, ${frostinfo.longFrost}", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(30.dp))
+             */
             Column(
+
                 modifier = Modifier.fillMaxWidth(),
                 //horizontalArrangement = Arrangement.SpaceEvenly  endret fra row til column, ds måtte denne kommenteres ut
             ) {
@@ -318,7 +323,7 @@ fun AlertButton(alertType : String, alertLevel : String, onButtonClick: () -> Un
         //hardkodet inn snow_yellow for test
         painter = painterResource(id = id),
         contentDescription = "alert",
-        alignment = Alignment.TopEnd)
+        alignment = Alignment.TopStart)
 }
 
 @Composable
@@ -367,6 +372,18 @@ fun Sikt_GreyButton(title : String) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Alert_Card(alert: AlertInfo){
+
+    val typebind = alert.alertTypeA.split("; ")
+    val type = typebind[1].split("-")
+    val level = alert.alertLevelA.split("; ")
+
+    //farevarselikon
+    val buttonimage = "${type[0]}_${level[1]}"
+    val context = LocalContext.current.applicationContext
+    val id = context.resources.getIdentifier(buttonimage, "drawable", context.packageName)
+
+    //level er 1,2,3,4 eller 5. Definerer hvilket fare bilde vi skal ha, eller skal vi ta det på level[1] som gir farge?
+    val alertLevel = level[0]
     Card(
       modifier = Modifier.fillMaxWidth()
     ){
@@ -375,8 +392,20 @@ fun Alert_Card(alert: AlertInfo){
             modifier = Modifier
                 .padding(20.dp)
         ){
-            //Her skal det stå hvilket sted, placeholder nå
-            Text(text = "Sted: " + alert.areaA , fontSize = 30.sp, fontWeight = FontWeight.Bold)
+            //Farevarsel ikon
+            Row(
+                modifier = Modifier
+                    .padding(20.dp)
+            ) {
+                Image(
+                    modifier = Modifier
+                        .padding(),
+                    painter = painterResource(id = id),
+                    contentDescription = "alert",
+                    alignment = Alignment.TopStart
+                )
+                Text(text = alert.areaA, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            }
             Text(text = "Type: " + alert.typeA, fontFamily = FontFamily.Monospace)
             Text(text = "Beskrivelse: "+ alert.descriptionA, fontFamily = FontFamily.Monospace)
             Text(text = "Konsekvens: " + alert.consequenseA, fontFamily = FontFamily.Monospace)

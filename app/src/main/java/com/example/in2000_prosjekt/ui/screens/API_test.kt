@@ -26,8 +26,8 @@ fun API_test(
                 weatherinfo = (appUiState as AppUiState.Success).locationF,
                 nowcastinfo = (appUiState as AppUiState.Success).nowCastF,
                 sunriseinfo = (appUiState as AppUiState.Success).sunriseF,
-                alertinfo = (appUiState as AppUiState.Success).alertListF,
-                frostinfo = (appUiState as AppUiState.Success).frostF
+                alertinfo = (appUiState as AppUiState.Success).alertListF
+                //frostinfo = (appUiState as AppUiState.Success).frostF
             ) //endre dette til en bedre måte etterhvert?
 
         }

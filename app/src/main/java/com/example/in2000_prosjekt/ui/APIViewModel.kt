@@ -18,9 +18,16 @@ import kotlinx.coroutines.async
 class APIViewModel : ViewModel() {
 
     //for å teste
+    /*
     val latitude : String = "61.6370"
     val longtitude: String = "8.3092"
     val altitude: String = "2469"
+
+     */
+
+    val latitude = " 63.073"
+    val longtitude = "8.98"
+    val altitude: String = "600"
 
     //----------------------
     //Frost:
@@ -55,13 +62,13 @@ class APIViewModel : ViewModel() {
             val locationDeferred = getLocation()
             val sunsetDeferred = getSunrise()
             val alertDeferred = getAlert()
-            val frostDeferred = getFrost()
+            //val frostDeferred = getFrost()
 
             val nowCastP = nowCastDeferred.await()
             val locationP = locationDeferred.await()
             val sunsetP = sunsetDeferred.await()
             val alertP = alertDeferred.await()
-            val frostP = frostDeferred.await()
+            //val frostP = frostDeferred.await()
 
             _appUistate.update {
                 AppUiState.Success(
@@ -69,7 +76,7 @@ class APIViewModel : ViewModel() {
                     nowCastF = nowCastP,
                     sunriseF = sunsetP,
                     alertListF = alertP,
-                    frostF = frostP
+                    //frostF = frostP
                 )
             }
         }
