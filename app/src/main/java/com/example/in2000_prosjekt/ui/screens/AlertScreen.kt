@@ -22,6 +22,7 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 fun AlertScreen(apiViewModel: APIViewModel = viewModel(),
                 onNavigateToMap: () -> Unit,
                 onNavigateToFav: () -> Unit,
+                onNavigateToSettings: () -> Unit,
                 onNavigateToRules: () -> Unit){
 
     val appUiState by apiViewModel.appUiState.collectAsState()
@@ -34,6 +35,7 @@ fun AlertScreen(apiViewModel: APIViewModel = viewModel(),
                 alertinfo = (appUiState as AppUiState.Success).alertListF,
                 onNavigateToMap,
                 onNavigateToFav,
+                onNavigateToSettings,
                 onNavigateToRules
             ) //endre dette til en bedre måte etterhvert?
         }
@@ -46,9 +48,10 @@ fun AlertScreen(apiViewModel: APIViewModel = viewModel(),
 fun AlertScreenSuccess(alertinfo: MutableList<AlertInfo>,
                        onNavigateToMap: () -> Unit,
                        onNavigateToFav: () -> Unit,
+                       onNavigateToSettings: () -> Unit,
                        onNavigateToRules: () -> Unit){
 
-    Scaffold( bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_mellomblå, rules = Sikt_lyseblå, map = Sikt_lyseblå) })
+    Scaffold( bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToRules, favoritt = Sikt_mellomblå, rules = Sikt_lyseblå, settings = Sikt_lyseblå, map = Sikt_lyseblå) })
     {
         Column{
             alertinfo.forEach {

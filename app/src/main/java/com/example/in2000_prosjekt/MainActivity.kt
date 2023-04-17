@@ -41,14 +41,16 @@ fun MultipleScreenApp() {
     var map = { navController.navigate("Map") }
     var favorite = { navController.navigate("Favorite") }
     var rules = { navController.navigate("Rules") }
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "API") {
+    var settings = {navController.navigate("Settings")}
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
         composable("Start") { StartPage( onNavigateToNext = { navController.navigate("LandingPage") })  }
-        composable("Map") { ShowMap(map, favorite, rules)  }
-        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToRules = rules) }
-        composable("Rules") { RulesScreen(map, favorite, rules) }
+        composable("Map") { ShowMap(map, favorite, settings, rules)  }
+        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules) }
+        composable("Rules") { RulesScreen(map, favorite, settings, rules) }
         composable("API") { API_test(onNavigateToNext = { navController.navigate("API") }) }
         composable("LandingPage") { LandingPage( onNavigateToNext = { navController.navigate("Map") })  }
-        composable("Alert") { AlertScreen( onNavigateToMap = { map }, onNavigateToFav = { favorite }, onNavigateToRules = rules) }
+        composable("Alert") { AlertScreen( onNavigateToMap = { map }, onNavigateToFav = { favorite }, onNavigateToRules = rules, onNavigateToSettings = settings) }
+        composable("Settings") { SettingsScreen(map, favorite, settings, rules) }
     }
 }
 
