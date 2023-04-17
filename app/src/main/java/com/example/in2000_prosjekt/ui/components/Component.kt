@@ -635,7 +635,9 @@ fun Sikt_LoctationCard_Topper_i_naerheten() {
     ) {
         Text(text = "Topper i nærheten: ", modifier = Modifier.align(Alignment.TopStart), fontWeight = FontWeight.Bold)
         LazyRow(
-            modifier = Modifier.fillMaxWidth().align(Alignment.Center),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
             horizontalArrangement = Arrangement.SpaceEvenly) {
             item {
                 Sikt_FinnTurer_card()
@@ -655,6 +657,7 @@ fun Sikt_LoctationCard_Topper_i_naerheten() {
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_LocationCard(){
@@ -730,6 +733,74 @@ fun Sikt_LocationCard(){
     }
 }
 
+@Composable
+fun Sikt_Historisk_Kalender() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(30.dp)
+            .height(100.dp)
+            .background(Sikt_hvit),
+    ) {
+        Text(text = "Kalender")
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Sikt_HistoriskCard(){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Sikt_lyseblå),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box() {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
+                    Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
+                    Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
+                }
+                Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
+            }
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Box() {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Sikt_Datavisualisering_Card()
+                    Column(
+                        modifier = Modifier.size(height = 220.dp, width = 150.dp),
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "2000-5000 m.o.h")
+                        Text(text = "Sikt: ")
+                        Text(text = "1000-2000 m.o.h")
+                        Text(text = "Sikt: ")
+                        Text(text = "0-1000 m.o.h")
+                        Text(text = "Sikt: ")
+                    }
+                }
+            }
+        }
+
+        Sikt_Historisk_Kalender()
+
+        Sikt_LoctationCard_Topper_i_naerheten()
+
+    }
+}
+
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
@@ -737,5 +808,6 @@ fun Sikt_LocationCard(){
 fun TestComponent() {
     Scaffold(bottomBar = { Sikt_BottomBar2() }) {
         Sikt_LocationCard()
+        //Sikt_HistoriskCard()
     }
 }
