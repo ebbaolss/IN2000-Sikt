@@ -241,28 +241,35 @@ fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: S
                 Sikt_lyseblå
             )
             .fillMaxWidth()) {
-
-            //Alert pop up dialog
-            var openDialog by remember {
-                mutableStateOf(false)
-            }
-
-            if (alertinfo.size != 0){
-
-                AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
-                    openDialog = true
+            //Fare Ikon på linje med navnet
+            Row(
+                modifier = Modifier
+                .padding(20.dp)
+            ){
+                //Alert pop up dialog
+                var openDialog by remember {
+                    mutableStateOf(false)
                 }
-            }
 
-            if (openDialog){
-                AlertDialog(alertinfo = alertinfo){
-                    openDialog = false
+                if (alertinfo.size != 0){
+
+                    AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
+                        openDialog = true
+                    }
                 }
+
+                if (openDialog){
+                    AlertDialog(alertinfo = alertinfo){
+                        openDialog = false
+                    }
+                }
+
+                Spacer(modifier = Modifier
+                    .height(20.dp))
+                // MÅ ENDRE TIL TOPPNAVN
+                Text(text = "TOPPNAVN", fontSize = 30.sp, fontWeight = FontWeight.Bold)
             }
 
-            Spacer(modifier = Modifier
-                .height(20.dp))
-            Text(text = "Galdhøpiggen", fontSize = 30.sp, fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier
                 .height(20.dp))
@@ -398,21 +405,48 @@ fun Alert_Card(alert: AlertInfo){
                     .padding(20.dp)
             ) {
                 Image(
-                    modifier = Modifier
-                        .padding(),
+                    contentScale = ContentScale.Fit,
                     painter = painterResource(id = id),
                     contentDescription = "alert",
                     alignment = Alignment.TopStart
                 )
                 Text(text = alert.areaA, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             }
+
+            Spacer(modifier = Modifier
+                .height(10.dp))
+            /*
             Text(text = "Type: " + alert.typeA, fontFamily = FontFamily.Monospace)
+            Spacer(modifier = Modifier
+                .height(10.dp))
             Text(text = "Beskrivelse: "+ alert.descriptionA, fontFamily = FontFamily.Monospace)
+            Spacer(modifier = Modifier
+                .height(10.dp))
             Text(text = "Konsekvens: " + alert.consequenseA, fontFamily = FontFamily.Monospace)
+            Spacer(modifier = Modifier
+                .height(10.dp))
             Text(text = "Anbefaling: " + alert.recomendationA, fontFamily = FontFamily.Monospace)
 
+            Spacer(modifier = Modifier
+                .height(10.dp))
 
-        //level, type, area, consequenses, instruction
+             */
+
+            Text(text = "Faregrader ", fontFamily = FontFamily.Monospace)
+            Row(
+                modifier = Modifier
+                    .padding(20.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.green),
+                    contentDescription = "green",
+                    modifier = Modifier
+                )
+                Text(text = "Faregrad 1 - liten fare", fontFamily = FontFamily.Monospace)
+            }
+
+
+            //level, type, area, consequenses, instruction
         }
     }
 }
