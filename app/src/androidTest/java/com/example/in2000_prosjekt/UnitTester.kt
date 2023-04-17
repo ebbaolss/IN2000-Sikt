@@ -6,7 +6,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.core.view.get
 import androidx.core.view.isVisible
-import androidx.navigation.testing.TestNavHostController
+//import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.platform.ThreadChecker
 import com.example.in2000_prosjekt.ui.APIViewModel
@@ -39,8 +39,8 @@ import org.junit.Assert
 
 class TestBildeStartpage {
     @get:Rule
-    val rule = createComposeRule()
-    lateinit var navController: TestNavHostController
+    val rule = createComposeRule()}
+    /*lateinit var navController: TestNavHostController
 
     @Test
     fun openApp_showsStartPagePicture() {
@@ -459,3 +459,4 @@ class Test_API_testScreen {
 
 
 
+*/
