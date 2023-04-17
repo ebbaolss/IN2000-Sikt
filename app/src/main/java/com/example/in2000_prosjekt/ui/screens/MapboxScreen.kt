@@ -25,7 +25,7 @@ import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
     fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit) {
-    Scaffold(bottomBar = { Sikt_BottomBar() }) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_lyseblå, rules = Sikt_lyseblå, map = Sikt_mellomblå) }) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
