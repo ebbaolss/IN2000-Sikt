@@ -10,8 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.in2000_prosjekt.ui.components.Sikt_BlueButton
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.mapbox.geojson.Point
+import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
 import com.mapbox.maps.MapView
 import com.mapbox.maps.dsl.cameraOptions
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
@@ -20,7 +24,7 @@ import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-    fun ShowMap(onNavigateToNext: () -> Unit) {
+    fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit) {
     Scaffold(bottomBar = { Sikt_BottomBar() }) {
         Box(
             contentAlignment = Alignment.Center,
@@ -33,6 +37,7 @@ import com.mapbox.maps.plugin.gestures.addOnMapClickListener
             )
 
         }
+        //Sikt_BottomSheet()
     }
 }
 fun createFactoryMap(xt: Context) : MapView {

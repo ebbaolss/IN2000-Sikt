@@ -7,38 +7,35 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.statement.*
 import io.ktor.serialization.gson.*
 
-class DataSource (private val latitude: String,
-                  private val longtitude: String,
-                  private val altitude: String?) {
+class DataSource (val basePath:String) {
 
     private val client = HttpClient() {
         install(ContentNegotiation) {
             gson()
         }
     }
-    suspend fun fetchLocationForecast(): Model {
+
+    suspend fun fetchLocationForecast(latitude: String, longtitude: String, altitude: String? = null): Model {
 
         var coordinates: String = "lat=$latitude&lon=$longtitude"
         if (altitude != null) {
             coordinates += "&altitude=$altitude"
         }
-
-        return client.get("https://api.met.no/weatherapi/locationforecast/2.0/complete?$coordinates").body()
+        return authURL("$basePath/locationforecast/2.0/complete?$coordinates").body()
     }
 
-    suspend fun fetchNowCast(): Nowcast{
+    suspend fun authURL(URL: String) : HttpResponse {
+        return client.get(URL) {
+            headers {append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")}}
+    }
+
+    suspend fun fetchNowCast(latitude: String, longtitude: String, altitude: String? = null): Model{
 
         //PLACEHOLDER NOT CORRECT URL
         var coordinates: String = "lat=$latitude&lon=$longtitude"
         if (altitude != null) {
             coordinates += "&altitude=$altitude"
         }
-        return client.get("https://api.met.no/weatherapi/nowcast/2.0/complete?$coordinates").body()
-    }
-
-    suspend fun fetchMetAlert() : Build {
-        var coordinates: String = "lat=$latitude&lon=$longtitude"
-
-        return client.get("https://api.met.no/weatherapi/metalerts/1.1/.json?$coordinates").body()
+        return authURL("$basePath/nowcast/2.0/complete?$coordinates").body()
     }
 }

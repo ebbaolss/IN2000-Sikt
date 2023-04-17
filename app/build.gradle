@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.in2000_prosjekt"
-        minSdk 23
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -80,4 +80,12 @@ dependencies {
     implementation "io.ktor:ktor-serialization-gson:$ktor_version"
 
     implementation("io.coil-kt:coil-compose:2.2.2")
+
+    implementation("androidx.cardview:cardview:1.0.0") //for cards
+
+    // Frost dependencies:
+    implementation "io.ktor:ktor-client-auth:$ktor_version"
+    implementation("androidx.compose.runtime:runtime-livedata:$compose_version")
+    // test frost
+    implementation "androidx.compose.material3:material3:1.0.0-beta03"
 }
