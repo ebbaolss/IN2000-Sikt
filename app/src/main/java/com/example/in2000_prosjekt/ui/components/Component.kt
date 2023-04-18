@@ -675,11 +675,10 @@ fun Sikt_Datavisualisering_Card(height : Int, temp : Int, vind : Int, skydekkeTo
         heigthVisuals = R.drawable.topp__2000
     }
 
-    Card(
-        modifier = Modifier.size(width = 170.dp, height = 220.dp),
-    ) {
-        Box() {
-
+    Card() {
+        Box(
+            modifier = Modifier.size(width = 170.dp, height = 220.dp)
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.illustrasjon_background),
                 contentDescription = "",
@@ -717,9 +716,13 @@ fun Sikt_Datavisualisering_Card(height : Int, temp : Int, vind : Int, skydekkeTo
                     .padding(10.dp))
 
             Box(modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(10.dp)) {
-                Column() {
+                .align(Alignment.BottomEnd)
+                .padding(10.dp)
+                .fillMaxSize()
+            ) {
+                Column(
+                    modifier = Modifier.align(Alignment.TopEnd)
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.vind_icon),
                         contentDescription = "",
@@ -729,8 +732,6 @@ fun Sikt_Datavisualisering_Card(height : Int, temp : Int, vind : Int, skydekkeTo
                 }
             }
         }
-
-
     }
 }
 
@@ -974,42 +975,8 @@ fun Sikt_HistoriskCard(){
 }
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
-    Scaffold(bottomBar = { Sikt_BottomBar2() }) {
-
-        //Sikt_LocationCard()
-
-        //Sikt_HistoriskCard()
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Sikt_mellomblå),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(20.dp))
-                Sikt_Favorite_card()
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-            item {
-                Sikt_Favorite_card()
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-            item {
-                Sikt_Favorite_card()
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-            item {
-                Sikt_Favorite_card()
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-
-        }
-    }
+    Sikt_Datavisualisering_Card(800, 7, 6, true, true, false)
 }
