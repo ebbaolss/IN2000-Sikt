@@ -5,17 +5,31 @@ import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,15 +40,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.*
+import kotlinx.coroutines.launch
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 
@@ -68,46 +81,67 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(120.dp)
+                modifier = Modifier.width(75.dp)
             ) {
 
                 IconButton(onClick = { onNavigateToFav() }) {
-                    var iconfarge = Sikt_mellomblå
+                    var backroundColor = Sikt_hvit
                     if (favoritt == Sikt_mellomblå) {
-                        iconfarge = Sikt_hvit
+                        backroundColor = Sikt_lyseblå
                     }
                     Icon(
                         Icons.Outlined.Favorite,
                         contentDescription = "Localized description",
-                        tint = iconfarge,
+                        tint = Sikt_mørkeblå,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(favoritt)
+                            .background(backroundColor)
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Favoritter")
+                Text(text = "Favoritter", fontSize = 13.sp)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(120.dp)
+                modifier = Modifier.width(98.dp)
             ) {
                 IconButton(onClick = { onNavigateToRules() }) {
-                    var iconfarge = Sikt_mellomblå
+                    var backroundColor = Sikt_hvit
                     if (rules == Sikt_mellomblå) {
-                        iconfarge = Sikt_hvit
+                        backroundColor = Sikt_lyseblå
                     }
                     Icon(
-                        Icons.Outlined.Menu,
+                        painter = painterResource(id = R.drawable.ny_fjellvettregler),
                         "",
-                        tint = iconfarge,
-                        modifier = Modifier
+                        tint = Sikt_mørkeblå,
+                        modifier = Modifier.size(120.dp)
                             .clip(CircleShape)
-                            .background(rules)
+                            .background(backroundColor)
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Fjellvettreglene")
+                Text(text = "Fjellvettreglene", fontSize = 13.sp)
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(75.dp)
+            ) {
+                IconButton(onClick = { onNavigateToSettings() }) {
+                    var backroundColor = Sikt_hvit
+                    if (settings == Sikt_mellomblå) {
+                        backroundColor = Sikt_lyseblå
+                    }
+                    Icon(
+                        Icons.Outlined.Settings,
+                        "",
+                        tint = Sikt_mørkeblå,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(backroundColor)
+                            .padding(5.dp)
+                    )
+                }
+                Text(text = "Innstillinger", fontSize = 13.sp)
             }
         }
     }
@@ -118,58 +152,60 @@ fun Sikt_BottomBar2( ) {
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
-        containerColor = Sikt_lyseblå,
+        containerColor = Sikt_hvit,
 
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
             Column (horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(120.dp)
+                modifier = Modifier.width(75.dp)
             ){
                 IconButton(onClick = {  }) {
                     Icon(
-                        Icons.Outlined.LocationOn,
+                        Icons.Filled.LocationOn,
                         contentDescription = "Localized description",
-                        tint = Sikt_mellomblå,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(Sikt_lyseblå)
-                            .padding(5.dp))
+                        tint = Sikt_mørkeblå,
+                    )
                 }
                 Text(text = "Utforsk")
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(120.dp)
+                modifier = Modifier.width(75.dp)
             ) {
                 IconButton(onClick = {  }) {
                     Icon(
                         Icons.Outlined.Favorite,
                         contentDescription = "Localized description",
-                        tint = Sikt_mellomblå,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(Sikt_lyseblå)
-                            .padding(5.dp)
+                        tint = Sikt_mørkeblå,
                     )
                 }
                 Text(text = "Favoritter")
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(120.dp)
+                modifier = Modifier.width(93.dp)
             ) {
                 IconButton(onClick = {  }) {
                     Icon(
-                        Icons.Outlined.Menu,
+                        painter = painterResource(id = R.drawable.fjellvettregler),
                         "",
-                        tint = Sikt_mellomblå,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(Sikt_lyseblå)
-                            .padding(5.dp)
+                        tint = Sikt_mørkeblå,
                     )
                 }
                 Text(text = "Fjellvettreglene")
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(75.dp)
+            ) {
+                IconButton(onClick = {  }) {
+                    Icon(
+                        Icons.Outlined.Settings,
+                        "",
+                        tint = Sikt_mørkeblå,
+                    )
+                }
+                Text(text = "Innstillinger")
             }
         }
     }
@@ -626,9 +662,144 @@ fun Alert_Card(alert: AlertInfo){
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Sikt_FinnTurer_card(){
+    Card(
+        modifier = Modifier
+            .width(120.dp)
+            .height(110.dp)
+            .padding(10.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(Sikt_hvit)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Galdhøpiggen", color = Sikt_sort, fontSize = 12.sp)
+            Spacer(modifier = Modifier.height(30.dp))
+            Sikt_sol()
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun Sikt_BottomSheet() {
+
+    val sheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+    )
+
+    val showModalSheet = rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    ModalBottomSheetLayout(
+        sheetState = sheetState,
+        sheetContent = { BottomSheetContent() }
+    ) {
+        ModalSheetWithAnchor(sheetState, showModalSheet)
+    }
+}
+
+@Composable
+fun BottomSheetContent( ){
+    Surface(
+        modifier = Modifier.height(250.dp),
+        color = Sikt_lyseblå
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "Finn turer i nærheten",
+                fontSize = 20.sp,
+                modifier = Modifier.padding(10.dp),
+                color = Sikt_sort,
+                fontWeight = FontWeight.Bold
+            )
+            Divider(
+                modifier = Modifier.padding(5.dp),
+                color = Color.White)
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly) {
+                item {
+                    Sikt_FinnTurer_card()
+                }
+                item {
+                    Sikt_FinnTurer_card()
+                }
+                item {
+                    Sikt_FinnTurer_card()
+                }
+                item {
+                    Sikt_FinnTurer_card()
+                }
+                item {
+                    Sikt_FinnTurer_card()
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun ModalSheetWithAnchor(
+    sheetState: ModalBottomSheetState,
+    showModalSheet: MutableState<Boolean>
+) {
+    val scope = rememberCoroutineScope()
+
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
+        Button(
+            modifier = Modifier
+                .height(165.dp)
+                .fillMaxWidth()
+                .padding(30.dp),
+            shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
+            colors = ButtonDefaults.buttonColors(Sikt_lyseblå),
+            onClick = {
+                showModalSheet.value = !showModalSheet.value
+                scope.launch {
+                    sheetState.show()
+                }
+            })  {
+            Column(
+                Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowUp,
+                    tint = Sikt_mellomblå,
+                    contentDescription = "",
+                    modifier = Modifier
+                )
+                Text(text = "Finn turer i nærheten", color = Sikt_sort, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+
+            }
+        }
+    }
+}
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
+    Scaffold(bottomBar = { Sikt_BottomBar2() }) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(Sikt_orange)) {
+
+        }
+    }
 }
