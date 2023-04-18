@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material.*
 //import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -52,7 +53,12 @@ import kotlinx.coroutines.launch
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
+
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Color, map : Color, settings : Color, rules : Color) {
@@ -441,6 +447,8 @@ fun Alert_Card(alert: AlertInfo){
     val alertLevel = level[0]
 
     var multiplier by remember { mutableStateOf(1f) }
+    var fontSize by remember { mutableStateOf(24.sp) } // initial font size
+
 
     Card(
       modifier = Modifier
@@ -467,24 +475,40 @@ fun Alert_Card(alert: AlertInfo){
                 )
 
                 //Overskrift med Området Resize funker bare en gang...
-                Text(
-                    text = alert.areaA,
-                    textAlign = TextAlign.Center,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    //Prøver å resize til å passe på en linje
-                    maxLines = 2,
-                    overflow = TextOverflow.Visible,
-                    style = LocalTextStyle.current.copy(
-                        fontSize = LocalTextStyle.current.fontSize * multiplier
-                    ),
-                    onTextLayout = {
-                        if (it.hasVisualOverflow){
-                            multiplier *= 0.90f
-                            Log.d("RESIZE","reziser tekst med $multiplier")
-                        }
+                BoxWithConstraints {
+                    Text(
+                        modifier = Modifier
+                            .wrapContentSize(align = Alignment.Center)
+                            .fillMaxWidth(),
+                        text = alert.areaA,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        //Prøver å resize til å passe på en linje
+                        maxLines = 2,
+                        overflow = TextOverflow.Visible,
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = fontSize,
+                            textAlign = TextAlign.Center
+                        )
+                        /*
+                        ,inlineContent = mapOf(
+                            "fontSize" to InlineTextContent(
+                                Placeholder(
+                                    width = fontSize,
+                                    height = 0.sp,
+                                    placeholderVerticalAlign = PlaceholderVerticalAlign.Top
+                                )
+                            )
+                        )
+                         */
+                    )
+                    /*
+                    if (maxWidth > 0.dp && maxWidth < Float.MAX_VALUE.dp) {
+                        fontSize = (fontSize * (maxWidth / fontSize.toPx())).coerceAtMost(fontSize)
                     }
-                )
+                     */
+                }
                 //favoritt icon button
                 var checked by remember { mutableStateOf(false) }
                 IconToggleButton(
