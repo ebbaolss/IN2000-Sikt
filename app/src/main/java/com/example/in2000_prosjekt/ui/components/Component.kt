@@ -1,6 +1,7 @@
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
+import android.media.Image
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -551,13 +552,78 @@ fun ModalSheetWithAnchor(
         }
     }
 }
+
 @Composable
-fun Sikt_Datavisualisering_Card() {
+fun Sikt_Datavisualisering_Card(height : Int, temp : Int, vind : Int, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
+
+    var heigthVisuals = R.drawable.topp_1000_1500
+
+    if (height < 500) {
+        heigthVisuals = R.drawable.topp__500
+    } else if (height < 1000) {
+        heigthVisuals = R.drawable.topp_500_1000
+    } else if (height < 1500) {
+        heigthVisuals = R.drawable.topp_1000_1500
+    } else if (height < 2000) {
+        heigthVisuals = R.drawable.topp_1500_2000
+    } else if (height > 2000) {
+        heigthVisuals = R.drawable.topp__2000
+    }
+
     Card(
         modifier = Modifier.size(width = 170.dp, height = 220.dp),
-        colors = CardDefaults.cardColors(Sikt_mellomblå)
     ) {
-        
+        Box() {
+
+            Image(
+                painter = painterResource(id = R.drawable.illustrasjon_background),
+                contentDescription = "",
+                modifier = Modifier.fillMaxSize()
+            )
+            Image(
+                painter = painterResource(id = heigthVisuals),
+                contentDescription = "",
+                modifier = Modifier.fillMaxSize()
+            )
+            if(skydekkeTop) {
+                Image(
+                    painter = painterResource(id = R.drawable.h_yt_skydekke),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            if(skydekkeMid) {
+                Image(
+                    painter = painterResource(id = R.drawable.middels_skydekke),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            if(skydekkeLow) {
+                Image(
+                    painter = painterResource(id = R.drawable.lavt_skydekke),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            Text(text = "$temp°", fontWeight = FontWeight.Bold, fontSize = 48.sp, color = Sikt_hvit,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(10.dp))
+
+            Box(modifier = Modifier.align(Alignment.TopEnd).padding(10.dp)) {
+                Column() {
+                    Image(
+                        painter = painterResource(id = R.drawable.vind_icon),
+                        contentDescription = "",
+                        modifier = Modifier.size(30.dp)
+                    )
+                    Text(text = "$vind m/s", fontSize = 12.sp, color = Sikt_hvit)
+                }
+            }
+        }
+
+
     }
 }
 
@@ -688,7 +754,7 @@ fun Sikt_LocationCard(){
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Sikt_Datavisualisering_Card()
+                    Sikt_Datavisualisering_Card(2469, -13, 7,true, false, true)
                     Column(
                         modifier = Modifier.size(height = 220.dp, width = 150.dp),
                         verticalArrangement = Arrangement.SpaceEvenly,
@@ -776,7 +842,7 @@ fun Sikt_HistoriskCard(){
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Sikt_Datavisualisering_Card()
+                    Sikt_Datavisualisering_Card(2469, -11, 4, true, false, true)
                     Column(
                         modifier = Modifier.size(height = 220.dp, width = 150.dp),
                         verticalArrangement = Arrangement.SpaceEvenly,
@@ -807,7 +873,16 @@ fun Sikt_HistoriskCard(){
 @Composable
 fun TestComponent() {
     Scaffold(bottomBar = { Sikt_BottomBar2() }) {
-        Sikt_LocationCard()
+        //Sikt_LocationCard()
         //Sikt_HistoriskCard()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Sikt_hvit),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Sikt_Datavisualisering_Card(height = 1333, -3, 12, skydekkeTop = true, skydekkeMid = false, skydekkeLow = true)
+        }
     }
 }
