@@ -611,7 +611,9 @@ fun Sikt_Datavisualisering_Card(height : Int, temp : Int, vind : Int, skydekkeTo
                     .align(Alignment.BottomEnd)
                     .padding(10.dp))
 
-            Box(modifier = Modifier.align(Alignment.TopEnd).padding(10.dp)) {
+            Box(modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(10.dp)) {
                 Column() {
                     Image(
                         painter = painterResource(id = R.drawable.vind_icon),
@@ -877,21 +879,5 @@ fun TestComponent() {
         Sikt_LocationCard()
 
         //Sikt_HistoriskCard()
-
-        /*Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Sikt_hvit),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Sikt_Datavisualisering_Card(
-                height = 2345,
-                temp = -6,
-                vind = 15,
-                skydekkeTop = true,
-                skydekkeMid = false,
-                skydekkeLow = true)
-        }*/
     }
 }
