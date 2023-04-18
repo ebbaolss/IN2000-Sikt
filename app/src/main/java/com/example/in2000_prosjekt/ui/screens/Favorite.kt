@@ -23,7 +23,7 @@ import com.example.in2000_prosjekt.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit){
+fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
     val appUiState by apiViewModel.appUiState.collectAsState()
 
     when(appUiState){
@@ -35,9 +35,10 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
                 nowcastinfo = (appUiState as AppUiState.Success).nowCastF,
                 sunriseinfo = (appUiState as AppUiState.Success).sunriseF,
                 alertinfo = (appUiState as AppUiState.Success).alertListF,
-                frostinfo = (appUiState as AppUiState.Success).frostF,
+                //frostinfo = (appUiState as AppUiState.Success).frostF,
                 onNavigateToMap,
                 onNavigateToFav,
+                onNavigateToSettings,
                 onNavigateToRules
             ) //endre dette til en bedre måte etterhvert?
         }
@@ -47,19 +48,21 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, frostinfo: FrostInfo,
-    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit
+fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
+    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit
 ) {
-    Scaffold(topBar = { Sikt_favoritt_tekst()}, bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_mellomblå, rules = Sikt_lyseblå, map = Sikt_lyseblå)}) {
+    Scaffold(topBar = { Sikt_favoritt_tekst()}, bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = Sikt_mellomblå, rules = Sikt_lyseblå, map = Sikt_lyseblå, settings = Sikt_lyseblå)}) {
         LazyColumn(
         ){
             item {
                 Spacer(modifier = Modifier.height(100.dp))
-                ToppCard(weatherinfo, nowcastinfo, sunriseinfo, alertinfo, frostinfo)
+                ToppCard(weatherinfo, nowcastinfo, sunriseinfo, alertinfo//, frostinfo
+                )
                 Spacer(modifier = Modifier.height(15.dp))
             }
             item {
-                ToppCard(weatherinfo, nowcastinfo, sunriseinfo, alertinfo, frostinfo)
+                ToppCard(weatherinfo, nowcastinfo, sunriseinfo, alertinfo//, frostinfo
+                )
                 Spacer(modifier = Modifier.height(15.dp))
             }
         }

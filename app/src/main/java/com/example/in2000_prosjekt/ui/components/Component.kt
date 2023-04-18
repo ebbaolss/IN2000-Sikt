@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+//import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.LocationOn
@@ -50,9 +51,11 @@ import com.example.in2000_prosjekt.ui.theme.*
 import kotlinx.coroutines.launch
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
-fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, favoritt : Color, map : Color, rules : Color) {
+fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Color, map : Color, settings : Color, rules : Color) {
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
@@ -462,15 +465,15 @@ fun Alert_Card(alert: AlertInfo){
                     contentDescription = "alert",
                     alignment = Alignment.TopStart
                 )
-                //Overskrift med Området
 
+                //Overskrift med Området Resize funker bare en gang...
                 Text(
                     text = alert.areaA,
                     textAlign = TextAlign.Center,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     //Prøver å resize til å passe på en linje
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Visible,
                     style = LocalTextStyle.current.copy(
                         fontSize = LocalTextStyle.current.fontSize * multiplier
@@ -487,6 +490,7 @@ fun Alert_Card(alert: AlertInfo){
                 IconToggleButton(
                     checked = checked,
                     onCheckedChange = { checked = it },
+                    modifier = Modifier.padding(5.dp)
                 ) {
                     if (checked) {
                         Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
