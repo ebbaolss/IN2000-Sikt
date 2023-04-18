@@ -490,9 +490,7 @@ fun Alert_Card(alert: AlertInfo){
             } else if (alertLevel == "5"){
                 highlight5 = Color.Black
                 //fontweight5 = FontWeight.Bold
-
             }
-
 
             Text(text = "Faregrader ", fontFamily = FontFamily.Monospace)
             Row(

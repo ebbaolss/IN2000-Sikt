@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,9 +37,11 @@ fun RulesScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavi
 
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_lyseblå, rules = Sikt_mellomblå, map = Sikt_lyseblå) }) {
         val rules: Array<String> = stringArrayResource(id = R.array.rules)
+        val scrollState = rememberScrollState()
         Card(
             modifier = Modifier
-                .padding(20.dp),
+                .padding(20.dp)
+                .verticalScroll(scrollState),
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(Color(0xFFCDDCEB))
         ) {
