@@ -978,5 +978,5 @@ fun Sikt_HistoriskCard(){
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
-    Sikt_Datavisualisering_Card(800, 7, 6, true, true, false)
+    Sikt_LocationCard()
 }
