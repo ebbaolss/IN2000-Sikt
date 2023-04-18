@@ -697,7 +697,7 @@ fun Sikt_LoctationCard_Topper_i_naerheten() {
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
-            .padding(start = 20.dp, end = 20.dp, top = 15.dp),
+            .padding(start = 20.dp, end = 20.dp, top = 5.dp),
     ) {
         Text(text = "Topper i nærheten: ", modifier = Modifier.align(Alignment.TopStart), fontWeight = FontWeight.Bold)
         LazyRow(
@@ -754,7 +754,7 @@ fun Sikt_LocationCard(){
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Sikt_Datavisualisering_Card(2469, -13, 7,true, false, true)
+                    Sikt_Datavisualisering_Card(2469, 3, 7,true, false, true)
                     Column(
                         modifier = Modifier.size(height = 220.dp, width = 150.dp),
                         verticalArrangement = Arrangement.SpaceEvenly,
@@ -873,16 +873,25 @@ fun Sikt_HistoriskCard(){
 @Composable
 fun TestComponent() {
     Scaffold(bottomBar = { Sikt_BottomBar2() }) {
-        //Sikt_LocationCard()
+
+        Sikt_LocationCard()
+
         //Sikt_HistoriskCard()
-        Column(
+
+        /*Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Sikt_hvit),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Sikt_Datavisualisering_Card(height = 1333, -3, 12, skydekkeTop = true, skydekkeMid = false, skydekkeLow = true)
-        }
+            Sikt_Datavisualisering_Card(
+                height = 2345,
+                temp = -6,
+                vind = 15,
+                skydekkeTop = true,
+                skydekkeMid = false,
+                skydekkeLow = true)
+        }*/
     }
 }
