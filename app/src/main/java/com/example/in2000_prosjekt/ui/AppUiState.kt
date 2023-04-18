@@ -26,6 +26,7 @@ data class FrostInfo( //sett Frost på slutten, F brukes allerede
     val typeFrost : String,
     val longFrost : String,
     val latFrost : String,
+    val responosstatus: String
 )
 
 sealed interface AppUiState {
