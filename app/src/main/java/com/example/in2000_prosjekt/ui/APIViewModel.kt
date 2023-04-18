@@ -168,25 +168,45 @@ class APIViewModel : ViewModel() {
 }
 
     private fun getFrost() : Deferred<FrostInfo> {
+
         return viewModelScope.async(Dispatchers.IO) {
 
-            val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)
-            val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longtitude)
+            try {
 
-            val typeFrost = frost.type
-            val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
-            val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
+                val frostPolygon = dataFrost.fetchApiSvarkoordinater(2.toString(), 2.toString())
+                val source2 = frostPolygon?.data?.get(0)?.id.toString()
 
-            Log.d("typefrost", typeFrost.toString())
-            Log.d("lat", lat.toString())
-            Log.d("long", long.toString())
 
-            val frostF = FrostInfo(
-                typeFrost = typeFrost.toString(), //ikke egt ha toString her
-                longFrost = long!!,
-                latFrost = lat!!,
-            )
-            return@async frostF
+                val frost = dataFrost.fetchFrostTemp(elements, referencetime, source2)
+
+
+
+                val typeFrost = frost.type
+                val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0).toString()
+                val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1).toString()
+
+
+                Log.d("typefrost", typeFrost.toString())
+                Log.d("lat", lat.toString())
+                Log.d("long", long.toString())
+
+                val frostF = FrostInfo(
+                    typeFrost = typeFrost.toString(), //ikke egt ha toString her
+                    longFrost = long!!,
+                    latFrost = lat!!,
+                )
+                return@async frostF
+
+            } catch (e : Exception) {
+
+                return@async FrostInfo(  typeFrost = "Error: Mangler historisk værdata", //ikke egt ha toString her
+                    longFrost = "",
+                    latFrost = ""
+                )
+            }
+
+
+
         }
     }
 }
