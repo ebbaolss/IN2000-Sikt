@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -23,13 +26,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, favoritt : Color, map : Color, rules : Color) {
@@ -393,6 +400,9 @@ fun Alert_Card(alert: AlertInfo){
 
     //level er 1,2,3,4 eller 5. Definerer hvilket fare bilde vi skal ha, eller skal vi ta det på level[1] som gir farge?
     val alertLevel = level[0]
+
+    var multiplier by remember { mutableStateOf(1f) }
+
     Card(
       modifier = Modifier
           .fillMaxWidth()
@@ -407,7 +417,7 @@ fun Alert_Card(alert: AlertInfo){
             //Farevarsel ikon
             Row(
                 modifier = Modifier
-                    .padding(20.dp)
+                    .padding(5.dp)
                     .fillMaxWidth()
             ) {
                 Image(
@@ -416,7 +426,39 @@ fun Alert_Card(alert: AlertInfo){
                     contentDescription = "alert",
                     alignment = Alignment.TopStart
                 )
-                Text(text = alert.areaA, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                //Overskrift med Området
+
+                Text(
+                    text = alert.areaA,
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    //Prøver å resize til å passe på en linje
+                    maxLines = 1,
+                    overflow = TextOverflow.Visible,
+                    style = LocalTextStyle.current.copy(
+                        fontSize = LocalTextStyle.current.fontSize * multiplier
+                    ),
+                    onTextLayout = {
+                        if (it.hasVisualOverflow){
+                            multiplier *= 0.90f
+                            Log.d("RESIZE","reziser tekst med $multiplier")
+                        }
+                    }
+                )
+                //favoritt icon button
+                var checked by remember { mutableStateOf(false) }
+                IconToggleButton(
+                    checked = checked,
+                    onCheckedChange = { checked = it },
+                ) {
+                    if (checked) {
+                        Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
+                    } else {
+                        Icon(Icons.Outlined.Favorite, contentDescription = "Localized description")
+                    }
+                }
+
             }
 
             Spacer(modifier = Modifier
@@ -429,19 +471,19 @@ fun Alert_Card(alert: AlertInfo){
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier
-                .height(10.dp))
+                .height(20.dp))
 
             val beskrivelselist = alert.descriptionA.split(": ")
             Text(text = "Beskrivelse: \n"+ beskrivelselist[1], fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
-                .height(10.dp))
+                .height(20.dp))
             Text(text = "Konsekvens: \n" + alert.consequenseA, fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
-                .height(10.dp))
+                .height(20.dp))
             Text(text = "Anbefaling: \n" + alert.recomendationA, fontFamily = FontFamily.Monospace)
 
             Spacer(modifier = Modifier
-                .height(10.dp))
+                .height(20.dp))
 
             if(alert.timeIntervalA != null){
 
@@ -460,7 +502,7 @@ fun Alert_Card(alert: AlertInfo){
             }
 
             Spacer(modifier = Modifier
-                .height(10.dp))
+                .height(20.dp))
 
             //For å endre farge og boldness på det der faren er
             var highlight1 = Color.Gray
