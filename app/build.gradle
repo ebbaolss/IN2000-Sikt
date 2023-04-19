@@ -57,8 +57,6 @@ dependencies {
     implementation 'androidx.compose.material3:material3:1.0.0-alpha11'
 
 
-
-
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -97,6 +95,8 @@ dependencies {
     // test frost
     implementation "androidx.compose.material3:material3:1.0.0-beta03"
 
+    implementation("io.ktor:ktor-client-cio-jvm:2.2.4")
+
 
 // Dependencies for testene
 
@@ -119,5 +119,20 @@ dependencies {
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
     implementation "io.ktor:ktor-serialization-gson:$ktor_version"
+
+
+
+
+
+    // Datepicker i Material 3 er kun tilgjengelig fra 1.1.0-alpha04: https://developer.android.com/reference/kotlin/androidx/compose/material3/package-summary#DatePicker(androidx.compose.material3.DatePickerState,androidx.compose.ui.Modifier,androidx.compose.material3.DatePickerFormatter,kotlin.Function1,kotlin.Function0,kotlin.Function0,kotlin.Boolean,androidx.compose.material3.DatePickerColors)
+    implementation 'androidx.compose.material3:material3:1.1.0-alpha04'
+
+
+    //Dette er for Gamle Date picker:https://m2.material.io/components/date-pickers/android
+    implementation 'com.google.android.material:material:1.8.0'
+
+
+
+
 
 }

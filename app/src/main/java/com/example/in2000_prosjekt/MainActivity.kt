@@ -42,7 +42,7 @@ fun MultipleScreenApp() {
     var favorite = { navController.navigate("Favorite") }
     var rules = { navController.navigate("Rules") }
     var settings = {navController.navigate("Settings")}
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Rules") {
         composable("Start") { StartPage( onNavigateToNext = { navController.navigate("LandingPage") })  }
         composable("Map") { ShowMap(map, favorite, settings, rules)  }
         composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules) }

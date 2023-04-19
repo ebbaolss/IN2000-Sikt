@@ -3,6 +3,7 @@ package com.example.in2000_prosjekt.ui.components
 import android.annotation.SuppressLint
 import android.media.Image
 import android.util.Log
+import android.widget.DatePicker
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,6 +46,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.*
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.launch
 
 @Composable
@@ -907,6 +909,7 @@ fun Sikt_LocationCard(){
     }
 }
 
+@ExperimentalMaterial3Api
 @Composable
 fun Sikt_Historisk_Kalender() {
     Box(
@@ -914,11 +917,71 @@ fun Sikt_Historisk_Kalender() {
             .fillMaxWidth()
             .padding(30.dp)
             .height(100.dp)
-            .background(Sikt_hvit),
+            .background(Sikt_lyseblå), // når   .background(Sikt_hvit) så funker modifier inni datepciker
     ) {
-        Text(text = "Kalender")
+
+//MAterials 3 date pciker krever versjon 1.1.0-alpha04: https://developer.android.com/reference/kotlin/androidx/compose/material3/package-summary#DatePicker(androidx.compose.material3.DatePickerState,androidx.compose.ui.Modifier,androidx.compose.material3.DatePickerFormatter,kotlin.Function1,kotlin.Function0,kotlin.Function0,kotlin.Boolean,androidx.compose.material3.DatePickerColors)
+// ref denne stack overflowen https://stackoverflow.com/questions/75377259/how-to-change-datepicker-dialog-color-in-jetpack-compose
+
+        //Observasjon 18.04 kl.2105: Det går visst ann å ha flere versjoner Googles Material: Jeg ahdde både: 1.0.0-alpha11 og 1.1.0-alpha04 på samtidig
+
+        // Forsøk med Material 3: kl.21.26
+       val datePickerState  =  rememberDatePickerState(initialSelectedDateMillis = 1681852144365, initialDisplayedMonthMillis=1681852144365 , yearsRange= IntRange(2019, 2100))
+
+        val datePickerFormater=  DatePickerFormatter(
+             shortFormat= "test 1", mediumFormat=" Test 2",
+        monthYearFormat= "Saturday, March 27, 2021"
+
+        )
+
+        DatePicker(datePickerState=datePickerState, modifier=Modifier )
+
+
+        /* forsøk med Material  https://m2.material.io/components/date-pickers Denne bruker et annet google bibliotek:https://developer.android.com/reference/com/google/android/material/datepicker/MaterialDatePicker ikke det samme som modalBottomSheetLayout
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build()
+
+        datePicker.show() // funket ikke, kl.2146
+
+
+https://medium.com/@segunfrancis/how-to-create-material-date-and-time-pickers-in-android-18ecd246838b
+MaterialDatePicker
+    .Builder
+    .datePicker()
+    .setTitleText("Select date of birth")
+    .build()
+    .show(supportFragmentManager, "DATE_PICKER")
+
+         */
+
+        Text(text = "Kalenderen")
     }
+
+
+
+
+
 }
+
+/*
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun sikt_tittelDatepciker(state: DatePickerState) : Unit {
+
+    state.
+    DateRangePickerDefaults.DateRangePickerTitle(
+        state = state,
+        modifier = Modifier.padding(10.dp)
+    )
+
+}
+
+ */
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -974,9 +1037,19 @@ fun Sikt_HistoriskCard(){
     }
 }
 
+/*
 
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
     Sikt_LocationCard()
+}
+
+ */
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showSystemUi = true)
+@Composable
+fun TestDatePicker() {
+    Sikt_Historisk_Kalender()
 }
