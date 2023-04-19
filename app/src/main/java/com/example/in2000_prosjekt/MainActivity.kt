@@ -1,6 +1,7 @@
 package com.example.in2000_prosjekt
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,7 +43,7 @@ fun MultipleScreenApp() {
     var favorite = { navController.navigate("Favorite") }
     var rules = { navController.navigate("Rules") }
     var settings = {navController.navigate("Settings")}
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Rules") {
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "API") {
         composable("Start") { StartPage( onNavigateToNext = { navController.navigate("LandingPage") })  }
         composable("Map") { ShowMap(map, favorite, settings, rules)  }
         composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules) }
@@ -53,5 +54,25 @@ fun MultipleScreenApp() {
         composable("Settings") { SettingsScreen(map, favorite, settings, rules) }
     }
 }
+
+override fun onDestroy ()  {
+
+    super.onDestroy()
+    appendLog(this, "Destroying app...")
+    Log.d("Debug", "Destroying app..." )
+
+    if (this::httpClient.isinitialized) {
+
+        appendLog(this, "Destroying app...")
+
+        Log.d("Debug", "closing ktor client..." )
+        hottpClient.close()
+
+
+    }
+
+
+}
+
 
 

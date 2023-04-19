@@ -32,13 +32,15 @@ class DataSourceFrost (val basePath: String) {
             gson()
         }
 
+
+
         HttpResponseValidator {
             handleResponseExceptionWithRequest { exception, request ->
                 val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
                 val exceptionResponse = clientException.response
                 if (exceptionResponse.status == HttpStatusCode.NotFound) {
                     val exceptionResponseText = exceptionResponse.bodyAsText()
-                    throw MissingPageException(exceptionResponse, exceptionResponseText)
+                    throw ClientRequestException(exceptionResponse, exceptionResponseText)
                 }
             }
         }
@@ -48,6 +50,7 @@ class DataSourceFrost (val basePath: String) {
     }
 
     suspend fun authURL(URL: String) : HttpResponse {
+
         return client.get(URL) {
             headers {append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")}}
     }
@@ -58,7 +61,23 @@ class DataSourceFrost (val basePath: String) {
         source: String
     ): Frost_API_Respons {
 
-        return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=$elements").body()
+        return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=$elements").body() // hvorfor har vi client i hver datasource når vi bruker .body påauth
+
+        /* fra tirs 18.04
+        try{
+
+            return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=$elements").body() // hvorfor har vi client i hver datasource når vi bruker .body påauth
+        } catch (cause: ResponseException) {
+            println(cause)
+            cause.response
+
+
+        }
+        return Frost_API_Respons( "Error har skjedd","","","","",3?,0.5,3.4)
+
+         */
+
+
     }
 
     //DENNE MÅ SEES PÅ SAMMEN PÅ ONSDAG 12.04

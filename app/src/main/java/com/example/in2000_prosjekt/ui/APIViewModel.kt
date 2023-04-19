@@ -171,7 +171,7 @@ class APIViewModel : ViewModel() {
         return viewModelScope.async(Dispatchers.IO) {
 
             val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)
-            val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longtitude)
+            val frostPolygon = dataFrost.fetchApiSvarkoordinater(2.toString(), 2.toString())
 
             val typeFrost = frost.type
             val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)

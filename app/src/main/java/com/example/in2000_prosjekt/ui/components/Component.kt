@@ -1006,6 +1006,7 @@ fun Sikt_HistoriskCard(){
                 Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
             }
         }
+
         Spacer(modifier = Modifier.height(20.dp))
         Box() {
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
