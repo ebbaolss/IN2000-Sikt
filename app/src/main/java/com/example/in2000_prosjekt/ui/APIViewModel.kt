@@ -9,13 +9,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-import android.util.Log
 import com.example.in2000_prosjekt.ui.data.*
 
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 
 class APIViewModel : ViewModel() {
+
+    //manual dependency injection, se codelab
+    val repository: WeatherRepository = ImplementedWeatherRepository()
 
 //    //for å teste
 //    val latitude : String = "61.6370"
@@ -45,26 +46,27 @@ class APIViewModel : ViewModel() {
     private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
-    init {
-        getAll()
+    init { //etterhvert så endrer man  fra å ha init til å kalle på getAll fra en annen fil
+        //favoritter skal loades med en gang appen åpner, database se codelab
+        getAll("61.6370","8.3092","2469","3434" )
     }
 
-    fun getAll() {
+    fun getAll(latitude: String, longitude: String, altitude: String, county: String) {
         viewModelScope.launch() {
-            val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getLocation()
-            }
             val locationDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getNowCast()
+                repository.getLocation(latitude, longitude, altitude)
+            }
+            val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
+                repository.getNowCast(latitude, longitude, altitude)
             }
             val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getSunrise()
+                repository.getSunrise(latitude, longitude)
             }
             val alertDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getAlert()
+                repository.getAlert(county)
             }
             val frostDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getFrost()
+                repository.getFrost(latitude, longitude)
             }
 
             val nowCastP = nowCastDeferred.await()
