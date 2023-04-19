@@ -446,8 +446,7 @@ fun Alert_Card(alert: AlertInfo){
     //level er 1,2,3,4 eller 5. Definerer hvilket fare bilde vi skal ha, eller skal vi ta det på level[1] som gir farge?
     val alertLevel = level[0]
 
-    var multiplier by remember { mutableStateOf(1f) }
-    var fontSize by remember { mutableStateOf(24.sp) } // initial font size
+    var fontSize by remember { mutableStateOf(20.sp) } // initial font size
 
 
     Card(
