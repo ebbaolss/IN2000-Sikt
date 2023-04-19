@@ -18,52 +18,59 @@ class ImplementedWeatherRepository : WeatherRepository {
     val source = "SN18700" //skjønner ikke denne, hvor får vi dette fra? Hva er det? Spørr Nebil
     //----------------------
 
-
-    override suspend fun getLocation(latitude: String, longitude: String, altitude: String): LocationInfo {
+    override suspend fun getLocation(
+        latitude: String,
+        longitude: String,
+        altitude: String
+    ): LocationInfo {
         val forecast = dataSource.fetchLocationForecast(latitude, longitude, altitude)
 
         val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
-        val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
-        val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.get("precipitation_amount")
+        val airfog =
+            forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
+        val rain =
+            forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.get("precipitation_amount")
 
-        val locationF = LocationInfo(
+        return LocationInfo(
             temperatureL = (temp ?: -273.5) as Float,
             fog_area_fractionL = airfog!!,
             rainL = rain!!
         )
-        return locationF
     }
 
-    override suspend fun getNowCast(latitude: String, longtitude: String, altitude: String): NowCastInfo {
-        val forecastNow = dataSource.fetchNowCast(latitude, longtitude, altitude)
+    override suspend fun getNowCast(
+        latitude: String,
+        longitude: String,
+        altitude: String
+    ): NowCastInfo {
+        val forecastNow = dataSource.fetchNowCast(latitude, longitude, altitude)
 
-        val tempNow = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
+        val tempNow =
+            forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
         val windN = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed
 
-        val nowCastF = NowCastInfo(
+        return NowCastInfo(
             temperatureNow = (tempNow ?: -273.5) as Float, //dette må fikses bedre
             windN = windN!! //funker dette eller må jeg gjøre som over?
         )
-        return nowCastF
     }
 
-    override suspend fun getSunrise(latitude: String, longtitude: String): SunriseInfo {
-        val sunrise = dataSunrise.fetchSunrise(latitude, longtitude)
+    override suspend fun getSunrise(latitude: String, longitude: String): SunriseInfo {
+        val sunrise = dataSunrise.fetchSunrise(latitude, longitude)
 
         val sunriseToday = sunrise.properties?.sunrise?.time
         val sunsetToday = sunrise.properties?.sunset?.time
 
-        val sunriseF = SunriseInfo(
+        return SunriseInfo(
             sunriseS = sunriseToday!!,
             sunsetS = sunsetToday!!
         )
-        return sunriseF
     }
 
     override suspend fun getAlert(county: String): MutableList<AlertInfo> {
         val alert = dataMet.fetchMetAlert(county)
 
-        var alertList : MutableList<AlertInfo> = mutableListOf()
+        val alertList : MutableList<AlertInfo> = mutableListOf()
         //Dette er klønete, men appen kræsjer ikke hvis det ikke er fare
         var area : String?
         var type : String?
@@ -100,9 +107,10 @@ class ImplementedWeatherRepository : WeatherRepository {
         return alertList
     }
 
-    override suspend fun getFrost(latitude: String, longtitude: String): FrostInfo {
-        val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)
-        val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longtitude)
+    override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
+
+        val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)  //hardkoded parameterne, fiks dette
+        val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longitude)
 
         val typeFrost = frost.type
         val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
@@ -112,11 +120,10 @@ class ImplementedWeatherRepository : WeatherRepository {
         Log.d("lat", lat.toString())
         Log.d("long", long.toString())
 
-        val frostF = FrostInfo(
+        return FrostInfo(
             typeFrost = typeFrost.toString(), //ikke egt ha toString her
             longFrost = long!!,
             latFrost = lat!!,
         )
-        return frostF
     }
 }
