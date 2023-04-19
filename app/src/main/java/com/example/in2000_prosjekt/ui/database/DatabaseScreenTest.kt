@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun DatabaseScreenTest(viewModel: FavoriteViewModel = viewModel()) {
 
+
     val listState = rememberLazyListState()
     val fav1 = Favorite("coordinate", 1.1, 2.2)
     var valgt : Favorite

@@ -6,13 +6,8 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 class FavoriteViewModel @Inject constructor(private val favoriteRepository: FavoriteRepository) :
     ViewModel() {
-
-    init {
-        getAllFavorites()
-    }
 
     val favoriteList: LiveData<List<Favorite>> = favoriteRepository.allFavorites
 
