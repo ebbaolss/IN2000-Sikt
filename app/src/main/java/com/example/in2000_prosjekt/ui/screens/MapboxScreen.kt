@@ -36,7 +36,6 @@ import com.mapbox.maps.plugin.gestures.addOnMapClickListener
                 modifier = Modifier,
                 factory = { createFactoryMap(it) }
             )
-
         }
         Sikt_BottomSheet()
     }
