@@ -213,13 +213,14 @@ fun Sikt_BottomBar2( ) {
 
 @Composable
 fun Sikt_favoritt_tekst() {
-    CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
-        Text(
-            text = "Favoritter",
-            fontSize = 40.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(10.dp))
-    })
+    //CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
+    Text(
+        text = "Favoritter",
+        fontSize = 40.sp,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.
+        padding(10.dp)
+    )
 }
 
 
@@ -236,10 +237,9 @@ fun Sikt_sol() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
-                       alertinfo: MutableList<AlertInfo>){
+fun Sikt_Favorite_card(){
     Card(
-        modifier = Modifier.size(height = 400.dp, width = 320.dp),
+        modifier = Modifier.size(height = 336.dp, width = 320.dp),
         colors = CardDefaults.cardColors(Sikt_lyseblå)
     ) {
         Column(
@@ -254,23 +254,7 @@ fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunr
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        //Alert pop up dialog
-                        var openDialog by remember {
-                            mutableStateOf(false)
-                        }
-
-                        if (alertinfo.size != 0){
-
-                            AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
-                                openDialog = true
-                            }
-                        }
-
-                        if (openDialog){
-                            AlertDialog(alertinfo = alertinfo){
-                                openDialog = false
-                            }
-                        }
+                        Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
                         Text(text = "Gaustatoppen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
                         Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
                     }
@@ -285,7 +269,7 @@ fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunr
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(10.dp)
                     ) {
-                        Sikt_Datavisualisering_Card(1884, nowcastinfo.temperatureNow, nowcastinfo.windN,true, false, true)
+                        Sikt_Datavisualisering_Card(1884, -10, 7,true, false, true)
                         Column(
                             modifier = Modifier.size(height = 220.dp, width = 150.dp),
                             verticalArrangement = Arrangement.SpaceEvenly,
@@ -301,10 +285,6 @@ fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunr
                     }
                 }
             }
-            Sikt_sunrise_sundown(sunriseinfo.sunriseS, sunriseinfo.sunsetS)
-
-            Text(text = "Tåke: ${weatherinfo.fog_area_fractionL}", fontFamily = FontFamily.Monospace)
-            Text(text = "Nedbør: ${weatherinfo.rainL}", fontFamily = FontFamily.Monospace)
         }
     }
 }
@@ -574,27 +554,6 @@ fun Sikt_FinnTurer_card(height : Int, temp : Int, vind : Int, skydekkeTop : Bool
     }
 }
 
-@Composable
-fun Sikt_sunrise_sundown(sunrise : String, sunset : String) {
-    Row(modifier = Modifier.fillMaxWidth().padding(start = 30.dp, end = 30.dp)) {
-        Box() {
-            Icon(
-                painter = painterResource(id = R.drawable.sunrise), ""
-            )
-            Text(text = "Soloppgang: $sunrise", fontSize = 10.sp)
-        }
-
-        Spacer(modifier = Modifier.width(50.dp))
-
-        Box() {
-            Icon(
-                painter = painterResource(id = R.drawable.sundown), ""
-            )
-            Text(text = "Solnedgang: $sunset", fontSize = 10.sp)
-        }
-    }
-}
-
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -702,7 +661,7 @@ fun ModalSheetWithAnchor(
 }
 
 @Composable
-fun Sikt_Datavisualisering_Card(height : Int, temp : Float, vind : Float, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
+fun Sikt_Datavisualisering_Card(height : Int, temp : Int, vind : Int, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
 
     var heigthVisuals = R.drawable.topp_1000_1500
 
@@ -904,7 +863,7 @@ fun Sikt_LocationCard(){
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Sikt_Datavisualisering_Card(2469, 3.3f, 7f,true, false, true)
+                    Sikt_Datavisualisering_Card(2469, 3, 7,true, false, true)
                     Column(
                         modifier = Modifier.size(height = 220.dp, width = 150.dp),
                         verticalArrangement = Arrangement.SpaceEvenly,
@@ -992,8 +951,7 @@ fun Sikt_HistoriskCard(){
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
-                    Sikt_Datavisualisering_Card(2469, -11.11f, 4f, true, false, true)
+                    Sikt_Datavisualisering_Card(2469, -11, 4, true, false, true)
                     Column(
                         modifier = Modifier.size(height = 220.dp, width = 150.dp),
                         verticalArrangement = Arrangement.SpaceEvenly,
@@ -1027,9 +985,9 @@ fun TestComponent() {
 
         //Sikt_LocationCard()
 
-        Sikt_HistoriskCard()
+        //Sikt_HistoriskCard()
 
-        /*LazyColumn(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Sikt_mellomblå),
@@ -1038,22 +996,22 @@ fun TestComponent() {
         ) {
             item {
                 Spacer(modifier = Modifier.height(20.dp))
-                //Sikt_Favorite_card()
+                Sikt_Favorite_card()
                 Spacer(modifier = Modifier.height(20.dp))
             }
             item {
-                //Sikt_Favorite_card()
+                Sikt_Favorite_card()
                 Spacer(modifier = Modifier.height(20.dp))
             }
             item {
-                //Sikt_Favorite_card()
+                Sikt_Favorite_card()
                 Spacer(modifier = Modifier.height(20.dp))
             }
             item {
-                //Sikt_Favorite_card()
+                Sikt_Favorite_card()
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
-        }*/
+        }
     }
 }
