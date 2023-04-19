@@ -80,7 +80,7 @@ class APIViewModel : ViewModel() {
                         frostF = frostP
                     )
                 }
-            } catch (e: IOException) {// Ved nettverksavbrudd så behanldes dette ved at
+            } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
 
                 _appUistate.update {
                     AppUiState.Error
@@ -88,42 +88,6 @@ class APIViewModel : ViewModel() {
             }
         }
     }
-
-    fun getAll1() {
-        viewModelScope.launch() {
-            val nowCastDeferred = getNowCast()
-            val locationDeferred = getLocation()
-            val sunsetDeferred = getSunrise()
-            val alertDeferred = getAlert()
-            val frostDeferred = getFrost()
-
-            val nowCastP = nowCastDeferred.await()
-            val locationP = locationDeferred.await()
-            val sunsetP = sunsetDeferred.await()
-            val alertP = alertDeferred.await()
-            val frostP = frostDeferred.await()
-
-            try {
-
-                _appUistate.update {
-                    AppUiState.Success(
-                        locationF = locationP,
-                        nowCastF = nowCastP,
-                        sunriseF = sunsetP,
-                        alertListF = alertP,
-                        frostF = frostP
-                    )
-                }
-            } catch (e: IOException) // Dette er Error handlingen som kommer av mangelfull dekning
-            {
-                _appUistate.update {
-                    AppUiState.Error
-                }
-            }
-
-
-            // iff nettverkproblemmer oppdater _appUistate.update {AppUiState.Error, som er en errorskjerm som sier: hei vi har ikke nett}
-
 
 
 
