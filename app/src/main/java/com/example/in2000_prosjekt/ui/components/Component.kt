@@ -238,17 +238,23 @@ fun Sikt_sol() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_Favorite_card(){
+    // Sikt-ikonene er placeholders
+    // "Refresh"-ikon er placeholder for advarsels-ikon
     Card(
-        modifier = Modifier.size(height = 336.dp, width = 320.dp),
+        modifier = Modifier
+            .fillMaxWidth(),
+            //.size(height = 336.dp, width = 320.dp),
         colors = CardDefaults.cardColors(Sikt_lyseblå)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
         ) {
             Box() {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -256,31 +262,48 @@ fun Sikt_Favorite_card(){
                     ) {
                         Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
                         Text(text = "Gaustatoppen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
-                        Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
+                        var checked by remember { mutableStateOf(false) }
+                        IconToggleButton(
+                            checked = checked,
+                            onCheckedChange = { checked = it },
+                            modifier = Modifier.padding(5.dp)
+                        ) {
+                            if (checked) {
+                                Icon(Icons.Filled.Favorite, contentDescription = "Localized description", tint = Sikt_mørkeblå)
+                            } else {
+                                Icon(painterResource(id = R.drawable.outline_favorite), contentDescription = "Localized description",tint = Sikt_mørkeblå)
+                            }
+                        }
                     }
                     Text(text = "1884 m.o.h", fontWeight = FontWeight.Bold)
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
             Box() {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center) {
                     Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(10.dp)
                     ) {
-                        Sikt_Datavisualisering_Card(1884, -10, 7,true, false, true)
+                        Sikt_Datavisualisering_Card(1800, -10, 7,true, false, true)
+                        Spacer(modifier = Modifier.width(10.dp))
                         Column(
-                            modifier = Modifier.size(height = 220.dp, width = 150.dp),
+                            modifier = Modifier
+                                .fillMaxWidth(),
                             verticalArrangement = Arrangement.SpaceEvenly,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(text = "2000-5000 m.o.h")
-                            Text(text = "Sikt: ")
+                            Text(text = "God sikt")
+                            Icon(painterResource(id = R.drawable.god_sikt), "", tint = Sikt_mørkeblå, modifier = Modifier.size(24.dp)) //testikon
                             Text(text = "1000-2000 m.o.h")
-                            Text(text = "Sikt: ")
+                            Text(text = "God sikt")
+                            Icon(painterResource(id = R.drawable.god_sikt), "", tint = Sikt_mørkeblå, modifier = Modifier.size(24.dp)) //testikon
                             Text(text = "0-1000 m.o.h")
-                            Text(text = "Sikt: ")
+                            Text(text = "Meget dårlig sikt")
+                            Icon(painterResource(id = R.drawable.taake_sikt), "", tint = Sikt_mørkeblå, modifier = Modifier.size(24.dp)) //testikon
                         }
                     }
                 }
@@ -981,35 +1004,30 @@ fun Sikt_HistoriskCard(){
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
-    Scaffold(bottomBar = { Sikt_BottomBar2() }) {
+    //Sikt_Favorite_card()
 
-        //Sikt_LocationCard()
-
-        //Sikt_HistoriskCard()
+    Scaffold(bottomBar = { Sikt_BottomBar2() }) { innerpadding ->
 
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Sikt_mellomblå),
-            verticalArrangement = Arrangement.Center,
+                .fillMaxWidth()
+                .background(Sikt_mellomblå)
+                .padding(innerpadding)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                Spacer(modifier = Modifier.height(20.dp))
                 Sikt_Favorite_card()
-                Spacer(modifier = Modifier.height(20.dp))
             }
             item {
                 Sikt_Favorite_card()
-                Spacer(modifier = Modifier.height(20.dp))
             }
             item {
                 Sikt_Favorite_card()
-                Spacer(modifier = Modifier.height(20.dp))
             }
             item {
                 Sikt_Favorite_card()
-                Spacer(modifier = Modifier.height(20.dp))
             }
 
         }

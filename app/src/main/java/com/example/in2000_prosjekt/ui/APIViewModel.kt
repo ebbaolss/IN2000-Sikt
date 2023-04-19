@@ -49,7 +49,7 @@ class APIViewModel : ViewModel() {
         getAll()
     }
 
-    fun getAll() {
+     fun getAll() {
         viewModelScope.launch() {
             val nowCastDeferred = getNowCast()
             val locationDeferred = getLocation()
