@@ -83,10 +83,16 @@ class APIViewModel : ViewModel() {
             val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
             val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
             val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.get("precipitation_amount")
+            val cloud_high = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
+            val cloud_medium = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
+            val cloud_low = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
 
             val locationF = LocationInfo(
                 temperatureL = (temp ?: -273.5) as Float,
                 fog_area_fractionL = airfog!!,
+                cloud_area_fraction_high = cloud_high as Float,
+                cloud_area_fraction_low = cloud_medium as Float,
+                cloud_area_fraction_medium = cloud_low as Float,
                 rainL = rain!!
             )
             return@async locationF
