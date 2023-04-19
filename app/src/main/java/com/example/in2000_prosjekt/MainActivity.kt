@@ -15,6 +15,7 @@ import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.in2000_prosjekt.ui.database.DatabaseScreenTest
 import com.example.in2000_prosjekt.ui.screens.*
 
 class MainActivity : ComponentActivity() {
@@ -41,7 +42,7 @@ fun MultipleScreenApp() {
     var map = { navController.navigate("Map") }
     var favorite = { navController.navigate("Favorite") }
     var rules = { navController.navigate("Rules") }
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Database") {
         composable("Start") { StartPage( onNavigateToNext = { navController.navigate("LandingPage") })  }
         composable("Map") { ShowMap(map, favorite, rules)  }
         composable("Frost") { FrostScreen()  }
@@ -50,6 +51,7 @@ fun MultipleScreenApp() {
         composable("API") { API_test(onNavigateToNext = { navController.navigate("API") }) }
         composable("LandingPage") { LandingPage( onNavigateToNext = { navController.navigate("Map") })  }
         composable("Alert") { AlertScreen( onNavigateToMap = { map }, onNavigateToFav = { favorite }, onNavigateToRules = rules) }
+        composable("Database") { DatabaseScreenTest() }
     }
 }
 
