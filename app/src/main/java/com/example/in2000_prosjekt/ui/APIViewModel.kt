@@ -11,6 +11,8 @@ import kotlinx.coroutines.launch
 
 import android.util.Log
 import com.example.in2000_prosjekt.ui.data.*
+import io.ktor.client.call.*
+import io.ktor.utils.io.errors.*
 
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -49,7 +51,45 @@ class APIViewModel : ViewModel() {
         getAll()
     }
 
+
     fun getAll() {
+        viewModelScope.launch() {
+
+            try {
+
+                val nowCastDeferred = getNowCast()
+                val locationDeferred = getLocation()
+                val sunsetDeferred = getSunrise()
+                val alertDeferred = getAlert()
+                val frostDeferred = getFrost()
+
+                val nowCastP = nowCastDeferred.await()
+                val locationP = locationDeferred.await()
+                val sunsetP = sunsetDeferred.await()
+                val alertP = alertDeferred.await()
+                val frostP = frostDeferred.await()
+
+
+
+                _appUistate.update {
+                    AppUiState.Success(
+                        locationF = locationP,
+                        nowCastF = nowCastP,
+                        sunriseF = sunsetP,
+                        alertListF = alertP,
+                        frostF = frostP
+                    )
+                }
+            } catch (e: IOException) {// Ved nettverksavbrudd så behanldes dette ved at
+
+                _appUistate.update {
+                    AppUiState.Error
+                }
+            }
+        }
+    }
+
+    fun getAll1() {
         viewModelScope.launch() {
             val nowCastDeferred = getNowCast()
             val locationDeferred = getLocation()
@@ -63,15 +103,24 @@ class APIViewModel : ViewModel() {
             val alertP = alertDeferred.await()
             val frostP = frostDeferred.await()
 
-            _appUistate.update {
-                AppUiState.Success(
-                    locationF = locationP,
-                    nowCastF = nowCastP,
-                    sunriseF = sunsetP,
-                    alertListF = alertP,
-                    frostF = frostP
-                )
+            try {
+
+                _appUistate.update {
+                    AppUiState.Success(
+                        locationF = locationP,
+                        nowCastF = nowCastP,
+                        sunriseF = sunsetP,
+                        alertListF = alertP,
+                        frostF = frostP
+                    )
+                }
+            } catch (e: IOException) // Dette er Error handlingen som kommer av mangelfull dekning
+            {
+                _appUistate.update {
+                    AppUiState.Error
+                }
             }
+
 
             // iff nettverkproblemmer oppdater _appUistate.update {AppUiState.Error, som er en errorskjerm som sier: hei vi har ikke nett}
 
@@ -225,12 +274,11 @@ class APIViewModel : ViewModel() {
             }
 
         }
-}
+    }
+
 
     private fun getFrost() : Deferred<FrostInfo> {
-
         return viewModelScope.async(Dispatchers.IO) {
-
             try {
 
                 val frostPolygon = dataFrost.fetchApiSvarkoordinater(2.toString(), 2.toString())
@@ -250,23 +298,17 @@ class APIViewModel : ViewModel() {
                 Log.d("lat", lat.toString())
                 Log.d("long", long.toString())
 
-                val frostF = FrostInfo(
+                val frostF = FrostInfo.FoundFrostInfo(
                     typeFrost = typeFrost.toString(), //ikke egt ha toString her
                     longFrost = long!!,
                     latFrost = lat!!,
                 )
                 return@async frostF
+        }
+        catch (e: NoTransformationFoundException){// Dette er en error type som ktor sin get funksjon kaster ved feil av typen 4xx og 5xx
 
-            } catch (e : Exception) {
-
-                return@async FrostInfo(  typeFrost = "Error: Mangler historisk værdata", //ikke egt ha toString her
-                    longFrost = "",
-                    latFrost = ""
-                )
+            return@async FrostInfo.NotFoundFrostInfo
             }
-
-
-
         }
     }
 }
