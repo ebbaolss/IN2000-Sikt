@@ -3,6 +3,7 @@ package com.example.in2000_prosjekt.ui.data
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.serialization.gson.*
@@ -28,6 +29,13 @@ class DataSourceFrost (val basePath: String) {
         install(ContentNegotiation) {
             gson()
         }
+
+        /*
+        ResponseException()
+        https://github.com/ktorio/ktor-documentation/tree/2.2.4/codeSnippets/snippets/client-validate-non-2xx-response/src
+
+
+         */
     }
 
     suspend fun authURL(URL: String) : HttpResponse {

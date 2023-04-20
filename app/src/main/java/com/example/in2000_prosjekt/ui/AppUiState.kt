@@ -22,11 +22,17 @@ data class AlertInfo( //sett A på slutten
     val alertTypeA: String,
     val alertLevelA: String
 )
-data class FrostInfo( //sett Frost på slutten, F brukes allerede
-    val typeFrost : String,
-    val longFrost : Double,
-    val latFrost : Double,
-)
+sealed interface FrostInfo {
+    data class FoundFrostInfo(
+        val typeFrost: String,
+        val longFrost: String,
+        val latFrost: String,
+        val noDataFound: Boolean = false
+    ) : FrostInfo
+
+    object NotFoundFrostInfo : FrostInfo
+
+}
 
 sealed interface AppUiState {
     data class Success(

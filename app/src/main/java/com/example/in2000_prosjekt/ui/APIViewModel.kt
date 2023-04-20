@@ -11,6 +11,8 @@ import kotlinx.coroutines.launch
 
 import android.util.Log
 import com.example.in2000_prosjekt.ui.data.*
+import io.ktor.client.call.*
+import io.ktor.utils.io.errors.*
 
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -49,144 +51,228 @@ class APIViewModel : ViewModel() {
         getAll()
     }
 
+
     fun getAll() {
         viewModelScope.launch() {
-            val nowCastDeferred = getNowCast()
-            val locationDeferred = getLocation()
-            val sunsetDeferred = getSunrise()
-            val alertDeferred = getAlert()
-            val frostDeferred = getFrost()
 
-            val nowCastP = nowCastDeferred.await()
-            val locationP = locationDeferred.await()
-            val sunsetP = sunsetDeferred.await()
-            val alertP = alertDeferred.await()
-            val frostP = frostDeferred.await()
+            try {
 
-            _appUistate.update {
-                AppUiState.Success(
-                    locationF = locationP,
-                    nowCastF = nowCastP,
-                    sunriseF = sunsetP,
-                    alertListF = alertP,
-                    frostF = frostP
-                )
+                val nowCastDeferred = getNowCast()
+                val locationDeferred = getLocation()
+                val sunsetDeferred = getSunrise()
+                val alertDeferred = getAlert()
+                val frostDeferred = getFrost()
+
+                val nowCastP = nowCastDeferred.await()
+                val locationP = locationDeferred.await()
+                val sunsetP = sunsetDeferred.await()
+                val alertP = alertDeferred.await()
+                val frostP = frostDeferred.await()
+
+
+
+                _appUistate.update {
+                    AppUiState.Success(
+                        locationF = locationP,
+                        nowCastF = nowCastP,
+                        sunriseF = sunsetP,
+                        alertListF = alertP,
+                        frostF = frostP
+                    )
+                }
+            } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
+
+                _appUistate.update {
+                    AppUiState.Error
+                }
             }
+        }
+    }
+
+
+
+
+
+
+
+
+
         }
     }
 
     private fun getLocation() : Deferred<LocationInfo>{
         return viewModelScope.async(Dispatchers.IO) {
+            try {
+                val forecast = dataSource.fetchLocationForecast(latitude, longtitude, altitude)
 
-            val forecast = dataSource.fetchLocationForecast(latitude, longtitude, altitude)
+                val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
+                val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
+                val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.get("precipitation_amount")
 
-            val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
-            val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
-            val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.get("precipitation_amount")
+                val locationF = LocationInfo(
+                    temperatureL = (temp ?: -273.5) as Float,
+                    fog_area_fractionL = airfog!!,
+                    rainL = rain!!
+                )
+                return@async locationF
 
-            val locationF = LocationInfo(
-                temperatureL = (temp ?: -273.5) as Float,
-                fog_area_fractionL = airfog!!,
-                rainL = rain!!
-            )
-            return@async locationF
+            } catch (e: Exception) {
+                return@async LocationInfo(
+                    temperatureL =  0.0 as Float,
+                    fog_area_fractionL = 0.0 as Float,
+                    rainL = 0.0 as Float
+                )
+
+            }
+
+
+
         }
     }
 
     private fun getNowCast() : Deferred<NowCastInfo> {
         return viewModelScope.async(Dispatchers.IO) {
 
-            val forecastNow = dataSource.fetchNowCast(latitude, longtitude, altitude)
+            try { val forecastNow = dataSource.fetchNowCast(latitude, longtitude, altitude)
 
-            val tempNow = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
-            val windN = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed
+                val tempNow = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
+                val windN = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed
 
-            val nowCastF = NowCastInfo(
-                temperatureNow = (tempNow ?: -273.5) as Float, //dette må fikses bedre
-                windN = windN!! //funker dette eller må jeg gjøre som over?
-            )
-            return@async nowCastF
+                val nowCastF = NowCastInfo(
+                    temperatureNow = (tempNow ?: -273.5) as Float, //dette må fikses bedre
+                    windN = windN!! //funker dette eller må jeg gjøre som over?
+                )
+                return@async nowCastF }
+            catch (e: Exception) {
+                return@async NowCastInfo(
+                    temperatureNow = 0.0 as Float,
+                    windN =0.0 as Float
+                )
+            }
+
+
+
         }
+
     }
+
 
     private fun getSunrise() : Deferred<SunriseInfo> {
         return viewModelScope.async(Dispatchers.IO) {
 
-            val sunrise = dataSunrise.fetchSunrise(latitude, longtitude)
+            try {
+                val sunrise = dataSunrise.fetchSunrise(latitude, longtitude)
 
-            val sunriseToday = sunrise.properties?.sunrise?.time
-            val sunsetToday = sunrise.properties?.sunset?.time
+                val sunriseToday = sunrise.properties?.sunrise?.time
+                val sunsetToday = sunrise.properties?.sunset?.time
 
-            val sunriseF = SunriseInfo(
-                sunriseS = sunriseToday!!,
-                sunsetS = sunsetToday!!
-            )
-            return@async sunriseF
+                val sunriseF = SunriseInfo(
+                    sunriseS = sunriseToday!!,
+                    sunsetS = sunsetToday!!
+                )
+                return@async sunriseF
+            }catch (e: Exception ) {
+                return@async SunriseInfo(
+                    sunriseS = "Error: Mangler data tilknyttet soloppgangtider for denne lokalisasjonen",
+                    sunsetS = ""
+                )
+
+
+            }
+
+
+
         }
     }
 
     private fun getAlert() : Deferred<MutableList<AlertInfo>>{
         return viewModelScope.async(Dispatchers.IO) {
-            val alert = dataMet.fetchMetAlert(county)
 
-            var alertList : MutableList<AlertInfo> = mutableListOf()
-            //Dette er klønete, men appen kræsjer ikke hvis det ikke er fare
-            var area : String?
-            var type : String?
-            var cons : String?
-            var rec : String?
-            var desc: String?
-            var alertType: String?
-            var alertLevel: String?
+            try {
 
-            alert.features?.forEach{
-                val prop = it.properties
+                val alert = dataMet.fetchMetAlert(county)
 
-                area = prop?.area
-                type = prop?.eventAwarenessName
-                cons = prop?.consequences
-                rec = prop?.instruction
-                desc = prop?.description
-                alertType = prop?.awareness_type
-                alertLevel = prop?.awareness_level
+                var alertList : MutableList<AlertInfo> = mutableListOf()
+                //Dette er klønete, men appen kræsjer ikke hvis det ikke er fare
+                var area : String?
+                var type : String?
+                var cons : String?
+                var rec : String?
+                var desc: String?
+                var alertType: String?
+                var alertLevel: String?
 
-                val alertF = AlertInfo(
-                    areaA = area!!,
-                    typeA = type!!,
-                    consequenseA = cons!!,
-                    recomendationA = rec!!,
-                    descriptionA = desc!!,
-                    alertTypeA = alertType!!,
-                    alertLevelA = alertLevel!!
-                )
+                alert.features?.forEach{
+                    val prop = it.properties
 
-                alertList.add(alertF)
+                    area = prop?.area
+                    type = prop?.eventAwarenessName
+                    cons = prop?.consequences
+                    rec = prop?.instruction
+                    desc = prop?.description
+                    alertType = prop?.awareness_type
+                    alertLevel = prop?.awareness_level
+
+                    val alertF = AlertInfo(
+                        areaA = area!!,
+                        typeA = type!!,
+                        consequenseA = cons!!,
+                        recomendationA = rec!!,
+                        descriptionA = desc!!,
+                        alertTypeA = alertType!!,
+                        alertLevelA = alertLevel!!
+                    )
+
+                    alertList.add(alertF)
+                }
+                //Log.d("area", area.toString())
+                return@async alertList
+
             }
-            //Log.d("area", area.toString())
-            return@async alertList
+            catch (e:Exception) {
+
+                val erroralertInfoliste :  MutableList<AlertInfo>  = mutableListOf<AlertInfo>()
+                return@async erroralertInfoliste
+
+
+            }
+
         }
-}
+    }
+
 
     private fun getFrost() : Deferred<FrostInfo> {
         return viewModelScope.async(Dispatchers.IO) {
+            try {
 
-            val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)
-            val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longtitude)
+                val frostPolygon = dataFrost.fetchApiSvarkoordinater(2.toString(), 2.toString())
+                val source2 = frostPolygon?.data?.get(0)?.id.toString()
 
-            val typeFrost = frost.type
-            val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
-            val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
 
-            Log.d("typefrost", typeFrost.toString())
-            Log.d("lat", lat.toString())
-            Log.d("long", long.toString())
+                val frost = dataFrost.fetchFrostTemp(elements, referencetime, source2)
 
-            val frostF = FrostInfo(
-                typeFrost = typeFrost.toString(), //ikke egt ha toString her
-                longFrost = long!!,
-                latFrost = lat!!,
-            )
-            return@async frostF
+
+
+                val typeFrost = frost.type
+                val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0).toString()
+                val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1).toString()
+
+
+                Log.d("typefrost", typeFrost.toString())
+                Log.d("lat", lat.toString())
+                Log.d("long", long.toString())
+
+                val frostF = FrostInfo.FoundFrostInfo(
+                    typeFrost = typeFrost.toString(), //ikke egt ha toString her
+                    longFrost = long!!,
+                    latFrost = lat!!,
+                )
+                return@async frostF
+        }
+        catch (e: NoTransformationFoundException){// Dette er en error type som ktor sin get funksjon kaster ved feil av typen 4xx og 5xx
+
+            return@async FrostInfo.NotFoundFrostInfo
+            }
         }
     }
 }

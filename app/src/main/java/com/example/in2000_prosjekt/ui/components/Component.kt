@@ -316,12 +316,25 @@ fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: S
             Spacer(modifier = Modifier
                 .height(20.dp))
             Text(text = "Varsel: $varsel", fontFamily = FontFamily.Monospace)
+
+            when(frostinfo) {
+                is FrostInfo.FoundFrostInfo -> {
+                    // vis kalender med værdata
+                    Text(text = "Type frost: ${frostinfo.typeFrost}", fontFamily = FontFamily.Monospace)
+                    Spacer(modifier = Modifier
+                        .height(30.dp))
+                    Text(text = "Coordinates frost: ${frostinfo.latFrost}, ${frostinfo.longFrost}", fontFamily = FontFamily.Monospace)
+                }
+                is FrostInfo.NotFoundFrostInfo -> {
+
+                    Text(text = "Error Frost: Ingen data tilgjengelig")
+
+                }
+
+            }
             Spacer(modifier = Modifier
                 .height(30.dp))
-            Text(text = "Type frost: ${frostinfo.typeFrost}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(30.dp))
-            Text(text = "Coordinates frost: ${frostinfo.latFrost}, ${frostinfo.longFrost}", fontFamily = FontFamily.Monospace)
+
             Spacer(modifier = Modifier
                 .height(30.dp))
             Column(
@@ -565,3 +578,33 @@ fun TestComponent() {
         }
     }
 }
+
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FavoriteScreenError (  onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit) {
+
+    Scaffold(topBar = { Sikt_favoritt_tekst()}, bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_mellomblå, rules = Sikt_lyseblå, map = Sikt_lyseblå)})
+    {
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                painter =  painterResource(R.drawable.nonettworkpicture),
+                contentDescription = "Nettwork Error Icon presented on screen"
+            )
+
+        }
+
+    }
+
+
+
+}
+
