@@ -2,6 +2,7 @@ package com.example.in2000_prosjekt
 
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -54,6 +55,30 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    override fun onStart() {
+        super.onStart()
+        Log.i("Lifecycle", "onStart")
+    }
+    override fun onResume() {
+        super.onResume()
+        Log.i("Lifecycle", "onResume")
+    }
+    override fun onPause() {
+        super.onPause()
+        Log.i("Lifecycle", "onPause")
+    }
+    override fun onStop() {
+        super.onStop()
+        Log.i("Lifecycle", "onStop")
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("Lifecycle", "onDestroy")
+    }
+    override fun onRestart() {
+        super.onRestart()
+        Log.i("Lifecycle", "onRestart")
+    }
 }
 
 @Composable
@@ -63,15 +88,18 @@ fun MultipleScreenApp(viewModel: FavoriteViewModel) {
     var map = { navController.navigate("Map") }
     var favorite = { navController.navigate("Favorite") }
     var rules = { navController.navigate("Rules") }
-    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Database") {
+    var settings = {navController.navigate("Settings")}
+    
+    NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
+
         composable("Start") { StartPage( onNavigateToNext = { navController.navigate("LandingPage") })  }
-        composable("Map") { ShowMap(map, favorite, rules)  }
-        composable("Frost") { FrostScreen()  }
-        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToRules = rules) }
-        composable("Rules") { RulesScreen(map, favorite, rules) }
+        composable("Map") { ShowMap(map, favorite, settings, rules)  }
+        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules) }
+        composable("Rules") { RulesScreen(map, favorite, settings, rules) }
         composable("API") { API_test(onNavigateToNext = { navController.navigate("API") }) }
         composable("LandingPage") { LandingPage( onNavigateToNext = { navController.navigate("Map") })  }
-        composable("Alert") { AlertScreen( onNavigateToMap = { map }, onNavigateToFav = { favorite }, onNavigateToRules = rules) }
+        composable("Alert") { AlertScreen( onNavigateToMap = { map }, onNavigateToFav = { favorite }, onNavigateToRules = rules, onNavigateToSettings = settings) }
+        composable("Settings") { SettingsScreen(map, favorite, settings, rules) }
         composable("Database") { DatabaseScreenTest(viewModel) }
     }
 }

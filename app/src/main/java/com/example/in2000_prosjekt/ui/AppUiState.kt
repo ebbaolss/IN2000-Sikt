@@ -13,7 +13,7 @@ data class SunriseInfo( //sett S på slutten
     val sunriseS: String,
     val sunsetS: String
 )
-data class AlertInfo(
+data class AlertInfo( //sett A på slutten
     val areaA: String,
     val typeA: String,
     val consequenseA: String,
@@ -23,13 +23,20 @@ data class AlertInfo(
     val alertLevelA: String
 )
 
-sealed interface AppUiState2 {
+data class FrostInfo(
+    val typeFrost : String,
+    val longFrost : Double,
+    val latFrost : Double,
+)
+
+sealed interface AppUiState {
     data class Success(
-        val locationInfo: LocationInfo,
-        val nowCastDef: NowCastInfo,
-        val sunrise: SunriseInfo,
-        val alertList: MutableList<AlertInfo>
-    ) : AppUiState2
-    object Error : AppUiState2
-    object Loading : AppUiState2
+        val locationF: LocationInfo,
+        val nowCastF: NowCastInfo,
+        val sunriseF: SunriseInfo,
+        val alertListF: MutableList<AlertInfo>,
+        val frostF: FrostInfo
+    ) : AppUiState
+    object Error : AppUiState
+    object Loading : AppUiState
 }

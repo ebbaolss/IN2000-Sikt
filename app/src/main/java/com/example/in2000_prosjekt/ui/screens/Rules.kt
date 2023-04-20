@@ -23,15 +23,15 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RulesScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit){
+fun RulesScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
 
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_lyseblå, rules = Sikt_mellomblå, map = Sikt_lyseblå) }) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToRules, favoritt = Sikt_lyseblå, settings = Sikt_lyseblå, rules = Sikt_mellomblå, map = Sikt_lyseblå) }, containerColor = Sikt_mellomblå) {
         val rules: Array<String> = stringArrayResource(id = R.array.rules)
         Card(
             modifier = Modifier
                 .padding(20.dp),
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(Color(0xFFCDDCEB))
+            colors = CardDefaults.cardColors(Sikt_lyseblå)
         ) {
             Sikt_sol()
             Text(
