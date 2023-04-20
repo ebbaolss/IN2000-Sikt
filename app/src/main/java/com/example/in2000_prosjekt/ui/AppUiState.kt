@@ -22,7 +22,8 @@ data class AlertInfo( //sett A på slutten
     val alertTypeA: String,
     val alertLevelA: String
 )
-data class FrostInfo( //sett Frost på slutten, F brukes allerede
+
+data class FrostInfo(
     val typeFrost : String,
     val longFrost : Double,
     val latFrost : Double,

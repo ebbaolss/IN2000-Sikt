@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.ui.components.Sikt_BlueButton
 import com.example.in2000_prosjekt.ui.components.Sikt_GreyButton
-import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.theme.Sikt_grå
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_sort

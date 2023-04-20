@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui.screens
 
+import androidx.compose.material.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,7 +17,7 @@ fun API_test(
     onNavigateToNext: () -> Unit
 ){
 
-    val appUiState by apiViewModel.appUiState.collectAsState()
+    /*val appUiState by apiViewModel.appUiState.collectAsState()
 
     when(appUiState){
         is AppUiState.Loading -> Text (text = "loading...", fontSize = 30.sp)
@@ -31,7 +32,7 @@ fun API_test(
             ) //endre dette til en bedre måte etterhvert?
 
         }
-    }
+    }*/
 }
 
 
