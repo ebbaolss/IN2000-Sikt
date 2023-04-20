@@ -7,15 +7,23 @@ import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "Favorites")
-data class Favorite(
+class Favorite {
 
-    @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "Coordinates")
-    var coordinates: String,
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    @ColumnInfo(name = "FavoriteId")
+    var coordinates: Int = 0
 
-    @ColumnInfo(name = "Long")
-    var longitude: Double,
+    @ColumnInfo(name = "longtitude")
+    var longtitude: Double = 0.0
 
-    @ColumnInfo(name = "Lat")
-    var latitude: Double,
-)
+    @ColumnInfo(name = "latitude")
+    var latitude: Double = 0.0
+
+    constructor() {}
+
+    constructor(longtitude: Double, latitude: Double){
+        this.longtitude = longtitude
+        this.latitude = latitude
+    }
+}

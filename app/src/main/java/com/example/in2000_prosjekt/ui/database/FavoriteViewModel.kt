@@ -1,34 +1,43 @@
 package com.example.in2000_prosjekt.ui.database
 
 
+import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-class FavoriteViewModel @Inject constructor(private val favoriteRepository: FavoriteRepository) :
-    ViewModel() {
+class FavoriteViewModel(application: Application) : ViewModel() {
 
-    val favoriteList: LiveData<List<Favorite>> = favoriteRepository.allFavorites
+    val allFavorites: LiveData<List<Favorite>>
+    private val repository: FavoriteRepository
+    val searchFavorites: MutableLiveData<List<Favorite>>
 
-    val foundFavorite: LiveData<Favorite> = favoriteRepository.foundFavorite
+    init {
+        val favoriteDb = FavoriteDatabase.getInstance(application)
+        val favoriteDao = favoriteDb.favoriteDao()
+        repository = FavoriteRepository(favoriteDao)
 
+        allFavorites = repository.allFavorites
+        searchFavorites = repository.searchFavorites
+    }
+    /*
     fun getAllFavorites() {
         favoriteRepository.getAllFavorites()
     }
+     */
 
     fun addFavorite(favorite: Favorite) {
-        favoriteRepository.addFavorite(favorite)
-        getAllFavorites()
+        repository.addFavorite(favorite)
     }
 
-    fun findByCoordinate(coordinate: String) {
-        favoriteRepository.findByCoordinate(coordinate)
+    fun findFavorite(longtitude: Double, latitude: Double) {
+        repository.findFavorite(longtitude, latitude)
     }
 
-    fun deleteEmployee(favorite: Favorite) {
-        favoriteRepository.deleteFavorite(favorite)
-        getAllFavorites()
+    fun deleteFavorite(longtitude: Double, latitude: Double) {
+        repository.deleteFavorite(longtitude, latitude)
     }
 }
 

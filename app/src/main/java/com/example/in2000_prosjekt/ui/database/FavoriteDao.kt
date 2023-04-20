@@ -1,19 +1,20 @@
 package com.example.in2000_prosjekt.ui.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
 interface FavoriteDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert()
     suspend fun addFavorite(favorite: Favorite)
 
-    @Query("SELECT * FROM Favorites WHERE coordinates = :coordinate")
-    fun findFavoriteByCoordinate(coordinate: String): Favorite
+    @Query("SELECT * FROM Favorites WHERE longtitude = :longtitude AND latitude = :latitude")
+    fun findFavorite(longtitude: Double, latitude: Double): List<Favorite>
 
     @Query("SELECT * FROM favorites")
-    fun getAllFavorites(): List<Favorite>
+    fun getAllFavorites(): LiveData<List<Favorite>>
 
-    @Delete
-    suspend fun deleteFav(favorite: Favorite)
+    @Query("DELETE FROM favorites WHERE longtitude = :longtitude AND latitude = :latitude")
+    fun deleteFav(longtitude: Double, latitude: Double)
 }

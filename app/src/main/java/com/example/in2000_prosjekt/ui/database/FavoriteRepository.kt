@@ -1,15 +1,14 @@
 package com.example.in2000_prosjekt.ui.database
 
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
-    val allFavorites = MutableLiveData<List<Favorite>>()
-    val foundFavorite = MutableLiveData<Favorite>()
+    val allFavorites: LiveData<List<Favorite>> = favoriteDao.getAllFavorites()
+    val searchFavorites = MutableLiveData<List<Favorite>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     fun addFavorite(newFavorite: Favorite) {
@@ -18,22 +17,30 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         }
     }
 
+    /*
     fun getAllFavorites() {
         coroutineScope.launch(Dispatchers.IO) {
-            allFavorites.postValue(favoriteDao.getAllFavorites())
+            searchFavorites.postValue(favoriteDao.getAllFavorites())
         }
     }
 
-    fun deleteFavorite(favorite: Favorite) {
+     */
+
+    fun deleteFavorite(longtitude: Double, latitude: Double) {
         coroutineScope.launch(Dispatchers.IO) {
-            favoriteDao.deleteFav(favorite)
+            favoriteDao.deleteFav(longtitude, latitude)
         }
     }
 
-    fun findByCoordinate(coordinate: String) {
-        coroutineScope.launch(Dispatchers.IO) {
-            foundFavorite.postValue(favoriteDao.findFavoriteByCoordinate(coordinate))
+    fun findFavorite(longtitude: Double, latitude: Double) {
+        coroutineScope.launch(Dispatchers.Main) {
+            searchFavorites.value = asyncFind(longtitude, latitude).await()
         }
     }
+
+    private fun asyncFind(longtitude: Double, latitude: Double): Deferred<List<Favorite>?> =
+        coroutineScope.async(Dispatchers.IO) {
+            return@async favoriteDao.findFavorite(longtitude, latitude)
+        }
 
 }
