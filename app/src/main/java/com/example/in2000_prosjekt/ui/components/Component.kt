@@ -446,8 +446,6 @@ fun Alert_Card(alert: AlertInfo){
     //level er 1,2,3,4 eller 5. Definerer hvilket fare bilde vi skal ha, eller skal vi ta det på level[1] som gir farge?
     val alertLevel = level[0]
 
-    var fontSize by remember { mutableStateOf(20.sp) } // initial font size
-
 
     Card(
       modifier = Modifier
@@ -463,57 +461,38 @@ fun Alert_Card(alert: AlertInfo){
             //Farevarsel ikon
             Row(
                 modifier = Modifier
-                    .padding(5.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
+                    modifier = Modifier.weight(1f),
                     contentScale = ContentScale.Fit,
                     painter = painterResource(id = id),
                     contentDescription = "alert",
                     alignment = Alignment.TopStart
                 )
-
-                //Overskrift med Området Resize funker bare en gang...
-                BoxWithConstraints {
-                    Text(
-                        modifier = Modifier
-                            .wrapContentSize(align = Alignment.Center)
-                            .fillMaxWidth(),
-                        text = alert.areaA,
-                        textAlign = TextAlign.Center,
+                Text(
+                    modifier = Modifier
+                        .wrapContentSize(align = Alignment.Center)
+                        .weight(4f),
+                    text = alert.areaA,
+                    //Prøver å resize til å passe på en linje
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    style = TextStyle(
                         fontWeight = FontWeight.Bold,
-                        //Prøver å resize til å passe på en linje
-                        maxLines = 2,
-                        overflow = TextOverflow.Visible,
-                        style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = fontSize,
-                            textAlign = TextAlign.Center
-                        )
-                        /*
-                        ,inlineContent = mapOf(
-                            "fontSize" to InlineTextContent(
-                                Placeholder(
-                                    width = fontSize,
-                                    height = 0.sp,
-                                    placeholderVerticalAlign = PlaceholderVerticalAlign.Top
-                                )
-                            )
-                        )
-                         */
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center
                     )
-                    /*
-                    if (maxWidth > 0.dp && maxWidth < Float.MAX_VALUE.dp) {
-                        fontSize = (fontSize * (maxWidth / fontSize.toPx())).coerceAtMost(fontSize)
-                    }
-                     */
-                }
+                )
                 //favoritt icon button
                 var checked by remember { mutableStateOf(false) }
                 IconToggleButton(
                     checked = checked,
                     onCheckedChange = { checked = it },
                     modifier = Modifier.padding(5.dp)
+                        .weight(1f)
                 ) {
                     if (checked) {
                         Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
