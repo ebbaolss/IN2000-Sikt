@@ -46,7 +46,7 @@ fun createFactoryMap(xt: Context) : MapView {
             cameraOptions{
                 zoom(19.9)
             }
-            Sikt_BottomSheet()
+            //Sikt_BottomSheet()
         }
         mapboxMap.addOnMapClickListener(onMapClickListener = OnMapClickListener {point ->
             onMapClick(point)
