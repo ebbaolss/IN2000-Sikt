@@ -65,11 +65,13 @@ fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, s
         ){
             item {
                 Spacer(modifier = Modifier.height(100.dp))
-                Sikt_Favorite_card(weatherinfo, nowcastinfo, sunriseinfo, alertinfo)
+                Sikt_Favorite_card()
+                //Sikt_Favorite_card(weatherinfo, nowcastinfo, sunriseinfo, alertinfo)
                 Spacer(modifier = Modifier.height(15.dp))
             }
             item {
-                Sikt_Favorite_card(weatherinfo, nowcastinfo, sunriseinfo, alertinfo)
+                Sikt_Favorite_card()
+                //Sikt_Favorite_card(weatherinfo, nowcastinfo, sunriseinfo, alertinfo)
                 Spacer(modifier = Modifier.height(15.dp))
             }
         }
