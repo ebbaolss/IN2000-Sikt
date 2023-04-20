@@ -451,12 +451,13 @@ fun Alert_Card(alert: AlertInfo){
       modifier = Modifier
           .fillMaxWidth()
           //gjør cardet scrollable
-          .verticalScroll(scrollState)
+          .verticalScroll(scrollState),
+        backgroundColor = Sikt_lyseblå
     ){
         Column(
             //Spacer
             modifier = Modifier
-                .padding(20.dp)
+                .padding(10.dp)
         ){
             //Farevarsel ikon
             Row(
