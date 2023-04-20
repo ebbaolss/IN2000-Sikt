@@ -463,7 +463,7 @@ fun Alert_Card(alert: AlertInfo){
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Bottom
             ) {
                 Image(
                     modifier = Modifier.weight(1f),
