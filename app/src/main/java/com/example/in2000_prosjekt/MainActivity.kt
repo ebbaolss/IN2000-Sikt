@@ -1,6 +1,7 @@
 package com.example.in2000_prosjekt
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,9 +29,40 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) { 
                     MultipleScreenApp()
+                    //hente fra apier, de som kan hentes med en gang.
+                    //onCreate() :
+//                    It is called when the activity is first created.
+//                    This is where all the static work is done like creating views,
+//                    binding data to lists, etc. This method also provides a Bundle
+//                    containing its previous frozen state, if there was one.
+                    Log.i("Lifecycle", "onCreate")
                 }
             }
         }
+    }
+    override fun onStart() {
+        super.onStart()
+        Log.i("Lifecycle", "onStart")
+    }
+    override fun onResume() {
+        super.onResume()
+        Log.i("Lifecycle", "onResume")
+    }
+    override fun onPause() {
+        super.onPause()
+        Log.i("Lifecycle", "onPause")
+    }
+    override fun onStop() {
+        super.onStop()
+        Log.i("Lifecycle", "onStop")
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("Lifecycle", "onDestroy")
+    }
+    override fun onRestart() {
+        super.onRestart()
+        Log.i("Lifecycle", "onRestart")
     }
 }
 
