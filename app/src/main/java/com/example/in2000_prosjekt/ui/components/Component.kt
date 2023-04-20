@@ -495,9 +495,9 @@ fun Alert_Card(alert: AlertInfo){
                         .weight(1f)
                 ) {
                     if (checked) {
-                        Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
+                        Icon(Icons.Filled.Favorite, contentDescription = "Favorite filled")
                     } else {
-                        Icon(Icons.Outlined.Favorite, contentDescription = "Localized description")
+                        Icon(Icons.Outlined.Favorite, contentDescription = "Favorite outlined")
                     }
                 }
 
