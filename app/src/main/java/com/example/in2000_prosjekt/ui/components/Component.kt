@@ -44,6 +44,26 @@ import androidx.compose.ui.window.Dialog
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.*
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.*
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.font.FontStyle
 import kotlinx.coroutines.launch
 
 @Composable
@@ -144,7 +164,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
 
 @Composable
 fun Sikt_BottomBar2( ) {
-
+    //bruker denne til preview design
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
         containerColor = Sikt_hvit,
@@ -206,8 +226,26 @@ fun Sikt_BottomBar2( ) {
     }
 }
 
-
 @Composable
+fun Sikt_favoritter_card() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .padding(10.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(Sikt_lyseblå)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Galdhøpiggen", color = Sikt_sort, fontSize = 25.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(30.dp))
+            Sikt_sol()
+        }
+    }
+
 fun Sikt_favoritt_tekst() {
     //CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
     Text(
@@ -222,6 +260,7 @@ fun Sikt_favoritt_tekst() {
 
 @Composable
 fun Sikt_sol() {
+    //bilde til fjellvettregler-screen
     Image(
         painter = painterResource(id = R.drawable.sol),
         contentDescription = "sol",
@@ -233,32 +272,24 @@ fun Sikt_sol() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_favoritter_card(){
+fun Sikt_FinnTurer_card(){
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-            .background(Sikt_lyseblå),
-        shape = RoundedCornerShape(50.dp),
-        colors = CardDefaults.cardColors(Color(0xFFCDDCEB)) // vil sette bagrunnsfargen til sikt_lyseblå men ????
+            .width(120.dp)
+            .height(110.dp)
+            .padding(10.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(Sikt_hvit)
     ) {
-        //todoooo
-        Text(text = "Hei hei sikt")
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_Card() {
-    Card(
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp, textAlign = TextAlign.Center)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Galdhøpiggen", color = Sikt_sort, fontSize = 12.sp)
+            Spacer(modifier = Modifier.height(30.dp))
+            Sikt_sol()
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -460,7 +491,6 @@ fun Sikt_FinnTurer_card(){
     }
 }
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Sikt_BottomSheet() {
@@ -566,7 +596,50 @@ fun ModalSheetWithAnchor(
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun ModalSheetWithAnchor(
+    sheetState: ModalBottomSheetState,
+    showModalSheet: MutableState<Boolean>
+) {
+    val scope = rememberCoroutineScope()
+
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
+        Button(
+            modifier = Modifier
+                .height(165.dp)
+                .fillMaxWidth()
+                .padding(30.dp),
+            shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
+            colors = ButtonDefaults.buttonColors(Sikt_lyseblå),
+            onClick = {
+                showModalSheet.value = !showModalSheet.value
+                scope.launch {
+                    sheetState.show()
+            }
+        })  {
+            Column(
+                Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowUp,
+                    tint = Sikt_mellomblå,
+                    contentDescription = "",
+                    modifier = Modifier
+                )
+                Text(text = "Finn turer i nærheten", color = Sikt_sort, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+
+            }
+        }
+    }
+}
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
@@ -603,8 +676,5 @@ fun FavoriteScreenError (  onNavigateToMap: () -> Unit, onNavigateToFav: () -> U
         }
 
     }
-
-
-
 }
 

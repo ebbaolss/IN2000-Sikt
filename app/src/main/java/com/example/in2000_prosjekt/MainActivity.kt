@@ -1,24 +1,32 @@
 package com.example.in2000_prosjekt
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.in2000_prosjekt.ui.database.DatabaseScreenTest
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModelFactory
 import com.example.in2000_prosjekt.ui.screens.*
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -27,15 +35,22 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) { 
-                    MultipleScreenApp()
-                    //hente fra apier, de som kan hentes med en gang.
-                    //onCreate() :
-//                    It is called when the activity is first created.
-//                    This is where all the static work is done like creating views,
-//                    binding data to lists, etc. This method also provides a Bundle
-//                    containing its previous frozen state, if there was one.
-                    Log.i("Lifecycle", "onCreate")
+                ) {
+
+                    val owner = LocalViewModelStoreOwner.current
+
+                    owner?.let {
+                        val viewModel: FavoriteViewModel = viewModel(
+                            it,
+                            "FavoriteViewModel",
+                            FavoriteViewModelFactory(
+                                LocalContext.current.applicationContext
+                                        as Application
+                            )
+                        )
+
+                        MultipleScreenApp(viewModel)
+                    }
                 }
             }
         }
@@ -67,7 +82,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MultipleScreenApp() {
+fun MultipleScreenApp(viewModel: FavoriteViewModel) {
     val navController = rememberNavController()
 
     var map = { navController.navigate("Map") }
@@ -85,7 +100,9 @@ fun MultipleScreenApp() {
         composable("LandingPage") { LandingPage( onNavigateToNext = { navController.navigate("Map") })  }
         composable("Alert") { AlertScreen( onNavigateToMap = { map }, onNavigateToFav = { favorite }, onNavigateToRules = rules, onNavigateToSettings = settings) }
         composable("Settings") { SettingsScreen(map, favorite, settings, rules) }
+        composable("Database") { DatabaseScreenTest(viewModel) }
     }
 }
+
 
 
