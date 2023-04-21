@@ -100,6 +100,7 @@ fun MultipleScreenApp(viewModel: FavoriteViewModel) {
         composable("Alert") { AlertScreen( onNavigateToMap = { map }, onNavigateToFav = { favorite }, onNavigateToRules = rules, onNavigateToSettings = settings) }
         composable("Settings") { SettingsScreen(map, favorite, settings, rules) }
         composable("Database") { DatabaseScreenTest(viewModel) }
+
     }
 }
 

@@ -2,7 +2,9 @@ package com.example.in2000_prosjekt.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,9 +29,11 @@ fun RulesScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavi
 
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToRules, favoritt = Sikt_lyseblå, settings = Sikt_lyseblå, rules = Sikt_mellomblå, map = Sikt_lyseblå) }, containerColor = Sikt_mellomblå) {
         val rules: Array<String> = stringArrayResource(id = R.array.rules)
+        val scrollState = rememberScrollState()
         Card(
             modifier = Modifier
-                .padding(20.dp),
+                .padding(20.dp)
+                .verticalScroll(scrollState),
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(Sikt_lyseblå)
         ) {
