@@ -9,66 +9,51 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-import android.util.Log
 import com.example.in2000_prosjekt.ui.data.*
+import io.ktor.client.call.*
+import io.ktor.utils.io.errors.*
 
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 
 class APIViewModel : ViewModel() {
 
-    //for å teste
-    /*
-    val latitude : String = "61.6370"
-    val longtitude: String = "8.3092"
-    val altitude: String = "2469"
+    //manual dependency injection, se codelab
+    val repository: WeatherRepository = ImplementedWeatherRepository() //lettvinte måten
 
-     */
-
+    private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
+    val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
     val latitude = " 63.073"
     val longtitude = "8.98"
     val altitude: String = "600"
 
-    //----------------------
-    //Frost:
-    var elements = "air_temperature"// Dette er værmålingen vi ønsker: For enkelthetsskyld så velges bare: air temperature
-    var referencetime ="2021-05-17%2F2021-05-17" // Frost API, bruker UTC-tidsformat, denne ønskes senere å kunne bestemmes av en bruker ved hjelp av en Date picker (en bibloteksfunskjon i jetpack compose)
-    //var url_med_Polygon ="https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=POLYGON((7.9982%2058.1447%20%2C%208.0982%2058.1447%20%2C7.9982%2058.2447%20%2C%208.0982%2058.2447%20))"
-    val source = "SN18700" //skjønner ikke denne, hvor får vi dette fra? Hva er det? Spørr Nebil
-    //----------------------
-
-    /*
-    kommunenr for galhøpiggen
-    val county : String = "3434"
-    */
-    //kommunenr med farevarsler nå
-    val county : String = "54"
-
-    val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") //dette er både forecast og nowcast
-    val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
-
-    private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
-    val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
-
-    init {
-        getAll()
+    init { //etterhvert så endrer man  fra å ha init til å kalle på getAll fra en annen fil
+        //favoritter skal loades med en gang appen åpner, database se codelab
+        getAll("63.073","8.98","600","3434" )
     }
 
-    fun getAll() {
+    fun getAll(latitude: String, longitude: String, altitude: String, county: String) {
         viewModelScope.launch() {
-            val nowCastDeferred = getNowCast()
-            val locationDeferred = getLocation()
-            val sunsetDeferred = getSunrise()
-            val alertDeferred = getAlert()
-            //val frostDeferred = getFrost()
+            val locationDeferred = viewModelScope.async (Dispatchers.IO){
+                repository.getLocation(latitude, longitude, altitude)
+            }
+            val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
+                repository.getNowCast(latitude, longitude, altitude)
+            }
+            val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
+                repository.getSunrise(latitude, longitude)
+            }
+            val alertDeferred = viewModelScope.async (Dispatchers.IO){
+                repository.getAlert(latitude, longitude)
+            }
+            val frostDeferred = viewModelScope.async (Dispatchers.IO){
+                repository.getFrost(latitude, longitude)
+            }
 
             val nowCastP = nowCastDeferred.await()
             val locationP = locationDeferred.await()
             val sunsetP = sunsetDeferred.await()
             val alertP = alertDeferred.await()
-            //val frostP = frostDeferred.await()
+            val frostP = frostDeferred.await()
 
             _appUistate.update {
                 AppUiState.Success(
@@ -81,7 +66,7 @@ class APIViewModel : ViewModel() {
             }
         }
     }
-
+    
     private fun getLocation() : Deferred<LocationInfo>{
         return viewModelScope.async(Dispatchers.IO) {
 
@@ -178,26 +163,3 @@ class APIViewModel : ViewModel() {
         }
 }
 
-    private fun getFrost() : Deferred<FrostInfo> {
-        return viewModelScope.async(Dispatchers.IO) {
-
-            val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)
-            val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longtitude)
-
-            val typeFrost = frost.type
-            val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
-            val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
-
-            Log.d("typefrost", typeFrost.toString())
-            Log.d("lat", lat.toString())
-            Log.d("long", long.toString())
-
-            val frostF = FrostInfo(
-                typeFrost = typeFrost.toString(), //ikke egt ha toString her
-                longFrost = long!!,
-                latFrost = lat!!,
-            )
-            return@async frostF
-        }
-    }
-}
