@@ -6,7 +6,7 @@ interface WeatherRepository {
     suspend fun getLocation(latitude: String, longitude: String, altitude: String): LocationInfo
     suspend fun getNowCast(latitude: String, longitude: String, altitude: String) : NowCastInfo
     suspend fun getSunrise(latitude: String, longitude: String) : SunriseInfo
-    suspend fun getAlert(county: String) : MutableList<AlertInfo>
+    suspend fun getAlert(latitude: String, longitude: String) : MutableList<AlertInfo>
     suspend fun getFrost(latitude: String, longitude: String) : FrostInfo
 
 }

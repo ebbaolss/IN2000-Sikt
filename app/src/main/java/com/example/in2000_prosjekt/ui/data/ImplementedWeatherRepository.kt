@@ -67,8 +67,8 @@ class ImplementedWeatherRepository : WeatherRepository {
         )
     }
 
-    override suspend fun getAlert(county: String): MutableList<AlertInfo> {
-        val alert = dataMet.fetchMetAlert(county)
+    override suspend fun getAlert(latitude: String, longitude: String): MutableList<AlertInfo> {
+        val alert = dataMet.fetchMetAlert(latitude, longitude)
 
         val alertList : MutableList<AlertInfo> = mutableListOf()
         //Dette er klønete, men appen kræsjer ikke hvis det ikke er fare
