@@ -28,6 +28,7 @@ import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
+import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
 import com.example.in2000_prosjekt.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -66,14 +67,9 @@ fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, s
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit
 ) {
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, rules = false, map = false, settings = false)}) {
-        LazyColumn(
-        ){
-            item {
-                Text(text = "heihei")
-            }
-            item {
-
-            }
+        LazyColumn(contentPadding = PaddingValues(20.dp)) {
+            item { Sikt_Favorite_card(weatherinfo = weatherinfo, nowcastinfo = nowcastinfo , sunriseinfo = sunriseinfo , alertinfo = alertinfo) }
+            item { Sikt_Favorite_card(weatherinfo = weatherinfo, nowcastinfo = nowcastinfo , sunriseinfo = sunriseinfo , alertinfo = alertinfo) }
         }
     }
 
