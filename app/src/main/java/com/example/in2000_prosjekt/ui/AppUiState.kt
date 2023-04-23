@@ -23,9 +23,10 @@ data class AlertInfo( //sett A på slutten
     val recomendationA : String,
     val descriptionA : String,
     val alertTypeA: String,
-    val alertLevelA: String
+    val alertLevelA: String,
 )
-data class FrostInfo( //sett Frost på slutten, F brukes allerede
+
+data class FrostInfo(
     val typeFrost : String,
     val longFrost : Double,
     val latFrost : Double,
@@ -37,7 +38,7 @@ sealed interface AppUiState {
         val nowCastF: NowCastInfo,
         val sunriseF: SunriseInfo,
         val alertListF: MutableList<AlertInfo>,
-        val frostF: FrostInfo
+        // val frostF: FrostInfo
     ) : AppUiState
     object Error : AppUiState
     object Loading : AppUiState

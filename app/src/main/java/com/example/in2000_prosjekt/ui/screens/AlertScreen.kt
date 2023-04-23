@@ -51,7 +51,7 @@ fun AlertScreenSuccess(alertinfo: MutableList<AlertInfo>,
                        onNavigateToSettings: () -> Unit,
                        onNavigateToRules: () -> Unit){
 
-    Scaffold( bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToRules, favoritt = Sikt_mellomblå, rules = Sikt_lyseblå, settings = Sikt_lyseblå, map = Sikt_lyseblå) })
+    Scaffold( bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToRules, favoritt = false, rules = false, settings = false, map = false) })
     {
         Column{
             alertinfo.forEach {

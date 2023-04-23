@@ -21,10 +21,12 @@ class DataSourceAlerts (val basePath:String){
             headers {append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")}}
     }
 
-    suspend fun fetchMetAlert(county: String) : Build {
-        val strCounty: String = "county=$county"
-        //hei
+    suspend fun fetchMetAlert(latitude: String, longtitude: String) : Build {
+        //val strCounty: String = "county=$county"
+        //byttet til koordinater fordi county kan være tom.
 
-        return authURL("$basePath/metalerts/1.1/.json?$strCounty").body()
+        var coordinates = "lat=$latitude&lon=$longtitude"
+
+        return authURL("$basePath/metalerts/1.1/.json?$coordinates").body()
     }
 }
