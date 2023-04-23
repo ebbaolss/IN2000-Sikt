@@ -66,11 +66,11 @@ import androidx.compose.ui.unit.TextUnit
 
 
 @Composable
-fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Color, map : Color, settings : Color, rules : Color) {
+fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, rules : Boolean, settings : Boolean) {
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
-        containerColor = Sikt_lyseblå,
+        containerColor = Sikt_hvit,
 
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
@@ -78,9 +78,11 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.width(120.dp)
             ){
                 IconButton(onClick = { onNavigateToMap() }) {
-                    var iconfarge = Sikt_mellomblå
-                    if (map == Sikt_mellomblå) {
+                    var iconfarge = Sikt_mørkeblå
+                    var iconBackround = Sikt_hvit
+                    if (map) {
                         iconfarge = Sikt_hvit
+                        iconBackround = Sikt_mørkeblå
                     }
                     Icon(
                         Icons.Outlined.LocationOn,
@@ -88,10 +90,10 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                         tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(map)
+                            .background(iconBackround)
                             .padding(5.dp))
                 }
-                Text(text = "Utforsk")
+                Text(text = "Utforsk", fontSize = 13.sp)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -99,17 +101,19 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             ) {
 
                 IconButton(onClick = { onNavigateToFav() }) {
-                    var backroundColor = Sikt_hvit
-                    if (favoritt == Sikt_mellomblå) {
-                        backroundColor = Sikt_lyseblå
+                    var iconfarge = Sikt_mørkeblå
+                    var iconBackround = Sikt_hvit
+                    if (favoritt) {
+                        iconfarge = Sikt_hvit
+                        iconBackround = Sikt_mørkeblå
                     }
                     Icon(
                         Icons.Outlined.Favorite,
                         contentDescription = "Localized description",
-                        tint = Sikt_mørkeblå,
+                        tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(backroundColor)
+                            .background(iconBackround)
                             .padding(5.dp)
                     )
                 }
@@ -120,18 +124,20 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.width(98.dp)
             ) {
                 IconButton(onClick = { onNavigateToRules() }) {
-                    var backroundColor = Sikt_hvit
-                    if (rules == Sikt_mellomblå) {
-                        backroundColor = Sikt_lyseblå
+                    var iconfarge = Sikt_mørkeblå
+                    var iconBackround = Sikt_hvit
+                    if (rules) {
+                        iconfarge = Sikt_hvit
+                        iconBackround = Sikt_mørkeblå
                     }
                     Icon(
                         painter = painterResource(id = R.drawable.ny_fjellvettregler),
                         "",
-                        tint = Sikt_mørkeblå,
+                        tint = iconfarge,
                         modifier = Modifier
                             .size(120.dp)
                             .clip(CircleShape)
-                            .background(backroundColor)
+                            .background(iconBackround)
                             .padding(5.dp)
                     )
                 }
@@ -142,17 +148,19 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.width(75.dp)
             ) {
                 IconButton(onClick = { onNavigateToSettings() }) {
-                    var backroundColor = Sikt_hvit
-                    if (settings == Sikt_mellomblå) {
-                        backroundColor = Sikt_lyseblå
+                    var iconfarge = Sikt_mørkeblå
+                    var iconBackround = Sikt_hvit
+                    if (settings) {
+                        iconfarge = Sikt_hvit
+                        iconBackround = Sikt_mørkeblå
                     }
                     Icon(
                         Icons.Outlined.Settings,
                         "",
-                        tint = Sikt_mørkeblå,
+                        tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(backroundColor)
+                            .background(iconBackround)
                             .padding(5.dp)
                     )
                 }

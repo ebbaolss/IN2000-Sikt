@@ -65,11 +65,11 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
 fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit
 ) {
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = Sikt_mellomblå, rules = Sikt_lyseblå, map = Sikt_lyseblå, settings = Sikt_lyseblå)}) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, rules = false, map = false, settings = false)}) {
         LazyColumn(
         ){
             item {
-
+                Text(text = "heihei")
             }
             item {
 

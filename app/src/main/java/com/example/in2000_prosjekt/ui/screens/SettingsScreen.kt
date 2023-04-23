@@ -27,7 +27,7 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
 @Composable
 fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
 
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToRules, favoritt = Sikt_lyseblå, settings = Sikt_mellomblå, rules = Sikt_lyseblå, map = Sikt_lyseblå) }) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToRules, favoritt = false, settings = true, rules = false, map = false) }) {
         Column(modifier = Modifier
             .fillMaxSize()
             .background(Sikt_mellomblå),

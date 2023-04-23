@@ -25,7 +25,7 @@ fun StartPage(onNavigateToNext: () -> Unit) {
         )
     }
     LaunchedEffect(Unit) {
-        delay(1.5.seconds)
+        delay(1.seconds)
         onNavigateToNext()
     }
 }
