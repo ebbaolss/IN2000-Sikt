@@ -605,7 +605,7 @@ fun Alert_Card(alert: AlertInfo){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_FinnTurer_card(height : Int, temp : Int, vind : Int, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
-
+    //card til turer i nærheten på mapscreen, må fikse stedsnavn og design
     var heigthVisuals = R.drawable.topp_1000_1500
 
 
@@ -947,32 +947,6 @@ fun Sikt_Visualisering_and_Sikt_Info(sikthigh : Double, siktmedium : Double, sik
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun FavoriteScreenError (  onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit) {
-
-    Scaffold(bottomBar = { Sikt_BottomBar2() })
-    {
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            /*Icon(
-                painter =  painterResource(R.drawable.nonettworkpicture),
-                contentDescription = "Nettwork Error Icon presented on screen"
-            )*/
-
-            ////her må det legges inn et bilde
-
-        }
-    }
-}
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
@@ -983,24 +957,6 @@ fun TestComponent() {
 
     //Sikt_Datavisualisering_Card(860 ,-10, 7, false, true, true)
 
-    /*
-    Scaffold(bottomBar = { Sikt_BottomBar2() }) { innerpadding ->
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Sikt_mellomblå)
-                .padding(innerpadding)
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            item { Sikt_Favorite_card() }
-            item { Sikt_Favorite_card() }
-            item { Sikt_Favorite_card() }
-            item { Sikt_Favorite_card() }
-        }
-    }*/
 }
 
 
