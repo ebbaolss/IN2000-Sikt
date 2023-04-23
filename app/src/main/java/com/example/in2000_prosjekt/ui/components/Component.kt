@@ -213,14 +213,14 @@ fun Sikt_BottomBar2( ) {
 
 @Composable
 fun Sikt_favoritt_tekst() {
-    //CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
-    Text(
-        text = "Favoritter",
-        fontSize = 40.sp,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.
-        padding(10.dp)
-    )
+    /*CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
+        Text(
+            text = "Favoritter",
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(10.dp)
+        )
+    } )*/
 }
 
 @Composable
@@ -294,108 +294,6 @@ fun Sikt_Favorite_card() {
                 // random km lagt inn for å teste sikt-ikonene
                 Sikt_Visualisering_and_Sikt_Info(10.5, 3.3, 0.6)
             }
-        }
-    }
-}
-
-// Er denne i bruk?
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_Card() {
-    Card(
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp, textAlign = TextAlign.Center)
-        }
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
-    alertinfo: MutableList<AlertInfo>, frostinfo: FrostInfo
-) {
-    val varsel = "0" //midlertidlig, egt metAlert som skal brukes
-
-    Card(
-        modifier = Modifier.size(height = 336.dp, width = 320.dp),
-        colors = CardDefaults.cardColors(Sikt_lyseblå)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            //Alert pop up dialog
-            var openDialog by remember {
-                mutableStateOf(false)
-            }
-
-            if (alertinfo.size != 0){
-
-                AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
-                    openDialog = true
-                }
-            }
-
-            if (openDialog){
-                AlertDialog(alertinfo = alertinfo){
-                    openDialog = false
-                }
-            }
-
-            Box() {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
-                        Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
-                        Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
-                    }
-                    Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text(text = "Temperatur: ${nowcastinfo.temperatureNow}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(20.dp))
-            Text(text = "Tåke: ${weatherinfo.fog_area_fractionL}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(20.dp))
-            Text(text = "Nedbør: ${weatherinfo.rainL}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(20.dp))
-            Text(text = "Vind: ${nowcastinfo.windN}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(20.dp))
-            Text(text = "Varsel: $varsel", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(30.dp))
-            Text(text = "Type frost: ${frostinfo.typeFrost}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(30.dp))
-            Text(text = "Coordinates frost: ${frostinfo.latFrost}, ${frostinfo.longFrost}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(30.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                //horizontalArrangement = Arrangement.SpaceEvenly  endret fra row til column, ds måtte denne kommenteres ut
-            ) {
-                Text(text = "Soloppgang: ${sunriseinfo.sunriseS}", fontFamily = FontFamily.Monospace)
-                Text(text = "Solnedgang: ${sunriseinfo.sunsetS}", fontFamily = FontFamily.Monospace)
-            }
-            Spacer(modifier = Modifier
-                .height(50.dp))
         }
     }
 }

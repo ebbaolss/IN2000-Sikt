@@ -21,8 +21,6 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
 import com.example.in2000_prosjekt.ui.components.Sikt_favoritt_tekst
-//import com.example.in2000_prosjekt.ui.components.Sikt_favoritt_tekst
-import com.example.in2000_prosjekt.ui.components.ToppCard
 import com.example.in2000_prosjekt.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
