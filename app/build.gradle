@@ -97,7 +97,7 @@ dependencies {
     implementation "androidx.compose.material3:material3:1.0.0-beta03"
 
 
-// Dependencies for testene
+    // Dependencies for testene
 
     testImplementation 'org.junit.jupiter:junit-jupiter'
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
@@ -141,4 +141,3 @@ dependencies {
     implementation "io.ktor:ktor-client-auth:$ktor_version"
 
 }
-

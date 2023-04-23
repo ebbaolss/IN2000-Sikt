@@ -3,6 +3,9 @@ package com.example.in2000_prosjekt.ui
 data class LocationInfo( //gi ting navn med også L på slutten
     val temperatureL: Float,
     val fog_area_fractionL : Float,
+    var cloud_area_fraction_high: Float,
+    var cloud_area_fraction_low: Float,
+    var cloud_area_fraction_medium: Float,
     val rainL : Float
 )
 data class NowCastInfo( //sette N eller Now på slutten

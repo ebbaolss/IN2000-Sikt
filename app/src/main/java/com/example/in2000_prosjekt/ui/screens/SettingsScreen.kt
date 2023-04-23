@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_sol
+import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
@@ -34,7 +35,7 @@ fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Settings", fontSize = 50.sp)
+            Text(text = "Settings", fontSize = 50.sp, color = Sikt_hvit)
         }
     }
 }
