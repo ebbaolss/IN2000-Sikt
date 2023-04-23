@@ -107,6 +107,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         return alertList
     }
 
+
     override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
 
         val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)  //hardkoded parameterne, fiks dette

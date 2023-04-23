@@ -21,7 +21,6 @@ data class AlertInfo( //sett A på slutten
     val descriptionA : String,
     val alertTypeA: String,
     val alertLevelA: String,
-    val timeIntervalA: List<String?>
 )
 
 data class FrostInfo(
