@@ -173,16 +173,16 @@ class APIViewModel : ViewModel() {
             val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)
             val frostPolygon = dataFrost.fetchApiSvarkoordinater(2.toString(), 2.toString())
 
-            val typeFrost = frost.type
+            val meancloudareafraction = frost.data?.get(0)?.observations?.get(0)?.value
             val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
             val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
 
-            Log.d("typefrost", typeFrost.toString())
+            Log.d("typefrost", meancloudareafraction.toString())
             Log.d("lat", lat.toString())
             Log.d("long", long.toString())
 
             val frostF = FrostInfo(
-                typeFrost = typeFrost.toString(), //ikke egt ha toString her
+                typeFrost = meancloudareafraction!!, //ikke egt ha toString her
                 longFrost = long!!,
                 latFrost = lat!!,
             )
