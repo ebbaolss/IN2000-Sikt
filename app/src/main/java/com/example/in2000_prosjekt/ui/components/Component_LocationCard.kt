@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,98 +19,82 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_sort
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_LocationCard(){
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Sikt_lyseblå),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Card (
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(Sikt_lyseblå)
     ) {
-        Box() {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            // horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box() {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    //Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
-                    Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
-                    Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
-                }
-                Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Box() {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Sikt_Datavisualisering_Card(2469, 3f, 7f,true, false, true)
-                    Column(
-                        modifier = Modifier.size(height = 220.dp, width = 150.dp),
-                        verticalArrangement = Arrangement.SpaceEvenly,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = "2000-5000 m.o.h")
-                        Text(text = "Sikt: ")
-                        Text(text = "1000-2000 m.o.h")
-                        Text(text = "Sikt: ")
-                        Text(text = "0-1000 m.o.h")
-                        Text(text = "Sikt: ")
+                        Icon(
+                            Icons.Outlined.Refresh,
+                            "",
+                            tint = Sikt_mørkeblå
+                        ) //fyll symbol, bytter senere
+                        Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
+                        Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
+                    }
+                    Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
+                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Box() {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Sikt_Datavisualisering_Card(2469, 3f, 7f, true, false, true)
+                        Column(
+                            modifier = Modifier.size(height = 220.dp, width = 150.dp),
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(text = "2000-5000 m.o.h")
+                            Text(text = "Sikt: ")
+                            Text(text = "1000-2000 m.o.h")
+                            Text(text = "Sikt: ")
+                            Text(text = "0-1000 m.o.h")
+                            Text(text = "Sikt: ")
+                        }
                     }
                 }
             }
-        }
-        LazyRow(modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly) {
-            item {
-                Sikt_LocationCard_Hour()
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                item { Sikt_LocationCard_Hour() }
+                item { Sikt_LocationCard_Hour() }
+                item { Sikt_LocationCard_Hour() }
+                item { Sikt_LocationCard_Hour() }
+                item { Sikt_LocationCard_Hour() }
+                item { Sikt_LocationCard_Hour() }
             }
-            item {
-                Sikt_LocationCard_Hour()
-            }
-            item {
-                Sikt_LocationCard_Hour()
-            }
-            item {
-                Sikt_LocationCard_Hour()
-            }
-            item {
-                Sikt_LocationCard_Hour()
-            }
-            item {
-                Sikt_LocationCard_Hour()
-            }
-        }
-        Sikt_LocationCard_NextDays()
-        Sikt_LoctationCard_Topper_i_naerheten()
-
-    }
-}
-
-@Composable
-fun Sikt_LocationCard_Hour() {
-    Card(
-        modifier = Modifier
-            .width(70.dp)
-            .height(80.dp)
-            .padding(10.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(Sikt_hvit)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "12:00", color = Sikt_sort, fontSize = 12.sp)
-            Spacer(modifier = Modifier.height(30.dp))
-            Sikt_sol()
+            Sikt_LocationCard_NextDays()
+            Sikt_LoctationCard_Topper_i_naerheten()
         }
     }
 }
@@ -190,4 +175,23 @@ fun Sikt_LoctationCard_Topper_i_naerheten() {
     }
 }
 
-
+@Composable
+fun Sikt_LocationCard_Hour() {
+    Card(
+        modifier = Modifier
+            .width(70.dp)
+            .height(80.dp)
+            .padding(10.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(Sikt_hvit)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "12:00", color = Sikt_sort, fontSize = 12.sp)
+            Spacer(modifier = Modifier.height(30.dp))
+            Sikt_sol()
+        }
+    }
+}

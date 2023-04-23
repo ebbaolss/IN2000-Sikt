@@ -27,7 +27,7 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 @Composable
 fun RulesScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
 
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToRules, favoritt = false, settings = false, rules = true, map = false) }, containerColor = Sikt_mellomblå) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = false, settings = false, rules = true, map = false) }, containerColor = Sikt_mellomblå) {
         val rules: Array<String> = stringArrayResource(id = R.array.rules)
         val scrollState = rememberScrollState()
         Card(

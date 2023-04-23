@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -16,6 +17,19 @@ import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
+
+@Composable
+fun Sikt_Historisk_Kalender() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(30.dp)
+            .height(100.dp)
+            .background(Sikt_hvit),
+    ) {
+        Text(text = "Kalender")
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +47,7 @@ fun Sikt_HistoriskCard(){
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    //Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
+                    Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
                     Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
                     Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
                 }
@@ -71,15 +85,3 @@ fun Sikt_HistoriskCard(){
     }
 }
 
-@Composable
-fun Sikt_Historisk_Kalender() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(30.dp)
-            .height(100.dp)
-            .background(Sikt_hvit),
-    ) {
-        Text(text = "Kalender")
-    }
-}

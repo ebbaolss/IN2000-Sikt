@@ -3,32 +3,20 @@
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Icon
-import android.media.Image
 import android.util.Log
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material.*
-//import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.material3.Button
@@ -58,15 +46,9 @@ import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.*
 import kotlinx.coroutines.launch
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.TextUnit
-
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, rules : Boolean, settings : Boolean) {
@@ -84,8 +66,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     var iconfarge = Sikt_mørkeblå
                     var iconBackround = Sikt_hvit
                     if (map) {
-                        iconfarge = Sikt_hvit
-                        iconBackround = Sikt_mørkeblå
+                        iconBackround = Sikt_lyseblå
                     }
                     Icon(
                         Icons.Outlined.LocationOn,
@@ -107,8 +88,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     var iconfarge = Sikt_mørkeblå
                     var iconBackround = Sikt_hvit
                     if (favoritt) {
-                        iconfarge = Sikt_hvit
-                        iconBackround = Sikt_mørkeblå
+                        iconBackround = Sikt_lyseblå
                     }
                     Icon(
                         Icons.Outlined.Favorite,
@@ -130,8 +110,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     var iconfarge = Sikt_mørkeblå
                     var iconBackround = Sikt_hvit
                     if (rules) {
-                        iconfarge = Sikt_hvit
-                        iconBackround = Sikt_mørkeblå
+                        iconBackround = Sikt_lyseblå
                     }
                     Icon(
                         painter = painterResource(id = R.drawable.ny_fjellvettregler),
@@ -154,8 +133,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     var iconfarge = Sikt_mørkeblå
                     var iconBackround = Sikt_hvit
                     if (settings) {
-                        iconfarge = Sikt_hvit
-                        iconBackround = Sikt_mørkeblå
+                        iconBackround = Sikt_lyseblå
                     }
                     Icon(
                         Icons.Outlined.Settings,
@@ -884,250 +862,6 @@ fun Sikt_Datavisualisering_Card(height : Int, temp : Float, vind : Float, skydek
 }
 
 @Composable
-fun Sikt_LocationCard_Hour() {
-    Card(
-        modifier = Modifier
-            .width(70.dp)
-            .height(80.dp)
-            .padding(10.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(Sikt_hvit)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "12:00", color = Sikt_sort, fontSize = 12.sp)
-            Spacer(modifier = Modifier.height(30.dp))
-            Sikt_sol()
-        }
-    }
-}
-
-@Composable
-fun Sikt_LocationCard_NextDays() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(120.dp)
-            .padding(start = 30.dp, end = 30.dp, bottom = 20.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(Sikt_hvit)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Text(text = "Idag", color = Sikt_sort, fontSize = 12.sp)
-                Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Lettskyet", color = Sikt_sort, fontSize = 12.sp)
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Text(text = "Fredag", color = Sikt_sort, fontSize = 12.sp)
-                Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Lettskyet", color = Sikt_sort, fontSize = 12.sp)
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Text(text = "Lørdag", color = Sikt_sort, fontSize = 12.sp)
-                Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Lettskyet", color = Sikt_sort, fontSize = 12.sp)
-            }
-        }
-    }
-}
-
-@Composable
-fun Sikt_LoctationCard_Topper_i_naerheten() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(160.dp)
-            .padding(start = 20.dp, end = 20.dp, top = 5.dp),
-    ) {
-        Text(text = "Topper i nærheten: ", modifier = Modifier.align(Alignment.TopStart), fontWeight = FontWeight.Bold)
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),
-            horizontalArrangement = Arrangement.SpaceEvenly) {
-            item {
-                Sikt_FinnTurer_card(450, -10, 0,true, false, true)
-            }
-            item {
-                Sikt_FinnTurer_card(550, 3, 3,false, true, false)
-            }
-            item {
-                Sikt_FinnTurer_card(1100, 23, 9,false, false, true)
-            }
-            item {
-                Sikt_FinnTurer_card(1670, -1, 15,false, false, false)
-            }
-            item {
-                Sikt_FinnTurer_card(2469, 6, 2,true, true, true)
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_LocationCard(){
-    Card (
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(Sikt_lyseblå)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            // horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Box() {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Outlined.Refresh,
-                            "",
-                            tint = Sikt_mørkeblå
-                        ) //fyll symbol, bytter senere
-                        Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
-                        Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
-                    }
-                    Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
-                }
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            Box() {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Sikt_Datavisualisering_Card(2469, 3, 7, true, false, true)
-                        Column(
-                            modifier = Modifier.size(height = 220.dp, width = 150.dp),
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(text = "2000-5000 m.o.h")
-                            Text(text = "Sikt: ")
-                            Text(text = "1000-2000 m.o.h")
-                            Text(text = "Sikt: ")
-                            Text(text = "0-1000 m.o.h")
-                            Text(text = "Sikt: ")
-                        }
-                    }
-                }
-            }
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                item { Sikt_LocationCard_Hour() }
-                item { Sikt_LocationCard_Hour() }
-                item { Sikt_LocationCard_Hour() }
-                item { Sikt_LocationCard_Hour() }
-                item { Sikt_LocationCard_Hour() }
-                item { Sikt_LocationCard_Hour() }
-            }
-            Sikt_LocationCard_NextDays()
-            Sikt_LoctationCard_Topper_i_naerheten()
-        }
-    }
-}
-
-@Composable
-fun Sikt_Historisk_Kalender() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(30.dp)
-            .height(100.dp)
-            .background(Sikt_hvit),
-    ) {
-        Text(text = "Kalender")
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_HistoriskCard(){
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Sikt_lyseblå),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Box() {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
-                    Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
-                    Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
-                }
-                Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Box() {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Sikt_Datavisualisering_Card(2469, -11, 4, true, false, true)
-                    Column(
-                        modifier = Modifier.size(height = 220.dp, width = 150.dp),
-                        verticalArrangement = Arrangement.SpaceEvenly,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(text = "2000-5000 m.o.h")
-                        Text(text = "Sikt: ")
-                        Text(text = "1000-2000 m.o.h")
-                        Text(text = "Sikt: ")
-                        Text(text = "0-1000 m.o.h")
-                        Text(text = "Sikt: ")
-                    }
-                }
-            }
-        }
-
-        Sikt_Historisk_Kalender()
-
-        Sikt_LoctationCard_Topper_i_naerheten()
-
-    }
-}
-
-
-@Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun Sikt_Visualisering_and_Sikt_Info(sikthigh : Double, siktmedium : Double, siktlow : Double){
         // Tar inn antall km sikt
@@ -1160,7 +894,7 @@ fun Sikt_Visualisering_and_Sikt_Info(sikthigh : Double, siktmedium : Double, sik
         modifier = Modifier
             .fillMaxWidth(),
     ) {
-        Sikt_Datavisualisering_Card(1800, -10, 7, true, false, true)
+        Sikt_Datavisualisering_Card(1800, -10f, 7f, true, false, true)
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -1245,8 +979,6 @@ fun TestComponent() {
 
     //Sikt_Card()
     //Sikt_LocationCard()
-
-    Sikt_Favorite_card()
     //Sikt_Visualisering_and_Sikt_Info(10.5, 3.3, 0.6)
 
     //Sikt_Datavisualisering_Card(860 ,-10, 7, false, true, true)
