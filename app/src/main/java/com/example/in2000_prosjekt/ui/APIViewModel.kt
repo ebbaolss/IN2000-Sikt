@@ -23,16 +23,16 @@ class APIViewModel : ViewModel() {
 
     private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
-    val latitude = " 63.073"
-    val longtitude = "8.98"
+    val latitude = "59"
+    val longtitude = "4"
     val altitude: String = "600"
 
     init { //etterhvert så endrer man  fra å ha init til å kalle på getAll fra en annen fil
         //favoritter skal loades med en gang appen åpner, database se codelab
-        getAll("63.073","8.98","600","3434" )
+        getAll("59","4","600")
     }
 
-    fun getAll(latitude: String, longitude: String, altitude: String, county: String) {
+    fun getAll(latitude: String, longitude: String, altitude: String) {
         viewModelScope.launch() {
             val locationDeferred = viewModelScope.async (Dispatchers.IO){
                 repository.getLocation(latitude, longitude, altitude)

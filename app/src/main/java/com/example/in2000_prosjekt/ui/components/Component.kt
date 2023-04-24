@@ -6,7 +6,9 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -256,27 +258,26 @@ fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunr
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Placeholder-ikon for advarsel:
-                Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
+                // Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
                 
-                /*
+                Log.d("ALERT-S", "alertinfo.size: ${alertinfo.size}")
                 //Alert pop up dialog
-                        var openDialog by remember {
-                            mutableStateOf(false)
-                        }
+                var openDialog by remember {
+                    mutableStateOf(false)
+                }
 
-                        if (alertinfo.size != 0){
+                if (alertinfo.size != 0){
+                    AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
+                        openDialog = true
+                    }
+                }
 
-                            AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
-                                openDialog = true
-                            }
-                        }
+                if (openDialog){
+                    AlertDialog(alertinfo = alertinfo){
+                        openDialog = false
+                    }
+                }
 
-                        if (openDialog){
-                            AlertDialog(alertinfo = alertinfo){
-                                openDialog = false
-                            }
-                        }
-                */
                 Text(text = "Gaustatoppen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
                 var checked by remember { mutableStateOf(false) }
                 IconToggleButton(
@@ -329,7 +330,7 @@ fun AlertButton(alertType : String, alertLevel : String, onButtonClick: () -> Un
     Log.d("ALERT: ", buttonimage)
 
     val context = LocalContext.current.applicationContext
-    val id = context.resources.getIdentifier(buttonimage, "drawable", context.packageName)
+    val id = context.resources.getIdentifier(buttonimage.lowercase(), "drawable", context.packageName)
 
 
     Image(modifier = Modifier.clickable { onButtonClick() },
@@ -351,10 +352,17 @@ fun AlertDialog(alertinfo: MutableList<AlertInfo>, onDismiss: () -> Unit){
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Column{
+            val scrollState = rememberScrollState()
+            Column(modifier = Modifier.verticalScroll(scrollState)){
                 alertinfo.forEach {
                     Alert_Card(alert = it)
                 }
+            }
+
+            val listState = rememberLazyListState()
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()){
+
             }
         }
     }
@@ -375,7 +383,7 @@ fun Alert_Card(alert: AlertInfo){
     //farevarselikon
     val buttonimage = "${type[0]}_${level[1]}"
     val context = LocalContext.current.applicationContext
-    val id = context.resources.getIdentifier(buttonimage, "drawable", context.packageName)
+    val id = context.resources.getIdentifier(buttonimage.lowercase(), "drawable", context.packageName)
 
     //level er 1,2,3,4 eller 5. Definerer hvilket fare bilde vi skal ha, eller skal vi ta det på level[1] som gir farge?
     val alertLevel = level[0]
@@ -462,7 +470,7 @@ fun Alert_Card(alert: AlertInfo){
             Spacer(modifier = Modifier
                 .height(20.dp))
 
-            /*if(alert.timeIntervalA != null){
+            if(alert.timeIntervalA != null){
 
                 val starttime = alert.timeIntervalA[0]?.split("T")
                 val endtime = alert.timeIntervalA[1]?.split("T")
@@ -476,7 +484,7 @@ fun Alert_Card(alert: AlertInfo){
                 Text(text = "Fra: ${starttime?.get(0)} - $start", fontFamily = FontFamily.Monospace)
                 Text(text = "Til: ${endtime?.get(0)} - $end", fontFamily = FontFamily.Monospace)
 
-            }*/
+            }
 
             Spacer(modifier = Modifier
                 .height(20.dp))
