@@ -118,7 +118,7 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap): Boolean {
         onFeatureClicked(it) { feature ->
             if (feature.id() != null) {
 
-                Log.d("Feature", feature.toString())
+                Log.d("Feature", feature.getStringProperty("name").toString() + ". Elevation: " + feature.getStringProperty("elevation_m").toString() + "m.o.h.")
 
                 mapboxMap.getStyle() { style ->
                     val layer = style.getLayerAs<CircleLayer>("LAYER_ID")!!
