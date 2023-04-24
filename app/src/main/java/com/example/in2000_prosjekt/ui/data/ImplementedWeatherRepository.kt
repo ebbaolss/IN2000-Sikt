@@ -83,6 +83,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         var desc: String?
         var alertType: String?
         var alertLevel: String?
+        var timeIntervalA: List<String?>?
 
         alert.features?.forEach{
             val prop = it.properties
@@ -94,6 +95,7 @@ class ImplementedWeatherRepository : WeatherRepository {
             desc = prop?.description
             alertType = prop?.awareness_type
             alertLevel = prop?.awareness_level
+            timeIntervalA = it.tid?.interval
 
             val alertF = AlertInfo(
                 areaA = area!!,
@@ -102,7 +104,8 @@ class ImplementedWeatherRepository : WeatherRepository {
                 recomendationA = rec!!,
                 descriptionA = desc!!,
                 alertTypeA = alertType!!,
-                alertLevelA = alertLevel!!
+                alertLevelA = alertLevel!!,
+                timeIntervalA = timeIntervalA!!
             )
 
             alertList.add(alertF)

@@ -46,7 +46,7 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
         is AppUiState.Error -> {
 
            FavoriteScreenError( onNavigateToMap,
-               onNavigateToFav,
+               onNavigateToFav,onNavigateToSettings,
                onNavigateToRules)
         }
         is AppUiState.Success -> {
