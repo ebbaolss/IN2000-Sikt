@@ -1,7 +1,7 @@
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
+import android.text.format.Time
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -181,6 +181,7 @@ fun Sikt_LoctationCard_Topper_i_naerheten() {
 
 @Composable
 fun Sikt_LocationCard_Hour() {
+    
     Card(
         modifier = Modifier
             .width(70.dp)
