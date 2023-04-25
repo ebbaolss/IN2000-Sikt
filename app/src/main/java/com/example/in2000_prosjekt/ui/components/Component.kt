@@ -220,15 +220,29 @@ fun Sikt_BottomBar2( ) {
 }
 
 @Composable
-fun Sikt_Header(location : String /* ,alertType : String, alertLevel : String */) {
+fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Placeholder-ikon for advarsel:
-        Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
-        //AlertButton(alertType = , alertLevel = ) {}
+        //Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
+        var openDialog by remember {
+            mutableStateOf(false)
+        }
+
+        if (alertinfo.size != 0){
+            AlertButton( alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA){
+                openDialog = true
+            }
+        }
+
+        if (openDialog){
+            AlertDialog(alertinfo = alertinfo){
+                openDialog = false
+            }
+        }
         Text(text = "$location", fontWeight = FontWeight.Bold, fontSize = 30.sp)
         var checked by remember { mutableStateOf(false) }
         IconToggleButton(
@@ -276,7 +290,7 @@ fun Sikt_sol() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_Favorite_card( /* weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo> */) {
+fun Sikt_Favorite_card(  weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo> ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -291,7 +305,7 @@ fun Sikt_Favorite_card( /* weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, 
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Sikt_Header("fjelltopp" /* , alertType : String, alertLevel : String */)
+            Sikt_Header("fjelltopp" , alertinfo)
             Sikt_MountainHight("1884")
             Sikt_Visualisering_and_Sikt_Info(10.5, 3.3, 0.6)
 

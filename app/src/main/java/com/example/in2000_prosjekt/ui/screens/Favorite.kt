@@ -73,8 +73,8 @@ fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, s
 ) {
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, rules = false, map = false, settings = false)}) {
         LazyColumn(contentPadding = PaddingValues(20.dp)) {
-            //item { Sikt_Favorite_card(weatherinfo = weatherinfo, nowcastinfo = nowcastinfo , sunriseinfo = sunriseinfo , alertinfo = alertinfo) }
-            //item { Sikt_Favorite_card(weatherinfo = weatherinfo, nowcastinfo = nowcastinfo , sunriseinfo = sunriseinfo , alertinfo = alertinfo) }
+            item { Sikt_Favorite_card(weatherinfo = weatherinfo, nowcastinfo = nowcastinfo , sunriseinfo = sunriseinfo , alertinfo = alertinfo) }
+            item { Sikt_Favorite_card(weatherinfo = weatherinfo, nowcastinfo = nowcastinfo , sunriseinfo = sunriseinfo , alertinfo = alertinfo) }
         }
     }
 }
