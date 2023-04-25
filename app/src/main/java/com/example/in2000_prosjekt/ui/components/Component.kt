@@ -57,6 +57,7 @@ import kotlinx.coroutines.launch
 //import androidx.compose.material3.DatePickerColors Fjernet sammen med: 1.1.0-alpha04
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.core.graphics.toColor
 import androidx.lifecycle.viewModelScope
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -935,140 +936,18 @@ fun Sikt_LocationCard(){
     }
 }
 
-@SuppressLint("ResourceType")
-@ExperimentalMaterial3Api
+
+//I vår composable funksjon som generer kalenderen vår (se neste Composable-funskjon: StaticCalender() ) så kan man bestemme innholdet til de ulike bestanddelene av en kalender, slikt som tittel, plassering av de ulike trykkbare komponetene i kalenderen, om den er scrollbar etc.
+//Dette er funksjonen som bestemmer dagsinnholdet i hver dag kalenderen StaticCalender()
 @Composable
-fun Sikt_Historisk_Kalender_DenneGjelderikke() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            //.padding(30.dp)// Ved emulator så blir kalenderen litt klippet, og overlapper
-            //.height(100.dp)
-            .background(Sikt_hvit), // når   .background(Sikt_hvit) så funker modifier inni datepciker
-    ) {
+fun dayContent(dayState: NonSelectableDayState /*,frostinfo: FrostInfo*/) : MutableList<LocalDate> {
 
-//MAterials 3 date pciker krever versjon 1.1.0-alpha04: https://developer.android.com/reference/kotlin/androidx/compose/material3/package-summary#DatePicker(androidx.compose.material3.DatePickerState,androidx.compose.ui.Modifier,androidx.compose.material3.DatePickerFormatter,kotlin.Function1,kotlin.Function0,kotlin.Function0,kotlin.Boolean,androidx.compose.material3.DatePickerColors)
-// ref denne stack overflowen https://stackoverflow.com/questions/75377259/how-to-change-datepicker-dialog-color-in-jetpack-compose
-
-        //Observasjon 18.04 kl.2105: Det går visst ann å ha flere versjoner Googles Material: Jeg ahdde både: 1.0.0-alpha11 og 1.1.0-alpha04 på samtidig
-
-        // Forsøk med Material 3: kl.21.26
-       //val datePickerState  =  rememberDatePickerState(initialSelectedDateMillis = 1681852144365, initialDisplayedMonthMillis=1681852144365 , yearsRange= IntRange(2019, 2100))
-
-       // painter= PaintDrawable()
-        val image= Image(
-            painter = painterResource(id = R.drawable.flood_yellow),
-            contentDescription = "",
-            modifier = Modifier.size(30.dp)
-        )
-
-
-
-
-        //mColorspace = ColorSpace(modifier = Modifier.paint(painter=  painterResource(id = R.drawable.))
-
-/*
-
-       val daycolor= DatePickerColors (containerColor: Color = DatePickerModalTokens.ContainerColor.toColor(),
-        titleContentColor: Color = DatePickerModalTokens.HeaderSupportingTextColor.toColor(),
-        headlineContentColor: Color = DatePickerModalTokens.HeaderHeadlineColor.toColor(),
-        weekdayContentColor: Color = DatePickerModalTokens.WeekdaysLabelTextColor.toColor(),
-        subheadContentColor: Color =
-        DatePickerModalTokens.RangeSelectionMonthSubheadColor.toColor(),
-        yearContentColor: Color =DatePickerModalTokens.SelectionYearUnselectedLabelTextColor.toColor(),
-        currentYearContentColor: Color = DatePickerModalTokens.DateTodayLabelTextColor.toColor(),
-        selectedYearContentColor: Color = DatePickerModalTokens.SelectionYearSelectedLabelTextColor.toColor(),
-        selectedYearContainerColor: Color =DatePickerModalTokens.SelectionYearSelectedContainerColor.toColor(),
-        dayContentColor: Color = DatePickerModalTokens.DateUnselectedLabelTextColor.toColor(),
-        // TODO: Missing token values for the disabled colors.
-        disabledDayContentColor: Color = dayContentColor.copy(alpha = 0.38f),
-        selectedDayContentColor: Color = DatePickerModalTokens.DateSelectedLabelTextColor.toColor(),
-        // TODO: Missing token values for the disabled colors.
-        disabledSelectedDayContentColor: Color = selectedDayContentColor.copy(alpha = 0.38f),
-        selectedDayContainerColor: Color =
-        DatePickerModalTokens.DateSelectedContainerColor.toColor(),
-        // TODO: Missing token values for the disabled colors.
-        disabledSelectedDayContainerColor: Color = selectedDayContainerColor.copy(alpha = 0.38f),
-        todayContentColor: Color = DatePickerModalTokens.DateTodayLabelTextColor.toColor(),
-        todayDateBorderColor: Color =
-        DatePickerModalTokens.DateTodayContainerOutlineColor.toColor())
-*/
-
-
-        val p = painterResource(id = R.drawable.flood_yellow)
-
-        val gh= colorResource(id = R.drawable.flood_yellow)
-/*
-        val alternative= DatePickerDefaults.colors(dayContentColor=gh)
-
-
-        //DatePicker(datePickerState=datePickerState, colors=alternative)
-
-
-        //val color= Color(ColorSpace=mColorspace )// colospace
-
-
-        val b = ColorSpace.RenderIntent.ABSOLUTE
-        val t= DatePickerDefaults.colors(dayContentColor=Color.Green)
-        val h= DatePickerDefaults.colors(dayContentColor=gh)
-        /*
-
-
-        val l= DatePickerDefaults.colors(dayContentColor=Color.VectorConverter{})// vektor
-        val l= DatePickerDefaults.colors(dayContentColor=Color.VectorConverter{})// vektor
-
-*/
-
-
-        val datePickerFormater=  DatePickerFormatter(
-             shortFormat= "test 1", mediumFormat=" Test 2",
-        monthYearFormat= "Saturday, March 27, 2021"
-
-        )
- */
-
-        // DatePicker(datePickerState=datePickerState, modifier=Modifier.padding(30.dp)// Ved emulator så blir kalenderen mikroskopisk liten
-        //            .height(100.dp),  ) - Funket dårlig for nå så prøv heller å bruker default colors for å sette bilde som default color
-
-
-
-
-
-
-     //Dette var:  https://github.com/boguszpawlowski/ComposeCalendar?fbclid=IwAR3i_MvLSzs-8v23gcIa8MSNFfLaBm9bWYAiIGhmTve-P59dj628WdFK7Lc
-   //  @Composable
-     // fun MainScreen() {
-        //StaticCalendar(modifier=Modifier.background(Color.Green))
-
-        //}
-        /* forsøk med Material  https://m2.material.io/components/date-pickers Denne bruker et annet google bibliotek:https://developer.android.com/reference/com/google/android/material/datepicker/MaterialDatePicker ikke det samme som modalBottomSheetLayout
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build()
-
-        datePicker.show() // funket ikke, kl.2146
-
-
-https://medium.com/@segunfrancis/how-to-create-material-date-and-time-pickers-in-android-18ecd246838b */
-
-       // MaterialDatePicker.Builder.datePicker().setTitleText("Select date of birth").build().show()
-
-
-
-
-        Text(text = "Kalenderen")
-    }
-}
-
-
-@Composable
-fun dayContent(dayState: NonSelectableDayState /*,frostinfo: FrostInfo*/) {
+    var alledager = mutableListOf<LocalDate>()
 
     Card(
-        modifier = Modifier.aspectRatio(1f)// Dette er en test for å se på om
-            .padding(2.dp), // jerg skjønner dette er padding mellom hver card, men fremdeels
+        modifier = Modifier
+            .aspectRatio(1f)
+            .padding(2.dp),
 
         border =  BorderStroke(1.dp, Sikt_hvit)
     )
@@ -1076,64 +955,46 @@ fun dayContent(dayState: NonSelectableDayState /*,frostinfo: FrostInfo*/) {
     {
 
         Column(
-            modifier = Modifier//clickable {},
-            //contentAlignment = Alignment.Center, // åja tror det er denne, f
+            modifier = Modifier.fillMaxWidth()
+
         ) {
 
-            Text(text = dayState.date.dayOfMonth.toString()+".", modifier=Modifier.padding(start = 1.5.dp)//.wrapContentHeight( //  modifier = Modifier.align(Alignment.TopCenter)
-                //  Alignment.TopStart).aspectRatio(.1f).size(0.1.dp)
+            Text(text = dayState.date.dayOfMonth.toString()+".", modifier=Modifier.padding(start = 2.4.dp) // dette er datoen
             )
-
-//Denne lå har før, og fjern for loop
-//                    Image(painter = painterResource(id = R.drawable.flood_orange), contentDescription = "test med fare i hver", contentScale = ContentScale.FillWidth, modifier = Modifier.fillMaxWidth())
-
-            var i = 0
-
-
-
-            // weather icon to be shown in each calender date
-            var weathericon = R.drawable.partlycloudy
-
-
-            /*
+            /* Logic for å velge hva slags type ikon som skal dukke opp: Ikke implementert enda: Ref. det at viewmodelen vår ikke tar inn data for øyeblikket 25.04.23: Dette er blitt diskutert med gruppa på mandag 23.04:
             if (frostinfo.typeFrost == 0) { // Picks icon to be shown depending on the sight / sikt conditions: The lower the APi value the more clear the sky is(the better the conditions)
-                weathericon = R.drawable.sunny
-            } else if (0 < frostinfo.typeFrost && frostinfo.typeFrost < 4 ) {
-                weathericon = R.drawable.partlycloudy
+                weathericon = R.drawable.klart
+            } else if (0 < frostinfo.typeFrost && frostinfo.typeFrost < 3) {
+                weathericon = R.drawable.lettskyet
             } else if (frostinfo.typeFrost > 4) {
-                weathericon = R.drawable.cloudy
+                weathericon = R.drawable.delvis_skyet
+            }
+             } else if (frostinfo.typeFrost > 4) {
+                weathericon = R.drawable.skyet
             }
              */
 
-            for ( i in 1..dayState.date.lengthOfMonth()){
-                // innafor denne så har jeg lyst til
-                //Gjøre et APi kall, også vis frem et bilde// if setning fra det over
+            Image(painter = painterResource(id =  R.drawable.klart),
+                contentDescription = "test med fare i hver",
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(2f)
+                    .wrapContentSize(Alignment.Center)
+                    .size(30.dp))
 
-                Image(painter = painterResource(id = weathericon), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.padding(start = 8.dp).wrapContentSize(Alignment.Center)/*.fillMaxWidth(0.7f)*/)
-            }
+            alledager.add(dayState.date) // generer en liste med innholdet i kalenderen
 
         }
-
-
-
-
     }
 
-    Log.d("Halladagdate", dayState.date.toString())
-    Log.d("Halladagmonthvalue", dayState.date.monthValue.toString())
-    Log.d("HalladagisCurrent", dayState.isCurrentDay.toString())
-    Log.d("HalladagIsfromcurrent monht", dayState.isFromCurrentMonth.toString())
 
-
-
+    return alledager
 }
 
 
 
-
-
-
-//Dette var:  https://github.com/boguszpawlowski/ComposeCalendar?fbclid=IwAR3i_MvLSzs-8v23gcIa8MSNFfLaBm9bWYAiIGhmTve-P59dj628WdFK7Lc
+//Dette er en Composable funksjon som generer en kalender med et dagsinnhold bestemt av funksjonen dayContent
+//En StaticCalender er en kalender som kun presenterer en bruker for info tilknyttet hver dag i måneden. Biblioteket brukt for å generere denne kalenderen har andre typer kalendere (slikt som ukeskalendere mm.), men i henhold til kravspesifikasjonen så anså vi en StaticCalender som mest passende.
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
 @Composable
@@ -1146,41 +1007,52 @@ fun Sikt_Historisk_Kalender(/* frostinfo: FrostInfo*/) { // api kallet er kommen
     ){
 
 
-        var testie : CalendarState<EmptySelectionState> = rememberCalendarState()
+        var calenderstate : CalendarState<EmptySelectionState> = rememberCalendarState()
 
 
-        StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.background(Sikt_lyseblå), calendarState =testie, dayContent =  { it -> dayContent(
-            dayState =  it/*, frostinfo = frostinfo*/) }
+
+        StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.background(Sikt_lyseblå), calendarState =calenderstate, dayContent =  { it -> dayContent(
+            dayState =  it/*, frostinfo = frostinfo*/)
+
+        }
         )
+
+
 
         Text(text= "Picture description:")
 
 
-        Text(text= "Clear conditions/clear sky:")
-        Image(painter = painterResource(id = R.drawable.sunny), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
+        Text(text= "Klart:")
+        Image(painter = painterResource(id = R.drawable.klart), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
 
 
 
-        Text(text= "Partly cloudy:")
-        Image(painter = painterResource(id = R.drawable.partlycloudy), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
+        Text(text= "Lettskyet:")
+        Image(painter = painterResource(id = R.drawable.lettskyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
 
 
-        Text(text= "Cloudy:")
-        Image(painter = painterResource(id = R.drawable.cloudy), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
+        Text(text= "Delvis skyet:")
+        Image(painter = painterResource(id = R.drawable.delvis_skyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
 
-        var dag : Day   //(date= LocalDate , isCurrentDay = true , isFromCurrentMonth=  true ) // trenger ikke være noe
+        Text(text= "Skyet:")
+        Image(painter = painterResource(id = R.drawable.skyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
 
-        /*
-            var ww =  DefaultDay(
-                state= DayState(day= dag,selectionState = testie.selectionState), // hva skal day= Day være : Kanskje dagens dato: Som vi vet er:
-                modifier = Modifier ,
-                selectionColor = androidx.compose.material.MaterialTheme.colors.secondary, // hightlight fargen på en valgt dag
-                currentDayColor= androidx.compose.material.MaterialTheme.colors.primary, // farget på dagens dato
-                onClick  = {},// ønsker ikke at noe skal skje
 
-            )
 
-             */
+        //var kalenderdager= dayContent(dayState = DayState<EmptySelectionState>(selectionState = calenderstate.selectionState, day = Day(calenderstate.monthState.currentMonth.atDay(1))))
+
+
+        //Log.d("Halladagdate", dayContent(dayState = calenderstate) .date.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
+
+
+        // var datoertilgjengelig: List<LocalDate> = calenderstate.monthState.currentMonth
+
+
+        //var datoertilgjengelig = calenderstate.monthState.currentMonth.month
+
+
+        //Log.d("calenderstate.monthState.currentMonth.month", calenderstate.monthState.currentMonth.month.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
+
 
 
     }
@@ -1188,20 +1060,7 @@ fun Sikt_Historisk_Kalender(/* frostinfo: FrostInfo*/) { // api kallet er kommen
 }
 
 
-/*
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun sikt_tittelDatepciker(state: DatePickerState) : Unit {
 
-    state.
-    DateRangePickerDefaults.DateRangePickerTitle(
-        state = state,
-        modifier = Modifier.padding(10.dp)
-    )
-
-}
-
- */
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -1258,7 +1117,7 @@ fun Sikt_HistoriskCard(){
     }
 }
 
-/*
+
 
 @Preview(showSystemUi = true)
 @Composable
@@ -1266,256 +1125,8 @@ fun TestComponent() {
     Sikt_LocationCard()
 }
 
- */
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showSystemUi = true)
-@Composable
-fun TestDatePicker() {
-    //Sikt_Historisk_Kalender()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Sikt_hvit),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ){
 
-        SelectableCalendar(modifier=Modifier.background(Color.Green))
-
-    }
-}
-
-
-@Preview(showSystemUi = true)
-@Composable
-fun SelectableCalendarSample() {
-    val calendarState = rememberSelectableCalendarState() // Lager en dynamic selection state
-
-    manedTilSelectableKalendern(calendarStatey = calendarState)// okei,
-
-    var g = calendarState.monthState.currentMonth // ToString gjør ikke monthstate til en måned, den gjør den til Klassens minne adress
-    var i = calendarState.monthState.currentMonth.month // ToString gjør ikke monthstate til en måned, den gjør den til Klassens minne adress
-    var r = calendarState.monthState.currentMonth.year // ToString gjør ikke monthstate til en måned, den gjør den til Klassens minne adress
-    var n = calendarState.monthState.currentMonth.monthValue // ToString gjør ikke monthstate til en måned, den gjør den til Klassens minne adress
-    var w = calendarState.monthState.currentMonth.lengthOfMonth() // ToString gjør ikke monthstate til en måned, den gjør den til Klassens minne adress
-    var dagensdato = calendarState.monthState.currentMonth.month// dagens dato
-
-        /*
-    Column(
-        Modifier.verticalScroll(rememberScrollState())
-    ) {
-        SelectableCalendar(calendarState = calendarState, firstDayOfWeek = DayOfWeek.MONDAY, modifier = Modifier.background(Sikt_lyseblå))
-
-        SelectionControls(selectionState = calendarState.selectionState)
-// kl.17.11, alle de 5 boksene under var skrevet kl.16.28
-        Text(text=" calendarState.monthState.currentMonth: " + g +" Nebil1")
-        Text(text=" calendarState.monthState.currentMonth.month: " + i +" Nebil2")
-        Text(text="  calendarState.monthState.currentMonth.year : " + r +" Nebil3")
-        Text(text=" calendarState.monthState.currentMonth.monthValue: " + n +" Nebil3")
-        Text(text=" calendarState.monthState.currentMonth.lengthOfMonth(): " + w +"Nebs4")
-
-    }
-
-         */
-}
-
-
-@Composable
-private fun SelectionControls(
-    selectionState: DynamicSelectionState,
-) {
-    Text(
-        text = "Calendar Selection Mode",
-        style = MaterialTheme.typography.bodyMedium,
-    )
-    SelectionMode.values().forEach { selectionMode ->
-        Row(modifier = Modifier.fillMaxWidth()) {
-
-            RadioButton(
-                selected = selectionState.selectionMode == selectionMode,
-                onClick = { selectionState.selectionMode = selectionMode },
-                colors = RadioButtonDefaults.colors()
-
-            )
-            Text(text = selectionMode.name) // generer 4 RadioButtons under hverandre
-            Spacer(modifier = Modifier.height(4.dp))
-        }
-    }
-
-    Text(
-        text = "Selection: ${selectionState.selection.joinToString { it.toString() }}", // Printer teksten "Selection:"
-        style = MaterialTheme.typography.bodyMedium //MaterialTheme.typography.h6,
-    )
-
-
-/*
-    Text(// dette skal være hele måneden forran oss
-        text = "Info nebil test 1: ${selectionState.selection.listIterator()}", // Dette Skal være hele måneden
-
-        style = MaterialTheme.typography.bodyMedium //MaterialTheme.typography.h6,
-    )
-
-
-   Text(// dette skal være hele måneden forran oss
-        text = "Info nebil test 2: ${selectionState.selection.toString()}", // Dette Skal være hele måneden
-
-        style = MaterialTheme.typography.bodyMedium //MaterialTheme.typography.h6,
-    )
-    Text(// dette skal være hele måneden forran oss
-        text = "Info nebil test 3: ${selectionState.selectionMode.name}", // Dette Skal være hele måneden
-        style = MaterialTheme.typography.bodyMedium //MaterialTheme.typography.h6,
-    )
-    Text(// dette skal være hele måneden forran oss
-        text = "Info nebil test 4: ${selectionState.isDateSelected(LocalDate.now()) }" + " ${selectionState.selection.asReversed()}", // To skikkelig spennende metoder
-        style = MaterialTheme.typography.bodyMedium //MaterialTheme.typography.h6,
-    )
-
-
-    // det du ønsker er en List<LocaleDate> av måneden du er i:
-    // hvor får du måneden du er i
-    val datoer1 : MutableList<LocalDate> = mutableListOf() // tom liste av typen: dag
-    val datoer2 : MutableList<LocalDate> = mutableListOf() // tom liste av typen: dag
-    val datoer3 : MutableList<LocalDate> = mutableListOf() // tom liste av typen: dag
-
-    var i : Int =0
-  *//*  while(selectionState.selection.listIterator().hasNext()){
-
-        datoer1.add(index= i, selectionState.selection.listIterator().previous() )
-      //  datoer2.add(index= i, selectionState.selection.lastIndexOf() )
-    }*//*
-
-    selectionState.selection.listIterator().forEach{ dagDate -> // for each or å fylle en fiktiv måned: Har man seriøst ikke andre måter å finne måeneded man er i, oppgave for lørdag den 22.02 Finn hvor månedinfoen er for current dato
-
-        datoer3.add(dagDate)
-    }
-
-    Text(// dette skal være hele måneden forran oss
-        text = "Info nebil test 5: ${datoer1.toString() }", // Dette Skal være hele måneden
-        style = MaterialTheme.typography.bodyMedium //MaterialTheme.typography.h6,
-    )
-      Text(// dette skal være hele måneden forran oss
-        text = "Info nebil test 6: ${datoer3.toString()}", // Dette Skal være hele måneden
-        style = MaterialTheme.typography.bodyMedium //MaterialTheme.typography.h6,
-    )*/
-
-//målet med disse testene er å få måneden vi er i uten å røre noe som helt, uten å selecte noenting
-
-// Oppgaver for lørdag 22.04
-    //Oppgave 1:
-// sjekke ut documentasjonssiden til Selection state og Localdate
-//Oppgave 2:
-//prøv datoer3 med betingelsen:  !   selectionState.selection.isDateSelected(localDate også skriv alle 12 månedene)
-
-// Oppgave 3: Sjekk ut begge over med forEach setning og lær om lambda utrykk av phillip lacknin
-
-}
-
-fun manedTilSelectableKalendern (calendarStatey: CalendarState<DynamicSelectionState>) : Unit {
-
-    Log.d("Halla1", calendarStatey.monthState.currentMonth.toString())
-    Log.d("Halla1", calendarStatey.monthState.currentMonth.lengthOfMonth().toString())
-    Log.d("Halla2", calendarStatey.monthState.currentMonth.toKotlinYearMonth().toString())
-    Log.d("HallamånedTEKST", calendarStatey.monthState.currentMonth.month.toString())
-    Log.d("HallamånedTall", calendarStatey.monthState.currentMonth.month.value.toString())
-    Log.d("Hallayear", calendarStatey.monthState.currentMonth.year.toString())
-
-
-    // Wow, lørdag 22.04 funksjoen : .toKotlinYearMonth().
-
-    //kan man omgjøre en selectable calender til en unselectable en
-    // Kan vi få currenth month for et static calender
-}
-
-fun manedTilSTATISKKalendern (StatiskKalender: CalendarState<EmptySelectionState>) : Unit {
-/*
-    Log.d("StatiskKalenderHalla3", StatiskKalender.monthState.currentMonth.toString())
-    Log.d("Halla4", StatiskKalender.monthState.toString())
-    Log.d("Halla5", StatiskKalender.monthState.currentMonth.toKotlinYearMonth().toString())*/
-
-    // Wow, lørdag 22.04 funksjoen : .toKotlinYearMonth().
-
-    //kan man omgjøre en selectable calender til en unselectable en
-    // Kan vi få currenth month for et static calender
-}
-
-@Composable
-fun minDayComposable (calendarStatey: CalendarState<DynamicSelectionState>) { //
-    // Funksjoner
-// DEnne skal være et card: Med bare et tall dagens dato, og et bilde rett under Das it
-
-
-    // url builder:2021-05-01%2F2021-05-31
-    val beginningofmonth= "01"
-    val endofmonth= calendarStatey.monthState.currentMonth.lengthOfMonth().toString() // 28, 30 eller 31
-    val month= "0"+calendarStatey.monthState.currentMonth.month.value.toString() // nåværende måned: 05 = mai
-    val year= calendarStatey.monthState.currentMonth.year.toString() // 2022,2023
-
-    val referencetiime= year+"-"+month+"-"+beginningofmonth + "%2F"+year+"-"+month+"-"+endofmonth
-
-    val source = "SN18700"
-    var elements = "air_temperature"
-
-/*
-    return viewModelScope.async(Dispatchers.IO) {
-
-        val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)
-        val frostPolygon = dataFrost.fetchApiSvarkoordinater(2.toString(), 2.toString())
-
-        val typeFrost = frost.type
-        val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
-        val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
-
-        Log.d("typefrost", typeFrost.toString())
-        Log.d("lat", lat.toString())
-        Log.d("long", long.toString())
-
-        val frostF = FrostInfo(
-            typeFrost = typeFrost.toString(), //ikke egt ha toString her
-            longFrost = long!!,
-            latFrost = lat!!,
-        )
-        return@async frostF
-
- */
-
-// Oppgave 3.1 Lag en Day Composable: Se documentasjno: Daycontent inni StaticCalender
-
-        // et tall // kanske bruk den LocalDate staandard defuelt greia
-        // et bilde av et været
-    //DayState
-    calendarStatey.monthState
-    calendarStatey.monthState.currentMonth
-    /*
-    Card(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .padding(2.dp),
-        elevation = if (calendarStatey.isFromCurrentMonth) 4.dp else 0.dp,
-        border = if (state.isCurrentDay) BorderStroke(1.dp, currentDayColor) else null,
-        contentColor = if (isSelected) selectionColor else contentColorFor(
-            backgroundColor = androidx.compose.material.MaterialTheme.colors.surface
-        ){
-
-            Box(
-                modifier = Modifier.clickable {
-                    onClick(date)
-                    selectionState.onDateSelected(date)
-                },
-                contentAlignment = Alignment.Center,
-            ) {
-
-               Text(text = date.dayOfMonth.toString())
-
-                Image(painter = painterResource(id = R.drawable.flood_orange), contentDescription = "test med fare i hver", contentScale = ContentScale.FillWidth, modifier = Modifier.fillMaxWidth())
-            }
-
-
-        }
-
-     */
-
-
-}
 
 

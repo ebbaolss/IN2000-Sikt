@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.components.Sikt_BlueButton
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
@@ -56,6 +58,8 @@ fun createFactoryMap(xt: Context) : MapView {
 }
 fun onMapClick(point: Point): Boolean {
     Log.d("Coordinate", point.toString())
+
+
     return@onMapClick true
 }
 

@@ -15,12 +15,14 @@ import com.example.in2000_prosjekt.ui.data.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 
-class APIViewModel : ViewModel() {
+class APIViewModel () : ViewModel()
+    {
 
     //for å teste
-    val latitude : String = "61.6370"
-    val longtitude: String = "8.3092"
-    val altitude: String = "2469"
+    var latitude : String = "61.6370"
+    var longtitude: String = "8.3092"
+    var altitude: String = "2469"
+
 
     //----------------------
     //Frost:
@@ -49,13 +51,13 @@ class APIViewModel : ViewModel() {
         getAll()
     }
 
-    fun getAll() {
+    fun getAll(referencetimetest: String = "") {
         viewModelScope.launch() {
             val nowCastDeferred = getNowCast()
             val locationDeferred = getLocation()
             val sunsetDeferred = getSunrise()
             val alertDeferred = getAlert()
-            val frostDeferred = getFrost()
+            val frostDeferred = getFrost(    referencetimetest)
 
             val nowCastP = nowCastDeferred.await()
             val locationP = locationDeferred.await()
@@ -167,10 +169,10 @@ class APIViewModel : ViewModel() {
         }
 }
 
-    private fun getFrost() : Deferred<FrostInfo> {
+    fun getFrost( referencetimetest: String = "") : Deferred<FrostInfo> {
         return viewModelScope.async(Dispatchers.IO) {
 
-            val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)
+            val frost = dataFrost.fetchFrostTemp(elements, referencetimetest, source)
             val frostPolygon = dataFrost.fetchApiSvarkoordinater(2.toString(), 2.toString())
 
             val meancloudareafraction = frost.data?.get(0)?.observations?.get(0)?.value
