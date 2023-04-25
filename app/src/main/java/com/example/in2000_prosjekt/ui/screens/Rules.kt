@@ -37,51 +37,55 @@ fun RulesScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavi
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(Sikt_lyseblå)
         ) {
-            Sikt_sol()
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp),
-                text = "Fjellvettreglene",
-                textAlign = TextAlign.Center,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold
-            )
-
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier.padding(20.dp)
             ) {
-                Box(
+                Sikt_sol()
+                Text(
                     modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    text = "Fjellvettreglene",
+                    textAlign = TextAlign.Center,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold
                 )
 
-                Spacer(Modifier.height(10.dp))
-
-                var counter = 1
-                rules.forEach {
-                    Row(
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Box(
                         modifier = Modifier
-                            .padding(horizontal = 20.dp, vertical = 5.dp),
-                    ) {
+                    )
 
-                        Text(
-                            text = "$counter. ",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold
+                    Spacer(Modifier.height(10.dp))
 
-                        )
-                        Text(
+                    var counter = 1
+                    rules.forEach {
+                        Row(
                             modifier = Modifier
-                                .fillMaxWidth(),
-                            text = it,
-                            fontSize = 18.sp,
-                            fontFamily = FontFamily.SansSerif
-                        )
-                        Spacer(Modifier.height(30.dp))
-                        counter++
+                                .padding(horizontal = 20.dp, vertical = 5.dp),
+                        ) {
+
+                            Text(
+                                text = "$counter. ",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                text = it,
+                                fontSize = 18.sp,
+                                fontFamily = FontFamily.SansSerif
+                            )
+                            Spacer(Modifier.height(30.dp))
+                            counter++
+                        }
                     }
                 }
             }
