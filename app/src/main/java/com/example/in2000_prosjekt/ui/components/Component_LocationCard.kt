@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
@@ -155,21 +157,23 @@ fun Sikt_LoctationCard_Topper_i_naerheten() {
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Center),
-            horizontalArrangement = Arrangement.SpaceEvenly) {
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             item {
-                Sikt_FinnTurer_card(450, -10, 0,true, false, true)
+                Sikt_Datavisualisering_Card(860 ,-10f, 7f, false, true, true)
+                //Sikt_FinnTurer_card(450, -10, 0,true, false, true)
             }
             item {
-                Sikt_FinnTurer_card(550, 3, 3,false, true, false)
+                Sikt_FinnTurer_card("test",550, 3,false, true, false)
             }
             item {
-                Sikt_FinnTurer_card(1100, 23, 9,false, false, true)
+                Sikt_FinnTurer_card("test",1100, 23,false, false, true)
             }
             item {
-                Sikt_FinnTurer_card(1670, -1, 15,false, false, false)
+                Sikt_FinnTurer_card("test",1670, -1,false, false, false)
             }
             item {
-                Sikt_FinnTurer_card(2469, 6, 2,true, true, true)
+                Sikt_FinnTurer_card("test",2469, 6,true, true, true)
             }
         }
     }
@@ -193,5 +197,26 @@ fun Sikt_LocationCard_Hour() {
             Spacer(modifier = Modifier.height(30.dp))
             Sikt_sol()
         }
+    }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showSystemUi = true)
+@Composable
+fun ComponentTest() {
+
+    Card(
+        modifier = Modifier
+            .width(70.dp)
+            .height(80.dp)
+            .padding(10.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(Sikt_hvit)
+    ) {
+        Sikt_LocationCard()
+        //Sikt_LocationCard_NextDays()
+        //Sikt_LoctationCard_Topper_i_naerheten()
+        //Sikt_LocationCard_Hour()
     }
 }
