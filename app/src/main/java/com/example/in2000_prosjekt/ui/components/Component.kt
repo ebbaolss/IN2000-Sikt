@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -51,6 +52,8 @@ import kotlinx.coroutines.launch
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import com.example.in2000_prosjekt.ui.database.Favorite
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, rules : Boolean, settings : Boolean) {
@@ -235,88 +238,105 @@ fun Sikt_sol() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-
-fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
-                       alertinfo: MutableList<AlertInfo>) {
-    // "Refresh"-ikon er placeholder for advarsels-ikon
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-        colors = CardDefaults.cardColors(Sikt_lyseblå)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Placeholder-ikon for advarsel:
-                // Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
-                
-                Log.d("ALERT-S", "alertinfo.size: ${alertinfo.size}")
-                //Alert pop up dialog
-                var openDialog by remember {
-                    mutableStateOf(false)
-                }
-
-                if (alertinfo.size != 0){
-                    AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
-                        openDialog = true
-                    }
-                }
-
-                if (openDialog){
-                    AlertDialog(alertinfo = alertinfo){
-                        openDialog = false
-                    }
-                }
-
-                Text(text = "Gaustatoppen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
-                var checked by remember { mutableStateOf(false) }
-                IconToggleButton(
-                    checked = checked,
-                    onCheckedChange = { checked = it },
-                    modifier = Modifier.padding(5.dp)
-                ) {
-                    if (checked) {
-                        Icon(
-                            Icons.Filled.Favorite,
-                            contentDescription = "Localized description",
-                            tint = Sikt_mørkeblå
-                        )
-                    } else {
-                        Icon(
-                            painterResource(id = R.drawable.outline_favorite),
-                            contentDescription = "Localized description",
-                            tint = Sikt_mørkeblå
-                        )
-                    }
-                }
-            }
-            Column(
+fun LazyListScope.Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
+                       alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel, allFavorites: List<Favorite>) {
+    items(allFavorites.size){
+        allFavorites.forEach{
+            favorite ->
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .padding(20.dp),
+                colors = CardDefaults.cardColors(Sikt_lyseblå)
             ) {
-                Text(text = "1884 m.o.h", fontWeight = FontWeight.Bold)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Placeholder-ikon for advarsel:
+                        // Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
+
+                        Log.d("ALERT-S", "alertinfo.size: ${alertinfo.size}")
+                        //Alert pop up dialog
+                        var openDialog by remember {
+                            mutableStateOf(false)
+                        }
+
+                        if (alertinfo.size != 0){
+                            AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
+                                openDialog = true
+                            }
+                        }
+
+                        if (openDialog){
+                            AlertDialog(alertinfo = alertinfo){
+                                openDialog = false
+                            }
+                        }
+
+                        Text(text = "Gaustatoppen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
+                        var checked by remember { mutableStateOf(false) }
+                        IconToggleButton(
+                            checked = checked,
+                            onCheckedChange = { checked = it
+                                if(it){
+                                    viewModel.addFavorite(
+                                        Favorite(
+                                            favorite.longtitude,
+                                            favorite.latitude
+                                        )
+                                    )
+                                } else{
+                                    viewModel.deleteFavorite(
+                                        favorite.longtitude,
+                                        favorite.latitude
+                                    )
+                                }
+                            },
+                            modifier = Modifier.padding(5.dp)
+                        ) {
+                            if (checked) {
+                                Icon(
+                                    Icons.Filled.Favorite,
+                                    contentDescription = "Localized description",
+                                    tint = Sikt_mørkeblå
+                                )
+                            } else {
+                                Icon(
+                                    painterResource(id = R.drawable.outline_favorite),
+                                    contentDescription = "Localized description",
+                                    tint = Sikt_mørkeblå
+                                )
+                            }
+                        }
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(text = "1884 m.o.h", fontWeight = FontWeight.Bold)
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    ) {
+                        // random km lagt inn for å teste sikt-ikonene
+                        Sikt_Visualisering_and_Sikt_Info(10.5, 3.3, 0.6)
+                    }
+                }
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-            ) {
-                // random km lagt inn for å teste sikt-ikonene
-                Sikt_Visualisering_and_Sikt_Info(10.5, 3.3, 0.6)
-            }
+
         }
     }
+
 }
 
 @SuppressLint("DiscouragedApi")
