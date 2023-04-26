@@ -47,7 +47,7 @@ fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.padding(20.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.baseline_contact_phone_24),
+                    painter = painterResource(id = R.drawable.outline_contact_phone),
                     contentDescription = "Phone illustration",
                     tint = Sikt_mørkeblå,
                     modifier = Modifier.align(CenterHorizontally).size(100.dp),

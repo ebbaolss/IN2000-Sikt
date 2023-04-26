@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.LocationOn
@@ -66,9 +67,9 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.size(width = 80.dp, height = 100.dp)) {
                 IconButton(onClick = { onNavigateToMap() }) {
                     var iconfarge = Sikt_mørkeblå
-                    var iconBackround = Sikt_hvit
+                    var iconChosen = R.drawable.outline_place_outline
                     if (map) {
-                        iconBackround = Sikt_lyseblå
+                        iconChosen = R.drawable.baseline_place_filled
                     }
                     Icon(
                         Icons.Outlined.LocationOn,
@@ -76,7 +77,6 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                         tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(iconBackround)
                             .padding(5.dp))
                 }
                 Text(text = "Utforsk", fontSize = 14.sp)
@@ -85,17 +85,16 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.size(width = 80.dp, height = 100.dp)) {
                 IconButton(onClick = { onNavigateToFav() }) {
                     var iconfarge = Sikt_mørkeblå
-                    var iconBackround = Sikt_hvit
+                    var iconChosen = Icons.Outlined.Favorite
                     if (favoritt) {
-                        iconBackround = Sikt_lyseblå
+                        iconChosen = Icons.Filled.Favorite
                     }
                     Icon(
-                        Icons.Outlined.Favorite,
+                        iconChosen,
                         contentDescription = "Localized description",
                         tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(iconBackround)
                             .padding(5.dp)
                     )
                 }
@@ -105,18 +104,17 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.size(width = 80.dp, height = 100.dp)) {
                 IconButton(onClick = { onNavigateToRules() }) {
                     var iconfarge = Sikt_mørkeblå
-                    var iconBackround = Sikt_hvit
+                    var iconChosen = R.drawable.outline_view_list_outlined
                     if (rules) {
-                        iconBackround = Sikt_lyseblå
+                        iconChosen = R.drawable.baseline_view_list_filled
                     }
                     Icon(
-                        painter = painterResource(id = R.drawable.ny_fjellvettregler),
+                        painter = painterResource(iconChosen),
                         "",
                         tint = iconfarge,
                         modifier = Modifier
                             .size(120.dp)
                             .clip(CircleShape)
-                            .background(iconBackround)
                             .padding(5.dp)
                     )
                 }
@@ -126,17 +124,16 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.size(width = 80.dp, height = 100.dp)) {
                 IconButton(onClick = { onNavigateToSettings() }) {
                     var iconfarge = Sikt_mørkeblå
-                    var iconBackround = Sikt_hvit
+                    var iconChosen = R.drawable.outline_info_outlined
                     if (settings) {
-                        iconBackround = Sikt_lyseblå
+                        iconChosen = R.drawable.baseline_info_filled
                     }
                     Icon(
-                        Icons.Outlined.Settings,
+                        painterResource(iconChosen),
                         "",
                         tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(iconBackround)
                             .padding(5.dp)
                     )
                 }
@@ -539,9 +536,9 @@ fun Sikt_Visualisering_and_Sikt_Info(sikthigh : Double, siktmedium : Double, sik
 @Composable
 fun TestComponent() {
 
-    Sikt_Header("test")
+    //Sikt_Header("test")
     Sikt_MountainHight("test")
-    Sikt_Favorite_card()
+    //Sikt_Favorite_card()
 
     BottomSheetContent()
     Sikt_BottomSheet()
