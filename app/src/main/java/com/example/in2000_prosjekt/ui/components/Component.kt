@@ -60,7 +60,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.core.graphics.toColor
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.datepicker.MaterialDatePicker
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.boguszpawlowski.composecalendar.*
 import io.github.boguszpawlowski.composecalendar.day.Day
 import io.github.boguszpawlowski.composecalendar.day.DayState
@@ -398,11 +398,13 @@ fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: S
             Text(text = "Varsel: $varsel", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(30.dp))
-            Text(text = "Type frost: ${frostinfo.typeFrost}", fontFamily = FontFamily.Monospace)
+            Text(text = "Type frost: ${frostinfo.sightcondition}", fontFamily = FontFamily.Monospace)
             Spacer(modifier = Modifier
                 .height(30.dp))
-            Text(text = "Coordinates frost: ${frostinfo.latFrost}, ${frostinfo.longFrost}", fontFamily = FontFamily.Monospace)
+           /* Text(text = "Coordinates frost: ${frostinfo.latFrost}, ${frostinfo.longFrost}", fontFamily = FontFamily.Monospace)
+               */
             Spacer(modifier = Modifier
+
                 .height(30.dp))
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -943,7 +945,6 @@ fun Sikt_LocationCard(){
 fun dayContent(dayState: NonSelectableDayState /*,frostinfo: FrostInfo*/) : MutableList<LocalDate> {
 
     var alledager = mutableListOf<LocalDate>()
-
     Card(
         modifier = Modifier
             .aspectRatio(1f)
@@ -998,7 +999,11 @@ fun dayContent(dayState: NonSelectableDayState /*,frostinfo: FrostInfo*/) : Muta
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
 @Composable
-fun Sikt_Historisk_Kalender(/* frostinfo: FrostInfo*/) { // api kallet er kommentert ut fordi jeg ikke får kjørt med apikallet
+fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frostinfo: FrostInfo*/) { // api kallet er kommentert ut fordi jeg ikke får kjørt med apikallet
+
+    val historicCardUiState by APIViewModel.appUiState.collectAsState()
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -1011,12 +1016,14 @@ fun Sikt_Historisk_Kalender(/* frostinfo: FrostInfo*/) { // api kallet er kommen
 
 
 
+
         StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.background(Sikt_lyseblå), calendarState =calenderstate, dayContent =  { it -> dayContent(
             dayState =  it/*, frostinfo = frostinfo*/)
 
         }
         )
 
+        APIViewModel.getFrost( referencetimetest = ( dayContent()   )
 
 
         Text(text= "Picture description:")

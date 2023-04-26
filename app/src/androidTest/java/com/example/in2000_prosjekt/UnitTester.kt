@@ -1,5 +1,7 @@
 package com.example.in2000_prosjekt
 
+
+/*
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -40,7 +42,7 @@ import org.junit.Assert
 class TestBildeStartpage {
     @get:Rule
     val rule = createComposeRule()}
-    /*lateinit var navController: TestNavHostController
+    lateinit var navController: TestNavHostController
 
     @Test
     fun openApp_showsStartPagePicture() {

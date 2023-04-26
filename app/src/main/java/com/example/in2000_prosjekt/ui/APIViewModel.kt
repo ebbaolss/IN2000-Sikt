@@ -14,13 +14,14 @@ import com.example.in2000_prosjekt.ui.data.*
 
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import java.time.LocalDate
 
 class APIViewModel () : ViewModel()
     {
 
     //for å teste
     var latitude : String = "61.6370"
-    var longtitude: String = "8.3092"
+    var longitude: String = "8.3092"
     var altitude: String = "2469"
 
 
@@ -57,7 +58,7 @@ class APIViewModel () : ViewModel()
             val locationDeferred = getLocation()
             val sunsetDeferred = getSunrise()
             val alertDeferred = getAlert()
-            val frostDeferred = getFrost(    referencetimetest)
+            val frostDeferred = getFrost(referencetimetest)
 
             val nowCastP = nowCastDeferred.await()
             val locationP = locationDeferred.await()
@@ -80,7 +81,7 @@ class APIViewModel () : ViewModel()
     private fun getLocation() : Deferred<LocationInfo>{
         return viewModelScope.async(Dispatchers.IO) {
 
-            val forecast = dataSource.fetchLocationForecast(latitude, longtitude, altitude)
+            val forecast = dataSource.fetchLocationForecast(latitude, longitude, altitude)
 
             val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
             val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
@@ -98,7 +99,7 @@ class APIViewModel () : ViewModel()
     private fun getNowCast() : Deferred<NowCastInfo> {
         return viewModelScope.async(Dispatchers.IO) {
 
-            val forecastNow = dataSource.fetchNowCast(latitude, longtitude, altitude)
+            val forecastNow = dataSource.fetchNowCast(latitude, longitude, altitude)
 
             val tempNow = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
             val windN = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed
@@ -114,7 +115,7 @@ class APIViewModel () : ViewModel()
     private fun getSunrise() : Deferred<SunriseInfo> {
         return viewModelScope.async(Dispatchers.IO) {
 
-            val sunrise = dataSunrise.fetchSunrise(latitude, longtitude)
+            val sunrise = dataSunrise.fetchSunrise(latitude, longitude)
 
             val sunriseToday = sunrise.properties?.sunrise?.time
             val sunsetToday = sunrise.properties?.sunset?.time
@@ -169,11 +170,14 @@ class APIViewModel () : ViewModel()
         }
 }
 
-    fun getFrost( referencetimetest: String = "") : Deferred<FrostInfo> {
+    fun getFrost( referencetimetest: MutableList<LocalDate> ) : Deferred<FrostInfo> {
         return viewModelScope.async(Dispatchers.IO) {
 
+            var datefrom = referencetimetest.get(0) // dag 01, på kalendern
+            var dateto =referencetimetest.get(31) // dag 30, på kalendern
+
             val frost = dataFrost.fetchFrostTemp(elements, referencetimetest, source)
-            val frostPolygon = dataFrost.fetchApiSvarkoordinater(2.toString(), 2.toString())
+            val frostPolygon = dataFrost.fetchApiSvarkoordinater(longitude,latitude)
 
             val meancloudareafraction = frost.data?.get(0)?.observations?.get(0)?.value
             val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
@@ -184,9 +188,8 @@ class APIViewModel () : ViewModel()
             Log.d("long", long.toString())
 
             val frostF = FrostInfo(
-                typeFrost = meancloudareafraction!!, //ikke egt ha toString her
-                longFrost = long!!,
-                latFrost = lat!!,
+                sightcondition = meancloudareafraction!!, //ikke egt ha toString her
+
             )
             return@async frostF
         }
