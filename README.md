@@ -3,7 +3,7 @@
 
 Gruppemedlemmer
 
-— Ebba Maja Olsson
+- Ebba Maja Olsson
 - Elisabeth Bårdstu
 - Nebil Hassen Khalifa
 — Ola Juul Holm
