@@ -72,7 +72,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                         iconChosen = R.drawable.baseline_place_filled
                     }
                     Icon(
-                        Icons.Outlined.LocationOn,
+                        painter = painterResource(iconChosen),
                         contentDescription = "Localized description",
                         tint = iconfarge,
                         modifier = Modifier
