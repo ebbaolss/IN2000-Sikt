@@ -13,8 +13,10 @@ class DataSourceMap() {
             gson()
         }
     }
-
     suspend fun fetchMapSearch(path: String): MapBuild {
         return client.get(path).body()
+    }
+    suspend fun fetchMapCoordinates(path2: String): MapCoordinatesBuild {
+        return client.get(path2).body()
     }
 }

@@ -187,6 +187,7 @@ fun SearchBar(viewModel: MapViewModel){
                             //oppdatere lista
                             viewModel.updateRecentSearch(mountain)
 
+                            retrieveSearch(viewModel, mapUiState.value.)
                             //neste er å kalle på nytt api retrieveSearch()
                             //lag en funk i view og repository
                             //lage ny map.kt
@@ -246,7 +247,9 @@ fun suggestionSearch(apiViewModel: MapViewModel, searchString : String) {
     //oppdaterer lista i uistate, så nå har vi liste med bare mountain poi
     apiViewModel.getDataSearch(searchString)
 }
-fun retrieveSearch(mapSearchInfo: MapInfo,) {
+fun retrieveSearch(apiViewModel: MapViewModel, mapboxId: String) {
+
+    apiViewModel.getDataSearchCoordinates(mapboxId)
 
     //her skal man kalle på det nadre apiet med mapbox_id
     //dette må lages, men så og si bare å kopiere det man gjorde på getDataSearch

@@ -16,12 +16,11 @@ class MapViewModel : ViewModel() {
     //manual dependency injection, se codelab
     val repository: WeatherRepository = ImplementedWeatherRepository() //lettvinte måten
 
-
-//    private val _appUistate = MutableStateFlow(AppUiState.LoadingMapSearch)
-//    val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
-
     private val _appUistate = MutableStateFlow(MapInfo())
     val appUiState = _appUistate.asStateFlow()
+
+    private val _appUistate2 = MutableStateFlow(MapCoordinates())
+    val appUiState2 = _appUistate2.asStateFlow()
 
     fun getDataSearch(query: String) {
 
@@ -29,23 +28,45 @@ class MapViewModel : ViewModel() {
                 "session_token=[GENERATED-UUID]&country=NO&poi_category=mountain&poi_category_exclusions=street&" +
                 "access_token=pk.eyJ1IjoiZWxpc2FiZXRoYiIsImEiOiJjbGY2c3N3dDAxYWxsM3ludHY5em5wMnJxIn0.YVrKFoHYA1sCJhgBCbhudw"
 
-
         viewModelScope.launch() {
             val mapSearchDeferred = viewModelScope.async (Dispatchers.IO){
                 repository.getMap(path)
             }
-
             val mapSearchP = mapSearchDeferred.await()
 
-            _appUistate.update {
+            _appUistate.update { //kan man bare oppdatere denne ene og ikke også recent?
                 MapInfo(
                     optionMountains = mapSearchP.optionMountains
                 )
             }
         }
     }
+    fun getDataSearchCoordinates(mapboxId: String) {
+
+        //ha denne her? må nesten det eller?
+        val path2 = "https://api.mapbox.com/search/searchbox/v1/retrieve/$mapboxId==?" +
+                "session_token=[GENERATED-UUID]&" +
+                "access_token=pk.eyJ1IjoiZWxpc2FiZXRoYiIsImEiOiJjbGY2c3N3dDAxYWxsM3ludHY5em5wMnJxIn0.YVrKFoHYA1sCJhgBCbhudw"
+
+        viewModelScope.launch() {
+            val mapSearchCoordinatesDeferred = viewModelScope.async (Dispatchers.IO){
+                repository.getMapCoordinates(path2) //lage egen ny
+            }
+
+            val mapSearchCoordinatesP = mapSearchCoordinatesDeferred.await()
+
+            _appUistate2.update {
+                MapCoordinates(
+                    latitude = mapSearchCoordinatesP.latitude,
+                    longitude = mapSearchCoordinatesP.longitude
+                )
+            }
+        }
+    }
 
     fun updateRecentSearch(input : String) {
+        //MANGLER:
+        //å fikse sånn at det bare er 3 elementer i lista max, og at sist søkt ligger øverst
 
         val updatetList : MutableList<String> = mutableListOf()
 

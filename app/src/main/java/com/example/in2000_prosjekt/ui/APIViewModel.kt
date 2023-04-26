@@ -18,8 +18,9 @@ class APIViewModel : ViewModel() {
     //manual dependency injection, se codelab
     val repository: WeatherRepository = ImplementedWeatherRepository() //lettvinte måten
 
-    private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.LoadingFavorite)
+    private val _appUistate: MutableStateFlow<AppUiState > = MutableStateFlow(AppUiState.LoadingFavorite) //fjerne ": MutableStateFlow< AppUiState >" ???
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
+
     val latitude = "59"
     val longtitude = "4"
     val altitude: String = "600"

@@ -19,7 +19,7 @@ data class Contents(
     val poi_category : List<String>?,
     val poi_category_ids : List<String>?,
     val external_ids : ExternalIds,
-    val  metadata : MutableMap<Any, Any> //?? riktig
+    val metadata : MutableMap<Any, Any>? //?? riktig
 
 )
 

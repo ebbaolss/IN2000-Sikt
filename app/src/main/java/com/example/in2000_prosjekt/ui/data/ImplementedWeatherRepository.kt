@@ -2,6 +2,7 @@ package com.example.in2000_prosjekt.ui.data
 
 import android.util.Log
 import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.ui.MapCoordinates
 
 class ImplementedWeatherRepository : WeatherRepository {
 
@@ -9,7 +10,7 @@ class ImplementedWeatherRepository : WeatherRepository {
     val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
-    val dataMapSearch = DataSourceMap()
+    val dataMap = DataSourceMap()
 
     //----------------------
     //Frost:
@@ -41,8 +42,7 @@ class ImplementedWeatherRepository : WeatherRepository {
     override suspend fun getNowCast(latitude: String, longitude: String, altitude: String): NowCastInfo {
         val forecastNow = dataSource.fetchNowCast(latitude, longitude, altitude)
 
-        val tempNow =
-            forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
+        val tempNow = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
         val windN = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed
 
         return NowCastInfo(
@@ -123,9 +123,9 @@ class ImplementedWeatherRepository : WeatherRepository {
         )
     }
     override suspend fun getMap(path: String) : MapInfo {
-        val mapJson = dataMapSearch.fetchMapSearch(path)
+        val mapJson = dataMap.fetchMapSearch(path)
         //listeHer med fjell som forslag
-        var mountains = HashMap<String, String>() //maks 3 elementer, de siste 3 søkt på
+        val mountains = HashMap<String, String>() //maks 3 elementer, de siste 3 søkt på
 
         //while og sortere ting, lages en liste
         for (item in mapJson.suggestions) {
@@ -135,9 +135,18 @@ class ImplementedWeatherRepository : WeatherRepository {
         }
 
         return MapInfo(
-            optionMountains = mountains
+            optionMountains = mountains //her returnerer vi bare option, må man også gjøre noe med recent her??
         )
     }
+    override suspend fun getMapCoordinates(path: String) : MapCoordinates {
+        val mapCoordinatesJson = dataMap.fetchMapCoordinates(path)
 
-    //ny fun for å hentew indeks mapsearch
+        val longitudeMap = mapCoordinatesJson.features?.get(0)?.geometry?.coordinates?.get(0)
+        val latitudeMap = mapCoordinatesJson.features?.get(0)?.geometry?.coordinates?.get(1)
+
+        return MapCoordinates(
+            latitude = latitudeMap!!,
+            longitude = longitudeMap!!
+        )
+    }
 }

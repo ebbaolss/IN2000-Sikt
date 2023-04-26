@@ -35,9 +35,12 @@ data class FrostInfo(
 data class MapInfo(
     //hashmap med forslag
     val optionMountains : HashMap<String, String> = hashMapOf(),
-    val recentSearch : List<String> = emptyList()
+    val recentSearch : List<String> = emptyList(),
 )
-
+data class MapCoordinates(
+    val latitude : Float,
+    val longitude : Float
+)
 
 sealed interface AppUiState {
 
@@ -52,9 +55,10 @@ sealed interface AppUiState {
     object ErrorFavorite : AppUiState
     object LoadingFavorite : AppUiState
 
-    data class SuccessMapSearch(
-        val mapSearchF : MapInfo
-    ) : AppUiState
-    object ErrorMapSearch : AppUiState
-    object LoadingMapSearch : AppUiState
+    //Trengs dette????
+//    data class SuccessMapSearch(
+//        val mapSearchF : MapInfo
+//    ) : AppUiState
+//    object ErrorMapSearch : AppUiState
+//    object LoadingMapSearch : AppUiState
 }
