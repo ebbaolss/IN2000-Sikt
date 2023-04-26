@@ -184,8 +184,6 @@ fun SearchBar(viewModel: MapViewModel){
                         .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
                         .clickable( enabled = true, onClick = {
 
-                            println(mapUiState.value.recentSearch)
-
                             //oppdatere lista
                             viewModel.updateRecentSearch(mountain)
 
@@ -198,6 +196,8 @@ fun SearchBar(viewModel: MapViewModel){
                             //finspekkeri
 
                             focusManager.clearFocus()
+
+                            println(mapUiState.value.recentSearch)
                         }),
 
                     verticalAlignment = Alignment.CenterVertically
