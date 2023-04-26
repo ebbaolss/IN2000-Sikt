@@ -12,14 +12,43 @@ class ImplementedWeatherRepository : WeatherRepository {
     val dataMapSearch = DataSourceMap()
 
     //----------------------
-    //Frost:
-    var elements = "air_temperature"// Dette er værmålingen vi ønsker: For enkelthetsskyld så velges bare: air temperature
-    var referencetime ="2021-05-17%2F2021-05-17" // Frost API, bruker UTC-tidsformat, denne ønskes senere å kunne bestemmes av en bruker ved hjelp av en Date picker (en bibloteksfunskjon i jetpack compose)
-    //var url_med_Polygon ="https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=POLYGON((7.9982%2058.1447%20%2C%208.0982%2058.1447%20%2C7.9982%2058.2447%20%2C%208.0982%2058.2447%20))"
-    val source = "SN18700" //skjønner ikke denne, hvor får vi dette fra? Hva er det? Spørr Nebil
+    //Frost: // frost test variabler: Disse trengs ikke
+    val source = "SN18700" //Dette er navnet på en værstasjon: Frost API'et krever at man bruker en værstasjon sin id, når man gjøre forespøsler etter historisk værdata
     //----------------------
 
-    override suspend fun getLocation(latitude: String, longitude: String, altitude: String): LocationInfo {
+    override suspend fun getFrost(latitude: String, longitude: String,  referencetime : String ): MutableList<FrostInfo> {
+
+        val nearweatherstationpolygon = dataFrost.fetchApiSvarkoordinater(latitude, longitude)
+        val nearestweatherstationid = nearweatherstationpolygon.data?.get(0)?.id // denne henter nærmeste værstasjons id, basert på et polygon
+        val historicdata = dataFrost.fetchFrostTemp("mean(cloud_area_fraction P1D)", referencetime, nearestweatherstationid!!)
+        val historicsightconditions = historicdata.data
+
+        val mutableFrostInfoList: MutableList<FrostInfo> = mutableListOf()
+
+            //.get(1)?.observations?.get(0)?.value
+        if (historicsightconditions != null) {
+            historicsightconditions.forEach {
+                val referenceTime = it.referenceTime
+                val observations = it.observations?.forEach {
+                    val sightCondition = it?.value
+                    if (referenceTime != null && sightCondition != null) {
+                        mutableFrostInfoList.add(FrostInfo(referencetime, sightCondition.toString()))
+                    }
+                }
+
+            }
+        }
+
+        Log.d("Sightcond", historicsightconditions.toString())
+
+        return mutableFrostInfoList
+    }
+
+    override suspend fun getLocation(
+        latitude: String,
+        longitude: String,
+        altitude: String
+    ): LocationInfo {
         val forecast = dataSource.fetchLocationForecast(latitude, longitude, altitude)
 
         val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
@@ -50,6 +79,7 @@ class ImplementedWeatherRepository : WeatherRepository {
             windN = windN!! //funker dette eller må jeg gjøre som over?
         )
     }
+
     override suspend fun getSunrise(latitude: String, longitude: String): SunriseInfo {
         val sunrise = dataSunrise.fetchSunrise(latitude, longitude)
 
@@ -61,6 +91,7 @@ class ImplementedWeatherRepository : WeatherRepository {
             sunsetS = sunsetToday!!
         )
     }
+
     override suspend fun getAlert(latitude: String, longitude: String): MutableList<AlertInfo> {
         val alert = dataMet.fetchMetAlert(latitude, longitude)
 
@@ -103,25 +134,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         //Log.d("area", area.toString())
         return alertList
     }
-    override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
 
-        val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)  //hardkoded parameterne, fiks dette
-        val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longitude)
-
-        val typeFrost = frost.type
-        val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
-        val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
-
-        Log.d("typefrost", typeFrost.toString())
-        Log.d("lat", lat.toString())
-        Log.d("long", long.toString())
-
-        return FrostInfo(
-            typeFrost = typeFrost.toString(), //ikke egt ha toString her
-            longFrost = long!!,
-            latFrost = lat!!,
-        )
-    }
     override suspend fun getMap(path: String) : MapInfo {
         val mapJson = dataMapSearch.fetchMapSearch(path)
         //listeHer med fjell som forslag
@@ -141,3 +154,4 @@ class ImplementedWeatherRepository : WeatherRepository {
 
     //ny fun for å hentew indeks mapsearch
 }
+

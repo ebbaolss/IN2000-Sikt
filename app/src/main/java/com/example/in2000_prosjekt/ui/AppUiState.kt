@@ -28,10 +28,10 @@ data class AlertInfo( //sett A på slutten
 )
 
 data class FrostInfo(
-    val typeFrost : String,
-    val longFrost : Double,
-    val latFrost : Double,
+    val referenceTime: String,
+    val meanSightCondition: String
 )
+
 data class MapInfo(
     //hashmap med forslag
     val optionMountains : HashMap<String, String> = hashMapOf(),
