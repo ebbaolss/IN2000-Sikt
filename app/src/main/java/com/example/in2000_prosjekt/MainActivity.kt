@@ -88,6 +88,7 @@ fun MultipleScreenApp(viewModel: FavoriteViewModel) {
     var map = { navController.navigate("Map") }
     var favorite = { navController.navigate("Favorite") }
     var rules = { navController.navigate("Rules") }
+
     var settings = {navController.navigate("Settings")}
     
     NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
@@ -99,7 +100,6 @@ fun MultipleScreenApp(viewModel: FavoriteViewModel) {
         composable("Alert") { AlertScreen( onNavigateToMap = { map }, onNavigateToFav = { favorite }, onNavigateToRules = rules, onNavigateToSettings = settings) }
         composable("Settings") { SettingsScreen(map, favorite, settings, rules) }
         composable("Database") { DatabaseScreenTest(viewModel) }
-
     }
 }
 

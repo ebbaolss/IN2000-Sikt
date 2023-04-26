@@ -66,8 +66,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
-
-    implementation 'com.mapbox.maps:android:10.11.2'
+    // Mapbox
     implementation ('com.mapbox.maps:android:10.11.2'){
         exclude group: 'group_name', module: 'module_name'
     }
@@ -112,7 +111,7 @@ dependencies {
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
     implementation "io.ktor:ktor-serialization-gson:$ktor_version"
-    
+   
     implementation("io.ktor:ktor-client-core:$ktor_version")
 
     //database
@@ -134,10 +133,7 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_lifecycle_viewmodel_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_compiler_version"
 
-
-
     // viewmodel
-
     implementation "io.ktor:ktor-client-auth:$ktor_version"
 
 }
