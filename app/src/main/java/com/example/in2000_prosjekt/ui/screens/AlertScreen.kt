@@ -15,8 +15,6 @@ import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.components.Alert_Card
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 
 @Composable
 fun AlertScreen(apiViewModel: APIViewModel = viewModel(),
@@ -28,17 +26,18 @@ fun AlertScreen(apiViewModel: APIViewModel = viewModel(),
     val appUiState by apiViewModel.appUiState.collectAsState()
 
     when(appUiState){
-        is AppUiState.Loading -> Text (text = "loading...", fontSize = 30.sp)
-        is AppUiState.Error -> Text (text = "error")
-        is AppUiState.Success -> {
+        is AppUiState.LoadingFavorite -> Text (text = "loading...", fontSize = 30.sp)
+        //is AppUiState.ErrorFavorite -> Text (text = "error")
+        is AppUiState.SuccessFavorite -> {
             AlertScreenSuccess(
-                alertinfo = (appUiState as AppUiState.Success).alertListF,
+                alertinfo = (appUiState as AppUiState.SuccessFavorite).alertListF,
                 onNavigateToMap,
                 onNavigateToFav,
                 onNavigateToSettings,
                 onNavigateToRules
             ) //endre dette til en bedre måte etterhvert?
         }
+        else -> Text (text = "error")
     }
 }
 

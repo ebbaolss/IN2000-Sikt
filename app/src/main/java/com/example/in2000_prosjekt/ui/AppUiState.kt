@@ -1,5 +1,9 @@
 package com.example.in2000_prosjekt.ui
 
+data class SearchUiState(
+    val optionMountains : List<String> = emptyList()
+)
+
 data class LocationInfo( //gi ting navn med også L på slutten
     val temperatureL: Float,
     val fog_area_fractionL : Float,
@@ -32,15 +36,28 @@ data class FrostInfo(
     val longFrost : Double,
     val latFrost : Double,
 )
+data class MapInfo(
+    //liste med forslag
+    val mapboxId : String,
+    val feature_type : String
+)
 
 sealed interface AppUiState {
-    data class Success(
+
+    //En data class per screen
+    data class SuccessFavorite(
         val locationF: LocationInfo,
         val nowCastF: NowCastInfo,
         val sunriseF: SunriseInfo,
         val alertListF: MutableList<AlertInfo>,
-        // val frostF: FrostInfo
+        val frostF: FrostInfo
     ) : AppUiState
-    object Error : AppUiState
-    object Loading : AppUiState
+    object ErrorFavorite : AppUiState
+    object LoadingFavorite : AppUiState
+
+    data class SuccessMapSearch(
+        val mapSearchF : MapInfo
+    ) : AppUiState
+    object ErrorMapSearch : AppUiState
+    object LoadingMapSearch : AppUiState
 }

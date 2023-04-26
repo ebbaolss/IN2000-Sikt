@@ -55,30 +55,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    override fun onStart() {
-        super.onStart()
-        Log.i("Lifecycle", "onStart")
-    }
-    override fun onResume() {
-        super.onResume()
-        Log.i("Lifecycle", "onResume")
-    }
-    override fun onPause() {
-        super.onPause()
-        Log.i("Lifecycle", "onPause")
-    }
-    override fun onStop() {
-        super.onStop()
-        Log.i("Lifecycle", "onStop")
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i("Lifecycle", "onDestroy")
-    }
-    override fun onRestart() {
-        super.onRestart()
-        Log.i("Lifecycle", "onRestart")
-    }
 }
 
 @Composable

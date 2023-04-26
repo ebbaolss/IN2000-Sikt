@@ -9,6 +9,7 @@ class ImplementedWeatherRepository : WeatherRepository {
     val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
+    val dataMapSearch = DataSourceMap()
 
     //----------------------
     //Frost:
@@ -18,11 +19,7 @@ class ImplementedWeatherRepository : WeatherRepository {
     val source = "SN18700" //skjønner ikke denne, hvor får vi dette fra? Hva er det? Spørr Nebil
     //----------------------
 
-    override suspend fun getLocation(
-        latitude: String,
-        longitude: String,
-        altitude: String
-    ): LocationInfo {
+    override suspend fun getLocation(latitude: String, longitude: String, altitude: String): LocationInfo {
         val forecast = dataSource.fetchLocationForecast(latitude, longitude, altitude)
 
         val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
@@ -41,12 +38,7 @@ class ImplementedWeatherRepository : WeatherRepository {
             cloud_area_fraction_low = cloud_low!!,
         )
     }
-
-    override suspend fun getNowCast(
-        latitude: String,
-        longitude: String,
-        altitude: String
-    ): NowCastInfo {
+    override suspend fun getNowCast(latitude: String, longitude: String, altitude: String): NowCastInfo {
         val forecastNow = dataSource.fetchNowCast(latitude, longitude, altitude)
 
         val tempNow =
@@ -58,7 +50,6 @@ class ImplementedWeatherRepository : WeatherRepository {
             windN = windN!! //funker dette eller må jeg gjøre som over?
         )
     }
-
     override suspend fun getSunrise(latitude: String, longitude: String): SunriseInfo {
         val sunrise = dataSunrise.fetchSunrise(latitude, longitude)
 
@@ -70,7 +61,6 @@ class ImplementedWeatherRepository : WeatherRepository {
             sunsetS = sunsetToday!!
         )
     }
-
     override suspend fun getAlert(latitude: String, longitude: String): MutableList<AlertInfo> {
         val alert = dataMet.fetchMetAlert(latitude, longitude)
 
@@ -113,8 +103,6 @@ class ImplementedWeatherRepository : WeatherRepository {
         //Log.d("area", area.toString())
         return alertList
     }
-
-
     override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
 
         val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)  //hardkoded parameterne, fiks dette
@@ -132,6 +120,17 @@ class ImplementedWeatherRepository : WeatherRepository {
             typeFrost = typeFrost.toString(), //ikke egt ha toString her
             longFrost = long!!,
             latFrost = lat!!,
+        )
+    }
+    override suspend fun getMap(path: String) : MapInfo {
+        val mapJson = dataMapSearch.fetchMapSearch(path)
+
+        val mapboxId = mapJson.suggestions[0].mapbox_id //nå henter vi på posisjon 0, endre dette
+        val featureType = mapJson.suggestions[0].feature_type
+
+        return MapInfo(
+            mapboxId = mapboxId!!,
+            feature_type = featureType!!
         )
     }
 }
