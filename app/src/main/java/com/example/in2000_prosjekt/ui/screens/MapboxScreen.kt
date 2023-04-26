@@ -16,7 +16,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
 
-import com.mapbox.geojson.Point
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 
@@ -43,17 +42,12 @@ import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import org.jetbrains.annotations.Nullable
 import java.util.concurrent.CountDownLatch
 
-import com.mapbox.maps.MapView
-import com.mapbox.maps.dsl.cameraOptions
-import com.mapbox.maps.plugin.gestures.OnMapClickListener
-import com.mapbox.maps.plugin.gestures.addOnMapClickListener
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit) {
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = false, settings = false, rules = false, map = true) }) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = false, rules = false, map = true, settings = false)}) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -61,7 +55,9 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
         ) {
             AndroidView(
                 modifier = Modifier,
-                factory = { createFactoryMap(it) }
+                factory = {
+                    createFactoryMap(it)
+                }
             )
         }
 
@@ -77,10 +73,10 @@ fun createFactoryMap(xt: Context) : MapView {
 
         mapboxMap.loadStyle(
             style(styleUri = Style.OUTDOORS) {
-                +vectorSource(id = "SOURCE_ID") {
+                +vectorSource(id = "STREETS_V8") {
                     url("mapbox://mapbox.mapbox-streets-v8")
                 }
-                +circleLayer(layerId = "LAYER_ID", sourceId = "SOURCE_ID") {
+                +circleLayer(layerId = "LAYER_ID", sourceId = "STREETS_V8") {
                     sourceLayer("natural_label")
 
                     // Removing all natural labels points that are not mountains e.g. lakes
@@ -115,6 +111,7 @@ fun createFactoryMap(xt: Context) : MapView {
 }
 
 
+
 // Definerer hva som skal skje når brukeren trykker på kartet
 fun onMapClick(point: Point, mapboxMap: MapboxMap): Boolean {
     Log.d("Coordinate", point.toString())
@@ -134,7 +131,7 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap): Boolean {
         onFeatureClicked(it) { feature ->
             if (feature.id() != null) {
 
-                Log.d("Feature", feature.getStringProperty("name").toString() + ". Elevation: " + feature.getStringProperty("elevation_m").toString() + "m.o.h.")
+                Log.d("Feature", feature.getStringProperty("name").toString() + ". Elevation: " + feature.getStringProperty("elevation_m").toString() + " m.o.h.")
 
                 mapboxMap.getStyle() { style ->
                     val layer = style.getLayerAs<CircleLayer>("LAYER_ID")!!
