@@ -533,25 +533,25 @@ fun Sikt_Visualisering_and_Sikt_Info(sikthigh : Double, siktmedium : Double, sik
     }
 }
 
-//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-//@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
-//@Preview(showSystemUi = true)
-//@Composable
-//fun TestComponent() {
-//
-//    //Sikt_Header("test")
-//    //Sikt_MountainHight("test")
-//    //Sikt_Favorite_card()
-//
-//    //BottomSheetContent()
-//    //Sikt_BottomSheet()
-//
-//    // Denne har hardkodet str, prøver å fikse:
-//    //Sikt_FinnTurer_card("test", 860, -10, true, true, true)
-//
-//    //Sikt_Datavisualisering_Card(860 ,-10f, 7f, false, true, true)
-//    //Sikt_Visualisering_and_Sikt_Info(10.5, 3.3, 0.6)
-//}
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@Preview(showSystemUi = true)
+@Composable
+fun TestComponent() {
+
+    Sikt_Header("test")
+    Sikt_MountainHight("test")
+    Sikt_Favorite_card()
+
+    BottomSheetContent()
+    Sikt_BottomSheet()
+
+    // Denne har hardkodet str, prøver å fikse:
+    Sikt_FinnTurer_card("test", 860, -10, true, true, true)
+
+    Sikt_Datavisualisering_Card(860 ,-10f, 7f, false, true, true)
+    Sikt_Visualisering_and_Sikt_Info(10.5, 3.3, 0.6)
+}
 
 
 
