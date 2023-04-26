@@ -27,6 +27,7 @@ import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import org.junit.Rule
 import org.junit.Test
 import com.example.in2000_prosjekt.ui.screens.*
+import com.google.gson.annotations.SerializedName
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.exception.WorkerThreadException
@@ -50,7 +51,6 @@ import io.ktor.http.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 import org.junit.*
-import kotlin.test.Test
 
 //TEst 1: Test for funksjon: fun StartPage(onNavigateToNext: () -> Unit) // Test av om bildet dukker opp på skjermen StartPage
 
@@ -267,9 +267,8 @@ class test_MapBoxScreenModalBottomSheetLayout {
 
 
         rule.onNodeWithText("Finn turer i nærheten").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Finn turer i nærheten"
-        rule.onNodeWithText("Finn turer i nærheten").performClick().// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Finn turer i nærheten"
+        rule.onNodeWithText("Finn turer i nærheten").performClick()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Finn turer i nærheten"
 
-        var a= Sikt_BottomSheet()
 
 
     }
@@ -295,12 +294,15 @@ class Test_FavoritterCardComponent {
 
         rule.setContent {
             IN2000_ProsjektTheme {
+               // val appUiState by apiViewModel.appUiState.collectAsState()
+
                 //FavoriteScreen(onNavigateToMap = { /*TODO*/ }, onNavigateToFav = { /*TODO*/ }, onNavigateToRules = { /*TODO*/ })
-                val appUiState by APIViewModel.
-                FavoriteScreenSuccess(weatherinfo= LocationInfo() , nowcastinfo= NowCastInfo , sunriseinfo= SunriseInfo () , alertinfo= null , frostinfo=null ,// Var ikke nullable før, kl.22.15
-                    onNavigateToMap = { /*TODO*/ }, onNavigateToFav = { /*TODO*/ },onNavigateToRules = { /*TODO*/ })
+              //  val appUiState by APIViewModel
+            //    FavoriteScreenSuccess(weatherinfo= LocationInfo() , nowcastinfo= NowCastInfo , sunriseinfo= SunriseInfo () , alertinfo= null , frostinfo=null ,// Var ikke nullable før, kl.22.15
+              //      onNavigateToMap = { /*TODO*/ }, onNavigateToFav = { /*TODO*/ },onNavigateToRules = { /*TODO*/ })
             }
         }
+        /*
 
         rule.onNodeWithText("Temperatur: ").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Temperatur: "
         rule.onNodeWithText("Tåke: ").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Tåke: "
@@ -314,37 +316,57 @@ class Test_FavoritterCardComponent {
 
 
 
-        data class IpResponse(val ip: String)
+         */
+        data class frostApiResponse( @SerializedName("@type") val repsons: String)
         class ApiClient(engine: HttpClientEngine) {
             private val httpClient = HttpClient(engine) {
+                install(Auth) {
+                    basic {
+                        credentials {
+                            BasicAuthCredentials(
+                                username = "1cf3b8eb-0fbd-46c9-803d-32206f191ccf",
+                                password = ""
+                            )
+                        }
+                    }
+                }
                 install(ContentNegotiation) {
                     gson()
                 }
             }
-            suspend fun getIp(): IpResponse = httpClient.get("https://api.ipify.org/?format=json").body()
+
+
+            suspend fun getFrostApiRespons(): frostApiResponse = httpClient.get("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&country=norge").body()
 
 
             val mockEngine = MockEngine { request ->
                 respond(
-                    content = ByteReadChannel("""{"ip":"127.0.0.1"}"""),
+                    content = ByteReadChannel(""""@type" : "SourceResponse","""), //   "@type" : "SourceResponse",
+
                     status = HttpStatusCode.OK,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                   // headers = headersOf(HttpHeaders.ContentType, "application/json")
                 )
             }
 
-
+            @Test
+            fun sampleClientTest() {
             runBlocking {
+
             val mockEngine = MockEngine { request ->
                 respond(
-                    content = ByteReadChannel("""{"ip":"127.0.0.1"}"""),
+                    content = ByteReadChannel(""""@type" : "SourceResponse","""),
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json")
                 )
             }
             val apiClient = ApiClient(mockEngine)
 
-            Assert.assertEquals("127.0.0.1", apiClient.getIp().ip)
+            Assert.assertEquals("SourceResponse", apiClient.getFrostApiRespons().repsons)
         }
+            }
+
+
+
     }
 
 

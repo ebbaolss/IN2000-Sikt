@@ -58,11 +58,9 @@ dependencies {
 
     implementation 'androidx.room:room-common:2.5.1'
 
-    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
@@ -97,12 +95,31 @@ dependencies {
     implementation "androidx.compose.material3:material3:1.0.0-beta03"
 
 
-    // Dependencies for testene
 
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // Dependencies for testene
+    //testImplementation 'org.junit.jupiter:junit-jupiter' gjort i dag onsdag 26.04, kl 14.00
+   // testImplementation 'junit:junit:4.13.2' gjort i dag onsdag 26.04, kl 14.00
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
     testImplementation "io.ktor:ktor-client-mock-jvm:$ktor_version"
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+
+
+    //androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+
+    androidTestImplementation "androidx.compose.ui:ui-test-junit5:$compose_version"
+
+
+
+
+
+
+
 
     //modal bottom bar
     implementation "androidx.compose.ui:ui:1.2.0-beta02"
