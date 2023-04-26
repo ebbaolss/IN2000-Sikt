@@ -37,8 +37,8 @@ data class MapInfo(
     val optionMountains : HashMap<String, String> = hashMapOf(),
     val recentSearch : List<String> = emptyList(),
 )
-data class MapCoordinates(
-    val latitude : Float,
+data class MapCoordinatesInfo(
+    val latitude : Float, //double??
     val longitude : Float
 )
 
@@ -55,10 +55,5 @@ sealed interface AppUiState {
     object ErrorFavorite : AppUiState
     object LoadingFavorite : AppUiState
 
-    //Trengs dette????
-//    data class SuccessMapSearch(
-//        val mapSearchF : MapInfo
-//    ) : AppUiState
-//    object ErrorMapSearch : AppUiState
-//    object LoadingMapSearch : AppUiState
+
 }

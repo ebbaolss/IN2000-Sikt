@@ -2,7 +2,7 @@ package com.example.in2000_prosjekt.ui.data
 
 import android.util.Log
 import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.MapCoordinates
+import com.example.in2000_prosjekt.ui.MapCoordinatesInfo
 
 class ImplementedWeatherRepository : WeatherRepository {
 
@@ -112,10 +112,6 @@ class ImplementedWeatherRepository : WeatherRepository {
         val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
         val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
 
-        Log.d("typefrost", typeFrost.toString())
-        Log.d("lat", lat.toString())
-        Log.d("long", long.toString())
-
         return FrostInfo(
             typeFrost = typeFrost.toString(), //ikke egt ha toString her
             longFrost = long!!,
@@ -124,10 +120,10 @@ class ImplementedWeatherRepository : WeatherRepository {
     }
     override suspend fun getMap(path: String) : MapInfo {
         val mapJson = dataMap.fetchMapSearch(path)
-        //listeHer med fjell som forslag
+
         val mountains = HashMap<String, String>() //maks 3 elementer, de siste 3 søkt på
 
-        //while og sortere ting, lages en liste
+        //lage en liste som bare inneholder mountains (poi)
         for (item in mapJson.suggestions) {
             if (item.feature_type == "poi") {
                 mountains[item.name!!] = item.mapbox_id!!
@@ -138,13 +134,13 @@ class ImplementedWeatherRepository : WeatherRepository {
             optionMountains = mountains //her returnerer vi bare option, må man også gjøre noe med recent her??
         )
     }
-    override suspend fun getMapCoordinates(path: String) : MapCoordinates {
+    override suspend fun getMapCoordinates(path: String) : MapCoordinatesInfo {
         val mapCoordinatesJson = dataMap.fetchMapCoordinates(path)
 
         val longitudeMap = mapCoordinatesJson.features?.get(0)?.geometry?.coordinates?.get(0)
         val latitudeMap = mapCoordinatesJson.features?.get(0)?.geometry?.coordinates?.get(1)
 
-        return MapCoordinates(
+        return MapCoordinatesInfo(
             latitude = latitudeMap!!,
             longitude = longitudeMap!!
         )

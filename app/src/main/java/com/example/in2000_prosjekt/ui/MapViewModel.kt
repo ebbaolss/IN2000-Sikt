@@ -19,7 +19,10 @@ class MapViewModel : ViewModel() {
     private val _appUistate = MutableStateFlow(MapInfo())
     val appUiState = _appUistate.asStateFlow()
 
-    private val _appUistate2 = MutableStateFlow(MapCoordinates())
+    //Må det lages ny uiState eller kan jeg sette de sammen til en data class? og bruke it.copy()
+    //Fjerne dette: feil på MapCoordinatesInfo update
+    //ha dette, feil på _appUistate2
+    private val _appUistate2 = MutableStateFlow(MapCoordinatesInfo())
     val appUiState2 = _appUistate2.asStateFlow()
 
     fun getDataSearch(query: String) {
@@ -36,7 +39,7 @@ class MapViewModel : ViewModel() {
 
             _appUistate.update { //kan man bare oppdatere denne ene og ikke også recent?
                 MapInfo(
-                    optionMountains = mapSearchP.optionMountains
+                    optionMountains = mapSearchP.optionMountains //hvor ligger name og mapbox_id? legges det til egt?
                 )
             }
         }
@@ -55,8 +58,8 @@ class MapViewModel : ViewModel() {
 
             val mapSearchCoordinatesP = mapSearchCoordinatesDeferred.await()
 
-            _appUistate2.update {
-                MapCoordinates(
+            _appUistate.update {
+                MapCoordinatesInfo(
                     latitude = mapSearchCoordinatesP.latitude,
                     longitude = mapSearchCoordinatesP.longitude
                 )
@@ -77,7 +80,7 @@ class MapViewModel : ViewModel() {
                 recentSearch = updatetList
             )
         }
-        println("Recent serach: ${appUiState.value.recentSearch}")
+        println("Recent search: ${appUiState.value.recentSearch}")
     }
 }
 

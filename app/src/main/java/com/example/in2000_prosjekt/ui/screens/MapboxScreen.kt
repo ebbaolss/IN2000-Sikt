@@ -40,13 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.in2000_prosjekt.ui.AppUiState
-import com.example.in2000_prosjekt.ui.MapInfo
 import com.example.in2000_prosjekt.ui.MapViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter") //burde unngå disse så langt det lar seg gjøre, men her måtte vi for å slippe padding
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,6 +92,7 @@ fun SearchBar(viewModel: MapViewModel){
     //at man kan søke med enter, keylistener greie
 
     val mapUiState = viewModel.appUiState.collectAsState()
+    val mapUiStateCoordinates = viewModel.appUiState2.collectAsState()
 
     var input by remember { mutableStateOf("") }
     var isTextFieldFocused by remember { mutableStateOf(false) }
@@ -187,12 +182,12 @@ fun SearchBar(viewModel: MapViewModel){
                             //oppdatere lista
                             viewModel.updateRecentSearch(mountain)
 
-                            retrieveSearch(viewModel, mapUiState.value.)
+                            println("value: ${mapUiState.value.optionMountains[mountain]}")
+                            retrieveSearch(viewModel, mapUiState.value.optionMountains[mountain]!!) //vil ha ut mapbox_id, klarer jeg det her?
+                            println(mapUiStateCoordinates.value.latitude)
+                            println(mapUiStateCoordinates.value.longitude)
                             //neste er å kalle på nytt api retrieveSearch()
-                            //lag en funk i view og repository
-                            //lage ny map.kt
-                            //lage ny data class i uistate
-                            //hente koordinater fra uistate
+
                             //bruke de til å få opp card
                             //finspekkeri
 
@@ -222,6 +217,20 @@ fun SearchBar(viewModel: MapViewModel){
         }
     }
 }
+fun suggestionSearch(apiViewModel: MapViewModel, searchString : String) {
+    //da kaller vi på apiet med den stringen
+    //oppdaterer lista i uistate, så nå har vi liste med bare mountain poi
+    apiViewModel.getDataSearch(searchString)
+}
+fun retrieveSearch(apiViewModel: MapViewModel, mapboxId: String) {
+
+    //her skal man kalle på det nadre apiet med mapbox_id
+    //dette må lages, men så og si bare å kopiere det man gjorde på getDataSearch
+    //da får man oppdatert koordinater, lat og long
+    apiViewModel.getDataSearchCoordinates(mapboxId)
+
+}
+
 
 //@Composable
 //fun SearchBarCheckSuccess(apiViewModel: APIViewModel = viewModel()) {
@@ -242,20 +251,6 @@ fun SearchBar(viewModel: MapViewModel){
 //        }
 //    }
 //}
-fun suggestionSearch(apiViewModel: MapViewModel, searchString : String) {
-    //da kaller vi på apiet med den stringen
-    //oppdaterer lista i uistate, så nå har vi liste med bare mountain poi
-    apiViewModel.getDataSearch(searchString)
-}
-fun retrieveSearch(apiViewModel: MapViewModel, mapboxId: String) {
-
-    apiViewModel.getDataSearchCoordinates(mapboxId)
-
-    //her skal man kalle på det nadre apiet med mapbox_id
-    //dette må lages, men så og si bare å kopiere det man gjorde på getDataSearch
-    //da får man oppdatert koordinater, lat og long
-
-}
 
 
 
