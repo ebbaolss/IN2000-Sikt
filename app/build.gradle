@@ -136,4 +136,8 @@ dependencies {
     // viewmodel
     implementation "io.ktor:ktor-client-auth:$ktor_version"
 
+    // test av api, ktors mock engine
+    implementation "io.ktor:ktor-client-mock-jvm:2.2.3"
+
+
 }
