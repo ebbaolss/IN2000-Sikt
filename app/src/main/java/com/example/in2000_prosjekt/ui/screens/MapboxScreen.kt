@@ -14,8 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
+import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
+
+import com.mapbox.geojson.Point
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
+
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
@@ -39,12 +43,17 @@ import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import org.jetbrains.annotations.Nullable
 import java.util.concurrent.CountDownLatch
 
+import com.mapbox.maps.MapView
+import com.mapbox.maps.dsl.cameraOptions
+import com.mapbox.maps.plugin.gestures.OnMapClickListener
+import com.mapbox.maps.plugin.gestures.addOnMapClickListener
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit) {
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, favoritt = Sikt_lyseblå, rules = Sikt_lyseblå, map = Sikt_mellomblå)}) {
+fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = false, settings = false, rules = false, map = true) }) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -54,10 +63,14 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
                 modifier = Modifier,
                 factory = { createFactoryMap(it) }
             )
-
         }
+
+        Sikt_BottomSheet()
     }
 }
+
+
+
 fun createFactoryMap(xt: Context) : MapView {
     return MapView(xt).apply {
         val mapboxMap = getMapboxMap()
@@ -100,6 +113,9 @@ fun createFactoryMap(xt: Context) : MapView {
         })
     }
 }
+
+
+// Definerer hva som skal skje når brukeren trykker på kartet
 fun onMapClick(point: Point, mapboxMap: MapboxMap): Boolean {
     Log.d("Coordinate", point.toString())
     mapboxMap.queryRenderedFeatures(
@@ -129,6 +145,8 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap): Boolean {
     }
     return true
 }
+
+
 
 fun onFeatureClicked(
     expected: Expected<String, List<QueriedFeature>>,
