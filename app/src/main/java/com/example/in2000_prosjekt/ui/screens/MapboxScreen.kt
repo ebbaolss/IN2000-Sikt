@@ -15,6 +15,7 @@ import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,7 +24,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.material3.Text
-
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
@@ -39,15 +40,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.MapInfo
 import com.example.in2000_prosjekt.ui.MapViewModel
-import com.example.in2000_prosjekt.ui.SearchUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter") //burde unngå disse så langt det lar seg gjøre, men her måtte vi for å slippe padding
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit) {
@@ -56,19 +57,18 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
         bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings,
             favoritt = false, settings = false, rules = false, map = true) })
     {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                AndroidView(
-                    modifier = Modifier,
-                    factory = { createFactoryMap(it) }
-                )
-            }
-            Sikt_BottomSheet()
-
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            AndroidView(
+                modifier = Modifier,
+                factory = { createFactoryMap(it) }
+            )
         }
+        Sikt_BottomSheet()
+    }
 }
 fun createFactoryMap(xt: Context) : MapView {
     return MapView(xt).apply {
@@ -89,26 +89,20 @@ fun onMapClick(point: Point): Boolean {
     return@onMapClick true
 }
 
-//var optionMountains = mutableListOf<String>() //maks 3 elementer, de siste 3 søkt på
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBar(viewModel: MapViewModel){ //mangler at tastaturet forsvinner når man trykker på kart
+fun SearchBar(viewModel: MapViewModel){
+    //MANGLER :
+    // at tastaturet forsvinner når man trykker på kart
+    // at det slutter å blinke i searchfeltet når man trykker på kartet
+    //at man kan søke med enter, keylistener greie
 
     val mapUiState = viewModel.appUiState.collectAsState()
-
-//    _appUistate.update {
-//        //body
-//    }
 
     var input by remember { mutableStateOf("") }
     var isTextFieldFocused by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    var textFieldState: Boolean
-
-    //optionMountains.add("Galdhøpiggen")
-//    optionMountains.add("Snøhetta")
-//    optionMountains.add("Glittertind")
 
     LazyColumn(
         modifier = Modifier
@@ -126,10 +120,9 @@ fun SearchBar(viewModel: MapViewModel){ //mangler at tastaturet forsvinner når 
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White)
-                    //.align(Alignment.TopCenter)
                     .onFocusChanged {
+                        println("focus changes\n")
                         isTextFieldFocused = it.isFocused
-                        Log.d("isTextFieldFocused", "$isTextFieldFocused")
                     },
 
                 singleLine = true,
@@ -138,7 +131,6 @@ fun SearchBar(viewModel: MapViewModel){ //mangler at tastaturet forsvinner når 
                     onDone = {
                         keyboardController?.hide()
                         isTextFieldFocused = false
-                        Log.d("Closed Keyboard", "")
                     }),
                 //KeyboardOptions = KeyboardOptions.Default,
                 //KeyboardActions = KeyboardActions(),
@@ -159,16 +151,14 @@ fun SearchBar(viewModel: MapViewModel){ //mangler at tastaturet forsvinner når 
                         onClick = {
                             //bruker har skrevet inn noe og trykket søk,
                             // nå skal api-et kalles på:
-                            //suggestionSearch(teksten skrevet inn)
+                            suggestionSearch(viewModel, input)
+
 
                             //etter dette skal options dukke opp
                             //når det er success så skal det dukke opp på skjermen
                             //nå kan bruker velge alternativ
-                            suggestionSearch(input)
 
-                            optionList(input) //sende med lista også? funker denne?
                             input = ""
-                            focusManager.clearFocus() //riktig? hva gjør denne
 
                         }, colors = ButtonDefaults.buttonColors(Color.White),
                     ) {
@@ -183,22 +173,36 @@ fun SearchBar(viewModel: MapViewModel){ //mangler at tastaturet forsvinner når 
             )
         }
         if (isTextFieldFocused) {
-            //items(liste med forslagene vi har fått fra api) ? så før det er søkt noe skal siste søk komme opp, ellers byttes
-            //lista til forslag.
-            items(mapUiState) { mountain -> //disse må gjøres til buttons/clickable
+
+            items(mapUiState.value.optionMountains.keys.toList()) { mountain -> //disse må gjøres til buttons/clickable
 
                 Row(
-                    //.clickable
-                    //hvis den er trykket:
-                    //1. retrivesearch() med mapid
-
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color.White)
                         .height(40.dp)
-                        .padding(start = 20.dp, top = 9.dp, bottom = 7.dp),
+                        .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
+                        .clickable( enabled = true, onClick = {
+
+                            println(mapUiState.value.recentSearch)
+
+                            //oppdatere lista
+                            viewModel.updateRecentSearch(mountain)
+
+                            //neste er å kalle på nytt api retrieveSearch()
+                            //lag en funk i view og repository
+                            //lage ny map.kt
+                            //lage ny data class i uistate
+                            //hente koordinater fra uistate
+                            //bruke de til å få opp card
+                            //finspekkeri
+
+                            focusManager.clearFocus()
+                        }),
+
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     Text(
                         text = mountain,
                         fontSize = 15.sp,
@@ -237,35 +241,18 @@ fun SearchBar(viewModel: MapViewModel){ //mangler at tastaturet forsvinner når 
 //        }
 //    }
 //}
-fun suggestionSearch(searchString : String) {
-    //da kaller vi på apiet med den stringen getMap(stringen)
-    //da får vi
-
+fun suggestionSearch(apiViewModel: MapViewModel, searchString : String) {
+    //da kaller vi på apiet med den stringen
+    //oppdaterer lista i uistate, så nå har vi liste med bare mountain poi
+    apiViewModel.getDataSearch(searchString)
 }
 fun retrieveSearch(mapSearchInfo: MapInfo,) {
 
-    //her skal man kalle på første api og få hente ut mapbox_id, dette kan vi bruke til å kalle på nytt api med id-en
+    //her skal man kalle på det nadre apiet med mapbox_id
+    //dette må lages, men så og si bare å kopiere det man gjorde på getDataSearch
+    //da får man oppdatert koordinater, lat og long
 
 }
-fun optionList(result : String) {
 
-
-    //lat som jeg har en liste med alle fjelltoppene:
-//
-//    if (!optionMountains.contains(result)) { //får man  ikke nullpointerexception?
-//        optionMountains[2] = optionMountains[1] //?: ""
-//        optionMountains[1] = optionMountains[0]
-//        optionMountains[0] = result
-//    }
-
-    var counter = 1
-    optionMountains.forEach{
-        optionMountains[counter] = it
-        counter++
-    }
-    optionMountains[0] = result
-    optionMountains = optionMountains.subList(0, 2)
-
-}
 
 

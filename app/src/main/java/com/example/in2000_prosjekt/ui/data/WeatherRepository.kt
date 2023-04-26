@@ -10,5 +10,7 @@ interface WeatherRepository {
     suspend fun getFrost(latitude: String, longitude: String) : FrostInfo
     suspend fun getMap(path: String) : MapInfo
 
+    //ny fun her
+
 }
 

@@ -1,9 +1,5 @@
 package com.example.in2000_prosjekt.ui
 
-data class SearchUiState(
-    val optionMountains : List<String> = emptyList()
-)
-
 data class LocationInfo( //gi ting navn med også L på slutten
     val temperatureL: Float,
     val fog_area_fractionL : Float,
@@ -37,10 +33,11 @@ data class FrostInfo(
     val latFrost : Double,
 )
 data class MapInfo(
-    //liste med forslag
-    val mapboxId : String,
-    val feature_type : String
+    //hashmap med forslag
+    val optionMountains : HashMap<String, String> = hashMapOf(),
+    val recentSearch : List<String> = emptyList()
 )
+
 
 sealed interface AppUiState {
 

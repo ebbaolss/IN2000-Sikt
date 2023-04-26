@@ -124,13 +124,20 @@ class ImplementedWeatherRepository : WeatherRepository {
     }
     override suspend fun getMap(path: String) : MapInfo {
         val mapJson = dataMapSearch.fetchMapSearch(path)
+        //listeHer med fjell som forslag
+        var mountains = HashMap<String, String>() //maks 3 elementer, de siste 3 søkt på
 
-        val mapboxId = mapJson.suggestions[0].mapbox_id //nå henter vi på posisjon 0, endre dette
-        val featureType = mapJson.suggestions[0].feature_type
+        //while og sortere ting, lages en liste
+        for (item in mapJson.suggestions) {
+            if (item.feature_type == "poi") {
+                mountains[item.name!!] = item.mapbox_id!!
+            }
+        }
 
         return MapInfo(
-            mapboxId = mapboxId!!,
-            feature_type = featureType!!
+            optionMountains = mountains
         )
     }
+
+    //ny fun for å hentew indeks mapsearch
 }
