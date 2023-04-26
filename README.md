@@ -6,6 +6,6 @@ Gruppemedlemmer
 - Ebba Maja Olsson
 - Elisabeth Bårdstu
 - Nebil Hassen Khalifa
-— Ola Juul Holm
+- Ola Juul Holm
 - Synne Markmanrud
 - Thea Hermansen Bakke
