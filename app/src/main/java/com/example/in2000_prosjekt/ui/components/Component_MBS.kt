@@ -57,7 +57,8 @@ fun BottomSheetContent(){
     Surface(
         color = Sikt_lyseblå,
         modifier = Modifier.height(200.dp),
-        // shape = RoundedCornerShape(20.dp) får ikke denne til å se bra ut :((
+        // shape = RoundedCornerShape(20.dp)
+        // får ikke denne til å se bra ut :((
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
