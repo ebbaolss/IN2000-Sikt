@@ -1,7 +1,6 @@
 package com.example.in2000_prosjekt.ui.screens
 
 import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,7 +12,6 @@ import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
 import com.mapbox.geojson.Point
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
-import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.dsl.cameraOptions
 import com.mapbox.maps.extension.style.expressions.dsl.generated.eq
@@ -25,7 +23,6 @@ import com.mapbox.maps.extension.style.style
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
@@ -107,12 +104,6 @@ fun createFactoryMap(xt: Context) : MapView {
                             literal("mountain")
                         }
                     )
-
-                    // Styling mountain points
-                    circleRadius(10.0)
-                    circleColor(Color.YELLOW)
-                    circleOpacity(1.0)
-                    circleStrokeColor(Color.BLACK)
                 }
             }
         )
@@ -156,7 +147,6 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap): Boolean {
 
                 mapboxMap.getStyle() { style ->
                     val layer = style.getLayerAs<CircleLayer>("LAYER_ID")!!
-                    layer.circleColor(Color.BLUE)
                 }
             }
         }
