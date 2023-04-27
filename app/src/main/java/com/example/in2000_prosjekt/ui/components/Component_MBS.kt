@@ -78,25 +78,25 @@ fun BottomSheetContent(){
                 // Her skal listen over topper i nærheten:
             ) {
                 item {
-                    Sikt_FinnTurer_card("test",2469, 3,true, false, true)
+                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
                 }
                 item {
-                    Sikt_FinnTurer_card("test",2469, 3,true, false, true)
+                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
                 }
                 item {
-                    Sikt_FinnTurer_card("test",2469, 3,true, false, true)
+                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
                 }
                 item {
-                    Sikt_FinnTurer_card("test",2469, 3,true, false, true)
+                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
                 }
                 item {
-                    Sikt_FinnTurer_card("test",2469, 3,true, false, true)
+                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
                 }
                 item {
-                    Sikt_FinnTurer_card("test",2469, 3,true, false, true)
+                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
                 }
                 item {
-                    Sikt_FinnTurer_card("test",2469, 3,true, false, true)
+                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
                 }
             }
         }
