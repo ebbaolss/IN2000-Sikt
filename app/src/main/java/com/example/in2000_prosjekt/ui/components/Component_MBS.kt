@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
@@ -52,6 +53,7 @@ fun Sikt_BottomSheet() {
 
 @Composable
 fun BottomSheetContent(){
+
     Surface(
         color = Sikt_lyseblå,
         modifier = Modifier.height(200.dp),
@@ -74,30 +76,14 @@ fun BottomSheetContent(){
                     .fillMaxWidth()
                     .padding(start = 20.dp)
                     .background(Sikt_lyseblå),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
                 // Her skal listen over topper i nærheten:
             ) {
-                item {
-                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-                }
-                item {
-                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-                }
-                item {
-                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-                }
-                item {
-                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-                }
-                item {
-                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-                }
-                item {
-                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-                }
-                item {
-                    Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-                }
+                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
             }
         }
     }
@@ -139,4 +125,14 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
             }
         }
     }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showSystemUi = true)
+@Composable
+fun MBSTest() {
+
+    BottomSheetContent()
+
 }

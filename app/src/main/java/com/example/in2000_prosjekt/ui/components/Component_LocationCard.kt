@@ -127,41 +127,6 @@ fun Sikt_LocationCard_NextDays() {
     }
 }
 
-@Composable
-fun Sikt_LoctationCard_Topper_i_naerheten() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(160.dp)
-            .padding(start = 20.dp, end = 20.dp, top = 5.dp),
-    ) {
-        Text(text = "Topper i nærheten: ", modifier = Modifier.align(Alignment.TopStart), fontWeight = FontWeight.Bold)
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            item {
-                Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-            }
-            item {
-                Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-            }
-            item {
-                Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-            }
-            item {
-                Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-            }
-            item {
-                Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8)
-            }
-        }
-    }
-}
-
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
