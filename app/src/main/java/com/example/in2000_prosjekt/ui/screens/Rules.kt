@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
-import com.example.in2000_prosjekt.ui.components.Sikt_sol
+import com.example.in2000_prosjekt.ui.components.Sikt_skyillustasjon
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 
@@ -40,7 +40,7 @@ fun RulesScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavi
             Column(
                 modifier = Modifier.padding(20.dp)
             ) {
-                Sikt_sol()
+                Sikt_skyillustasjon()
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()

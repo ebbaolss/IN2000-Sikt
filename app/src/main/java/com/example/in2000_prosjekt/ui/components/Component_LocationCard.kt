@@ -195,7 +195,7 @@ fun Sikt_LocationCard_Hour() {
         ) {
             Text(text = "12:00", color = Sikt_sort, fontSize = 12.sp)
             Spacer(modifier = Modifier.height(30.dp))
-            Sikt_sol()
+            Sikt_skyillustasjon()
         }
     }
 }

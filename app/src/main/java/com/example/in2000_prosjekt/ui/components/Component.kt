@@ -52,8 +52,11 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.*
 import kotlinx.coroutines.launch
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, rules : Boolean, settings : Boolean) {
@@ -64,7 +67,9 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
 
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.size(width = 80.dp, height = 100.dp)) {
+            Column (horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(120.dp)
+            ){
                 IconButton(onClick = { onNavigateToMap() }) {
                     var iconfarge = Sikt_mørkeblå
                     var iconChosen = R.drawable.outline_place_outline
@@ -79,10 +84,13 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .clip(CircleShape)
                             .padding(5.dp))
                 }
-                Text(text = "Utforsk", fontSize = 14.sp)
+                Text(text = "Utforsk", fontSize = 13.sp)
             }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(75.dp)
+            ) {
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.size(width = 80.dp, height = 100.dp)) {
                 IconButton(onClick = { onNavigateToFav() }) {
                     var iconfarge = Sikt_mørkeblå
                     var iconChosen = Icons.Outlined.Favorite
@@ -98,10 +106,12 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Favoritter", fontSize = 14.sp)
+                Text(text = "Favoritter", fontSize = 13.sp)
             }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.size(width = 80.dp, height = 100.dp)) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(98.dp)
+            ) {
                 IconButton(onClick = { onNavigateToRules() }) {
                     var iconfarge = Sikt_mørkeblå
                     var iconChosen = R.drawable.outline_view_list_outlined
@@ -118,10 +128,12 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Fjellvett", fontSize = 14.sp)
+                Text(text = "Fjellvettreglene", fontSize = 13.sp)
             }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.size(width = 80.dp, height = 100.dp)) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(75.dp)
+            ) {
                 IconButton(onClick = { onNavigateToSettings() }) {
                     var iconfarge = Sikt_mørkeblå
                     var iconChosen = R.drawable.outline_info_outlined
@@ -137,7 +149,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Info", fontSize = 14.sp)
+                Text(text = "Innstillinger", fontSize = 13.sp)
             }
         }
     }
@@ -183,7 +195,7 @@ fun Sikt_BottomBar2( ) {
             ) {
                 IconButton(onClick = {  }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.fjellvettregler),
+                        painter = painterResource(id = R.drawable.outline_info_outlined),
                         "",
                         tint = Sikt_mørkeblå,
                     )
@@ -208,29 +220,15 @@ fun Sikt_BottomBar2( ) {
 }
 
 @Composable
-fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
+fun Sikt_Header(location : String /* ,alertType : String, alertLevel : String */) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Placeholder-ikon for advarsel:
-        //Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
-        var openDialog by remember {
-            mutableStateOf(false)
-        }
-
-        if (alertinfo.size != 0){
-            AlertButton( alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA){
-                openDialog = true
-            }
-        }
-
-        if (openDialog){
-            AlertDialog(alertinfo = alertinfo){
-                openDialog = false
-            }
-        }
+        Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
+        //AlertButton(alertType = , alertLevel = ) {}
         Text(text = "$location", fontWeight = FontWeight.Bold, fontSize = 30.sp)
         var checked by remember { mutableStateOf(false) }
         IconToggleButton(
@@ -265,10 +263,9 @@ fun Sikt_MountainHight(mountainheight : String) {
 }
 
 @Composable
-fun Sikt_sol() {
-    //brukes i rules
+fun Sikt_skyillustasjon() {
     Image(
-        painter = painterResource(id = R.drawable.sol),
+        painter = painterResource(id = R.drawable.clounds_image),
         contentDescription = "sol",
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
@@ -278,7 +275,7 @@ fun Sikt_sol() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_Favorite_card(  weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo> ) {
+fun Sikt_Favorite_card( /* weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo> */) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -293,10 +290,8 @@ fun Sikt_Favorite_card(  weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, su
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Sikt_Header("fjelltopp" , alertinfo)
+            Sikt_Header("fjelltopp" /* , alertType : String, alertLevel : String */)
             Sikt_MountainHight("1884")
-            Sikt_Visualisering_and_Sikt_Info(10.5, 3.3, 0.6)
-
         }
     }
 }
@@ -304,19 +299,19 @@ fun Sikt_Favorite_card(  weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, su
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
-    //på modal bottom sheet og på locationCard
-    var heigthVisuals = R.drawable.topp_1000_1500
+
+    var heigthVisuals = R.drawable.topp1500to1000
 
     if (height < 500) {
-        heigthVisuals = R.drawable.topp__500
+        heigthVisuals = R.drawable.topp_under500
     } else if (height < 1000) {
-        heigthVisuals = R.drawable.topp_500_1000
+        heigthVisuals = R.drawable.topp1000to500
     } else if (height < 1500) {
-        heigthVisuals = R.drawable.topp_1000_1500
+        heigthVisuals = R.drawable.topp1500to1000
     } else if (height < 2000) {
-        heigthVisuals = R.drawable.topp_1500_2000
+        heigthVisuals = R.drawable.topp2000to1500
     } else if (height > 2000) {
-        heigthVisuals = R.drawable.topp__2000
+        heigthVisuals = R.drawable.topp_over2000
     }
 
     Card(
@@ -336,7 +331,7 @@ fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop
                 modifier = Modifier.clip(RoundedCornerShape(5.dp))
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.background),
+                    painter = painterResource(id = R.drawable.new_background),
                     contentDescription = "",
                 )
                 Image(
@@ -345,19 +340,19 @@ fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop
                 )
                 if (skydekkeTop) {
                     Image(
-                        painter = painterResource(id = R.drawable.h_yt_skydekke),
+                        painter = painterResource(id = R.drawable.clouds_high_big),
                         contentDescription = "",
                     )
                 }
                 if (skydekkeMid) {
                     Image(
-                        painter = painterResource(id = R.drawable.middels_skydekke),
+                        painter = painterResource(id = R.drawable.clouds_mid_big),
                         contentDescription = "",
                     )
                 }
                 if (skydekkeLow) {
                     Image(
-                        painter = painterResource(id = R.drawable.lavt_skydekke),
+                        painter = painterResource(id = R.drawable.clouds_low_big),
                         contentDescription = "",
                     )
                 }
@@ -378,153 +373,282 @@ fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop
 @Composable
 fun Sikt_Datavisualisering_Card(height : Int, temp : Float, vind : Float, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
 
-    var heigthVisuals = R.drawable.topp_1000_1500
+    var heigthVisuals = R.drawable.topp1500to1000
 
     if (height < 500) {
-        heigthVisuals = R.drawable.topp__500
+        heigthVisuals = R.drawable.topp_under500
     } else if (height < 1000) {
-        heigthVisuals = R.drawable.topp_500_1000
+        heigthVisuals = R.drawable.topp1000to500
     } else if (height < 1500) {
-        heigthVisuals = R.drawable.topp_1000_1500
+        heigthVisuals = R.drawable.topp1500to1000
     } else if (height < 2000) {
-        heigthVisuals = R.drawable.topp_1500_2000
+        heigthVisuals = R.drawable.topp2000to1500
     } else if (height > 2000) {
-        heigthVisuals = R.drawable.topp__2000
+        heigthVisuals = R.drawable.topp_over2000
     }
 
-    Card(
-        modifier = Modifier.size(width = 170.dp, height = 220.dp),
-    ) {
-        Box() {
 
-            Image(
-                painter = painterResource(id = R.drawable.background),
+    // Klart vær = God sikt = Sikt på mer enn 10 km (INGEN SKYER)
+    // Lettskyet = Moderat sikt = Sikt på 4-10 km (LITEN SKY)
+    // Delvis skyet = Dårlig sikt = Sikt på 1-4 km (STOR SKY)
+    // Skyet = Tåke = Sikt på mindre enn 1 km (STOR + LITEN SKY)
+
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+
+    Box(
+        modifier = Modifier
+            .size(screenWidth)
+            .padding(bottom = 0.dp)
+    ){
+
+        Image(
+                painter = painterResource(id = R.drawable.new_background),
                 contentDescription = "",
-                modifier = Modifier.fillMaxSize()
-            )
-            Image(
-                painter = painterResource(id = heigthVisuals),
-                contentDescription = "",
-                modifier = Modifier.fillMaxSize()
-            )
-            if(skydekkeTop) {
-                Image(
-                    painter = painterResource(id = R.drawable.h_yt_skydekke),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            if(skydekkeMid) {
-                Image(
-                    painter = painterResource(id = R.drawable.middels_skydekke),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            if(skydekkeLow) {
-                Image(
-                    painter = painterResource(id = R.drawable.lavt_skydekke),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            Text(text = "$temp°", fontWeight = FontWeight.Bold, fontSize = 48.sp, color = Sikt_hvit,
+                //contentScale = ContentScale.Fit,
+                //modifier = Modifier.size(boxWithConstraintsScope.maxWidth)
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(10.dp))
+                    .size(screenWidth)
+                    .padding(bottom = 0.dp)
 
-            Box(modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(10.dp)) {
-                Column() {
-                    Image(
-                        painter = painterResource(id = R.drawable.vind_icon),
-                        contentDescription = "",
-                        modifier = Modifier.size(30.dp)
-                    )
-                    Text(text = "$vind m/s", fontSize = 12.sp, color = Sikt_hvit)
-                }
-            }
+        )
+        Image(
+            painter = painterResource(id = R.drawable.topp1000to500),
+            contentDescription = "",
+            //modifier = Modifier.size(boxWithConstraintsScope.maxWidth)
+            modifier = Modifier
+                .size(screenWidth)
+                .padding(bottom = 0.dp)
+        )
+        if (skydekkeTop) {
+            Image(
+                painter = painterResource(id = R.drawable.clouds_high_big),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(screenWidth)
+                    .padding(bottom = 0.dp)
+            )
+        }
+        if (skydekkeMid) {
+            Image(
+                painter = painterResource(id = R.drawable.clouds_mid_big),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(screenWidth)
+                    .padding(bottom = 0.dp)
+            )
+        }
+        if (skydekkeLow) {
+            Image(
+                painter = painterResource(id = R.drawable.clouds_low_big),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(screenWidth)
+                    .padding(bottom = 0.dp),
+            )
+        }
+
+        Text(
+            text = "$temp°",
+            fontWeight = FontWeight.Bold,
+            fontSize = 48.sp,
+            color = Sikt_hvit,
+            modifier = Modifier.size(screenWidth)
+        )
+
+        Column(
+            modifier = Modifier.size(screenWidth)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.vind_icon),
+                contentDescription = "",
+                modifier = Modifier.size(24.dp)
+            )
+            Text(text = "$vind m/s", fontSize = 12.sp, color = Sikt_hvit)
         }
     }
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
-fun Sikt_Visualisering_and_Sikt_Info(sikthigh : Double, siktmedium : Double, siktlow : Double){
-        // Tar inn antall km sikt, eller tar inn %
+fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : String, weatherMid : String, weatherLow : String){
 
-    fun getRightSiktIcon(km: Double): Int {
-        return if (km < 1) {
-            R.drawable.taake_sikt
-        } else if (km < 4) {
-            R.drawable.daarlig_sikt
-        } else if (km < 10) {
-            R.drawable.moderat_sikt
+    /*
+    fun getHeightVisuals(height: Int) : Int {
+        if (height < 500) {
+            R.drawable.topp_under500
+        } else if (height < 1000) {
+            R.drawable.topp1000to500
+        } else if (height < 1500) {
+            R.drawable.topp1500to1000
+        } else if (height < 2000) {
+            R.drawable.topp2000to1500
+        } else if (height > 2000) {
+            R.drawable.topp_over2000
+        }
+    }*/
+
+    var heigthVisuals = R.drawable.topp1500to1000
+    if (height < 500) {
+        heigthVisuals = R.drawable.topp_under500
+    } else if (height < 1000) {
+        heigthVisuals = R.drawable.topp1000to500
+    } else if (height < 1500) {
+        heigthVisuals = R.drawable.topp1500to1000
+    } else if (height < 2000) {
+        heigthVisuals = R.drawable.topp2000to1500
+    } else if (height > 2000) {
+        heigthVisuals = R.drawable.topp_over2000
+    }
+
+    // Klart vær = God sikt = Sikt på mer enn 10 km (INGEN SKYER)
+    // Lettskyet = Moderat sikt = Sikt på 4-10 km (LITEN SKY)
+    // Delvis skyet = Dårlig sikt = Sikt på 1-4 km (STOR SKY)
+    // Skyet = Tåke = Sikt på mindre enn 1 km (STOR + LITEN SKY)
+
+    fun getHighClouds(highclouds: String): Int {
+        return if (highclouds == "skyet") {
+            R.drawable.clouds_high_both
+        } else if (highclouds == "delvisskyet") {
+            R.drawable.clouds_high_big
+        } else if (highclouds == "lettskyet") {
+            R.drawable.clouds_high_small
         } else {
-            R.drawable.god_sikt
+            R.drawable.klart
         }
     }
-    fun getRightSiktText(km: Double): String {
-        return if (km < 1) {
+
+    fun getMidClouds(midclouds: String): Int {
+        return if (midclouds == "skyet") {
+            R.drawable.clouds_mid_both
+        } else if (midclouds == "delvisskyet") {
+            R.drawable.clouds_mid_big
+        } else if (midclouds == "lettskyet") {
+            R.drawable.clouds_mid_small
+        } else {
+            R.drawable.klart
+        }
+    }
+
+    fun getLowClouds(lowclouds: String): Int {
+        return if (lowclouds == "skyet") {
+            R.drawable.clouds_low_both
+        } else if (lowclouds == "delvisskyet") {
+            R.drawable.clouds_low_big
+        } else if (lowclouds == "lettskyet") {
+            R.drawable.clouds_low_small
+        } else {
+            R.drawable.klart
+        }
+    }
+
+    fun getRightWeather(weather: String): String {
+        return if (weather == "skyet") {
             "Meget dårlig sikt"
-        } else if (km < 4) {
+        } else if (weather == "delvisskyet") {
             "Dårlig sikt"
-        } else if (km < 10) {
-            "Moderat  sikt"
+        } else if (weather == "lettskyet") {
+            "Lettskyet"
         } else {
-            "God sikt"
+            "Klart vær"
         }
     }
-    
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-    ) {
-        Sikt_Datavisualisering_Card(1800, -10f, 7f, true, false, true)
+
+    fun getRightKm(km: String): String {
+        return if (km == "skyet") {
+            "> 1 km sikt"
+        } else if (km == "delvisskyet") {
+            "1-4 km sikt"
+        } else if (km == "lettskyet") {
+            "4-10 km sikt"
+        } else {
+            "< 10 km sikt"
+        }
+    }
+
+    Box(
+        modifier = Modifier.aspectRatio(1f)
+    ){
+        Image(
+            painter = painterResource(id = R.drawable.new_background),
+            contentDescription = "",
+            modifier = Modifier.fillMaxSize()
+        )
+        Image(
+            painter = painterResource(id = heigthVisuals),
+            contentDescription = "",
+            modifier = Modifier.fillMaxSize()
+        )
+        Image(
+            painter = painterResource(id = getHighClouds(weatherHigh)),
+            contentDescription = "",
+            modifier = Modifier.fillMaxSize()
+        )
+        Image(
+            painter = painterResource(id = getMidClouds(weatherMid)),
+            contentDescription = "",
+            modifier = Modifier.fillMaxSize()
+        )
+        Image(
+            painter = painterResource(id = getLowClouds(weatherLow)),
+            contentDescription = "",
+            modifier = Modifier.fillMaxSize()
+        )
         Column(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(start = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            // Hvordan space evenly uten å bli høyrere enn Sikt_Datavisualisering_Card???
+                .fillMaxHeight()
+                .align(Alignment.TopStart)
+                .padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.vind_icon),
+                contentDescription = "",
+                modifier = Modifier.size(24.dp)
+            )
+            Text(text = "$vind m/s", fontSize = 12.sp, color = Sikt_sort)
+        }
+        Text(
+            text = "$temp°",
+            fontWeight = FontWeight.Bold,
+            fontSize = 40.sp,
+            color = Sikt_sort,
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(10.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .align(Alignment.CenterEnd)
+                .padding(10.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                Text(text = "2000-5000 m.o.h")
-                Text(text = getRightSiktText(sikthigh))
-                Icon(painterResource(
-                    id = getRightSiktIcon(sikthigh)),"",
-                    modifier = Modifier.size(24.dp), tint = Sikt_mørkeblå
-                )
+                Text(text = "2000 - 5000 m.o.h.", fontSize = 12.sp, color = Sikt_sort)
+                Text(text = getRightKm(weatherHigh), fontSize = 16.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
+                Text(text = getRightWeather(weatherHigh), fontSize = 12.sp, color = Sikt_sort)
             }
+            Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.width(100.dp))
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                Text(text = "1000-2000 m.o.h")
-                Text(text = getRightSiktText(siktmedium))
-                Icon(painterResource(
-                    id = getRightSiktIcon(siktmedium)),"",
-                    modifier = Modifier.size(24.dp), tint = Sikt_mørkeblå
-                )
+                Text(text = "1000 - 2000 m.o.h.", fontSize = 12.sp, color = Sikt_sort)
+                Text(text = getRightKm(weatherMid), fontSize = 16.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
+                Text(text = getRightWeather(weatherMid), fontSize = 12.sp, color = Sikt_sort)
             }
+            Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.width(100.dp))
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                Text(text = "0-1000 m.o.h")
-                Text(text = getRightSiktText(siktlow))
-                Icon(
-                    painterResource(
-                        id = getRightSiktIcon(siktlow)
-                    ), "",
-                    modifier = Modifier.size(24.dp), tint = Sikt_mørkeblå
-                )
+                Text(text = "0 - 1000 m.o.h.", fontSize = 12.sp, color = Sikt_sort)
+                Text(text = getRightKm(weatherLow), fontSize = 16.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
+                Text(text = getRightWeather(weatherLow), fontSize = 12.sp, color = Sikt_sort)
             }
         }
     }
@@ -536,19 +660,18 @@ fun Sikt_Visualisering_and_Sikt_Info(sikthigh : Double, siktmedium : Double, sik
 @Composable
 fun TestComponent() {
 
-    //Sikt_Header("test")
-    Sikt_MountainHight("test")
-    //Sikt_Favorite_card()
+    Card(
+        colors = CardDefaults.cardColors(Sikt_lyseblå),
+        modifier = Modifier.padding(20.dp),
+    ) {
 
-    BottomSheetContent()
-    Sikt_BottomSheet()
-
-    // Denne har hardkodet str, prøver å fikse:
-    Sikt_FinnTurer_card("test", 860, -10, true, true, true)
-
-    Sikt_Datavisualisering_Card(860 ,-10f, 7f, false, true, true)
-    Sikt_Visualisering_and_Sikt_Info(10.5, 3.3, 0.6)
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+            Sikt_Header("Fjelltopp")
+            Sikt_MountainHight("1800")
+            Spacer(modifier = Modifier.size(20.dp))
+            illustrasjon(2469, -11f,5f,"skyet", "delvisskyet", "klart")
+        }
+    }
 }
-
-
-
