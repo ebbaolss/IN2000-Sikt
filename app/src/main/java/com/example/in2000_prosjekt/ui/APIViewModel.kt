@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 import com.example.in2000_prosjekt.ui.data.*
+import io.ktor.utils.io.errors.*
 
 import kotlinx.coroutines.async
 
@@ -20,34 +21,37 @@ class APIViewModel : ViewModel() {
 
     private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.LoadingFavorite)
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
-    val latitude = "59"
-    val longtitude = "4"
+    val latitude = "10.720426"
+    val longtitude = "59.942674"
     val altitude: String = "600"
 
     init { //etterhvert så endrer man  fra å ha init til å kalle på getAll fra en annen fil
         //favoritter skal loades med en gang appen åpner, database se codelab
-        getAll("59","4","600")
+
+        // Koordinatene til Metrologisk Institutt og referencetime for 17-20 mai 2021
+        // Longitude 59.942674, Latitude 10.720426
+        getAll(latitude,longtitude,altitude, "2021-05-17%2F2021-05-20")
     }
 
-    fun getAll(latitude: String, longitude: String, altitude: String) {
+    fun getAll(latitude: String, longitude: String, altitude: String, referencetime: String) {
         viewModelScope.launch() {
 
             try {
                 val locationDeferred = viewModelScope.async (Dispatchers.IO){
                 repository.getLocation(latitude, longitude, altitude)
-              }
-              val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
-                  repository.getNowCast(latitude, longitude, altitude)
-              }
-              val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
-                  repository.getSunrise(latitude, longitude)
-              }
-              val alertDeferred = viewModelScope.async (Dispatchers.IO){
-                  repository.getAlert(latitude, longitude)
-              }
-              val frostDeferred = viewModelScope.async (Dispatchers.IO){
-                  repository.getFrost(latitude, longitude)
-              }
+                }
+                val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
+                    repository.getNowCast(latitude, longitude, altitude)
+                }
+                val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
+                    repository.getSunrise(latitude, longitude)
+                }
+                val alertDeferred = viewModelScope.async (Dispatchers.IO){
+                    repository.getAlert(latitude, longitude)
+                }
+                val frostDeferred = viewModelScope.async (Dispatchers.IO){
+                    repository.getFrost(latitude, longitude, referencetime)
+                }
 
               val nowCastP = nowCastDeferred.await()
               val locationP = locationDeferred.await()
@@ -67,7 +71,7 @@ class APIViewModel : ViewModel() {
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
 
                 _appUistate.update {
-                    AppUiState.Error
+                    AppUiState.ErrorFavorite
                 }
             }
         }

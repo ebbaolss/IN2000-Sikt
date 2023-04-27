@@ -16,9 +16,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
@@ -35,10 +40,8 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
     when(appUiState){
 
         is AppUiState.LoadingFavorite -> Text (text = "loading...", fontSize = 30.sp)
-        
-        is AppUiState.ErrorFavorite -> {
 
-        is AppUiState.Loading -> 
+        is AppUiState.LoadingFavorite ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -50,7 +53,7 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
                 Text(text = "Loading", color = Sikt_hvit, fontSize = 30.sp, fontWeight = FontWeight.Bold)
             }
             
-        is AppUiState.Error -> {
+        is AppUiState.ErrorFavorite -> {
            FavoriteScreenError( onNavigateToMap,
                onNavigateToFav,onNavigateToSettings,
                onNavigateToRules)
@@ -62,7 +65,7 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
                 nowcastinfo = (appUiState as AppUiState.SuccessFavorite).nowCastF,
                 sunriseinfo = (appUiState as AppUiState.SuccessFavorite).sunriseF,
                 alertinfo = (appUiState as AppUiState.SuccessFavorite).alertListF,
-                //frostinfo = (appUiState as AppUiState.Success).frostF,
+                frostinfo = (appUiState as AppUiState.SuccessFavorite).frostF,
                 onNavigateToMap,
                 onNavigateToFav,
                 onNavigateToSettings,
@@ -79,7 +82,7 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
+fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, frostinfo: MutableList<FrostInfo>,
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit
 ) {
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, rules = false, map = false, settings = false)}) {
