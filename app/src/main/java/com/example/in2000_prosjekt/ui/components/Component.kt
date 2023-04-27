@@ -523,7 +523,6 @@ fun TestComponent() {
     ) {
 
         Column(
-            //modifier = Modifier.padding(20.dp),
         ) {
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(20.dp)

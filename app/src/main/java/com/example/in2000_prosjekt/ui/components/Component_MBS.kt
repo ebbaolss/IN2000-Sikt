@@ -53,7 +53,6 @@ fun Sikt_BottomSheet() {
 
 @Composable
 fun BottomSheetContent(){
-
     Surface(
         color = Sikt_lyseblå,
         modifier = Modifier.height(200.dp),
