@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id "org.jetbrains.kotlin.plugin.serialization" version "1.8.20-Beta"
-    id("de.mannodermaus.android-junit5") version "1.8.2.1"
+    //id("de.mannodermaus.android-junit5") version "1.8.2.1" Se på hvordan de andre linjene gjør det
 }
 
 android {
@@ -99,49 +99,6 @@ dependencies {
 
 
 
-    // Dependencies for testene
-
-    //testImplementation 'org.junit.jupiter:junit-jupiter' gjort i dag onsdag 26.04, kl 14.00
-    // testImplementation 'junit:junit:4.13.2' gjort i dag onsdag 26.04, kl 14.00
-
-
-    /*
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-
-
-
-
-    //androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit5:$compose_version"
-
-
-
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
-    testImplementation "io.ktor:ktor-client-mock-jvm:$ktor_version"
-    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
-
-     */
-
-
-    // (Required) Writing and executing Unit Tests on the JUnit Platform
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
-
-    // (Optional) If you need "Parameterized Tests"
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
-
-    // (Optional) If you also have JUnit 4-based tests
-    testImplementation("junit:junit:4.13.2")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.2")
-
-
-
-
-
-
 
     //modal bottom bar
     implementation "androidx.compose.ui:ui:1.2.0-beta02"
@@ -151,7 +108,7 @@ dependencies {
     implementation "io.ktor:ktor-client-android:$ktor_version"
     implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
     implementation "io.ktor:ktor-serialization-gson:$ktor_version"
-    
+
     implementation("io.ktor:ktor-client-core:$ktor_version")
 
     //database
@@ -181,6 +138,61 @@ dependencies {
 
     // test av api, ktors mock engine
     implementation "io.ktor:ktor-client-mock-jvm:2.2.3"
+
+
+
+
+    // Dependencies for testene
+
+    //testImplementation 'org.junit.jupiter:junit-jupiter' gjort i dag onsdag 26.04, kl 14.00
+    // testImplementation 'junit:junit:4.13.2' gjort i dag onsdag 26.04, kl 14.00
+
+
+    //androidTestImplementation "androidx.compose.ui:ui-test-junit5:$compose_version" Denne finnes ikke: bare versjon 4 eksisterer i jetpack compose
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version" // Dette er siste offisielt støttede måte å teste composable funksjoner på: Ref. https://github.com/android/android-test/issues/224
+
+
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+
+
+   // implementation 'org.junit.jupiter:junit-jupiter-api:5.9.2' // Denne pleide å være testImplementation, kl.14.23, Denne gir meg feil: Den må være testImplementation
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+
+
+    //implementation 'org.junit.vintage:junit-vintage-engine:5.9.2'// dette er for tester som gjøres på composable funksjoner: // Denne pleide å være testImplementation, kl.14.23,
+    //Denne ga meg en error nå, kl 16.10 nå som jeg forsøker å bruke både junit 5 og 4
+
+    testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
+    testImplementation "io.ktor:ktor-client-mock-jvm:$ktor_version"
+    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+    // testImplementation "org.junit.vintage:junit-vintage-engine:4.12.0-M3"  Gjort, 27.04, kl. 13.13: Status: Funker ikke herfra.
+
+
+
+
+
+    /*
+
+    // (Required) Writing and executing Unit Tests on the JUnit Platform
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+
+    // (Optional) If you need "Parameterized Tests"
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
+
+    // (Optional) If you also have JUnit 4-based tests
+    testImplementation("junit:junit:4.13.2")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.2")
+
+
+
+     */
+
+
+
 
 
 }

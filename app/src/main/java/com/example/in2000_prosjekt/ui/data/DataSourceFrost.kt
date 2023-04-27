@@ -3,7 +3,6 @@ package com.example.in2000_prosjekt.ui.data
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.serialization.gson.*
@@ -52,9 +51,9 @@ class DataSourceFrost (val basePath: String) {
         return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=$elements").body()
     }
 
-    //DENNE MÅ SEES PÅ SAMMEN PÅ ONSDAG 12.04
-    suspend fun fetchApiSvarkoordinater(lat: String, long: String): Frost_API_Respons_for_koordinater {
+    fun coordinatesToPolygonConverter(longitutde: Double, latitude: Double): String {
 
+        // Eksemepl noen dypper inn galdehøpiggen= 61.3811 og 8.1845
         val increasePolygon: Boolean = true //?? denne blir alltid true...
         val increase: Double
         // Foresporsel_om_Oke_str_polygon er True eller False nå, men kan endres til en String (som angir en gradvis økning, eller ja eller nei.
@@ -66,43 +65,39 @@ class DataSourceFrost (val basePath: String) {
 
         } else increase = 0.01// når false Så er polygonet  1.11km * 1.11km
 
+        /*
+        POLYGON((10 60,10 65, 11 65, 10 60)) // merk at det alltid er longitude som kommer først.
 
-        fun coordinatesToPolygonConverter(longitutde: Double, latitude: Double): String {
+         */
 
-            // Eksemepl noen dypper inn galdehøpiggen= 61.3811 og 8.1845
+        var long_Point1 = longitutde
+        var lat_Point1 = latitude
 
-            /*
-            POLYGON((10 60,10 65, 11 65, 10 60)) // merk at det alltid er longitude som kommer først.
+        var long_Point2 = longitutde + increase
+        var lat_Point2 = latitude
 
-             */
+        var long_Point3 = longitutde
+        var lat_Point3 = latitude + increase
 
-            var long_Point1 = longitutde
-            var lat_Point1 = latitude
-
-            var long_Point2 = longitutde + increase
-            var lat_Point2 = latitude
-
-            var long_Point3 = longitutde
-            var lat_Point3 = latitude + increase
-
-            var long_Point4 = longitutde + increase
-            var lat_Point4 = latitude + increase
+        var long_Point4 = longitutde + increase
+        var lat_Point4 = latitude + increase
 
 
-            // Dette er en firkant: kan endres til en seks- eller åttekant
-            var polygon =
-                "POLYGON((${long_Point1} $lat_Point1 , $long_Point2 $lat_Point2 ,${long_Point3} $lat_Point3 , $long_Point4 $lat_Point4 ))"
+        // Dette er en firkant: kan endres til en seks- eller åttekant
+        var polygon =
+            "POLYGON((${long_Point1} $lat_Point1 , $long_Point2 $lat_Point2 ,${long_Point3} $lat_Point3 , $long_Point4 $lat_Point4 ))"
 
-            return polygon
-        }
+        return polygon
+    }
 
-        var polygonMadeFromCoordinates =
-            coordinatesToPolygonConverter(long.toDouble(), lat.toDouble())
+    suspend fun fetchApiSvarkoordinater(longitude: Double, latitude: Double): Frost_API_Respons_for_koordinater {
+
+        var polygon= coordinatesToPolygonConverter (longitude,latitude) // generer deg et polygon fra funksjonen over
 
         var urlPolygon =
-            "https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=${polygonMadeFromCoordinates}"
+            "https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=${polygon}"
 
-        //get call her?? (authURL.....)
+
         val respons2: Frost_API_Respons_for_koordinater = authURL(urlPolygon).body()
         Log.d("API call2", respons2.toString())
         return respons2

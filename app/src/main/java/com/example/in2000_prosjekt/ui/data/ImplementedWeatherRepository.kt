@@ -118,7 +118,7 @@ class ImplementedWeatherRepository : WeatherRepository {
     override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
 
         val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)  //hardkoded parameterne, fiks dette
-        val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longitude)
+        val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude.toDouble(), longitude.toDouble())
 
         val typeFrost = frost.type
         val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)

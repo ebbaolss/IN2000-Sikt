@@ -51,6 +51,7 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.*
 import kotlinx.coroutines.launch
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 
@@ -345,6 +346,7 @@ fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop
                 Image(
                     painter = painterResource(id = heigthVisuals),
                     contentDescription = "",
+                    modifier= Modifier.testTag ( heigthVisuals.toString() )
                 )
                 if (skydekkeTop) {
                     Image(
