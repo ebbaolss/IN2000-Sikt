@@ -3,7 +3,6 @@ package com.example.in2000_prosjekt.ui.data
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.serialization.gson.*
@@ -67,7 +66,7 @@ class DataSourceFrost (val basePath: String) {
         } else increase = 0.01// når false Så er polygonet  1.11km * 1.11km
 
 
-        fun coordinatesToPolygonConverter(longitutde: Double, latitude: Double): String {
+        fun coordinatesToPolygonConverter(longitude: Double, latitude: Double): String {
 
             // Eksemepl noen dypper inn galdehøpiggen= 61.3811 og 8.1845
 
@@ -76,16 +75,16 @@ class DataSourceFrost (val basePath: String) {
 
              */
 
-            var long_Point1 = longitutde
+            var long_Point1 = longitude
             var lat_Point1 = latitude
 
-            var long_Point2 = longitutde + increase
+            var long_Point2 = longitude + increase
             var lat_Point2 = latitude
 
-            var long_Point3 = longitutde
+            var long_Point3 = longitude
             var lat_Point3 = latitude + increase
 
-            var long_Point4 = longitutde + increase
+            var long_Point4 = longitude + increase
             var lat_Point4 = latitude + increase
 
 
