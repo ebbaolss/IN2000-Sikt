@@ -17,4 +17,8 @@ interface FavoriteDao {
 
     @Query("DELETE FROM favorites WHERE longtitude = :longtitude AND latitude = :latitude")
     fun deleteFav(longtitude: Double, latitude: Double)
+
+    @Query("DELETE FROM favorites")
+    fun deleteAll()
+
 }
