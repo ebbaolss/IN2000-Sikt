@@ -163,7 +163,7 @@ fun Sikt_LoctationCard_Topper_i_naerheten() {
                 //Sikt_FinnTurer_card(450, -10, 0,true, false, true)
             }
             item {
-                Sikt_FinnTurer_card("test",550, 3,false, true, false)
+                //Sikt_FinnTurer_card("test",550, 3,false, true, false)
             }
             item {
                 Sikt_FinnTurer_card("test",1100, 23,false, false, true)

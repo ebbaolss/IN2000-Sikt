@@ -403,6 +403,7 @@ fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop
         }
     }
 }
+//Knapp til Instillinger for å slette alle favoritter.
 @Composable
 fun DeleteAllButton(viewModel: FavoriteViewModel){
     Button(
