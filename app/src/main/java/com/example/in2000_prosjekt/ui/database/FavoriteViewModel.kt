@@ -22,11 +22,6 @@ class FavoriteViewModel(application: Application) : ViewModel() {
         allFavorites = repository.allFavorites
         searchFavorites = repository.searchFavorites
     }
-    /*
-    fun getAllFavorites() {
-        favoriteRepository.getAllFavorites()
-    }
-     */
 
     fun addFavorite(favorite: Favorite) {
         repository.addFavorite(favorite)

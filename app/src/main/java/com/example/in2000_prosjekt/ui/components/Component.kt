@@ -304,7 +304,7 @@ fun Sikt_Favorite_card(  weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, su
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
-
+    //på modal bottom sheet og på locationCard
     var heigthVisuals = R.drawable.topp_1000_1500
 
     if (height < 500) {
