@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import com.example.in2000_prosjekt.R
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -27,13 +30,10 @@ fun FavoriteScreenError ( onNavigateToMap: () -> Unit, onNavigateToFav: () -> Un
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            /*Icon(
+            Icon(
                 painter =  painterResource(R.drawable.nonettworkpicture),
                 contentDescription = "Nettwork Error Icon presented on screen"
-            )*/
-
-            ////her må det legges inn et bilde
-
+            )
         }
     }
 }

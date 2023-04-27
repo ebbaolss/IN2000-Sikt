@@ -31,36 +31,44 @@ class APIViewModel : ViewModel() {
 
     fun getAll(latitude: String, longitude: String, altitude: String) {
         viewModelScope.launch() {
-            val locationDeferred = viewModelScope.async (Dispatchers.IO){
+
+            try {
+                val locationDeferred = viewModelScope.async (Dispatchers.IO){
                 repository.getLocation(latitude, longitude, altitude)
-            }
-            val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getNowCast(latitude, longitude, altitude)
-            }
-            val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getSunrise(latitude, longitude)
-            }
-            val alertDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getAlert(latitude, longitude)
-            }
-            val frostDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getFrost(latitude, longitude)
-            }
+              }
+              val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
+                  repository.getNowCast(latitude, longitude, altitude)
+              }
+              val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
+                  repository.getSunrise(latitude, longitude)
+              }
+              val alertDeferred = viewModelScope.async (Dispatchers.IO){
+                  repository.getAlert(latitude, longitude)
+              }
+              val frostDeferred = viewModelScope.async (Dispatchers.IO){
+                  repository.getFrost(latitude, longitude)
+              }
 
-            val nowCastP = nowCastDeferred.await()
-            val locationP = locationDeferred.await()
-            val sunsetP = sunsetDeferred.await()
-            val alertP = alertDeferred.await()
-            val frostP = frostDeferred.await()
+              val nowCastP = nowCastDeferred.await()
+              val locationP = locationDeferred.await()
+              val sunsetP = sunsetDeferred.await()
+              val alertP = alertDeferred.await()
+              val frostP = frostDeferred.await()
 
-            _appUistate.update {
-                AppUiState.SuccessFavorite(
-                    locationF = locationP,
-                    nowCastF = nowCastP,
-                    sunriseF = sunsetP,
-                    alertListF = alertP,
-                    frostF = frostP
-                )
+              _appUistate.update {
+                  AppUiState.SuccessFavorite(
+                      locationF = locationP,
+                      nowCastF = nowCastP,
+                      sunriseF = sunsetP,
+                      alertListF = alertP,
+                      frostF = frostP
+                  )
+              }
+            } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
+
+                _appUistate.update {
+                    AppUiState.Error
+                }
             }
         }
     }
