@@ -48,7 +48,17 @@ fun FavoriteScreen(viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, on
     val appUiState by viewModel.appUiState.collectAsState()
 
     when(appUiState){
-        is AppUiState.Loading -> Text (text = "loading...", fontSize = 30.sp)
+        is AppUiState.Loading -> 
+             Column(
+                 modifier = Modifier
+                     .fillMaxSize()
+                     .background(Sikt_mellomblå), 
+                 horizontalAlignment = Alignment.CenterHorizontally,
+                 verticalArrangement = Arrangement.Center
+             ) {
+                 Icon(painter = painterResource(id = R.drawable.outline_pending), contentDescription = "", tint = Sikt_hvit, modifier = Modifier.size(50.dp))
+                 Text(text = "Loading", color = Sikt_hvit, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+             }
         is AppUiState.Error -> {
 
            FavoriteScreenError( onNavigateToMap,
