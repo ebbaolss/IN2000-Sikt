@@ -472,9 +472,9 @@ fun Sikt_Datavisualisering_Card(height : Int, temp : Float, vind : Float, skydek
 @Composable
 fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : String, weatherMid : String, weatherLow : String){
 
-    /*
+
     fun getHeightVisuals(height: Int) : Int {
-        if (height < 500) {
+        return if (height < 500) {
             R.drawable.topp_under500
         } else if (height < 1000) {
             R.drawable.topp1000to500
@@ -482,22 +482,9 @@ fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : String,
             R.drawable.topp1500to1000
         } else if (height < 2000) {
             R.drawable.topp2000to1500
-        } else if (height > 2000) {
+        } else {
             R.drawable.topp_over2000
         }
-    }*/
-
-    var heigthVisuals = R.drawable.topp1500to1000
-    if (height < 500) {
-        heigthVisuals = R.drawable.topp_under500
-    } else if (height < 1000) {
-        heigthVisuals = R.drawable.topp1000to500
-    } else if (height < 1500) {
-        heigthVisuals = R.drawable.topp1500to1000
-    } else if (height < 2000) {
-        heigthVisuals = R.drawable.topp2000to1500
-    } else if (height > 2000) {
-        heigthVisuals = R.drawable.topp_over2000
     }
 
     // Klart vær = God sikt = Sikt på mer enn 10 km (INGEN SKYER)
@@ -574,7 +561,7 @@ fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : String,
             modifier = Modifier.fillMaxSize()
         )
         Image(
-            painter = painterResource(id = heigthVisuals),
+            painter = painterResource(id = getHeightVisuals(height)),
             contentDescription = "",
             modifier = Modifier.fillMaxSize()
         )
@@ -671,7 +658,7 @@ fun TestComponent() {
             Sikt_Header("Fjelltopp")
             Sikt_MountainHight("1800")
             Spacer(modifier = Modifier.size(20.dp))
-            illustrasjon(2469, -11f,5f,"skyet", "delvisskyet", "klart")
+            illustrasjon(1469, -11f,5f,"skyet", "delvisskyet", "klart")
         }
     }
 }
