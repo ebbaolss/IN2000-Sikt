@@ -58,7 +58,7 @@ class MapViewModel : ViewModel() {
 
             val mapSearchCoordinatesP = mapSearchCoordinatesDeferred.await()
 
-            _appUistate.update {
+            _appUistate2.update {
                 MapCoordinatesInfo(
                     latitude = mapSearchCoordinatesP.latitude,
                     longitude = mapSearchCoordinatesP.longitude
