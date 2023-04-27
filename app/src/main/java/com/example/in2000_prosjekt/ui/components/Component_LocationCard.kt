@@ -1,7 +1,6 @@
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
-import android.text.format.Time
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,7 +48,7 @@ fun Sikt_LocationCard(){
                             Icons.Outlined.Refresh,
                             "",
                             tint = Sikt_mørkeblå
-                        ) //fyll symbol, bytter senere
+                        )
                         Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
                         Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
                     }
