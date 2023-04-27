@@ -16,30 +16,38 @@ class ImplementedWeatherRepository : WeatherRepository {
     val source = "SN18700" //Dette er navnet på en værstasjon: Frost API'et krever at man bruker en værstasjon sin id, når man gjøre forespøsler etter historisk værdata
     //----------------------
 
-    override suspend fun getFrost(latitude: String, longitude: String,  referencetime : String ): MutableList<FrostInfo> {
+    override suspend fun getFrost(
+        latitude: String,
+        longitude: String,
+        referencetime: String
+    ): MutableList<FrostInfo> {
 
         val nearweatherstationpolygon = dataFrost.fetchApiSvarkoordinater(latitude, longitude)
-        val nearestweatherstationid = nearweatherstationpolygon.data?.get(0)?.id // denne henter nærmeste værstasjons id, basert på et polygon
-        val historicdata = dataFrost.fetchFrostTemp("mean(cloud_area_fraction P1D)", referencetime, nearestweatherstationid!!)
-        val historicsightconditions = historicdata.data
+        val nearestweatherstationid =
+            nearweatherstationpolygon.data?.get(0)?.id // denne henter nærmeste værstasjons id, basert på et polygon
+        val historicdata = dataFrost.fetchFrostTemp(
+            "mean(cloud_area_fraction%20P1D)",
+            referencetime,
+            nearestweatherstationid!!
+        )
 
         val mutableFrostInfoList: MutableList<FrostInfo> = mutableListOf()
 
-            //.get(1)?.observations?.get(0)?.value
-        if (historicsightconditions != null) {
-            historicsightconditions.forEach {
-                val referenceTime = it.referenceTime
-                val observations = it.observations?.forEach {
-                    val sightCondition = it?.value
-                    if (referenceTime != null && sightCondition != null) {
-                        mutableFrostInfoList.add(FrostInfo(referencetime, sightCondition.toString()))
-                    }
-                }
+        historicdata.data?.forEach { dataFrost ->
+            val referencetime = dataFrost.referenceTime
+            val sightCondition = dataFrost.observations?.first()?.value
 
+            if (referencetime != null && sightCondition != null) {
+                mutableFrostInfoList.add(
+                    FrostInfo(
+                        referencetime,             // dato målingen ble gjort
+                        sightCondition.toString()  // En double verdi fra 0 - 8 lagret som en string
+                    )
+                )
             }
         }
 
-        Log.d("Sightcond", historicsightconditions.toString())
+        Log.d("Sightconditions", mutableFrostInfoList.toString())
 
         return mutableFrostInfoList
     }
