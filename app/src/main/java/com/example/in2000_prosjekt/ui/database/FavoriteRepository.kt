@@ -29,6 +29,12 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         }
     }
 
+    fun deleteAll(){
+        coroutineScope.launch(Dispatchers.IO) {
+            favoriteDao.deleteAll()
+        }
+    }
+
     private fun asyncFind(longtitude: Double, latitude: Double): Deferred<List<Favorite>?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async favoriteDao.findFavorite(longtitude, latitude)
