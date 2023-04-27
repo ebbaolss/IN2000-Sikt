@@ -20,6 +20,7 @@ import com.example.in2000_prosjekt.R
 @Composable
 fun FavoriteScreenError ( onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit) {
 
+    //fiks bottombar og errorhandling for mapbox
     Scaffold(bottomBar = {  })
     {
 

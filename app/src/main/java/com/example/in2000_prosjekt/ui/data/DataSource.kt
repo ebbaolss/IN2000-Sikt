@@ -8,7 +8,7 @@ import io.ktor.client.statement.*
 import io.ktor.serialization.gson.*
 
 class DataSource (val basePath:String) {
-
+    //datasource for nowcast og locationForecast
     private val client = HttpClient() {
         install(ContentNegotiation) {
             gson()

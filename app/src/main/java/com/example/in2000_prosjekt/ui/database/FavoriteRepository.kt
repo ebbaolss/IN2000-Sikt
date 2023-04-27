@@ -17,15 +17,6 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         }
     }
 
-    /*
-    fun getAllFavorites() {
-        coroutineScope.launch(Dispatchers.IO) {
-            searchFavorites.postValue(favoriteDao.getAllFavorites())
-        }
-    }
-
-     */
-
     fun deleteFavorite(longtitude: Double, latitude: Double) {
         coroutineScope.launch(Dispatchers.IO) {
             favoriteDao.deleteFav(longtitude, latitude)

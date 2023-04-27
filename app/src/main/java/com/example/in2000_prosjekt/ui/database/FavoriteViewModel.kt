@@ -33,11 +33,6 @@ class FavoriteViewModel(application: Application) : ViewModel() {
             AppUiState.Success()
         }
     }
-    /*
-    fun getAllFavorites() {
-        favoriteRepository.getAllFavorites()
-    }
-     */
 
     fun addFavorite(favorite: Favorite) {
         repository.addFavorite(favorite)
