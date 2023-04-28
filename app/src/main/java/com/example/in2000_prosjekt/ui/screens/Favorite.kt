@@ -34,14 +34,15 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 //import com.example.in2000_prosjekt.ui.components.Sikt_favoritt_tekst
 import com.example.in2000_prosjekt.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
+fun FavoriteScreen(viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
 
-    val appUiState by apiViewModel.appUiState.collectAsState()
+    val appUiState by viewModel.appUiState.collectAsState()
 
     when(appUiState){
         is AppUiState.Loading -> 
@@ -63,15 +64,19 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
         }
         is AppUiState.Success -> {
             FavoriteScreenSuccess(
+                /*
                 weatherinfo = (appUiState as AppUiState.Success).locationF,
                 nowcastinfo = (appUiState as AppUiState.Success).nowCastF,
                 sunriseinfo = (appUiState as AppUiState.Success).sunriseF,
                 alertinfo = (appUiState as AppUiState.Success).alertListF,
+
+                 */
                 //frostinfo = (appUiState as AppUiState.Success).frostF,
                 onNavigateToMap,
                 onNavigateToFav,
                 onNavigateToSettings,
-                onNavigateToRules
+                onNavigateToRules,
+                viewModel
             ) //endre dette til en bedre måte etterhvert?
         }
     }
@@ -80,13 +85,18 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
-    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit
+fun FavoriteScreenSuccess(
+    //weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
+    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel
 ) {
+    //var weatherinfo = viewModel.getLocationList()
+    //var nowcastinfo = viewModel.getNowInfo()
+
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, rules = false, map = false, settings = false)}) {
-        LazyColumn(contentPadding = PaddingValues(20.dp)) {
-            item { Sikt_Favorite_card(weatherinfo = weatherinfo, nowcastinfo = nowcastinfo , sunriseinfo = sunriseinfo , alertinfo = alertinfo) }
-            item { Sikt_Favorite_card(weatherinfo = weatherinfo, nowcastinfo = nowcastinfo , sunriseinfo = sunriseinfo , alertinfo = alertinfo) }
+        LazyColumn(
+            contentPadding = PaddingValues(20.dp)
+        ) {
+            //Sikt_Favorite_card(weatherinfo = weatherinfo, nowcastinfo = nowcastinfo )
         }
     }
 }

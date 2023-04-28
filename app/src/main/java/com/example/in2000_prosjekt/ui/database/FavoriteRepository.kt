@@ -42,7 +42,7 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
             return@async favoriteDao.findFavorite(longtitude, latitude)
         }
 
-     fun getLocationList() : MutableList<LocationInfo> {
+     suspend fun getLocationList() : MutableList<LocationInfo> {
         val favorites = allFavorites.value!!
 
         val forecastList : MutableList<LocationInfo> = mutableListOf()
@@ -84,7 +84,7 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         return forecastList
     }
 
-    fun getNowList() : MutableList<NowCastInfo> {
+    suspend fun getNowList() : MutableList<NowCastInfo> {
         val favorites = allFavorites.value!!
 
         val forecastList : MutableList<NowCastInfo> = mutableListOf()
