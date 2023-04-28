@@ -29,7 +29,6 @@ class Integrasjonstest {
 
 
 // Test 8: Test av Apikall med MockEngine, lagt kl.16.30 , den 27.08
-
     class integratsjonstest_APIkall {
         @get:Rule
         val rule = createComposeRule()
@@ -75,7 +74,7 @@ class Integrasjonstest {
                 }
 
 
-                suspend fun getFrostApiRespons(): frostApiResponse = httpClient.get("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=mean(cloud_area_fraction P1D)&country=norge").body()
+                suspend fun testGetFrostApiRespons(): frostApiResponse = httpClient.get("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=mean(cloud_area_fraction P1D)&country=norge").body()
 
                 @Test
                 fun frostApiTest() {
@@ -89,7 +88,7 @@ class Integrasjonstest {
                         }
                         val apiClient = ApiClient(mockEngine)
 
-                        Assert.assertEquals("SourceResponse", apiClient.getFrostApiRespons().respons) // sammenlinger om verdien til
+                        Assert.assertEquals("SourceResponse", apiClient.testGetFrostApiRespons().respons) // sammenlinger om verdien til
                     }
                 }
 

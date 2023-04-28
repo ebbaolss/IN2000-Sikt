@@ -12,10 +12,8 @@ class ImplementedWeatherRepository : WeatherRepository {
 
     //----------------------
     //Frost:
-    var elements = "air_temperature"// Dette er værmålingen vi ønsker: For enkelthetsskyld så velges bare: air temperature
     var referencetime ="2021-05-17%2F2021-05-17" // Frost API, bruker UTC-tidsformat, denne ønskes senere å kunne bestemmes av en bruker ved hjelp av en Date picker (en bibloteksfunskjon i jetpack compose)
     //var url_med_Polygon ="https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=POLYGON((7.9982%2058.1447%20%2C%208.0982%2058.1447%20%2C7.9982%2058.2447%20%2C%208.0982%2058.2447%20))"
-    val source = "SN18700" //skjønner ikke denne, hvor får vi dette fra? Hva er det? Spørr Nebil
     //----------------------
 
     override suspend fun getLocation(
@@ -117,21 +115,23 @@ class ImplementedWeatherRepository : WeatherRepository {
 
     override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
 
-        val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)  //hardkoded parameterne, fiks dette
-        val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude.toDouble(), longitude.toDouble())
 
-        val typeFrost = frost.type
-        val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
-        val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
+        val frostPolygon = dataFrost.fetchFrostWeatherStation( longitude.toDouble(), latitude.toDouble())
+        val weatherstationid  = frostPolygon.data!!.get(0).id // en værstasjon sin ID: Blindern = SN18700
 
-        Log.d("typefrost", typeFrost.toString())
-        Log.d("lat", lat.toString())
-        Log.d("long", long.toString())
+
+
+        val frost = dataFrost.fetchFrost( weatherstationid!!, referencetime )
+
+        //Kommentar 22.04, her har vi 2 tilnmmærminger å gjære et apicall
+        // Alt 1: å gjøre et apicall per dag inni calendern vår
+
+        // eller Alt2: Å gjøre et apicall på en periode fra 01. av måneden til 30. av måneden
+        val sightconditions = frost.data?.get(0)?.observations?.get(0)?.value // Denne linjen avgjør tilnærming: Synes alt 1 var ryddigst
 
         return FrostInfo(
-            typeFrost = typeFrost.toString(), //ikke egt ha toString her
-            longFrost = long!!,
-            latFrost = lat!!,
+            sightconditionsfound = sightconditions.toString(),
+
         )
     }
 }

@@ -13,7 +13,6 @@ import io.ktor.client.statement.*
 class DataSourceFrost (val basePath: String) {
 
     private val client = HttpClient() {
-
         install(Auth) {
             basic {
                 credentials {
@@ -24,17 +23,9 @@ class DataSourceFrost (val basePath: String) {
                 }
             }
         }
-
         install(ContentNegotiation) {
             gson()
         }
-
-        /*
-        ResponseException()
-        https://github.com/ktorio/ktor-documentation/tree/2.2.4/codeSnippets/snippets/client-validate-non-2xx-response/src
-
-
-         */
     }
 
     suspend fun authURL(URL: String) : HttpResponse {
@@ -42,65 +33,28 @@ class DataSourceFrost (val basePath: String) {
             headers {append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")}}
     }
 
-    suspend fun fetchFrostTemp(
-        elements: String,
-        referencetime: String,
-        source: String
-    ): Frost_API_Respons {
-
-        return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=$elements").body()
-    }
-
-    fun coordinatesToPolygonConverter(longitutde: Double, latitude: Double): String {
-
-        // Eksemepl noen dypper inn galdehøpiggen= 61.3811 og 8.1845
-        val increasePolygon: Boolean = true //?? denne blir alltid true...
-        val increase: Double
-        // Foresporsel_om_Oke_str_polygon er True eller False nå, men kan endres til en String (som angir en gradvis økning, eller ja eller nei.
-        // Det er When-setningen eller if-setningen nå som bestemmer hvor stor økningen skal være)
-
-        if (increasePolygon) {
-
-            increase = 0.1 // når true Så er polygonet  11.1km * 11.1km
-
-        } else increase = 0.01// når false Så er polygonet  1.11km * 1.11km
-
-        /*
-        POLYGON((10 60,10 65, 11 65, 10 60)) // merk at det alltid er longitude som kommer først.
-
-         */
-
-        var long_Point1 = longitutde
-        var lat_Point1 = latitude
-
-        var long_Point2 = longitutde + increase
-        var lat_Point2 = latitude
-
-        var long_Point3 = longitutde
-        var lat_Point3 = latitude + increase
-
-        var long_Point4 = longitutde + increase
-        var lat_Point4 = latitude + increase
+    //Dette er en funksjon som genererer et polygon rundt koordinatet gitt fra kartet
+    fun coordinatesToPolygonConverter(latitude: Double, longitude: Double): String { // 60,10
+        val increase = 0.1 // tilsvarer en radius på rundt 11km, hvilket forholdsmessig gir en turgåer en anvendelig/formålstjenelig ide/info om siktforhold i nærheten av seg
+        var longpointincreased = longitude + increase
+        var latpointincreased = latitude + increase
 
 
-        // Dette er en firkant: kan endres til en seks- eller åttekant
-        var polygon =
-            "POLYGON((${long_Point1} $lat_Point1 , $long_Point2 $lat_Point2 ,${long_Point3} $lat_Point3 , $long_Point4 $lat_Point4 ))"
+        var polygon ="POLYGON((${longitude} $latitude , $longitude $latpointincreased , ${longpointincreased} $latitude , $longpointincreased $latpointincreased ))"
 
         return polygon
     }
 
-    suspend fun fetchApiSvarkoordinater(longitude: Double, latitude: Double): Frost_API_Respons_for_koordinater {
+    suspend fun fetchFrostWeatherStation(longitude: Double, latitude: Double): FrostCoordinatesBuild {
+        var polygon= coordinatesToPolygonConverter (longitude,latitude) // generer deg et polygon fra et koordinat
 
-        var polygon= coordinatesToPolygonConverter (longitude,latitude) // generer deg et polygon fra funksjonen over
-
-        var urlPolygon =
-            "https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=${polygon}"
-
-
-        val respons2: Frost_API_Respons_for_koordinater = authURL(urlPolygon).body()
-        Log.d("API call2", respons2.toString())
-        return respons2
-
+        return  authURL("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&geometry=${polygon}").body()
     }
+
+    suspend fun fetchFrost(  source: String, referencetime: String,): FrostResponsBuild {
+        return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)").body()
+    }
+
+
+
 }

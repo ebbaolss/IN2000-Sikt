@@ -12,10 +12,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
-import com.example.in2000_prosjekt.ui.AlertInfo
-import com.example.in2000_prosjekt.ui.LocationInfo
-import com.example.in2000_prosjekt.ui.NowCastInfo
-import com.example.in2000_prosjekt.ui.SunriseInfo
 import com.example.in2000_prosjekt.ui.components.*
 import com.example.in2000_prosjekt.ui.screens.*
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
@@ -27,7 +23,9 @@ import org.junit.Test
 
 
 
-
+/*
+ Dette er unit tester av composable funksjoner
+*/
 
 //TEst 1: Test for funksjon: fun StartPage(onNavigateToNext: () -> Unit) // Test av om bildet dukker opp på skjermen StartPage
 class testScreenStartpage {
@@ -161,33 +159,6 @@ class testInfoScreen {
 }
 
 
-
-//
-// Denne er her foeløpig som en påminner om testen for innholdet i carded som viser Met alerts
-class TestAlertScreenCard {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-    lateinit var navController: TestNavHostController
-
-
-    @Test
-    fun open_AlertScreenUIShowsText () {
-
-        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-        var alertscreen = { navController.navigate("Alert") }
-
-        rule.setContent {
-            IN2000_ProsjektTheme {
-                AlertScreen(onNavigateToMap = { /*TODO*/ }, onNavigateToFav = { /*TODO*/ },onNavigateToRules = { /*TODO*/ },onNavigateToSettings = { /*TODO*/})
-            }
-        }
-        rule.onNodeWithText("Sted: ").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Sted: "
-        rule.onNodeWithText("Type: ").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Type: "
-        rule.onNodeWithText("Beskrivelse").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Beskrivelse"
-        rule.onNodeWithText("Konsekvens").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Konsekvens"
-        rule.onNodeWithText("Anbefaling").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Anbefaling"
-    }
-}
 
 
 
@@ -350,8 +321,9 @@ class testSiktFinnTurerCard {
 }
 
 
-//test nr 8 dette er en ren test
-// test av Composable funksjonen: fabvorite success screen // denne funksjonen brukes som mal
+//test nr 9 av Card funksjon:  SiktLocationCardNextDays
+//Her så lager vi dummy objekter av apikallene som
+// composable funksjonen etterspør
 class testSiktLocationCardNextDays {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
@@ -377,9 +349,11 @@ class testSiktLocationCardNextDays {
 }
 
 
-// Ikke ferdig, kl.22.50, 27.10.23
-//test nr 9 dette er en ren test
-// test av Composable funksjonen: fabvorite success screen // denne funksjonen brukes som mal
+
+//test nr 9 av Card funksjon:  test_Sikt_LoctationCard_Topper_i_naerheten
+//Her så lager vi dummy objekter av apikallene som
+// composable funksjonen etterspør
+
 class test_Sikt_LocationCard_Topper_i_naerheten {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
@@ -401,52 +375,5 @@ class test_Sikt_LocationCard_Topper_i_naerheten {
     }
 
 }
-
-
-// Ikke ferdig, kl.01.09, 27.10.23 forsøk kl.23.30
-// test 10 Sikt_Favorite_card: Her så lager vi dummy objekter av apikallene som
-// composable funksjonen etterspør
-class  TestSiktFavoritecard {
-    @get:Rule
-    val rule = createComposeRule()
-    lateinit var navController: TestNavHostController
-
-
-    @Test
-    fun testSiktFavoritecard() {
-
-        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-        var alertscreen = { navController.navigate("Alert") }
-
-        rule.setContent {
-            IN2000_ProsjektTheme {
-                /*
-                Sikt_Favorite_card(
-                    weatherinfo: LocationInfo,
-                    nowcastinfo: NowCastInfo,
-                    sunriseinfo: SunriseInfo,
-                    alertinfo: MutableList< AlertInfo >
-                )
-
-                 */
-            }
-
-
-
-        }
-
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
 
 

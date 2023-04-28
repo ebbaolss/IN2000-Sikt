@@ -2,7 +2,8 @@ package com.example.in2000_prosjekt.ui.data
 
 import com.google.gson.annotations.SerializedName
 
-data class Frost_API_Respons(
+data class FrostResponsBuild(
+
 
     @SerializedName("@context") var context : String?,
     @SerializedName("@type") var type : String?,
@@ -17,8 +18,16 @@ data class Frost_API_Respons(
     var currentLink : String?,
     var data : List<DataFrost>?
 
+
 )
-data class Frost_API_Respons_for_koordinater (
+data class DataFrost(
+
+    var sourceId : String?,
+    var referenceTime : String?,
+    var observations : List<Observations?>? //spørsmålstegn også inni <> ?
+
+)
+data class FrostCoordinatesBuild (
 
     @SerializedName("@context") var context : String?,
     @SerializedName("@type") var type : String?,
@@ -33,13 +42,6 @@ data class Frost_API_Respons_for_koordinater (
     var currentLink : String?,
     var data: List<Data_For_Koordinater>?
 
-
-)
-data class DataFrost(
-
-    var sourceId : String?,
-    var referenceTime : String?,
-    var observations : List<Observations?>? //spørsmålstegn også inni <> ?
 
 )
 data class Data_For_Koordinater (
@@ -65,16 +67,14 @@ data class Data_For_Koordinater (
 data class Geometri (
 
     var type : String?,
-    //@SerializedName("coordinates" ) var coordinates : ArrayList<Double> = arrayListOf(),
     var coordinates : List<Double>?,
     var nearest : Boolean?
 )
 data class Observations (
 
     var elementId : String?,
-    var value : Double?, //termperatur
+    var value : Double?,
     var unit : String?,
-    var level : Level?,
     var timeOffset : String?,
     var timeResolution : String?,
     var timeSeriesId : Int?,
