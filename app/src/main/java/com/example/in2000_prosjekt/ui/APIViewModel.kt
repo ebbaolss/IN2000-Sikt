@@ -10,9 +10,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 import com.example.in2000_prosjekt.ui.data.*
-import io.ktor.client.call.*
+import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import io.ktor.utils.io.errors.*
-import kotlinx.coroutines.Deferred
 
 import kotlinx.coroutines.async
 
@@ -23,13 +22,20 @@ class APIViewModel : ViewModel() {
 
     private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
-    val latitude = "59"
-    val longtitude = "4"
-    val altitude: String = "600"
+
+    private val _cameraOptionsUiState: MutableStateFlow<MapUiState.MapboxCameraOptions> = MutableStateFlow(MapUiState.MapboxCameraOptions())
+    val cameraOptionsUiState: StateFlow<MapUiState.MapboxCameraOptions> = _cameraOptionsUiState.asStateFlow()
+
+    private val _mountainUiState = MutableStateFlow(MapUiState.Mountain())
+    val mountainUiState: StateFlow<MapUiState.Mountain> = _mountainUiState.asStateFlow()
+
+    private val currentLatitude = cameraOptionsUiState.value.currentScreenLatitude
+    private val currentLongitude = cameraOptionsUiState.value.currentScreenLongitude
+    private val altitude: String = "600"
 
     init { //etterhvert så endrer man  fra å ha init til å kalle på getAll fra en annen fil
         //favoritter skal loades med en gang appen åpner, database se codelab
-        getAll("59","4","600")
+        getAll(currentLatitude.toString(),currentLongitude.toString(),altitude)
     }
 
     fun getAll(latitude: String, longitude: String, altitude: String) {
@@ -73,6 +79,16 @@ class APIViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun updateMountain(mountain: MapUiState.Mountain) {
+        _mountainUiState.update {
+            it.copy(mountain.name, mountain.point)
+        }
+    }
+
+    fun updateCameraPosition() {
+
     }
 }
 

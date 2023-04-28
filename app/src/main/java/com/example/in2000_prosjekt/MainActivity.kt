@@ -20,6 +20,7 @@ import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.database.DatabaseScreenTest
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModelFactory
@@ -94,7 +95,7 @@ fun MultipleScreenApp(viewModel: FavoriteViewModel) {
     NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
 
         composable("Start") { StartPage( onNavigateToNext = { navController.navigate("Map") })  }
-        composable("Map") { ShowMap(map, favorite, settings, rules)  }
+        composable("Map") { ShowMap(map, favorite, settings, rules, APIViewModel())  }
         composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules) }
         composable("Rules") { RulesScreen(map, favorite, settings, rules) }
         composable("Settings") { SettingsScreen(map, favorite, settings, rules) }
