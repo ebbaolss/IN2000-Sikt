@@ -84,12 +84,13 @@ fun FavoriteScreenSuccess(
     var favorites = viewModel.allFavorites.value!!
     var weatherinfo = viewModel.getLocationList()
     var nowcastinfo = viewModel.getNowInfo()
+    var alertinfo = viewModel.getAlertInfo()
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, rules = false, map = false, settings = false)}
     ) {
         LazyColumn(
             contentPadding = PaddingValues(20.dp)
         ) {
-            Sikt_Favorite_card(weatherinfo, nowcastinfo)
+            Sikt_Favorite_card(weatherinfo, nowcastinfo, alertinfo)
         }
     }
 }

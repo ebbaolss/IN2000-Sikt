@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
@@ -53,6 +54,11 @@ class FavoriteViewModel(application: Application) : ViewModel() {
     @Composable
      fun getNowInfo() : MutableList<NowCastInfo> {
         return repository.getNowList()
+    }
+
+    @Composable
+    fun getAlertInfo() : MutableList<MutableList<AlertInfo>> {
+        return repository.getAlertInfo()
     }
 }
 

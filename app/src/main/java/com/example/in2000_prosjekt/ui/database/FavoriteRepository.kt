@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.data.DataSource
@@ -53,14 +54,12 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
         //Alternativt:
 
-        favorites.forEach{
-            favorite ->
+        favorites.forEach{ favorite ->
             coroutineScope.launch {
                 val forecast = weatherRepository.getLocation(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "")
+                forecastList.add(forecast)
             }
         }
-
-
 
         return forecastList
     }
@@ -74,15 +73,32 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         val forecastList : MutableList<NowCastInfo> = mutableListOf()
 
         //Hvis vi får fikse suspend:
-        favorites.forEach{
-                favorite ->
+        favorites.forEach{ favorite ->
             coroutineScope.launch {
                 val forecast = weatherRepository.getNowCast(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "")
-
+                forecastList.add(forecast)
             }
         }
 
         return forecastList
+    }
+
+    @Composable
+    fun getAlertInfo() : MutableList<MutableList<AlertInfo>> {
+        val coroutineScope = rememberCoroutineScope()
+
+        val favorites = allFavorites.value!!
+
+        val alertList : MutableList<MutableList<AlertInfo>> = mutableListOf()
+
+        favorites.forEach{ favorite ->
+            coroutineScope.launch {
+                val alert = weatherRepository.getAlert(favorite.latitude.toString(), favorite.longtitude.toString())
+                alertList.add(alert)
+            }
+        }
+
+        return alertList
     }
 
 }
