@@ -278,15 +278,12 @@ fun Sikt_skyillustasjon() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LazyListScope.Sikt_Favorite_card(viewModel: FavoriteViewModel) {
-    var favorites = viewModel.allFavorites.value!!
-    var weatherinfo = viewModel.getLocationList()
-    var nowcastinfo = viewModel.getNowInfo()
+fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>) {
+
     //favorites er en mutableList med LocationInfo kan derfor kalle
     // favorite.temperatureL etc.
-    items(favorites.size) {
-        favorites.forEach { favorite ->
+    items(weatherinfo.size) {
+        weatherinfo.forEach { favorite ->
             val location = weatherinfo[it]
             val nowcast = nowcastinfo[it]
 

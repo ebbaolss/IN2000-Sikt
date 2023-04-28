@@ -81,11 +81,15 @@ fun FavoriteScreenSuccess(
     //weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel
 ) {
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, rules = false, map = false, settings = false)}) {
+    var favorites = viewModel.allFavorites.value!!
+    var weatherinfo = viewModel.getLocationList()
+    var nowcastinfo = viewModel.getNowInfo()
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, rules = false, map = false, settings = false)}
+    ) {
         LazyColumn(
             contentPadding = PaddingValues(20.dp)
         ) {
-            Sikt_Favorite_card(viewModel)
+            Sikt_Favorite_card(weatherinfo, nowcastinfo)
         }
     }
 }
