@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 
 import com.example.in2000_prosjekt.ui.data.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
+import com.mapbox.geojson.Point
 import io.ktor.utils.io.errors.*
 
 import kotlinx.coroutines.async
@@ -87,8 +88,10 @@ class APIViewModel : ViewModel() {
         }
     }
 
-    fun updateCameraPosition() {
-
+    fun updateCameraPosition(point: Point) {
+        _cameraOptionsUiState.update {
+            it.copy(currentScreenLatitude = point.latitude(), currentScreenLongitude = point.longitude())
+        }
     }
 }
 

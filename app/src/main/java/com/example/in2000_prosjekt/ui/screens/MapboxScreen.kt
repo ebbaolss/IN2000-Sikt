@@ -2,10 +2,7 @@ package com.example.in2000_prosjekt.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
-import android.graphics.PointF
 import android.util.Log
-import android.view.View
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -14,47 +11,26 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
-
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
-
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
-import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.dsl.cameraOptions
-import com.mapbox.maps.extension.observable.eventdata.CameraChangedEventData
 import com.mapbox.maps.extension.style.expressions.dsl.generated.eq
-import com.mapbox.maps.extension.style.expressions.dsl.generated.get
-import com.mapbox.maps.extension.style.expressions.dsl.generated.literal
-import com.mapbox.maps.extension.style.expressions.dsl.generated.switchCase
-import com.mapbox.maps.extension.style.layers.Layer
-import com.mapbox.maps.extension.style.layers.generated.CircleLayer
 import com.mapbox.maps.extension.style.layers.generated.circleLayer
-import com.mapbox.maps.extension.style.layers.getLayer
-import com.mapbox.maps.extension.style.layers.getLayerAs
-import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.mapbox.maps.extension.style.sources.generated.vectorSource
 import com.mapbox.maps.extension.style.style
-import com.mapbox.maps.plugin.attribution.attribution
-import com.mapbox.maps.plugin.compass.CompassPlugin
-import com.mapbox.maps.plugin.compass.CompassViewPlugin
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.delegates.listeners.OnCameraChangeListener
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.scalebar.scalebar
-import org.jetbrains.annotations.Nullable
-import java.util.concurrent.CountDownLatch
+import kotlin.math.sqrt
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -98,6 +74,7 @@ fun ShowMap(
                         onMapClick(point, mapboxMap, viewModel)
                     })
                     mapboxMap.addOnCameraChangeListener(onCameraChangeListener = OnCameraChangeListener { cameraData ->
+                        Log.d("CameraChangeListener", "invoked")
                         onCameraChange(mapboxMap, viewModel)
                     })
 
@@ -105,6 +82,18 @@ fun ShowMap(
                 },
                 update = {
                     // pull cameraSettings from the UiState
+                    // Camera settings
+                    it.getMapboxMap().setCamera(
+                        cameraOptions {
+                            // Henter kamerakoordinater fra UiState
+                            val lng = cameraOptionsUiState.currentScreenLongitude
+                            val lat = cameraOptionsUiState.currentScreenLatitude
+
+                            Log.d("Update Camera Coordinates", "Lng: $lng, Lat: $lat")
+
+                            center(Point.fromLngLat(lng, lat))
+                        }
+                    )
                 }
             )
         }
@@ -115,7 +104,9 @@ fun ShowMap(
 }
 
 fun onCameraChange(mapboxMap: MapboxMap, viewModel: APIViewModel) {
-
+    val screenCenter = mapboxMap.cameraState.center
+    viewModel.updateCameraPosition(screenCenter)
+    Log.d("onCameraChange", screenCenter.toString())
 }
 
 
@@ -153,9 +144,9 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
         // Camera settings
         mapboxMap.setCamera(
             cameraOptions {
-                zoom(13.0)
+                zoom(cameraOptionsUiState.currentScreenZoom)
                 // Koordinatene til Glittertind
-                center(Point.fromLngLat(8.557801680731075,61.651356077904666))
+                center(Point.fromLngLat(cameraOptionsUiState.currentScreenLongitude,cameraOptionsUiState.currentScreenLatitude))
             }
         )
     }
@@ -196,7 +187,7 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, viewModel: APIViewModel): Boo
             if (feature.id() != null) {
                 val name = feature.getStringProperty("name")
                 val point = feature.geometry() as Point
-                val elevation = feature.getNumberProperty("elevation_m") as Int
+                val elevation = feature.getStringProperty("elevation_m").toInt()
 
                 // Saving a clicked mountain to the UiState through the view model
                 viewModel.updateMountain(MapUiState.Mountain(name, point, elevation))

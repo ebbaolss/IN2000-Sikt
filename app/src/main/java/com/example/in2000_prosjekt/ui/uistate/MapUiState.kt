@@ -10,7 +10,6 @@ sealed interface MapUiState {
         val currentScreenLatitude: Double = 61.651356077904666,
         val currentScreenLongitude: Double = 8.557801680731075,
 
-
         //val currentScreenPitch: Double, // Relevant when going into 3D view
         //val currentScreenBearing: Double // Compass direction
     )
