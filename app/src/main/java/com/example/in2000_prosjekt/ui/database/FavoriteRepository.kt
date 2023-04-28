@@ -1,6 +1,8 @@
 package com.example.in2000_prosjekt.ui.database
 
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.in2000_prosjekt.ui.LocationInfo
@@ -42,41 +44,20 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
             return@async favoriteDao.findFavorite(longtitude, latitude)
         }
 
-     suspend fun getLocationList() : MutableList<LocationInfo> {
+    @Composable
+    fun getLocationList() : MutableList<LocationInfo> {
+        val coroutineScope = rememberCoroutineScope()
         val favorites = allFavorites.value!!
 
         val forecastList : MutableList<LocationInfo> = mutableListOf()
-
-        //MANUELT:
-         /*
-        favorites.forEach{ favorite ->
-            val forecast = dataSource.fetchLocationForecast(favorite.latitude.toString(), favorite.longtitude.toString())
-
-            val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
-            val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
-            val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.get("precipitation_amount")
-            val cloud_high = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_high
-            val cloud_mid = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_medium
-            val cloud_low = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_low
-
-            val locationF = LocationInfo(
-                temperatureL = (temp ?: -273.5) as Float,
-                fog_area_fractionL = airfog!!,
-                rainL = rain!!,
-                cloud_area_fraction_high = cloud_high!!,
-                cloud_area_fraction_medium = cloud_mid!!,
-                cloud_area_fraction_low = cloud_low!!,
-            )
-
-            forecastList.add(locationF)
-        }
-          */
 
         //Alternativt:
 
         favorites.forEach{
             favorite ->
-            val forecast = weatherRepository.getLocation(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "")
+            coroutineScope.launch {
+                val forecast = weatherRepository.getLocation(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "")
+            }
         }
 
 
@@ -84,17 +65,21 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         return forecastList
     }
 
-    suspend fun getNowList() : MutableList<NowCastInfo> {
-        val favorites = allFavorites.value!!
+    @Composable
+     fun getNowList() : MutableList<NowCastInfo> {
+         val coroutineScope = rememberCoroutineScope()
+
+         val favorites = allFavorites.value!!
 
         val forecastList : MutableList<NowCastInfo> = mutableListOf()
-
-
 
         //Hvis vi får fikse suspend:
         favorites.forEach{
                 favorite ->
-            val forecast = weatherRepository.getNowCast(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "")
+            coroutineScope.launch {
+                val forecast = weatherRepository.getNowCast(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "")
+
+            }
         }
 
         return forecastList

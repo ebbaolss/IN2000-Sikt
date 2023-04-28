@@ -64,20 +64,12 @@ fun FavoriteScreen(viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, on
         }
         is AppUiState.Success -> {
             FavoriteScreenSuccess(
-                /*
-                weatherinfo = (appUiState as AppUiState.Success).locationF,
-                nowcastinfo = (appUiState as AppUiState.Success).nowCastF,
-                sunriseinfo = (appUiState as AppUiState.Success).sunriseF,
-                alertinfo = (appUiState as AppUiState.Success).alertListF,
-
-                 */
-                //frostinfo = (appUiState as AppUiState.Success).frostF,
                 onNavigateToMap,
                 onNavigateToFav,
                 onNavigateToSettings,
                 onNavigateToRules,
                 viewModel
-            ) //endre dette til en bedre måte etterhvert?
+            )
         }
     }
 }
@@ -93,7 +85,7 @@ fun FavoriteScreenSuccess(
         LazyColumn(
             contentPadding = PaddingValues(20.dp)
         ) {
-            //Sikt_Favorite_card(weatherinfo = weatherinfo, nowcastinfo = nowcastinfo )
+            Sikt_Favorite_card(viewModel)
         }
     }
 }

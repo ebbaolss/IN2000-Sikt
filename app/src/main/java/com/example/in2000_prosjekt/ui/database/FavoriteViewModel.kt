@@ -2,6 +2,7 @@ package com.example.in2000_prosjekt.ui.database
 
 
 import android.app.Application
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,11 +45,13 @@ class FavoriteViewModel(application: Application) : ViewModel() {
         repository.deleteFavorite(longtitude, latitude)
     }
 
-     suspend fun getLocationList() : MutableList<LocationInfo> {
+    @Composable
+    fun getLocationList() : MutableList<LocationInfo> {
         return repository.getLocationList()
-     }
+    }
 
-    suspend fun getNowInfo() : MutableList<NowCastInfo> {
+    @Composable
+     fun getNowInfo() : MutableList<NowCastInfo> {
         return repository.getNowList()
     }
 }
