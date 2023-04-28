@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.in2000_prosjekt.ui.LocationInfo
+import com.example.in2000_prosjekt.ui.NowCastInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -36,8 +37,12 @@ class FavoriteViewModel(application: Application) : ViewModel() {
         repository.deleteFavorite(longtitude, latitude)
     }
 
-    suspend fun getAllInfo() : MutableList<LocationInfo> {
-        return repository.getAllInfo()
+     fun getLocationList() : MutableList<LocationInfo> {
+        return repository.getLocationList()
+    }
+
+    fun getNowInfo() : MutableList<NowCastInfo> {
+        return repository.getNowList()
     }
 }
 
