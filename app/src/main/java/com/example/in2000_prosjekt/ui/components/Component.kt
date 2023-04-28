@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.Dp
 import com.example.in2000_prosjekt.ui.data.DataSource
 import com.example.in2000_prosjekt.ui.data.DataSourceSunrise
 import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, rules : Boolean, settings : Boolean) {
@@ -278,23 +279,32 @@ fun Sikt_skyillustasjon() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo> ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-        colors = CardDefaults.cardColors(Sikt_lyseblå)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+fun LazyListScope.Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel ) {
+    var favorites = viewModel.allFavorites.value!!
+    items(favorites.size) {
+        favorites.forEach { favorite ->
 
-            //Sikt_Header("fjelltopp", alertType : String, alertLevel : String)
-            Sikt_MountainHight("1884")
+            val latitude = favorite.latitude
+            val longtitude = favorite.longtitude
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                colors = CardDefaults.cardColors(Sikt_lyseblå)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    //Sikt_Header("fjelltopp", alertType : String, alertLevel : String)
+                    Sikt_MountainHight("1884")
+                }
+            }
         }
     }
 }
