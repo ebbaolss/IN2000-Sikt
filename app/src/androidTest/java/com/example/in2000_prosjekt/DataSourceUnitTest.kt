@@ -15,32 +15,29 @@ import junit.framework.TestCase.*
 class DataSourceUnitTest {
 
 
-
-    val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
-
-
+// Unit test Nr 10: Test av frost apoet
     //Arrange
-    private val Frostapirespons :  DataSourceFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
+    private val frostcoordinatesgenerator :  DataSourceFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun coordinatesToPolygonConverterTest() = runTest(UnconfinedTestDispatcher()) {
         //Act
         launch {
-            val frostapirespons = Frostapirespons.coordinatesToPolygonConverter(60.0,10.0)
+            val frostapirespons = frostcoordinatesgenerator.coordinatesToPolygonConverter(60.0,10.0)
             //Assert
             assertEquals("POLYGON((10.0 60.0 , 10.0 60.1 , 10.1 60.0 , 10.1 60.1 ))", frostapirespons )
         }
     }
 
+    // Unit test Nr 11: Test av LocationNow apiet
     //Arrange
-    private val Locationapirespons = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") // Forecast og nowcast bruker samme api
+    private val locationapirespons = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") // Forecast og nowcast bruker samme api
     @Test
     fun testfetchLocationForecast() = runBlocking {
 
         //Act
-        val locationapirespons = Locationapirespons.fetchLocationForecast("70", "12")
+        val locationapirespons = locationapirespons.fetchLocationForecast("70", "12")
 
         //Assert
         assertEquals("Point", locationapirespons.geometry?.type)
@@ -50,7 +47,7 @@ class DataSourceUnitTest {
     }
 
 
-
+    // Unit test Nr 12: Test av NowCast apiet
     //Arrange
     private val nowcastapirespons :  DataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     @Test
@@ -67,6 +64,7 @@ class DataSourceUnitTest {
         assertNotNull(nowcastapirespons.properties?.timeseries?.size)
     }
 
+    // Unit test Nr 13: Test av Met alert apoet
     //Arrange
     private val alertapirespons :  DataSourceAlerts = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     @Test
@@ -84,6 +82,7 @@ class DataSourceUnitTest {
     }
 
 
+    // Unit test Nr 14: Test av sunrise apiet
     //Arrange
     private val sunriserespons :  DataSourceSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     @Test
@@ -101,6 +100,27 @@ class DataSourceUnitTest {
         assertNotNull(sunriseapirespons.properties?.sunrise)
         assertNotNull(sunriseapirespons.properties?.sunset)
     }
+
+
+    // Unit test Nr 14: Test av frost apoet
+    //Arrange
+    private val frostrespons :   DataSourceFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
+    @Test
+    fun testfetchfrost() = runBlocking {
+
+        //Act
+        val frosteapirespons = frostrespons.fetchFrostWeatherStation("58.1447".toDouble(), "7.9982".toDouble(), )
+
+        //Assert
+        assertEquals("SourceResponse", frosteapirespons.type)
+        assertEquals("https://frost.met.no/schema", frosteapirespons.context)
+
+
+        assertNotNull(frosteapirespons.data)
+        assertNotNull(frosteapirespons.createdAt)
+
+    }
+
 
 
 
