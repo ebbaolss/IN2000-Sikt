@@ -24,14 +24,8 @@ class APIViewModel : ViewModel() {
     private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
-    private val _cameraOptionsUiState: MutableStateFlow<MapUiState.MapboxCameraOptions> = MutableStateFlow(MapUiState.MapboxCameraOptions())
-    val cameraOptionsUiState: StateFlow<MapUiState.MapboxCameraOptions> = _cameraOptionsUiState.asStateFlow()
-
-    private val _mountainUiState = MutableStateFlow(MapUiState.Mountain())
-    val mountainUiState: StateFlow<MapUiState.Mountain> = _mountainUiState.asStateFlow()
-
-    private val currentLatitude = cameraOptionsUiState.value.currentScreenLatitude
-    private val currentLongitude = cameraOptionsUiState.value.currentScreenLongitude
+    private val currentLatitude = 61.651356077904666
+    private val currentLongitude = 8.557801680731075
     private val altitude: String = "600"
 
     init { //etterhvert så endrer man  fra å ha init til å kalle på getAll fra en annen fil
@@ -79,18 +73,6 @@ class APIViewModel : ViewModel() {
                     AppUiState.Error
                 }
             }
-        }
-    }
-
-    fun updateMountain(mountain: MapUiState.Mountain) {
-        _mountainUiState.update {
-            it.copy(mountain.name, mountain.point)
-        }
-    }
-
-    fun updateCameraPosition(point: Point) {
-        _cameraOptionsUiState.update {
-            it.copy(currentScreenLatitude = point.latitude(), currentScreenLongitude = point.longitude())
         }
     }
 }

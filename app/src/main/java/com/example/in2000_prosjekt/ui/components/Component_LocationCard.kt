@@ -12,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,13 +21,16 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_sort
+import com.example.in2000_prosjekt.ui.uistate.MapUiState
+import com.mapbox.geojson.Point
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_LocationCard(){
+fun Sikt_LocationCard(mountain: MapUiState.Mountain){
     Card (
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
         colors = CardDefaults.cardColors(Sikt_lyseblå)
     ) {
         Column(
@@ -50,10 +54,10 @@ fun Sikt_LocationCard(){
                             "",
                             tint = Sikt_mørkeblå
                         ) //fyll symbol, bytter senere
-                        Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
+                        Text(text = "${mountain.name}", fontWeight = FontWeight.Bold, fontSize = 30.sp)
                         Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
                     }
-                    Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
+                    Text(text = "${mountain.elevation} m.o.h.", fontWeight = FontWeight.Bold)
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -215,7 +219,7 @@ fun ComponentTest() {
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(Sikt_hvit)
     ) {
-        Sikt_LocationCard()
+        Sikt_LocationCard(MapUiState.Mountain("Galdhøpiggen", Point.fromLngLat(50.0,10.0), 2469))
         //Sikt_LocationCard_NextDays()
         //Sikt_LoctationCard_Topper_i_naerheten()
         //Sikt_LocationCard_Hour()

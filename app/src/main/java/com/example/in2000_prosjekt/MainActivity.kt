@@ -5,14 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
@@ -21,9 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.database.DatabaseScreenTest
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModelFactory
+import com.example.in2000_prosjekt.ui.database.*
 import com.example.in2000_prosjekt.ui.screens.*
 
 class MainActivity : ComponentActivity() {
@@ -41,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     val owner = LocalViewModelStoreOwner.current
 
                     owner?.let {
-                        val viewModel: FavoriteViewModel = viewModel(
+                        val favoriteViewModel: FavoriteViewModel = viewModel(
                             it,
                             "FavoriteViewModel",
                             FavoriteViewModelFactory(
@@ -50,7 +46,15 @@ class MainActivity : ComponentActivity() {
                             )
                         )
 
-                        MultipleScreenApp(viewModel)
+                        val mapViewModel: MapViewModel = viewModel(
+                            it,
+                            "MapViewModel",
+                            MapViewModelFactory(
+                                LocalContext.current.applicationContext as Application
+                            )
+                        )
+
+                        MultipleScreenApp(favoriteViewModel, mapViewModel)
                     }
                 }
             }
@@ -83,23 +87,21 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MultipleScreenApp(viewModel: FavoriteViewModel) {
+fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapViewModel: MapViewModel) {
     val navController = rememberNavController()
 
     var map = { navController.navigate("Map") }
     var favorite = { navController.navigate("Favorite") }
     var rules = { navController.navigate("Rules") }
-
     var settings = {navController.navigate("Settings")}
     
     NavHost(modifier = Modifier.fillMaxSize(), navController = navController, startDestination = "Start") {
-
         composable("Start") { StartPage( onNavigateToNext = { navController.navigate("Map") })  }
-        composable("Map") { ShowMap(map, favorite, settings, rules, APIViewModel())  }
+        composable("Map") { ShowMap(map, favorite, settings, rules, mapViewModel)  }
         composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules) }
         composable("Rules") { RulesScreen(map, favorite, settings, rules) }
         composable("Settings") { SettingsScreen(map, favorite, settings, rules) }
-        composable("Database") { DatabaseScreenTest(viewModel) }
+        composable("Database") { DatabaseScreenTest(favoriteViewModel) }
     }
 }
 

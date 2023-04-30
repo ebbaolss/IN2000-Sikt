@@ -6,15 +6,15 @@ import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
+import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
+import com.example.in2000_prosjekt.ui.database.MapViewModel
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
@@ -41,10 +41,11 @@ fun ShowMap(
     onNavigateToFav: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToRules: () -> Unit,
-    viewModel: APIViewModel
+    mapViewModel: MapViewModel
 ) {
-    val cameraOptionsUiState by viewModel.cameraOptionsUiState.collectAsState()
-    val mountainUiState by viewModel.mountainUiState.collectAsState()
+    val cameraOptionsUiState by mapViewModel.cameraOptionsUiState.collectAsState()
+    val mountainUiState by mapViewModel.mountainUiState.collectAsState()
+    var locationCardState by remember { mutableStateOf(false) }
 
     Scaffold(
         bottomBar = {
@@ -71,11 +72,13 @@ fun ShowMap(
                     val mapboxMap = map.getMapboxMap()
 
                     mapboxMap.addOnMapClickListener(onMapClickListener = OnMapClickListener { point ->
-                        onMapClick(point, mapboxMap, viewModel)
+                        locationCardState = onMapClick(point, mapboxMap, mapViewModel)
+                        Log.d("LocationCardState", "$locationCardState")
+                        locationCardState
                     })
-                    mapboxMap.addOnCameraChangeListener(onCameraChangeListener = OnCameraChangeListener { cameraData ->
+                    mapboxMap.addOnCameraChangeListener(onCameraChangeListener = OnCameraChangeListener {
                         Log.d("CameraChangeListener", "invoked")
-                        onCameraChange(mapboxMap, viewModel)
+                        onCameraChange(mapboxMap, mapViewModel)
                     })
 
                     map
@@ -88,6 +91,7 @@ fun ShowMap(
                             // Henter kamerakoordinater fra UiState
                             val lng = cameraOptionsUiState.currentScreenLongitude
                             val lat = cameraOptionsUiState.currentScreenLatitude
+                            val zoom = cameraOptionsUiState.currentScreenZoom
 
                             Log.d("Update Camera Coordinates", "Lng: $lng, Lat: $lat")
 
@@ -96,6 +100,10 @@ fun ShowMap(
                     )
                 }
             )
+
+            if (locationCardState){
+                Sikt_LocationCard(mountainUiState)
+            }
         }
 
         // Menu
@@ -103,10 +111,12 @@ fun ShowMap(
     }
 }
 
-fun onCameraChange(mapboxMap: MapboxMap, viewModel: APIViewModel) {
+fun onCameraChange(mapboxMap: MapboxMap, viewModel: MapViewModel) {
     val screenCenter = mapboxMap.cameraState.center
+    val zoom = mapboxMap.cameraState.zoom
     viewModel.updateCameraPosition(screenCenter)
-    Log.d("onCameraChange", screenCenter.toString())
+    viewModel.updateCameraZoomState(zoom)
+    Log.d("onCameraChange", "Coordinates $screenCenter, Zoom level: $zoom")
 }
 
 
@@ -137,6 +147,8 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
                             literal("mountain")
                         }
                     )
+
+                    circleOpacity(0.0)
                 }
             }
         )
@@ -168,7 +180,7 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
 
 
 // Definerer hva som skal skje når brukeren trykker på kartet
-fun onMapClick(point: Point, mapboxMap: MapboxMap, viewModel: APIViewModel): Boolean {
+fun onMapClick(point: Point, mapboxMap: MapboxMap, viewModel: MapViewModel): Boolean {
     Log.d("Coordinate", point.toString())
     mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(ScreenBox(
@@ -186,8 +198,8 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, viewModel: APIViewModel): Boo
         onFeatureClicked(it) { feature ->
             if (feature.id() != null) {
                 val name = feature.getStringProperty("name")
-                val point = feature.geometry() as Point
                 val elevation = feature.getStringProperty("elevation_m").toInt()
+                val point = feature.geometry() as Point
 
                 // Saving a clicked mountain to the UiState through the view model
                 viewModel.updateMountain(MapUiState.Mountain(name, point, elevation))
