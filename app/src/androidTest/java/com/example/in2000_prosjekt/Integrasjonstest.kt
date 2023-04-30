@@ -103,3 +103,13 @@ class Integrasjonstest {
 
 
 }
+/*
+Forslag til integrasjonstest: Navbar. Dette SKAL implementeres
+ */
+
+
+
+/*
+Forslag til integrasjonstest: Å lage en skjerm med et apikall, altså teste samsipllet mellom en composable og alle apikallene (integrasjonen av apikall funksjonene og et Card som sikt_location_card)
+ */
+
