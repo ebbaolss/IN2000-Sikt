@@ -38,6 +38,7 @@ class MapViewModel : ViewModel() {
             val mapSearchP = mapSearchDeferred.await()
 
             _appUistate.value = MapInfo(mapSearchP.optionMountains, _appUistate.value.recentSearch)
+            println("oppdatert") //kommer aldri hit
         }
     }
     fun getDataSearchCoordinates(mapboxId: String) {
@@ -49,7 +50,7 @@ class MapViewModel : ViewModel() {
 
         viewModelScope.launch() {
             val mapSearchCoordinatesDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getMapCoordinates(path2) //lage egen ny
+                repository.getMapCoordinates(path2)
             }
 
             val mapSearchCoordinatesP = mapSearchCoordinatesDeferred.await()
@@ -64,11 +65,11 @@ class MapViewModel : ViewModel() {
         }
     }
 
-    fun updateRecentSearch(input : String) {
+    fun updateRecentSearch(input : String) : Boolean {
 
-        var updatetList  = appUiState.value.recentSearch
+        val updatetList = appUiState.value.recentSearch
 
-        if (input in updatetList) return
+        if (input in updatetList) return true
         if (updatetList.isEmpty()) {
             updatetList.add(input)
         } else {
@@ -77,13 +78,15 @@ class MapViewModel : ViewModel() {
                 updatetList[i] = updatetList[i - 1]
             }
             updatetList[0] = input
-            updatetList = updatetList.subList(0, 2)
+            if (updatetList.size > 3) {
+                updatetList.removeAt(updatetList.lastIndex)
+            }
         }
-
         _appUistate.update {
             it.copy(
                 recentSearch = updatetList
             )
         }
+        return false
     }
 }

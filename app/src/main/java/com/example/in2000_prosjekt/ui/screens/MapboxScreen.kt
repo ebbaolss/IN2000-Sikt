@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
 import com.example.in2000_prosjekt.ui.MapViewModel
+import java.lang.Thread.sleep
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter") //burde unngå disse så langt det lar seg gjøre, men her måtte vi for å slippe padding
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,6 +100,7 @@ fun SearchBar(viewModel: MapViewModel){
     var isTextFieldFocused by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    var showRecent = true
 
     LazyColumn(
         modifier = Modifier
@@ -117,13 +119,13 @@ fun SearchBar(viewModel: MapViewModel){
                     .fillMaxWidth()
                     .background(Color.White)
                     .onFocusChanged {
-                        println("focus changes\n")
                         isTextFieldFocused = it.isFocused
                     }
                     .onKeyEvent {
                         if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER){
                             if (input.length > 1) {
                                 suggestionSearch(viewModel, input)
+                                showRecent = false
                             }
                             input = ""
                         }
@@ -154,6 +156,7 @@ fun SearchBar(viewModel: MapViewModel){
 
                             if (input.length > 1) {
                                 suggestionSearch(viewModel, input)
+                                showRecent = false
                                 focusManager.clearFocus()
                             }
 
@@ -171,9 +174,62 @@ fun SearchBar(viewModel: MapViewModel){
                 }
             )
         }
-        if (isTextFieldFocused) {
+        if (isTextFieldFocused && showRecent) {
 
-            items(mapUiState.value.optionMountains.keys.toList()) { mountain -> //endre sånn at den også får opp recent search
+            items(mapUiState.value.recentSearch) { mountain ->
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .height(40.dp)
+                        .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
+                        .clickable( enabled = true, onClick = {
+
+                            val searchedBefore = viewModel.updateRecentSearch(mountain)
+                            if (searchedBefore) {
+                                suggestionSearch(viewModel, mountain) //oppdaterer lista så vi kan hente mapbox_id
+                                //få koden til å ikke gå videre før suggestionSearch er ferdig
+                                println(mapUiState.value.optionMountains[mountain]) //null
+                            }
+
+                            println("sjekker noe")
+
+                            retrieveSearch(viewModel, mapUiState.value.optionMountains[mountain]!!) //mapbox_id
+                            //få koden til å ikke gå videre før retriveSearch er ferdig
+                            println(mapUiStateCoordinates.value.latitude)
+                            println(mapUiStateCoordinates.value.longitude)
+
+                            //bruke koordinatene over til å få opp card
+
+                            focusManager.clearFocus()
+                            showRecent = true
+
+                            println("recent search: ${mapUiState.value.recentSearch}")
+                        }),
+
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = mountain,
+                        fontSize = 15.sp,
+                        modifier = Modifier
+                            .weight(1f),
+                        textAlign = TextAlign.Start,
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(end = 15.dp)
+                    )
+                }
+            }
+        }
+        if (isTextFieldFocused && !showRecent) {
+
+            items(mapUiState.value.optionMountains.keys.toList()) { mountain ->
 
                 Row(
                     modifier = Modifier
@@ -190,11 +246,10 @@ fun SearchBar(viewModel: MapViewModel){
                             println(mapUiStateCoordinates.value.latitude)
                             println(mapUiStateCoordinates.value.longitude)
 
+                            focusManager.clearFocus()
                             //bruke koordinatene over til å få opp card
 
-                            focusManager.clearFocus()
-
-                            println("recent search: ${mapUiState.value.recentSearch}")
+                            showRecent = true
                         }),
 
                     verticalAlignment = Alignment.CenterVertically
@@ -219,8 +274,6 @@ fun SearchBar(viewModel: MapViewModel){
     }
 }
 fun suggestionSearch(apiViewModel: MapViewModel, searchString : String) {
-    //da kaller vi på apiet med den stringen
-    //oppdaterer lista i uistate, så nå har vi liste med bare mountain poi
     apiViewModel.getDataSearch(searchString)
 }
 fun retrieveSearch(apiViewModel: MapViewModel, mapboxId: String) {
