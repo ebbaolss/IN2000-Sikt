@@ -37,17 +37,18 @@ class MapViewModel : ViewModel() {
             }
             val mapSearchP = mapSearchDeferred.await()
 
-            _appUistate.update { //kan man bare oppdatere denne ene og ikke også recent?
-                it.copy(
-                    optionMountains = mapSearchP.optionMountains //hvor ligger name og mapbox_id? legges det til egt?
-                )
-            }
+//            _appUistate.update { //kan man bare oppdatere denne ene og ikke også recent?
+//                it.copy(
+//                    optionMountains = mapSearchP.optionMountains //hvor ligger name og mapbox_id? legges det til egt?
+//                )
+//            }
+            _appUistate.value = MapInfo(mapSearchP.optionMountains, _appUistate.value.recentSearch)
         }
     }
     fun getDataSearchCoordinates(mapboxId: String) {
 
         //ha denne her? må nesten det eller?
-        val path2 = "https://api.mapbox.com/search/searchbox/v1/retrieve/$mapboxId==?" +
+        val path2 = "https://api.mapbox.com/search/searchbox/v1/retrieve/$mapboxId?" +
                 "session_token=[GENERATED-UUID]&" +
                 "access_token=pk.eyJ1IjoiZWxpc2FiZXRoYiIsImEiOiJjbGY2c3N3dDAxYWxsM3ludHY5em5wMnJxIn0.YVrKFoHYA1sCJhgBCbhudw"
 
@@ -64,48 +65,30 @@ class MapViewModel : ViewModel() {
                     longitude = mapSearchCoordinatesP.longitude
                 )
             }
+            println("update ferdig")
         }
     }
 
     fun updateRecentSearch(input : String) {
-        //MANGLER:
-        //å fikse sånn at det bare er 3 elementer i lista max, og at sist søkt ligger øverst
 
-        val updatetList : MutableList<String> = mutableListOf()
+        var updatetList  = appUiState.value.recentSearch
 
-        updatetList.add(input)
+        if (input in updatetList) return
+        if (updatetList.isEmpty()) {
+            updatetList.add(input)
+        } else {
+            updatetList.add(input)
+            for (i in updatetList.size - 1 downTo 1 ) {
+                updatetList[i] = updatetList[i - 1]
+            }
+            updatetList[0] = input
+            updatetList = updatetList.subList(0, 2)
+        }
 
         _appUistate.update {
             it.copy(
                 recentSearch = updatetList
             )
         }
-        println("Recent search: ${appUiState.value.recentSearch}")
     }
 }
-
-//fun optionList(result : String, listRecent : List<String>) : List<String> {
-//
-//    //lat som jeg har en liste med alle fjelltoppene:
-////
-////    if (!optionMountains.contains(result)) { //får man  ikke nullpointerexception?
-////        optionMountains[2] = optionMountains[1] //?: ""
-////        optionMountains[1] = optionMountains[0]
-////        optionMountains[0] = result
-////    }
-//
-//    var counter = 1
-//    if (listRecent.isEmpty()) {
-//        listRecent.add(result)
-//    }
-//
-//    listRecent.forEach{
-//        listRecent[counter] = it
-//        counter++
-//    }
-//    listRecent[0] = result
-//    listRecent = listRecent.subList(0, 2)
-//
-//    return listRecent
-//
-//}

@@ -192,7 +192,7 @@ fun SearchBar(viewModel: MapViewModel){
 
                             focusManager.clearFocus()
 
-                            println(mapUiState.value.recentSearch)
+                            println("recent search: ${mapUiState.value.recentSearch}")
                         }),
 
                     verticalAlignment = Alignment.CenterVertically
@@ -223,33 +223,14 @@ fun suggestionSearch(apiViewModel: MapViewModel, searchString : String) {
 }
 fun retrieveSearch(apiViewModel: MapViewModel, mapboxId: String) {
 
-    //her skal man kalle på det nadre apiet med mapbox_id
+    //her skal man kalle på det andre apiet med mapbox_id
     //dette må lages, men så og si bare å kopiere det man gjorde på getDataSearch
     //da får man oppdatert koordinater, lat og long
+    println("retriveSearch")
     apiViewModel.getDataSearchCoordinates(mapboxId)
+    println("ferdig med getDataSearchCoordinates")
 
 }
-
-
-//@Composable
-//fun SearchBarCheckSuccess(apiViewModel: APIViewModel = viewModel()) {
-//    val appUiState by apiViewModel.appUiState.collectAsState()
-//
-//    when(appUiState){
-//        is AppUiState.LoadingMapSearch -> Text (text = "loading...", fontSize = 30.sp)
-//        is AppUiState.ErrorMapSearch -> {
-//            Text (text = "loading...", fontSize = 30.sp)
-//        }
-//        is AppUiState.SuccessMapSearch -> {
-//            retrieveSearch(
-//                mapSearchInfo = (appUiState as AppUiState.SuccessMapSearch).mapSearchF,
-//            )
-//        }
-//        else -> {
-//            AppUiState.ErrorMapSearch
-//        }
-//    }
-//}
 
 
 

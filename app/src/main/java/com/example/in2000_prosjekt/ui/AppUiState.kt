@@ -35,7 +35,7 @@ data class FrostInfo(
 data class MapInfo(
     //hashmap med forslag
     val optionMountains : HashMap<String, String> = hashMapOf(),
-    val recentSearch : List<String> = emptyList(),
+    val recentSearch : MutableList<String> = mutableListOf()
 )
 data class MapCoordinatesInfo(
     val latitude : Double = 0.0, //double??
