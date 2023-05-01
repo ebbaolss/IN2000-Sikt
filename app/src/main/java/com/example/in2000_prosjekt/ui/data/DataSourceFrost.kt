@@ -33,20 +33,6 @@ class DataSourceFrost (val basePath: String) {
         }
 
 
-
-        HttpResponseValidator {
-            handleResponseExceptionWithRequest { exception, request ->
-                val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
-                val exceptionResponse = clientException.response
-                if (exceptionResponse.status == HttpStatusCode.NotFound) {
-                    val exceptionResponseText = exceptionResponse.bodyAsText()
-                    throw ClientRequestException(exceptionResponse, exceptionResponseText)
-                }
-            }
-        }
-
-
-
     }
 
     suspend fun authURL(URL: String) : HttpResponse {

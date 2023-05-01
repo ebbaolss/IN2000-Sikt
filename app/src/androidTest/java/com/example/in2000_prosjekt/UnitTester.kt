@@ -1,18 +1,27 @@
 package com.example.in2000_prosjekt
 
-
-/*
+import android.content.res.Configuration
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.unit.dp
 import androidx.core.view.get
 import androidx.core.view.isVisible
+import androidx.navigation.testing.TestNavHostController
 //import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.platform.ThreadChecker
 import com.example.in2000_prosjekt.ui.APIViewModel
+import com.example.in2000_prosjekt.ui.LocationInfo
+import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.SunriseInfo
+import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
+import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
 import com.example.in2000_prosjekt.ui.data.Frost_API_Respons
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import org.junit.Rule
@@ -36,27 +45,50 @@ import io.ktor.utils.io.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 
+import io.ktor.client.engine.mock.*
+import io.ktor.http.*
+import io.ktor.utils.io.*
+import kotlinx.coroutines.*
+import org.junit.*
+import kotlin.test.Test
 
 //TEst 1: Test for funksjon: fun StartPage(onNavigateToNext: () -> Unit) // Test av om bildet dukker opp på skjermen StartPage
 
-class TestBildeStartpage {
+class testScreenStartpage {
     @get:Rule
-    val rule = createComposeRule()}
+
+    val rule = createComposeRule()
+
     lateinit var navController: TestNavHostController
 
     @Test
     fun openApp_showsStartPagePicture() {
+
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext()) // denne setter navControlleren generert i testene lik navControlleren lagd Main Activity
         var startPage = { navController.navigate("Start") }
 
         rule.setContent {
             StartPage(startPage)
+            @Composable
+            fun getScreenConfiguration() : Configuration {
+                val configuration = LocalConfiguration.current
 
-            //StartPage (onNavigateToNext = navController.setCurrentDestination({   navController.} "Start Page"))
+                return  configuration }
+            val configuration = LocalConfiguration.current
+            val screenHeight = configuration.screenHeightDp.dp
+            val screenWidth = configuration.screenWidthDp.dp
+
         }
-        //rule.onNodeWithText().assertIsDisplayed()
-        rule.onNodeWithContentDescription("Andy Rubin")
-            .assertIsDisplayed() // Dette er en test som verifiserer det vi har skrevet i contentDescription til bilde på skjermen
+
+
+
+        rule.onAllNodes(hasNoClickAction()).onLast()
+         rule.onAllNodes(hasNoClickAction()).onLast().assertHeightIsAtLeast(753.dp)//  Test på størrelsen til bilde som er satt til fillMaxsize, som svarer til høyden til emulatoren vår, hentet fra dokumentasjonen til emulatoren: Her så testes det om bilde fyller skjermens høyde, som skal være 730.dp høy
+         rule.onAllNodes(hasNoClickAction()).onLast().assertWidthIsAtLeast(392.dp)//  Test på størrelsen til bilde som er satt til fillMaxsize,, som svarer til bredden til emulatoren vår, hentet fra dokumentasjonen til emulatoren: Her så testes det om bilde fyller skjermens bredde, som skal være 393.dp høy
+
+
+
+        //rule.wait (timeoutMillis = 1_000, condition= { true }) {   }
     }
 }
 
@@ -64,107 +96,30 @@ class TestBildeStartpage {
 
 
 
-// test 2: Test for funksjon: fun LandingPage(onNavigateToNext: () -> Unit)  // Denne tester om landing pagen har en tekstboble som heter "Planlegg tur"
-    class TestScreenLandingPageText {
-    @get:Rule
-        val rule = createComposeRule()
-        lateinit var navController: TestNavHostController
 
-        @Test
-        fun open_LandingPageUIShowText () {
-            val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-            var landingPage = { navController.navigate("LandingPage") }
-
-
-            rule.setContent { // test at De går ann å lage LandingPage Screen på en litt annen måte: lørdag 17.33 den 15.04                 LandingPage( onNavigateToNext = {nada })
-
-                //LandingPage( landingPage)
-                LandingPage( onNavigateToNext = {/* Toooodoooo */ })
-            }
-
-            rule.onNodeWithText("Planlegg tur").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Planlegg tur"
-            rule.onNodeWithText("Få informasjon").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Få informasjon"
-
-            rule.onNodeWithText("Lagre favoritter").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Lagre favoritter"
-
-            rule.onNodeWithText("Kom igang").assertIsDisplayed()// Dette er en test som verifiserer det dannes en knapp med teksten skrevet:"Kom igang"
-            rule.onNodeWithText("Hopp over").assertIsDisplayed()// Dette er en test som verifiserer det dannes en knapp med teksten skrevet:"Hopp over"
-
-
-
-            //rule.onNodeWithText("Planlegg tur").assertHasClickAction()// Dette er en test som verifiserer det dannes en knapp med teksten skrevet:"Planlegg tur"
-
-            // rule.onNodeWithText("Planlegg tur").performKeyPress({ onNavigateToNext() })// Dette er en test som verifiserer det dannes en knapp med teksten skrevet:"Planlegg tur"
-           // rule.onNode(hasText("Hopp over") and hasClickAction()).performClick(). // Dette er en test som verifiserer det dannes en knapp med teksten skrevet:"Planlegg tur"
-
-        }
-
-
-
-    }
-
-
-
-/*
-// Test 2 Verjson 2: av TestScreenLandingPageText Lag skjermen direkte fra main activity: https://stackoverflow.com/questions/74725792/android-compose-app-crashes-during-ui-testing-instrumented-tests
-// test 2: Test for funksjon: fun LandingPage(onNavigateToNext: () -> Unit)  // Denne tester om landing pagen har en tekstboble som heter "Planlegg tur"
-class TestScreenLandingPageText2 {
+// test 2: Test for funksjon: fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
+class testScreenSettingsScreen {
     @get:Rule
     val rule = createComposeRule()
     lateinit var navController: TestNavHostController
 
     @Test
-    fun open_LandingPageUIShowText2 () {
+    fun open_SettingsScreenUIAppears () {
 
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
         var landingPage = { navController.navigate("LandingPage") }
-
         rule.setContent {
             IN2000_ProsjektTheme {
-                LandingPage(landingPage)
+                SettingsScreen(
+                    onNavigateToMap = { /*TODO*/ },
+                    onNavigateToFav = { /*TODO*/ },
+                    onNavigateToSettings = { /*TODO*/},
+                    onNavigateToRules = {     }
+                )
             }
-
         }
 
-        rule.onNodeWithText("Planlegg tur").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Planlegg tur"
-
-        //rule.onNodeWithText("Planlegg tur").assertIsDisplayed()// Dette er en test som verifiserer det dannes en knapp med teksten skrevet:"Planlegg tur"
-
-
-    }
-
-
-
-}
-
- */
-
-
-
-
-// test 3: Test for funksjon: LandingPage(onNavigateToNext: () -> Unit)
-// Test 2 og 3 er veldig like : Test 2: tester bare tekseten: Test 3 skal teste funksjkoneliteten til knappen  "Kom igang" og "Hoppover"
-class TestScreenLandingPageText2 {
-    @get:Rule
-    val rule = createComposeRule()
-    lateinit var navController: TestNavHostController
-
-    @Test
-    fun open_LandingPageUIShowText2 () {
-
-        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-        var landingPage = { navController.navigate("LandingPage") }
-
-        rule.setContent {
-            IN2000_ProsjektTheme {
-                LandingPage(landingPage)
-            }
-
-        }
-        // kanskje bruk run eller start eller lignene for å si assert A knappetrykk, B: onNavitagtetoNext()
-
-        //rule.onNode(hasText("Hopp over") and hasClickAction()).performClick().assertEquals() // Dette er en test som verifiserer det dannes en knapp med teksten skrevet:"Planlegg tur"
-
+        rule.onNodeWithText("Settings").assertIsDisplayed()
 
 
     }
@@ -175,8 +130,8 @@ class TestScreenLandingPageText2 {
 
 
 
-// Test 4: Test for funksjon: RulesScreen(onNavigateToNext: () -> Unit): Denne skal sjekke at alle 10 reglene dukker opp på @composable funksjonen RulesScreen, og at tittelen stemmer
-class TestRules_fjellvettreglene {
+// Test 3: Test for funksjon: RulesScreen(onNavigateToNext: () -> Unit): Denne skal sjekke at alle 10 reglene dukker opp på @composable funksjonen RulesScreen, og at tittelen stemmer
+class testRules_fjellvettreglene {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
     lateinit var navController: TestNavHostController
@@ -190,7 +145,7 @@ class TestRules_fjellvettreglene {
 
         rule.setContent {
             IN2000_ProsjektTheme {
-                RulesScreen(onNavigateToMap =  { /*TODO*/ }, onNavigateToFav = { /*TODO*/ }, onNavigateToRules =  { /*TODO*/ })
+                RulesScreen(onNavigateToMap =  { /*TODO*/ }, onNavigateToFav = { /*TODO*/ }, onNavigateToRules =  { /*TODO*/ },onNavigateToSettings = { /*TODO*/} )
             }
 
         }
@@ -201,7 +156,7 @@ class TestRules_fjellvettreglene {
         rule.onAllNodesWithText("Fjellvettreglene").assertAll(SemanticsMatcher(description= "Fjellvettreglene", matcher= {  true })) // denne tester at det dukker opp en streng kalt "Fjellvettreglene", både i tittelen til Card'et og i bottom Navigation bar
 
         selvefjellvettreglene.forEach {
-            rule.onNodeWithText(it.toString()).assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet fra XML filen (at String arrayet med reglene printes på skjermen)
+            rule.onNodeWithText(it.toString()).assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet alle fjellvettreglene fra XML filen (at String arrayet med reglene printes på skjermen)
         }
 
 
@@ -212,9 +167,9 @@ class TestRules_fjellvettreglene {
 
 
 
-// Test 5: Test for funksjon: AlertScreenCard(onNavigateToNext: () -> Unit): Denne vil ikke funke: For en eller annen grunn så funker ikke Alertscreen ved vanlig kjøring, Spørsmål til Gruppa!
+// Test 4: Test for funksjon: AlertScreenCard(onNavigateToNext: () -> Unit): Denne vil ikke funke: For en eller annen grunn så funker ikke Alertscreen ved vanlig kjøring, Spørsmål til Gruppa!
 //
-class Test_AlertScreenCard {
+class test_AlertScreenCard {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
     lateinit var navController: TestNavHostController
@@ -228,7 +183,7 @@ class Test_AlertScreenCard {
 
         rule.setContent {
             IN2000_ProsjektTheme {
-                AlertScreen(onNavigateToMap = { /*TODO*/ }, onNavigateToFav = { /*TODO*/ },onNavigateToRules = { /*TODO*/ })
+                AlertScreen(onNavigateToMap = { /*TODO*/ }, onNavigateToFav = { /*TODO*/ },onNavigateToRules = { /*TODO*/ },onNavigateToSettings = { /*TODO*/})
             }
         }
         rule.onNodeWithText("Sted: ").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Sted: "
@@ -243,54 +198,28 @@ class Test_AlertScreenCard {
 
 
 
-// Test 6: Test for funksjon: MapBoxScreen((onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit): Denne skal sjekke at Kartet dukker opp, og etterhvert om Pointer funker
-class Test_MapBoxScreen {
+// Test 5: Test for funksjon: MapBoxScreen((onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit): Denne skal sjekke at Kartet dukker opp, og etterhvert om Pointer funker
+class test_MapBoxScreen {
     @get:Rule
     val rule = createComposeRule()
     //lateinit var navController: TestNavHostController
 
 
     @Test
-    fun open_MapScreenUIClickableMap  () {
+    fun open_MapScreenUIMapGenerates  () {
 
       //  val navController = TestNavHostController(ApplicationProvider.getApplicationContext()) // denne setter navControlleren generert i testene lik navControlleren lagd Main Activity
         //val mapscreen = navController.navigate("Map")
 
         rule.setContent {
 
-            ShowMap(onNavigateToMap = { /**/ }, onNavigateToFav = { /*TODO*/ },onNavigateToRules = { /*TODO*/ })
+            ShowMap(onNavigateToMap = { /**/ }, onNavigateToFav = { /*TODO*/ },onNavigateToRules = { /*TODO*/ },onNavigateToSettings = { /*TODO*/})
 
         }
-        rule.onNodeWithText("Fjellvettreglene").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Fjellvettreglene"
+        rule.onNodeWithText("Fjellvett").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Fjellvettreglene"
         rule.onNodeWithText("Favoritter").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Favoritter"
         rule.onNodeWithText("Utforsk").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Beskrivelse"
-
-       // rule.onNode(hasScrollAction()).assertExists() // denne verifiserer aren skjermen som dannes er scrollable,
-        //rule.onNode(hasClickAction()).assertExists()
-        //rule.onNode(hasClickAction())
-
-/*
-        val context =ApplicationProvider.getApplicationContext()
-
-        MapView(ApplicationProvider.getApplicationContext(), mapInitOptions: MapInitOptions = MapInitOptions(ApplicationProvider.getApplicationContext())){
-
-            // innafor denne så skal man kunne bruke mapController. som har masse teste funksjoner
-        }
-        map.isContextClickable
-
-        rule.apply {
-
-            map.apply {
-                getMapboxMap().isValid()
-            }
-        }
-
-
- */
-
-
-
-
+        rule.onNodeWithText("Info").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Beskrivelse"
 
 
         try {
@@ -315,20 +244,53 @@ class Test_MapBoxScreen {
     }
 }
 
+// Test 6: Test for funksjon: MapBoxScreen((onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit): Denne skal sjekke at Kartet dukker opp, og etterhvert om Pointer funker
+class test_MapBoxScreenModalBottomSheetLayout {
+    @get:Rule
+    val rule = createComposeRule()
+    //lateinit var navController: TestNavHostController
 
-/*
+
+    @Test
+    fun open_MapScreenUIMapGenerates  () {
+
+      //  val navController = TestNavHostController(ApplicationProvider.getApplicationContext()) // denne setter navControlleren generert i testene lik navControlleren lagd Main Activity
+        //val mapscreen = navController.navigate("Map")
+
+        rule.setContent {
+
+            ShowMap(onNavigateToMap = { /**/ }, onNavigateToFav = { /*TODO*/ },onNavigateToRules = { /*TODO*/ },onNavigateToSettings = { /*TODO*/})
+
+        }
+        rule.onNodeWithText("Fjellvett").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Fjellvett"
+        rule.onNodeWithText("Favoritter").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Favoritter"
+        rule.onNodeWithText("Utforsk").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Beskrivelse"
+        rule.onNodeWithText("Info").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Beskrivelse"
 
 
-// Test 7: Test for funksjon: Favoritter(onNavigateToNext: () -> Unit): Denne skal sjekke at alle 10 reglene dukker opp på @composable funksjonen RulesScreen
-// disse testes litt anderledes
-class Test_FavoritterCard {
+        rule.onNodeWithText("Finn turer i nærheten").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Finn turer i nærheten"
+        rule.onNodeWithText("Finn turer i nærheten").performClick().// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Finn turer i nærheten"
+
+        var a= Sikt_BottomSheet()
+
+
+    }
+}
+
+
+
+
+// Test 7: Test for funksjon: Favoritter(onNavigateToNext: () -> Unit): Denne skal teste alle reglene: Her så testes apiene, ved hjelp av MockEngine
+
+
+class Test_FavoritterCardComponent {
     @get:Rule
     val rule = createComposeRule()
     lateinit var navController: TestNavHostController
 
 
     @Test
-    fun open_FavoritScreenUIShowCard () {
+    fun open_FavoritScreenUIShowCardComponent () {
 
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
         var favorittscreen = { navController.navigate("Favoritt") }
@@ -336,10 +298,12 @@ class Test_FavoritterCard {
         rule.setContent {
             IN2000_ProsjektTheme {
                 //FavoriteScreen(onNavigateToMap = { /*TODO*/ }, onNavigateToFav = { /*TODO*/ }, onNavigateToRules = { /*TODO*/ })
-                FavoriteScreenSuccess(weatherinfo= null, nowcastinfo=null , sunriseinfo= SunriseInfo , alertinfo= null , frostinfo=null ,// Var ikke nullable før, kl.22.15
+                val appUiState by APIViewModel.
+                FavoriteScreenSuccess(weatherinfo= LocationInfo() , nowcastinfo= NowCastInfo , sunriseinfo= SunriseInfo () , alertinfo= null , frostinfo=null ,// Var ikke nullable før, kl.22.15
                     onNavigateToMap = { /*TODO*/ }, onNavigateToFav = { /*TODO*/ },onNavigateToRules = { /*TODO*/ })
             }
         }
+
         rule.onNodeWithText("Temperatur: ").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Temperatur: "
         rule.onNodeWithText("Tåke: ").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Tåke: "
         rule.onNodeWithText("Nedbør: ").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Nedbør: "
@@ -352,12 +316,49 @@ class Test_FavoritterCard {
 
 
 
+        data class IpResponse(val ip: String)
+        class ApiClient(engine: HttpClientEngine) {
+            private val httpClient = HttpClient(engine) {
+                install(ContentNegotiation) {
+                    gson()
+                }
+            }
+            suspend fun getIp(): IpResponse = httpClient.get("https://api.ipify.org/?format=json").body()
+
+
+            val mockEngine = MockEngine { request ->
+                respond(
+                    content = ByteReadChannel("""{"ip":"127.0.0.1"}"""),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                )
+            }
+
+
+            runBlocking {
+            val mockEngine = MockEngine { request ->
+                respond(
+                    content = ByteReadChannel("""{"ip":"127.0.0.1"}"""),
+                    status = HttpStatusCode.OK,
+                    headers = headersOf(HttpHeaders.ContentType, "application/json")
+                )
+            }
+            val apiClient = ApiClient(mockEngine)
+
+            Assert.assertEquals("127.0.0.1", apiClient.getIp().ip)
+        }
+    }
+
 
     }
+
+
+
+
 }
 
- */
 
+*/
 
 /*
 
@@ -461,4 +462,3 @@ class Test_API_testScreen {
 
 
 
-*/

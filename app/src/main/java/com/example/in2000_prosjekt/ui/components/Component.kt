@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
@@ -8,19 +10,24 @@ import android.media.Image
 import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.animation.VectorConverter
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.AlertDialogDefaults.titleContentColor
@@ -75,9 +82,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import java.time.DayOfWeek
 import java.time.LocalDate
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 
 @Composable
-fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, favoritt : Color, map : Color, settings : Color, rules : Color) {
+fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, rules : Boolean, settings : Boolean) {
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
@@ -86,23 +97,24 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
             Column (horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(70.dp)
+                modifier = Modifier.width(120.dp)
             ){
                 IconButton(onClick = { onNavigateToMap() }) {
-                    var backroundColor = Sikt_hvit
-                    if (map == Sikt_mellomblå) {
-                        backroundColor = Sikt_lyseblå
+                    var iconfarge = Sikt_mørkeblå
+                    var iconBackround = Sikt_hvit
+                    if (map) {
+                        iconBackround = Sikt_lyseblå
                     }
                     Icon(
                         Icons.Outlined.LocationOn,
                         contentDescription = "Localized description",
-                        tint = Sikt_mørkeblå,
+                        tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(backroundColor)
+                            .background(iconBackround)
                             .padding(5.dp))
                 }
-                Text(text = "Utforsk", fontSize = 13.sp,)
+                Text(text = "Utforsk", fontSize = 13.sp)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -110,17 +122,18 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             ) {
 
                 IconButton(onClick = { onNavigateToFav() }) {
-                    var backroundColor = Sikt_hvit
-                    if (favoritt == Sikt_mellomblå) {
-                        backroundColor = Sikt_lyseblå
+                    var iconfarge = Sikt_mørkeblå
+                    var iconBackround = Sikt_hvit
+                    if (favoritt) {
+                        iconBackround = Sikt_lyseblå
                     }
                     Icon(
                         Icons.Outlined.Favorite,
                         contentDescription = "Localized description",
-                        tint = Sikt_mørkeblå,
+                        tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(backroundColor)
+                            .background(iconBackround)
                             .padding(5.dp)
                     )
                 }
@@ -131,18 +144,19 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.width(98.dp)
             ) {
                 IconButton(onClick = { onNavigateToRules() }) {
-                    var backroundColor = Sikt_hvit
-                    if (rules == Sikt_mellomblå) {
-                        backroundColor = Sikt_lyseblå
+                    var iconfarge = Sikt_mørkeblå
+                    var iconBackround = Sikt_hvit
+                    if (rules) {
+                        iconBackround = Sikt_lyseblå
                     }
                     Icon(
                         painter = painterResource(id = R.drawable.ny_fjellvettregler),
                         "",
-                        tint = Sikt_mørkeblå,
+                        tint = iconfarge,
                         modifier = Modifier
                             .size(120.dp)
                             .clip(CircleShape)
-                            .background(backroundColor)
+                            .background(iconBackround)
                             .padding(5.dp)
                     )
                 }
@@ -153,17 +167,18 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.width(75.dp)
             ) {
                 IconButton(onClick = { onNavigateToSettings() }) {
-                    var backroundColor = Sikt_hvit
-                    if (settings == Sikt_mellomblå) {
-                        backroundColor = Sikt_lyseblå
+                    var iconfarge = Sikt_mørkeblå
+                    var iconBackround = Sikt_hvit
+                    if (settings) {
+                        iconBackround = Sikt_lyseblå
                     }
                     Icon(
                         Icons.Outlined.Settings,
                         "",
-                        tint = Sikt_mørkeblå,
+                        tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(backroundColor)
+                            .background(iconBackround)
                             .padding(5.dp)
                     )
                 }
@@ -175,7 +190,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
 
 @Composable
 fun Sikt_BottomBar2( ) {
-
+    //Denne brukes for for testing av design i preview
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
         containerColor = Sikt_hvit,
@@ -237,22 +252,14 @@ fun Sikt_BottomBar2( ) {
     }
 }
 
-
 @Composable
 fun Sikt_favoritt_tekst() {
-    //CenterAlignedTopAppBar(colors = TopAppBarDefaults.centerAlignedTopAppBarColors(Sikt_lyseblå), title = {
-    Text(
-        text = "Favoritter",
-        fontSize = 40.sp,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.
-        padding(10.dp)
-    )
+    //lag topbar/overskrift for favoritter
 }
-
 
 @Composable
 fun Sikt_sol() {
+    //brukes i rules
     Image(
         painter = painterResource(id = R.drawable.sol),
         contentDescription = "sol",
@@ -264,254 +271,96 @@ fun Sikt_sol() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_Favorite_card(){
+
+fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
+                       alertinfo: MutableList<AlertInfo>) {
+    // "Refresh"-ikon er placeholder for advarsels-ikon
+
     Card(
-        modifier = Modifier.size(height = 336.dp, width = 320.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp),
         colors = CardDefaults.cardColors(Sikt_lyseblå)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box() {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
-                        Text(text = "Gaustatoppen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
-                        Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
-                    }
-                    Text(text = "1884 m.o.h", fontWeight = FontWeight.Bold)
-                }
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            Box() {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(10.dp)
-                    ) {
-                        Sikt_Datavisualisering_Card(1884, -10, 7,true, false, true)
-                        Column(
-                            modifier = Modifier.size(height = 220.dp, width = 150.dp),
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(text = "2000-5000 m.o.h")
-                            Text(text = "Sikt: ")
-                            Text(text = "1000-2000 m.o.h")
-                            Text(text = "Sikt: ")
-                            Text(text = "0-1000 m.o.h")
-                            Text(text = "Sikt: ")
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_Card() {
-    Card(
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp, textAlign = TextAlign.Center)
-        }
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ToppCard(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo,
-    alertinfo: MutableList<AlertInfo>, frostinfo: FrostInfo
-) {
-    val varsel = "0" //midlertidlig, egt metAlert som skal brukes
-
-    Card(
-        modifier = Modifier.size(height = 336.dp, width = 320.dp),
-        colors = CardDefaults.cardColors(Sikt_lyseblå)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            //Alert pop up dialog
-            var openDialog by remember {
-                mutableStateOf(false)
-            }
-
-            if (alertinfo.size != 0){
-
-                AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
-                    openDialog = true
-                }
-            }
-
-            if (openDialog){
-                AlertDialog(alertinfo = alertinfo){
-                    openDialog = false
-                }
-            }
-
-            Box() {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
-                        Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
-                        Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
-                    }
-                    Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Text(text = "Temperatur: ${nowcastinfo.temperatureNow}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(20.dp))
-            Text(text = "Tåke: ${weatherinfo.fog_area_fractionL}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(20.dp))
-            Text(text = "Nedbør: ${weatherinfo.rainL}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(20.dp))
-            Text(text = "Vind: ${nowcastinfo.windN}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(20.dp))
-            Text(text = "Varsel: $varsel", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(30.dp))
-            Text(text = "Type frost: ${frostinfo.sightcondition}", fontFamily = FontFamily.Monospace)
-            Spacer(modifier = Modifier
-                .height(30.dp))
-           /* Text(text = "Coordinates frost: ${frostinfo.latFrost}, ${frostinfo.longFrost}", fontFamily = FontFamily.Monospace)
-               */
-            Spacer(modifier = Modifier
-
-                .height(30.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                //horizontalArrangement = Arrangement.SpaceEvenly  endret fra row til column, ds måtte denne kommenteres ut
-            ) {
-                Text(text = "Soloppgang: ${sunriseinfo.sunriseS}", fontFamily = FontFamily.Monospace)
-                Text(text = "Solnedgang: ${sunriseinfo.sunsetS}", fontFamily = FontFamily.Monospace)
-            }
-            Spacer(modifier = Modifier
-                .height(50.dp))
-        }
-    }
-}
-
-@SuppressLint("DiscouragedApi")
-@Composable
-fun AlertButton(alertType : String, alertLevel : String, onButtonClick: () -> Unit){
-    val typebind = alertType.split("; ")
-    val type = typebind[1].split("-")
-    val level = alertLevel.split("; ")
-
-    val buttonimage = "${type[0]}_${level[1]}"
-    Log.d("ALERT: ", buttonimage)
-
-    val context = LocalContext.current.applicationContext
-    val id = context.resources.getIdentifier(buttonimage, "drawable", context.packageName)
-
-
-    Image(modifier = Modifier.clickable { onButtonClick() },
-        //hardkodet inn snow_yellow for test
-        painter = painterResource(id = id),
-        contentDescription = "alert",
-        alignment = Alignment.TopEnd)
-}
-
-@Composable
-fun AlertDialog(alertinfo: MutableList<AlertInfo>, onDismiss: () -> Unit){
-
-    Dialog(
-        onDismissRequest = {
-            onDismiss()
-        }
-    ) {
-        Surface(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(20.dp),
         ) {
-            Column{
-                alertinfo.forEach {
-                    Alert_Card(alert = it)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Placeholder-ikon for advarsel:
+                // Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
+                
+                Log.d("ALERT-S", "alertinfo.size: ${alertinfo.size}")
+                //Alert pop up dialog
+                var openDialog by remember {
+                    mutableStateOf(false)
                 }
+
+                if (alertinfo.size != 0){
+                    AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
+                        openDialog = true
+                    }
+                }
+
+                if (openDialog){
+                    AlertDialog(alertinfo = alertinfo){
+                        openDialog = false
+                    }
+                }
+
+                Text(text = "Gaustatoppen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
+                var checked by remember { mutableStateOf(false) }
+                IconToggleButton(
+                    checked = checked,
+                    onCheckedChange = { checked = it },
+                    modifier = Modifier.padding(5.dp)
+                ) {
+                    if (checked) {
+                        Icon(
+                            Icons.Filled.Favorite,
+                            contentDescription = "Localized description",
+                            tint = Sikt_mørkeblå
+                        )
+                    } else {
+                        Icon(
+                            painterResource(id = R.drawable.outline_favorite),
+                            contentDescription = "Localized description",
+                            tint = Sikt_mørkeblå
+                        )
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(text = "1884 m.o.h", fontWeight = FontWeight.Bold)
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+            ) {
+                // random km lagt inn for å teste sikt-ikonene
+                Sikt_Visualisering_and_Sikt_Info(10.5, 3.3, 0.6)
             }
         }
     }
 }
 
-@Composable
-fun Sikt_BlueButton(title : String) {
-    Button(
-        onClick = { /*TODO*/ },
-        colors = ButtonDefaults.buttonColors(Sikt_lyseblå),
-        modifier = Modifier.width(172.dp)
-    ) {
-        Text(text = title, color = Sikt_mellomblå, fontWeight = FontWeight.Bold)
-    }
-}
-
-@Composable
-fun Sikt_GreyButton(title : String) {
-    Button(
-        onClick = { /*TODO*/ },
-        colors = ButtonDefaults.buttonColors(Sikt_grå),
-        modifier = Modifier.width(172.dp)
-    ) {
-        Text(text = title, color = Sikt_sort, fontWeight = FontWeight.Bold)
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Alert_Card(alert: AlertInfo){
-    Card(
-      modifier = Modifier.fillMaxWidth()
-    ){
-        Column(
-            //Spacer
-            modifier = Modifier
-                .padding(20.dp)
-        ){
-            //Her skal det stå hvilket sted, placeholder nå
-            Text(text = "Sted: " + alert.areaA , fontSize = 30.sp, fontWeight = FontWeight.Bold)
-            Text(text = "Type: " + alert.typeA, fontFamily = FontFamily.Monospace)
-            Text(text = "Beskrivelse: "+ alert.descriptionA, fontFamily = FontFamily.Monospace)
-            Text(text = "Konsekvens: " + alert.consequenseA, fontFamily = FontFamily.Monospace)
-            Text(text = "Anbefaling: " + alert.recomendationA, fontFamily = FontFamily.Monospace)
-
-
-        //level, type, area, consequenses, instruction
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_FinnTurer_card(height : Int, temp : Int, vind : Int, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
-
+fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
+    //på modal bottom sheet og på locationCard
+    
     var heigthVisuals = R.drawable.topp_1000_1500
+
 
     if (height < 500) {
         heigthVisuals = R.drawable.topp__500
@@ -534,11 +383,13 @@ fun Sikt_FinnTurer_card(height : Int, temp : Int, vind : Int, skydekkeTop : Bool
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize()
             )
+
             Image(
                 painter = painterResource(id = heigthVisuals),
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize()
-            )
+            ) 
+
             if(skydekkeTop) {
                 Image(
                     painter = painterResource(id = R.drawable.h_yt_skydekke),
@@ -546,6 +397,7 @@ fun Sikt_FinnTurer_card(height : Int, temp : Int, vind : Int, skydekkeTop : Bool
                     modifier = Modifier.fillMaxSize()
                 )
             }
+            
             if(skydekkeMid) {
                 Image(
                     painter = painterResource(id = R.drawable.middels_skydekke),
@@ -553,6 +405,7 @@ fun Sikt_FinnTurer_card(height : Int, temp : Int, vind : Int, skydekkeTop : Bool
                     modifier = Modifier.fillMaxSize()
                 )
             }
+            
             if(skydekkeLow) {
                 Image(
                     painter = painterResource(id = R.drawable.lavt_skydekke),
@@ -560,6 +413,7 @@ fun Sikt_FinnTurer_card(height : Int, temp : Int, vind : Int, skydekkeTop : Bool
                     modifier = Modifier.fillMaxSize()
                 )
             }
+            
             Text(text = "$temp°", fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Sikt_hvit,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -574,123 +428,28 @@ fun Sikt_FinnTurer_card(height : Int, temp : Int, vind : Int, skydekkeTop : Bool
                         contentDescription = "",
                         modifier = Modifier.size(10.dp)
                     )
-                    Text(text = "$vind m/s", fontSize = 10.sp, color = Sikt_hvit)
-                }
-            }
-        }
 
-
-    }
-}
-
-
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun Sikt_BottomSheet() {
-
-    val sheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-    )
-
-    val showModalSheet = rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    ModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetContent = { BottomSheetContent() }
-    ) {
-        ModalSheetWithAnchor(sheetState, showModalSheet)
-    }
-}
-
-@Composable
-fun BottomSheetContent( ){
-    Surface(
-        modifier = Modifier.height(250.dp),
-        color = Sikt_lyseblå
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = "Finn turer i nærheten",
-                fontSize = 20.sp,
-                modifier = Modifier.padding(10.dp),
-                color = Sikt_sort,
-                fontWeight = FontWeight.Bold
-            )
-            Divider(
-                modifier = Modifier.padding(5.dp),
-                color = Color.White)
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly) {
-                item {
-                    Sikt_FinnTurer_card(2469, 3, 7,true, false, true)
-                }
-                item {
-                    Sikt_FinnTurer_card(2469, 3, 7,true, false, true)
-                }
-                item {
-                    Sikt_FinnTurer_card(2469, 3, 7,true, false, true)
-                }
-                item {
-                    Sikt_FinnTurer_card(2469, 3, 7,true, false, true)
-                }
-                item {
-                    Sikt_FinnTurer_card(2469, 3, 7,true, false, true)
+                    //Text(text = "$vind m/s", fontSize = 10.sp, color = Sikt_hvit)
                 }
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+//Knapp til Instillinger for å slette alle favoritter.
 @Composable
-fun ModalSheetWithAnchor(
-    sheetState: ModalBottomSheetState,
-    showModalSheet: MutableState<Boolean>
-) {
-    val scope = rememberCoroutineScope()
-
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
-        Button(
-            modifier = Modifier
-                .height(165.dp)
-                .fillMaxWidth()
-                .padding(30.dp),
-            shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
-            colors = ButtonDefaults.buttonColors(Sikt_lyseblå),
-            onClick = {
-                showModalSheet.value = !showModalSheet.value
-                scope.launch {
-                    sheetState.show()
-                }
-            })  {
-            Column(
-                Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
-            ) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowUp,
-                    tint = Sikt_mellomblå,
-                    contentDescription = "",
-                    modifier = Modifier
-                )
-                Text(text = "Finn turer i nærheten", color = Sikt_sort, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-
-            }
+fun DeleteAllButton(viewModel: FavoriteViewModel){
+    Button(
+        onClick = {
+            viewModel.deleteAll()
         }
+    ){
+        Text("Slett alle favoritter")
     }
 }
 
 @Composable
-fun Sikt_Datavisualisering_Card(height : Int, temp : Int, vind : Int, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
+fun Sikt_Datavisualisering_Card(height : Int, temp : Float, vind : Float, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
 
     var heigthVisuals = R.drawable.topp_1000_1500
 
@@ -706,12 +465,13 @@ fun Sikt_Datavisualisering_Card(height : Int, temp : Int, vind : Int, skydekkeTo
         heigthVisuals = R.drawable.topp__2000
     }
 
-    Card() {
-        Box(
-            modifier = Modifier.size(width = 170.dp, height = 220.dp)
-        ) {
+    Card(
+        modifier = Modifier.size(width = 170.dp, height = 220.dp),
+    ) {
+        Box() {
+
             Image(
-                painter = painterResource(id = R.drawable.illustrasjon_background),
+                painter = painterResource(id = R.drawable.background),
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize()
             )
@@ -747,13 +507,9 @@ fun Sikt_Datavisualisering_Card(height : Int, temp : Int, vind : Int, skydekkeTo
                     .padding(10.dp))
 
             Box(modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(10.dp)
-                .fillMaxSize()
-            ) {
-                Column(
-                    modifier = Modifier.align(Alignment.TopEnd)
-                ) {
+                .align(Alignment.TopEnd)
+                .padding(10.dp)) {
+                Column() {
                     Image(
                         painter = painterResource(id = R.drawable.vind_icon),
                         contentDescription = "",
@@ -767,177 +523,87 @@ fun Sikt_Datavisualisering_Card(height : Int, temp : Int, vind : Int, skydekkeTo
 }
 
 @Composable
-fun Sikt_LocationCard_Hour() {
-    Card(
-        modifier = Modifier
-            .width(70.dp)
-            .height(80.dp)
-            .padding(10.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(Sikt_hvit)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "12:00", color = Sikt_sort, fontSize = 12.sp)
-            Spacer(modifier = Modifier.height(30.dp))
-            Sikt_sol()
-        }
-    }
-}
-
-@Composable
-fun Sikt_LocationCard_NextDays() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(120.dp)
-            .padding(start = 30.dp, end = 30.dp, bottom = 20.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(Sikt_hvit)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Text(text = "Idag", color = Sikt_sort, fontSize = 12.sp)
-                Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Lettskyet", color = Sikt_sort, fontSize = 12.sp)
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Text(text = "Fredag", color = Sikt_sort, fontSize = 12.sp)
-                Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Lettskyet", color = Sikt_sort, fontSize = 12.sp)
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Text(text = "Lørdag", color = Sikt_sort, fontSize = 12.sp)
-                Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Lettskyet", color = Sikt_sort, fontSize = 12.sp)
-            }
-        }
-    }
-}
-
-@Composable
-fun Sikt_LoctationCard_Topper_i_naerheten() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(160.dp)
-            .padding(start = 20.dp, end = 20.dp, top = 5.dp),
-    ) {
-        Text(text = "Topper i nærheten: ", modifier = Modifier.align(Alignment.TopStart), fontWeight = FontWeight.Bold)
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),
-            horizontalArrangement = Arrangement.SpaceEvenly) {
-            item {
-                Sikt_FinnTurer_card(450, -10, 0,true, false, true)
-            }
-            item {
-                Sikt_FinnTurer_card(550, 3, 3,false, true, false)
-            }
-            item {
-                Sikt_FinnTurer_card(1100, 23, 9,false, false, true)
-            }
-            item {
-                Sikt_FinnTurer_card(1670, -1, 15,false, false, false)
-            }
-            item {
-                Sikt_FinnTurer_card(2469, 6, 2,true, true, true)
-            }
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_LocationCard(){
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Sikt_lyseblå),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Box() {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
-                    Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
-                    Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
-                }
-                Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Box() {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Sikt_Datavisualisering_Card(2469, 3, 7,true, false, true)
-                    Column(
-                        modifier = Modifier.size(height = 220.dp, width = 150.dp),
-                        verticalArrangement = Arrangement.SpaceEvenly,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(text = "2000-5000 m.o.h")
-                        Text(text = "Sikt: ")
-                        Text(text = "1000-2000 m.o.h")
-                        Text(text = "Sikt: ")
-                        Text(text = "0-1000 m.o.h")
-                        Text(text = "Sikt: ")
-                    }
-                }
-            }
-        }
-        LazyRow(modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly) {
-            item {
-                Sikt_LocationCard_Hour()
-            }
-            item {
-                Sikt_LocationCard_Hour()
-            }
-            item {
-                Sikt_LocationCard_Hour()
-            }
-            item {
-                Sikt_LocationCard_Hour()
-            }
-            item {
-                Sikt_LocationCard_Hour()
-            }
-            item {
-                Sikt_LocationCard_Hour()
-            }
-        }
-        Sikt_LocationCard_NextDays()
-        Sikt_LoctationCard_Topper_i_naerheten()
+fun Sikt_Visualisering_and_Sikt_Info(sikthigh : Double, siktmedium : Double, siktlow : Double){
+        // Tar inn antall km sikt
 
+    fun getRightSiktIcon(km: Double): Int {
+        return if (km < 1) {
+            R.drawable.taake_sikt
+        } else if (km < 4) {
+            R.drawable.daarlig_sikt
+        } else if (km < 10) {
+            R.drawable.moderat_sikt
+        } else {
+            R.drawable.god_sikt
+        }
+    }
+
+    fun getRightSiktText(km: Double): String {
+        return if (km < 1) {
+            "Meget dårlig sikt"
+        } else if (km < 4) {
+            "Dårlig sikt"
+        } else if (km < 10) {
+            "Moderat  sikt"
+        } else {
+            "God sikt"
+        }
+    }
+    
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+    ) {
+        Sikt_Datavisualisering_Card(1800, -10f, 7f, true, false, true)
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(start = 10.dp)
+                .height(intrinsicSize = IntrinsicSize.Max),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            // Hvordan space evenly uten å bli høyrere enn Sikt_Datavisualisering_Card???
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                Text(text = "2000-5000 m.o.h")
+                Text(text = getRightSiktText(sikthigh))
+                Icon(painterResource(
+                    id = getRightSiktIcon(sikthigh)),"",
+                    modifier = Modifier.size(24.dp), tint = Sikt_mørkeblå
+                )
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                Text(text = "1000-2000 m.o.h")
+                Text(text = getRightSiktText(siktmedium))
+                Icon(painterResource(
+                    id = getRightSiktIcon(siktmedium)),"",
+                    modifier = Modifier.size(24.dp), tint = Sikt_mørkeblå
+                )
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                Text(text = "0-1000 m.o.h")
+                Text(text = getRightSiktText(siktlow))
+                Icon(
+                    painterResource(
+                        id = getRightSiktIcon(siktlow)
+                    ), "",
+                    modifier = Modifier.size(24.dp), tint = Sikt_mørkeblå
+                )
+            }
+        }
     }
 }
-
 
 //I vår composable funksjon som generer kalenderen vår (se neste Composable-funskjon: StaticCalender() ) så kan man bestemme innholdet til de ulike bestanddelene av en kalender, slikt som tittel, plassering av de ulike trykkbare komponetene i kalenderen, om den er scrollbar etc.
 //Dette er funksjonen som bestemmer dagsinnholdet i hver dag kalenderen StaticCalender()
@@ -1060,68 +726,8 @@ fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frost
 
         //Log.d("calenderstate.monthState.currentMonth.month", calenderstate.monthState.currentMonth.month.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
 
-
-
     }
 
-}
-
-
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_HistoriskCard(){
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Sikt_lyseblå),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Box() {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå) //fyll symbol, bytter senere
-                    Text(text = "Galdhøpiggen", fontWeight = FontWeight.Bold, fontSize = 30.sp)
-                    Icon(Icons.Filled.Favorite, "", tint = Sikt_mørkeblå)
-                }
-                Text(text = "2469 m.o.h", fontWeight = FontWeight.Bold)
-            }
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-        Box() {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Sikt_Datavisualisering_Card(2469, -11, 4, true, false, true)
-                    Column(
-                        modifier = Modifier.size(height = 220.dp, width = 150.dp),
-                        verticalArrangement = Arrangement.SpaceEvenly,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(text = "2000-5000 m.o.h")
-                        Text(text = "Sikt: ")
-                        Text(text = "1000-2000 m.o.h")
-                        Text(text = "Sikt: ")
-                        Text(text = "0-1000 m.o.h")
-                        Text(text = "Sikt: ")
-                    }
-                }
-            }
-        }
-
-        //Sikt_Historisk_Kalender()
-
-        Sikt_LoctationCard_Topper_i_naerheten()
-
-    }
 }
 
 
@@ -1131,9 +737,5 @@ fun Sikt_HistoriskCard(){
 fun TestComponent() {
     Sikt_LocationCard()
 }
-
-
-
-
 
 

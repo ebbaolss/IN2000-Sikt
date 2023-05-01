@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class Frost_API_Respons(
 
-    var context : String?,
-    var type : String?,
+    @SerializedName("@context") var context : String?,
+    @SerializedName("@type") var type : String?,
     var apiVersion : String?,
     var license : String?,
     var createdAt : String?,
@@ -20,8 +20,8 @@ data class Frost_API_Respons(
 )
 data class Frost_API_Respons_for_koordinater (
 
-    var context : String?,
-    var type : String?,
+    @SerializedName("@context") var context : String?,
+    @SerializedName("@type") var type : String?,
     var apiVersion : String?,
     var license : String?,
     var createdAt : String?,
