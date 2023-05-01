@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -51,6 +52,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, rules : Boolean, settings : Boolean) {
@@ -393,10 +395,23 @@ fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop
                         contentDescription = "",
                         modifier = Modifier.size(10.dp)
                     )
+
                     //Text(text = "$vind m/s", fontSize = 10.sp, color = Sikt_hvit)
                 }
             }
         }
+    }
+}
+
+//Knapp til Instillinger for å slette alle favoritter.
+@Composable
+fun DeleteAllButton(viewModel: FavoriteViewModel){
+    Button(
+        onClick = {
+            viewModel.deleteAll()
+        }
+    ){
+        Text("Slett alle favoritter")
     }
 }
 

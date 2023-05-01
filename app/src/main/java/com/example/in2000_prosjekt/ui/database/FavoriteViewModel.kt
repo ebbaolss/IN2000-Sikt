@@ -34,4 +34,9 @@ class FavoriteViewModel(application: Application) : ViewModel() {
     fun deleteFavorite(longtitude: Double, latitude: Double) {
         repository.deleteFavorite(longtitude, latitude)
     }
+
+    fun deleteAll(){
+        repository.deleteAll()
+    }
 }
+
