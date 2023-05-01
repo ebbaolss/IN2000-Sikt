@@ -67,7 +67,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
     // Mapbox
-    implementation ('com.mapbox.maps:android:10.12.1'){
+    implementation ('com.mapbox.maps:android:10.11.2'){
         exclude group: 'group_name', module: 'module_name'
     }
 

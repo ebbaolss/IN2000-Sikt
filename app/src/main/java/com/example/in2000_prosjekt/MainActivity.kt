@@ -17,8 +17,9 @@ import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.database.*
+import com.example.in2000_prosjekt.ui.database.DatabaseScreenTest
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModelFactory
 import com.example.in2000_prosjekt.ui.screens.*
 
 class MainActivity : ComponentActivity() {
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     val owner = LocalViewModelStoreOwner.current
 
                     owner?.let {
-                        val favoriteViewModel: FavoriteViewModel = viewModel(
+                        val viewModel: FavoriteViewModel = viewModel(
                             it,
                             "FavoriteViewModel",
                             FavoriteViewModelFactory(
@@ -45,15 +46,7 @@ class MainActivity : ComponentActivity() {
                             )
                         )
 
-                        val mapViewModel: MapViewModel = viewModel(
-                            it,
-                            "MapViewModel",
-                            MapViewModelFactory(
-                                LocalContext.current.applicationContext as Application
-                            )
-                        )
-
-                        MultipleScreenApp(favoriteViewModel, mapViewModel)
+                        MultipleScreenApp(viewModel)
                     }
                 }
             }
