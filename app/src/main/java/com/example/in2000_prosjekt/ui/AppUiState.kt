@@ -38,8 +38,8 @@ data class MapInfo(
     val recentSearch : List<String> = emptyList(),
 )
 data class MapCoordinatesInfo(
-    val latitude : Float, //double??
-    val longitude : Float
+    val latitude : Double = 0.0, //double??
+    val longitude : Double = 0.0
 )
 
 sealed interface AppUiState {

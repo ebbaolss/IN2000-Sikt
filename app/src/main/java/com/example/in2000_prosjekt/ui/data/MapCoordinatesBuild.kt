@@ -13,7 +13,7 @@ data class Content(
 )
 
 data class Geo(
-    val coordinates : List<Float>?,
+    val coordinates : List<Double>?,
     val type : String?
 )
 
