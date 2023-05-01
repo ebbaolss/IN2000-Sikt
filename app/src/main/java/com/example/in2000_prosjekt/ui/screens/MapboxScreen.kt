@@ -7,62 +7,31 @@ import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
-import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
-import com.example.in2000_prosjekt.ui.database.MapViewModel
-import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.maps.*
 import com.mapbox.maps.dsl.cameraOptions
 import com.mapbox.maps.extension.style.expressions.dsl.generated.eq
-import com.mapbox.maps.extension.style.layers.generated.circleLayer
 import com.mapbox.maps.extension.style.layers.generated.CircleLayer
 import com.mapbox.maps.extension.style.layers.generated.circleLayer
 import com.mapbox.maps.extension.style.layers.getLayerAs
 import com.mapbox.maps.extension.style.sources.generated.vectorSource
 import com.mapbox.maps.extension.style.style
-import com.mapbox.maps.plugin.compass.compass
-import com.mapbox.maps.plugin.delegates.listeners.OnCameraChangeListener
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
-import com.mapbox.maps.plugin.scalebar.scalebar
-import kotlin.math.sqrt
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowMap(
-    onNavigateToMap: () -> Unit,
-    onNavigateToFav: () -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToRules: () -> Unit,
-    mapViewModel: MapViewModel
-) {
-    val cameraOptionsUiState by mapViewModel.cameraOptionsUiState.collectAsState()
-    val mountainUiState by mapViewModel.mountainUiState.collectAsState()
-    var locationCardState by remember { mutableStateOf(false) }
-
-    Scaffold(
-        bottomBar = {
-            Sikt_BottomBar(
-                onNavigateToMap,
-                onNavigateToFav,
-                onNavigateToRules,
-                onNavigateToSettings,
-                favoritt = false,
-                rules = false,
-                map = true,
-                settings = false
-            )
-        }) {
+fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = false, rules = false, map = true, settings = false)}) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -71,79 +40,28 @@ fun ShowMap(
             AndroidView(
                 modifier = Modifier,
                 factory = {
-                    val map = createFactoryMap(it, cameraOptionsUiState)
-                    val mapboxMap = map.getMapboxMap()
-
-                    mapboxMap.addOnMapClickListener(onMapClickListener = OnMapClickListener { point ->
-                        locationCardState = onMapClick(point, mapboxMap, mapViewModel)
-                        Log.d("LocationCardState", "$locationCardState")
-                        locationCardState
-                    })
-                    mapboxMap.addOnCameraChangeListener(onCameraChangeListener = OnCameraChangeListener {
-                        Log.d("CameraChangeListener", "invoked")
-                        onCameraChange(mapboxMap, mapViewModel)
-                    })
-
-                    map
-                },
-                update = {
-                    // pull cameraSettings from the UiState
-                    // Camera settings
-                    it.getMapboxMap().setCamera(
-                        cameraOptions {
-                            // Henter kamerakoordinater fra UiState
-                            val lng = cameraOptionsUiState.currentScreenLongitude
-                            val lat = cameraOptionsUiState.currentScreenLatitude
-                            val zoom = cameraOptionsUiState.currentScreenZoom
-
-                            Log.d("Update Camera Coordinates", "Lng: $lng, Lat: $lat")
-
-                            center(Point.fromLngLat(lng, lat))
-                        }
-                    )
+                    createFactoryMap(it)
                 }
             )
-
-            if (locationCardState){
-                Sikt_LocationCard(mountainUiState)
-            }
         }
 
-        // Menu
         Sikt_BottomSheet()
     }
 }
 
-fun onCameraChange(mapboxMap: MapboxMap, viewModel: MapViewModel) {
-    val screenCenter = mapboxMap.cameraState.center
-    val zoom = mapboxMap.cameraState.zoom
-    viewModel.updateCameraPosition(screenCenter)
-    viewModel.updateCameraZoomState(zoom)
-    Log.d("onCameraChange", "Coordinates $screenCenter, Zoom level: $zoom")
-}
-
-
-fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraOptions) : MapView {
-
-    val mapView = MapView(xt).apply {
+fun createFactoryMap(xt: Context) : MapView {
+    return MapView(xt).apply {
         val mapboxMap = getMapboxMap()
-        val cameraOptionsUiState = cameraOptionsUiState
 
         mapboxMap.loadStyle(
-            // Declares map style
             style(styleUri = Style.OUTDOORS) {
-
-                // Adding data layer source to rendered map
                 +vectorSource(id = "STREETS_V8") {
                     url("mapbox://mapbox.mapbox-streets-v8")
                 }
-
-                // Creates an interactable point layer on top of style layer
-                +circleLayer(layerId = "MOUNTAINS_DATALAYER", sourceId = "STREETS_V8") {
-                    // natural label er et lag i STREETS_V8 datasettet til Mapbox og inneholder naturobjekter som fjell, innsjøer etc.
+                +circleLayer(layerId = "LAYER_ID", sourceId = "STREETS_V8") {
                     sourceLayer("natural_label")
 
-                    // Filtering out all natural labels points that are not marked with the mountains icon
+                    // Removing all natural labels points that are not mountains e.g. lakes
                     filter(
                         eq {
                             get { literal("maki") }
@@ -151,39 +69,33 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
                         }
                     )
 
-                    circleOpacity(0.0)
+                    // Styling mountain points
+                    circleRadius(10.0)
+                    circleColor(Color.YELLOW)
+                    circleOpacity(1.0)
+                    circleStrokeColor(Color.BLACK)
                 }
             }
         )
 
-        // Camera settings
         mapboxMap.setCamera(
             cameraOptions {
-                zoom(cameraOptionsUiState.currentScreenZoom)
+                zoom(13.0)
                 // Koordinatene til Glittertind
-                center(Point.fromLngLat(cameraOptionsUiState.currentScreenLongitude,cameraOptionsUiState.currentScreenLatitude))
+                center(Point.fromLngLat(8.557801680731075,61.651356077904666))
             }
         )
+
+        mapboxMap.addOnMapClickListener(onMapClickListener = OnMapClickListener { point ->
+            onMapClick(point, mapboxMap)
+        })
     }
-
-
-    // Editing compass settings, so that searchbar does not block compass
-    mapView.compass.updateSettings {
-        marginTop = 250F
-    }
-
-    // Editing scalebar, so that searchbar does not block scalebar
-    mapView.scalebar.updateSettings {
-        marginTop = 250F
-    }
-
-    return mapView
 }
 
 
 
 // Definerer hva som skal skje når brukeren trykker på kartet
-fun onMapClick(point: Point, mapboxMap: MapboxMap, viewModel: MapViewModel): Boolean {
+fun onMapClick(point: Point, mapboxMap: MapboxMap): Boolean {
     Log.d("Coordinate", point.toString())
     mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(ScreenBox(
@@ -196,31 +108,22 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, viewModel: MapViewModel): Boo
                 mapboxMap.pixelForCoordinate(point).y + 10.0
             )
         )),
-        RenderedQueryOptions(listOf("MOUNTAINS_DATALAYER"), null)
+        RenderedQueryOptions(listOf("LAYER_ID"), null)
     ) { it ->
         onFeatureClicked(it) { feature ->
             if (feature.id() != null) {
-                val name = feature.getStringProperty("name")
-                val elevation = feature.getStringProperty("elevation_m").toInt()
-                val point = feature.geometry() as Point
 
-                // Saving a clicked mountain to the UiState through the view model
-                viewModel.updateMountain(MapUiState.Mountain(name, point, elevation))
+                Log.d("Feature", feature.getStringProperty("name").toString() + ". Elevation: " + feature.getStringProperty("elevation_m").toString() + " m.o.h.")
 
-                // DEBUGGING
-                Log.d("Map Feature Clicked", feature.toString())
-                Log.d("Feature Contents:", " \nMountain Name:" + feature.getStringProperty("name").toString() +
-                        "\nElevation: " + feature.getStringProperty("elevation_m").toString() + " m.o.h.\n" +
-                        "Point: " + feature.geometry().toString()
-                )
+                mapboxMap.getStyle() { style ->
+                    val layer = style.getLayerAs<CircleLayer>("LAYER_ID")!!
+                    layer.circleColor(Color.BLUE)
+                }
             }
         }
     }
     return true
 }
-
-// When panning and zooming the map view the center screen coordinates and camera settings are updated to the cameraUiState.
-// funOnScreenGesture(cameraOptions: MapboxCameraOptions)
 
 
 
