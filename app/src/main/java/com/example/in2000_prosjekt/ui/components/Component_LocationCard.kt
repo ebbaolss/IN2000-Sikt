@@ -1,7 +1,6 @@
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
-import android.text.format.Time
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
