@@ -1,5 +1,5 @@
 package com.example.in2000_prosjekt
-
+/*
 import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
@@ -356,7 +356,7 @@ class Test_FavoritterCardComponent {
 }
 
 
-
+*/
 
 /*
 

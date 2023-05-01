@@ -17,9 +17,8 @@ import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.in2000_prosjekt.ui.database.DatabaseScreenTest
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModelFactory
+import com.example.in2000_prosjekt.ui.APIViewModel
+import com.example.in2000_prosjekt.ui.database.*
 import com.example.in2000_prosjekt.ui.screens.*
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     val owner = LocalViewModelStoreOwner.current
 
                     owner?.let {
-                        val viewModel: FavoriteViewModel = viewModel(
+                        val favoriteViewModel: FavoriteViewModel = viewModel(
                             it,
                             "FavoriteViewModel",
                             FavoriteViewModelFactory(
@@ -46,40 +45,24 @@ class MainActivity : ComponentActivity() {
                             )
                         )
 
-                        MultipleScreenApp(viewModel)
+                        val mapViewModel: MapViewModel = viewModel(
+                            it,
+                            "MapViewModel",
+                            MapViewModelFactory(
+                                LocalContext.current.applicationContext as Application
+                            )
+                        )
+
+                        MultipleScreenApp(favoriteViewModel, mapViewModel)
                     }
                 }
             }
         }
     }
-    override fun onStart() {
-        super.onStart()
-        Log.i("Lifecycle", "onStart")
-    }
-    override fun onResume() {
-        super.onResume()
-        Log.i("Lifecycle", "onResume")
-    }
-    override fun onPause() {
-        super.onPause()
-        Log.i("Lifecycle", "onPause")
-    }
-    override fun onStop() {
-        super.onStop()
-        Log.i("Lifecycle", "onStop")
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i("Lifecycle", "onDestroy")
-    }
-    override fun onRestart() {
-        super.onRestart()
-        Log.i("Lifecycle", "onRestart")
-    }
 }
 
 @Composable
-fun MultipleScreenApp(viewModel: FavoriteViewModel) {
+fun MultipleScreenApp(viewModel: FavoriteViewModel, mapviewmodel : MapViewModel) {
 
     val navController = rememberNavController()
 
@@ -124,7 +107,7 @@ fun MultipleScreenApp(viewModel: FavoriteViewModel) {
         startDestination = "Map") {
 
         composable("StartPage") { StartPage( onNavigateToNext = { navController.navigate("Map") })  }
-        composable("Map") { ShowMap(map, favorite, settings, rules)  }
+        composable("Map") { ShowMap(map, favorite, settings, rules, mapviewmodel)  }
         composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules) }
         composable("Rules") { RulesScreen(map, favorite, settings, rules) }
         composable("Info") { SettingsScreen(map, favorite, settings, rules) }

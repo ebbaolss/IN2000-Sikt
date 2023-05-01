@@ -44,11 +44,11 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
     val appUiState by apiViewModel.appUiState.collectAsState()
 
     when(appUiState){
-        is AppUiState.Loading -> 
+        is AppUiState.Loading ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Sikt_mellomblå), 
+                    .background(Sikt_mellomblå),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -57,9 +57,9 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
             }
         is AppUiState.Error -> {
 
-           FavoriteScreenError( onNavigateToMap,
-               onNavigateToFav,onNavigateToSettings,
-               onNavigateToRules)
+            FavoriteScreenError( onNavigateToMap,
+                onNavigateToFav,onNavigateToSettings,
+                onNavigateToRules)
         }
         is AppUiState.Success -> {
             FavoriteScreenSuccess(
@@ -81,7 +81,7 @@ fun FavoriteScreen(apiViewModel: APIViewModel = viewModel(), onNavigateToMap: ()
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
-    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit
+                          onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit
 ) {
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, rules = false, map = false, settings = false)}) {
         LazyColumn(contentPadding = PaddingValues(20.dp)) {
@@ -90,6 +90,7 @@ fun FavoriteScreenSuccess(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, s
         }
     }
 }
+
 
 
 

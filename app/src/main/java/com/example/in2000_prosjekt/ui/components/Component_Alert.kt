@@ -239,19 +239,19 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                     //kommentert ut at de blir bold intill vi blir enige om hva vi liker best.
                     if (alertLevel == "1") {
                         highlight1 = Color.Black
-                        //fontweight1 = FontWeight.Bold
+                        fontweight1 = FontWeight.Bold
                     } else if (alertLevel == "2") {
                         highlight2 = Color.Black
-                        //fontweight2 = FontWeight.Bold
+                        fontweight2 = FontWeight.Bold
                     } else if (alertLevel == "3") {
                         highlight3 = Color.Black
-                        //fontweight3 = FontWeight.Bold
+                        fontweight3 = FontWeight.Bold
                     } else if (alertLevel == "4") {
                         highlight4 = Color.Black
-                        //fontweight4 = FontWeight.Bold
+                        fontweight4 = FontWeight.Bold
                     } else if (alertLevel == "5") {
                         highlight5 = Color.Black
-                        //fontweight5 = FontWeight.Bold
+                        fontweight5 = FontWeight.Bold
                     }
 
                     Text(text = "Faregrader ", fontFamily = FontFamily.Monospace)
