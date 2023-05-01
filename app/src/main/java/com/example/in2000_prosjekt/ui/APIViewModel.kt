@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 import com.example.in2000_prosjekt.ui.data.*
-import io.ktor.client.call.*
+import com.example.in2000_prosjekt.ui.uistate.MapUiState
+import com.mapbox.geojson.Point
 import io.ktor.utils.io.errors.*
-import kotlinx.coroutines.Deferred
 
 import kotlinx.coroutines.async
 
@@ -23,13 +23,14 @@ class APIViewModel : ViewModel() {
 
     private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
-    val latitude = "59"
-    val longtitude = "4"
-    val altitude: String = "600"
+
+    private val currentLatitude = 61.651356077904666
+    private val currentLongitude = 8.557801680731075
+    private val altitude: String = "600"
 
     init { //etterhvert så endrer man  fra å ha init til å kalle på getAll fra en annen fil
         //favoritter skal loades med en gang appen åpner, database se codelab
-        getAll("59","4","600")
+        getAll(currentLatitude.toString(),currentLongitude.toString(),altitude)
     }
 
     fun getAll(latitude: String, longitude: String, altitude: String) {
