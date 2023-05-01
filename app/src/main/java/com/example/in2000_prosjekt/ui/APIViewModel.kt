@@ -15,8 +15,11 @@ import com.mapbox.geojson.Point
 import io.ktor.utils.io.errors.*
 
 import kotlinx.coroutines.async
+import java.time.LocalDate
 
-class APIViewModel : ViewModel() {
+class APIViewModel () : ViewModel()
+    {
+
 
     //manual dependency injection, se codelab
     val repository: WeatherRepository = ImplementedWeatherRepository() //lettvinte måten

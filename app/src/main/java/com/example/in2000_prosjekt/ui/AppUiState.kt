@@ -27,10 +27,9 @@ data class AlertInfo( //sett A på slutten
     val timeIntervalA: List<String?>?
 )
 
-data class FrostInfo(
-    val typeFrost : String,
-    val longFrost : Double,
-    val latFrost : Double,
+data class FrostInfo( //sett Frost på slutten, F brukes allerede
+    val sightcondition: Int,
+
 )
 
 sealed interface AppUiState {
