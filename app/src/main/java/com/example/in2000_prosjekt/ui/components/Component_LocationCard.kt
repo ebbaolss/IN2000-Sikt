@@ -201,22 +201,7 @@ fun Sikt_LoctationCard_Topper_i_naerheten() {
                 .align(Alignment.Center),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            item {
-                Sikt_Datavisualisering_Card(860 ,-10f, 7f, false, true, true)
-                //Sikt_FinnTurer_card(450, -10, 0,true, false, true)
-            }
-            item {
-                //Sikt_FinnTurer_card("test",550, 3,false, true, false)
-            }
-            item {
-                Sikt_FinnTurer_card("test",1100, 23,false, false, true)
-            }
-            item {
-                Sikt_FinnTurer_card("test",1670, -1,false, false, false)
-            }
-            item {
-                Sikt_FinnTurer_card("test",2469, 6,true, true, true)
-            }
+
         }
     }
 }
@@ -238,7 +223,6 @@ fun Sikt_LocationCard_Hour() {
         ) {
             Text(text = "12:00", color = Sikt_sort, fontSize = 12.sp)
             Spacer(modifier = Modifier.height(30.dp))
-            Sikt_sol()
         }
     }
 }
