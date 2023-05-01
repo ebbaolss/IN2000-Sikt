@@ -321,8 +321,6 @@ fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunr
     }
 }
 
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop : Boolean, skydekkeMid : Boolean, skydekkeLow : Boolean ) {
@@ -397,12 +395,14 @@ fun Sikt_FinnTurer_card(location : String, height : Int, temp : Int, skydekkeTop
                         contentDescription = "",
                         modifier = Modifier.size(10.dp)
                     )
-                    Text(text = "$vind m/s", fontSize = 10.sp, color = Sikt_hvit)
+
+                    //Text(text = "$vind m/s", fontSize = 10.sp, color = Sikt_hvit)
                 }
             }
         }
     }
 }
+
 //Knapp til Instillinger for å slette alle favoritter.
 @Composable
 fun DeleteAllButton(viewModel: FavoriteViewModel){
