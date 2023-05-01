@@ -15,6 +15,7 @@ val Sikt_grønn = Color(0xFF5D6B30)
 val Sikt_mørkeblå = Color(0xFF1A426B)
 val Sikt_mellomblå = Color(0xFF265B8C)
 val Sikt_lyseblå = Color(0xFFCDDCEB)
+val Sikt_bakgrunnblå = Color( 0xFFA4BFD8)
 val Sikt_grå = Color(0xFFCDCBCB)
 val Sikt_hvit = Color(0xFFF9F9F9)
 
