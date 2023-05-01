@@ -14,6 +14,7 @@ import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import android.annotation.SuppressLint
 import android.util.Log
+import android.view.KeyEvent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,6 +34,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
@@ -87,8 +91,6 @@ fun onMapClick(point: Point): Boolean {
 fun SearchBar(viewModel: MapViewModel){
     //MANGLER :
     // at tastaturet forsvinner når man trykker på kart
-    // at det slutter å blinke i searchfeltet når man trykker på kartet
-    //at man kan søke med enter, keylistener greie
 
     val mapUiState = viewModel.appUiState.collectAsState()
     val mapUiStateCoordinates = viewModel.appUiState2.collectAsState()
@@ -117,6 +119,15 @@ fun SearchBar(viewModel: MapViewModel){
                     .onFocusChanged {
                         println("focus changes\n")
                         isTextFieldFocused = it.isFocused
+                    }
+                    .onKeyEvent {
+                        if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER){
+                            if (input.length > 1) {
+                                suggestionSearch(viewModel, input)
+                            }
+                            input = ""
+                        }
+                        false //??
                     },
 
                 singleLine = true,
@@ -125,11 +136,8 @@ fun SearchBar(viewModel: MapViewModel){
                     onDone = {
                         keyboardController?.hide()
                         isTextFieldFocused = false
+                        focusManager.clearFocus()
                     }),
-                //KeyboardOptions = KeyboardOptions.Default,
-                //KeyboardActions = KeyboardActions(),
-                //KeyboardCapitalization.Words – Capitalize the first character of every word,
-                //shape = RoundedCornerShape(8.dp),
                 value = input,
                 colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
                 onValueChange = { input = it },
@@ -143,14 +151,11 @@ fun SearchBar(viewModel: MapViewModel){
                 trailingIcon = { //søkeknappen
                     Button(
                         onClick = {
-                            //bruker har skrevet inn noe og trykket søk,
-                            // nå skal api-et kalles på:
-                            suggestionSearch(viewModel, input)
 
-
-                            //etter dette skal options dukke opp
-                            //når det er success så skal det dukke opp på skjermen
-                            //nå kan bruker velge alternativ
+                            if (input.length > 1) {
+                                suggestionSearch(viewModel, input)
+                                focusManager.clearFocus()
+                            }
 
                             input = ""
 
@@ -160,7 +165,7 @@ fun SearchBar(viewModel: MapViewModel){
                             imageVector = Icons.Default.Search,
                             tint = Color.Black,
                             contentDescription = "Search icon",
-                            modifier = Modifier.size(24.dp) //trengs denne?
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }
@@ -168,7 +173,7 @@ fun SearchBar(viewModel: MapViewModel){
         }
         if (isTextFieldFocused) {
 
-            items(mapUiState.value.optionMountains.keys.toList()) { mountain -> //disse må gjøres til buttons/clickable
+            items(mapUiState.value.optionMountains.keys.toList()) { mountain -> //endre sånn at den også får opp recent search
 
                 Row(
                     modifier = Modifier
@@ -178,17 +183,14 @@ fun SearchBar(viewModel: MapViewModel){
                         .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
                         .clickable( enabled = true, onClick = {
 
-                            //oppdatere lista
                             viewModel.updateRecentSearch(mountain)
 
-                            println("value: ${mapUiState.value.optionMountains[mountain]}")
-                            retrieveSearch(viewModel, mapUiState.value.optionMountains[mountain]!!) //vil ha ut mapbox_id, klarer jeg det her?
+                            retrieveSearch(viewModel, mapUiState.value.optionMountains[mountain]!!) //mapbox_id
+                            //få koden til å ikke gå videre før retriveSearch er ferdig
                             println(mapUiStateCoordinates.value.latitude)
                             println(mapUiStateCoordinates.value.longitude)
-                            //neste er å kalle på nytt api retrieveSearch()
 
-                            //bruke de til å få opp card
-                            //finspekkeri
+                            //bruke koordinatene over til å få opp card
 
                             focusManager.clearFocus()
 

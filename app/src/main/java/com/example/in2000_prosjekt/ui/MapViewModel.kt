@@ -37,11 +37,6 @@ class MapViewModel : ViewModel() {
             }
             val mapSearchP = mapSearchDeferred.await()
 
-//            _appUistate.update { //kan man bare oppdatere denne ene og ikke også recent?
-//                it.copy(
-//                    optionMountains = mapSearchP.optionMountains //hvor ligger name og mapbox_id? legges det til egt?
-//                )
-//            }
             _appUistate.value = MapInfo(mapSearchP.optionMountains, _appUistate.value.recentSearch)
         }
     }
