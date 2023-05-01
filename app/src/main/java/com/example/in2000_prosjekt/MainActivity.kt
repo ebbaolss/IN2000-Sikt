@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MultipleScreenApp(viewModel: FavoriteViewModel) {
+fun MultipleScreenApp(viewModel: FavoriteViewModel, mapviewmodel : MapViewModel) {
 
     val navController = rememberNavController()
 
@@ -107,10 +107,8 @@ fun MultipleScreenApp(viewModel: FavoriteViewModel) {
         startDestination = "Map") {
 
         composable("StartPage") { StartPage( onNavigateToNext = { navController.navigate("Map") })  }
-        composable("Map") { ShowMap(map, favorite, settings, rules)  }
-        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules,
-            viewModel = viewModel
-        ) }
+        composable("Map") { ShowMap(map, favorite, settings, rules, mapviewmodel)  }
+        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules) }
         composable("Rules") { RulesScreen(map, favorite, settings, rules) }
         composable("Info") { SettingsScreen(map, favorite, settings, rules) }
         composable("Database") { DatabaseScreenTest(viewModel) }
