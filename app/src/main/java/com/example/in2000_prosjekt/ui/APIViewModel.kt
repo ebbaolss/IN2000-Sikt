@@ -46,15 +46,15 @@ class APIViewModel : ViewModel() {
             val alertDeferred = viewModelScope.async (Dispatchers.IO){
                 repository.getAlert(latitude, longitude)
             }
-            /*val frostDeferred = viewModelScope.async (Dispatchers.IO){
+            val frostDeferred = viewModelScope.async (Dispatchers.IO){
                 repository.getFrost(latitude, longitude)
-            }*/
+            }
 
             val nowCastP = nowCastDeferred.await()
             val locationP = locationDeferred.await()
             val sunsetP = sunsetDeferred.await()
             val alertP = alertDeferred.await()
-            //val frostP = frostDeferred.await()
+            val frostP = frostDeferred.await()
 
             _appUistate.update {
                 AppUiState.Success(
@@ -62,7 +62,7 @@ class APIViewModel : ViewModel() {
                     nowCastF = nowCastP,
                     sunriseF = sunsetP,
                     alertListF = alertP,
-                    //frostF = frostP
+                    frostF = frostP
                 )
             }
         }

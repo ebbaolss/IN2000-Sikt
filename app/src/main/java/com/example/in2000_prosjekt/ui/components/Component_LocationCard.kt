@@ -179,6 +179,15 @@ fun Sikt_LoctationCard_Topper_i_naerheten() {
     }
 }
 
+
+
+
+
+
+
+
+
+
 @Composable
 fun Sikt_LocationCard_Hour() {
     
@@ -201,6 +210,7 @@ fun Sikt_LocationCard_Hour() {
     }
 }
 
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showSystemUi = true)
@@ -215,9 +225,9 @@ fun ComponentTest() {
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(Sikt_hvit)
     ) {
-        Sikt_LocationCard()
+        //Sikt_LocationCard()
         //Sikt_LocationCard_NextDays()
         //Sikt_LoctationCard_Topper_i_naerheten()
-        //Sikt_LocationCard_Hour()
+        Sikt_LocationCard_Hour()
     }
 }

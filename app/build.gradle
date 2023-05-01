@@ -147,13 +147,21 @@ dependencies {
 
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.5.3")
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version" // Dette er siste offisielt støttede måte å teste composable funksjoner på: Ref. https://github.com/android/android-test/issues/224
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
     testImplementation "io.ktor:ktor-client-mock-jvm:$ktor_version"
 
+
+// Test av datepicker
+    // Date picker funnet på nett
+    implementation "io.github.boguszpawlowski.composecalendar:composecalendar:1.1.0"// 1.0.0 funka, 0.3.0 funka ikke, 1.1.0 funka ikke, 1.2.0
+
+
+    // separate artifact with utilities for working with kotlinx-datetime
+    implementation "io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.1.0"// 1.1.0, 0.3.0 funka ikke,1.1.0 funka ikke, 0.6.0
 
 
 

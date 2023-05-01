@@ -1,25 +1,43 @@
 package com.example.in2000_prosjekt
 
+import android.app.Application
 import android.content.res.Configuration
+import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.SemanticsConfiguration
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.ComposeNavigator
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.testing.TestNavHostController
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.example.in2000_prosjekt.ui.components.*
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModelFactory
 import com.example.in2000_prosjekt.ui.screens.*
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import com.mapbox.maps.MapView
 import com.mapbox.maps.exception.WorkerThreadException
+import org.junit.Assert
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
 
 class UnitTestComposableFunksjoner {
@@ -72,7 +90,6 @@ class UnitTestComposableFunksjoner {
     class testScreenInnstillingerScreen {
         @get:Rule
         val rule = createComposeRule()
-        lateinit var navController: TestNavHostController
 
         @Test
         fun open_SettingsScreenUIAppears() {
@@ -85,7 +102,7 @@ class UnitTestComposableFunksjoner {
                         onNavigateToMap = { /*TODO*/ },
                         onNavigateToFav = { /*TODO*/ },
                         onNavigateToSettings = { /*TODO*/ },
-                        onNavigateToRules = { }
+                        onNavigateToRules = {/*TODO*/ }
                     )
                 }
             }
@@ -411,4 +428,5 @@ class UnitTestComposableFunksjoner {
     }
 
 }
+
 
