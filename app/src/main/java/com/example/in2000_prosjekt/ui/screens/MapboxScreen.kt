@@ -12,9 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.components.Sikt_BlueButton
-import com.example.in2000_prosjekt.ui.APIViewModel
+
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard

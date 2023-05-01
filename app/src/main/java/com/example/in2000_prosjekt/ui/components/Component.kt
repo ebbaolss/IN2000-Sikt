@@ -7,10 +7,8 @@ import android.graphics.ColorSpace
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.PaintDrawable
 import android.media.Image
-import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.animation.VectorConverter
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -68,6 +66,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.core.graphics.toColor
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+/*
 import io.github.boguszpawlowski.composecalendar.*
 import io.github.boguszpawlowski.composecalendar.day.Day
 import io.github.boguszpawlowski.composecalendar.day.DayState
@@ -77,7 +76,7 @@ import io.github.boguszpawlowski.composecalendar.kotlinxDateTime.toKotlinYearMon
 import io.github.boguszpawlowski.composecalendar.selection.DynamicSelectionState
 import io.github.boguszpawlowski.composecalendar.selection.EmptySelectionState
 import io.github.boguszpawlowski.composecalendar.selection.SelectionMode
-import io.github.boguszpawlowski.composecalendar.selection.SelectionState
+import io.github.boguszpawlowski.composecalendar.selection.SelectionState */
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import java.time.DayOfWeek
@@ -295,7 +294,7 @@ fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunr
                 // Placeholder-ikon for advarsel:
                 // Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
                 
-                Log.d("ALERT-S", "alertinfo.size: ${alertinfo.size}")
+                //Log.d("ALERT-S", "alertinfo.size: ${alertinfo.size}")
                 //Alert pop up dialog
                 var openDialog by remember {
                     mutableStateOf(false)
@@ -607,7 +606,7 @@ fun Sikt_Visualisering_and_Sikt_Info(sikthigh : Double, siktmedium : Double, sik
 
 //I vår composable funksjon som generer kalenderen vår (se neste Composable-funskjon: StaticCalender() ) så kan man bestemme innholdet til de ulike bestanddelene av en kalender, slikt som tittel, plassering av de ulike trykkbare komponetene i kalenderen, om den er scrollbar etc.
 //Dette er funksjonen som bestemmer dagsinnholdet i hver dag kalenderen StaticCalender()
-@Composable
+/*@Composable
 fun dayContent(dayState: NonSelectableDayState /*,frostinfo: FrostInfo*/) : MutableList<LocalDate> {
 
     var alledager = mutableListOf<LocalDate>()
@@ -657,7 +656,7 @@ fun dayContent(dayState: NonSelectableDayState /*,frostinfo: FrostInfo*/) : Muta
 
     return alledager
 }
-
+*/
 
 
 //Dette er en Composable funksjon som generer en kalender med et dagsinnhold bestemt av funksjonen dayContent
@@ -666,7 +665,7 @@ fun dayContent(dayState: NonSelectableDayState /*,frostinfo: FrostInfo*/) : Muta
 @Preview(showSystemUi = true)
 @Composable
 fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frostinfo: FrostInfo*/) { // api kallet er kommentert ut fordi jeg ikke får kjørt med apikallet
-
+    /*
     val historicCardUiState by APIViewModel.appUiState.collectAsState()
 
 
@@ -678,7 +677,7 @@ fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frost
     ){
 
 
-        var calenderstate : CalendarState<EmptySelectionState> = rememberCalendarState()
+        //var calenderstate : CalendarState<EmptySelectionState> = rememberCalendarState()
 
 
 
@@ -692,23 +691,23 @@ fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frost
         APIViewModel.getFrost( referencetimetest = ( dayContent()   )
 
 
-        Text(text= "Picture description:")
+        /*Text(text= "Picture description:")
 
 
         Text(text= "Klart:")
-        Image(painter = painterResource(id = R.drawable.klart), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
+        //Image(painter = painterResource(id = R.drawable.klart), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/))
 
 
 
         Text(text= "Lettskyet:")
-        Image(painter = painterResource(id = R.drawable.lettskyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
+        //Image(painter = painterResource(id = R.drawable.lettskyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
 
 
         Text(text= "Delvis skyet:")
-        Image(painter = painterResource(id = R.drawable.delvis_skyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
+        //Image(painter = painterResource(id = R.drawable.delvis_skyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
 
-        Text(text= "Skyet:")
-        Image(painter = painterResource(id = R.drawable.skyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
+        Text(text= "Skyet:")*/
+        //Image(painter = painterResource(id = R.drawable.skyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
 
 
 
@@ -726,7 +725,7 @@ fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frost
 
         //Log.d("calenderstate.monthState.currentMonth.month", calenderstate.monthState.currentMonth.month.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
 
-    }
+    }*/
 
 }
 
@@ -735,7 +734,7 @@ fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frost
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
-    Sikt_LocationCard()
+    //Sikt_LocationCard()
 }
 
 

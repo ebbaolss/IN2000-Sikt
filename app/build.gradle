@@ -4,6 +4,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.serialization" version "1.8.20-Beta"
 }
 
+
 android {
     namespace 'com.example.in2000_prosjekt'
     compileSdk 33
