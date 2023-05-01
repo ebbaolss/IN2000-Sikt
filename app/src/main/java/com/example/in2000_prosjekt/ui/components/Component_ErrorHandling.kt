@@ -20,8 +20,8 @@ import com.example.in2000_prosjekt.R
 @Composable
 fun FavoriteScreenError ( onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit) {
 
-    //fiks bottombar og errorhandling for mapbox
-    Scaffold(bottomBar = {  })
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, rules = false, map = false, settings = false)
+    })
     {
 
         Column(
@@ -38,3 +38,5 @@ fun FavoriteScreenError ( onNavigateToMap: () -> Unit, onNavigateToFav: () -> Un
         }
     }
 }
+
+
