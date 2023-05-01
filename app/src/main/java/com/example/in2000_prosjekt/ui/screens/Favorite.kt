@@ -2,16 +2,11 @@ package com.example.in2000_prosjekt.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -24,8 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,7 +27,6 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
-//import com.example.in2000_prosjekt.ui.components.Sikt_favoritt_tekst
 import com.example.in2000_prosjekt.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

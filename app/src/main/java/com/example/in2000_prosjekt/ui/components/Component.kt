@@ -329,7 +329,7 @@ fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunr
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            //Sikt_Header("fjelltopp", alertType : String, alertLevel : String)
+            Sikt_Header("fjelltopp" /*, alertType : String, alertLevel : String */)
             Sikt_MountainHight("1884")
         }
     }
