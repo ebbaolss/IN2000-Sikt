@@ -253,14 +253,14 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
         onFeatureClicked(it) { feature ->
             if (feature.id() != null) {
                 val name = feature.getStringProperty("name")
-                val elevation = 600 // feature.getStringProperty("elevation_m").toInt()
+                val elevation = feature.getStringProperty("elevation_m").toInt()
                 val point = feature.geometry() as Point
 
                 // Saving a clicked mountain to the UiState through the view model
                 mapViewModel.updateMountain(MapUiState.Mountain(name, point, elevation))
 
-                val latitude = 61.651356077904666 // point.latitude()
-                val longitude = 8.557801680731075 // point.longitude()
+                val latitude =  point.latitude()
+                val longitude = point.longitude()
 
                 apiViewModel.getAll("$latitude", "$longitude", "$elevation")
 
