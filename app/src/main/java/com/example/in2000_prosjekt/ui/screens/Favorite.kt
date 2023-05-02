@@ -27,6 +27,7 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
+import com.example.in2000_prosjekt.ui.database.Favorite
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 //import com.example.in2000_prosjekt.ui.components.Sikt_favoritt_tekst
 import com.example.in2000_prosjekt.ui.theme.*
@@ -76,6 +77,8 @@ fun FavoriteScreenSuccess(
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel
 
 ) {
+    viewModel.addFavorite(Favorite(61.0,8.0))
+
     var favorites = viewModel.allFavorites.value!!
     var weatherinfo = viewModel.getLocationList()
     var nowcastinfo = viewModel.getNowInfo()

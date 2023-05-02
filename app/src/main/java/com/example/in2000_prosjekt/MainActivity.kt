@@ -106,7 +106,7 @@ fun MultipleScreenApp(viewModel: FavoriteViewModel, mapviewmodel : MapViewModel)
         navController = navController,
         startDestination = "Map") {
 
-        composable("StartPage") { StartPage( onNavigateToNext = { navController.navigate("Map") })  }
+        composable("StartPage") { StartPage( onNavigateToNext = { navController.navigate("Favorite") })  }
 
         composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules, viewModel = viewModel) }
         composable("Map") { ShowMap(map, favorite, settings, rules, mapviewmodel)  }
