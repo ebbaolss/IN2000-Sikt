@@ -416,7 +416,7 @@ fun DeleteAllButton(viewModel: FavoriteViewModel){
 }
 
 @Composable
-fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
+fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
 
     fun getHeightVisuals(height: Int?) : Int {
         return if (height != null) {
@@ -436,10 +436,10 @@ fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : Float, 
         }
     }
 
-    // Klart vær = God sikt = Sikt på mer enn 10 km (INGEN SKYER)
-    // Lettskyet = Moderat sikt = Sikt på 4-10 km (LITEN SKY)
-    // Delvis skyet = Dårlig sikt = Sikt på 1-4 km (STOR SKY)
-    // Skyet = Tåke = Sikt på mindre enn 1 km (STOR + LITEN SKY)
+    // Klart vær = God sikt = Sikt på mer enn 10 km (INGEN SKYER) under 25%
+    // Lettskyet = Moderat sikt = Sikt på 4-10 km (LITEN SKY) 25% - 50%
+    // Delvis skyet = Dårlig sikt = Sikt på 1-4 km (STOR SKY) 50% - 75%
+    // Skyet = Tåke = Sikt på mindre enn 1 km (STOR + LITEN SKY) over 100%
 
     fun getHighClouds(highclouds: Float): Int {
         return if (highclouds >= 75) {

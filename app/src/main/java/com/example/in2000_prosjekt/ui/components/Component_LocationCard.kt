@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,8 +50,8 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
     val weather_mid = locationInfo.cloud_area_fraction_medium
     val weather_low = locationInfo.cloud_area_fraction_low
 
-   // val temp = dataN.temperatureNow
-   // val wind = dataN.windN
+   val temp = nowCastInfo.temperatureNow
+   val wind = nowCastInfo.windN
 
     println("weather_high = $weather_high")
     println("weather_mid = $weather_mid")
@@ -66,7 +67,7 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
             Sikt_Header(location = "$name", alertinfo = mutableListOf()) // Husk å endre alertinfo
             Sikt_MountainHight(mountainheight = "$elevation")
             Spacer(modifier = Modifier.size(20.dp))
-            //illustrasjon(elevation, 10f,10f,"skyet", "delvisskyet", "klart")
+            illustrasjon(elevation, temp,wind,weather_high, weather_mid, weather_low)
             Spacer(modifier = Modifier.size(20.dp))
             Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.size(10.dp))
@@ -204,34 +205,4 @@ fun Sikt_LocationCard_NextDays() {
             }
         }
     }
-}
-
-@Composable
-fun Sikt_LoctationCard_Topper_i_naerheten() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(160.dp)
-            .padding(start = 20.dp, end = 20.dp, top = 5.dp),
-    ) {
-        Text(text = "Topper i nærheten: ", modifier = Modifier.align(Alignment.TopStart), fontWeight = FontWeight.Bold)
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-
-        }
-    }
-}
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showSystemUi = true)
-@Composable
-fun ComponentTest() {
-
-    //Sikt_LocationCard()
-
 }
