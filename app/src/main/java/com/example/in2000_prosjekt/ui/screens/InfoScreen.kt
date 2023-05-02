@@ -46,129 +46,149 @@ fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             Column(
                 modifier = Modifier.padding(20.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.outline_contact_phone),
-                    contentDescription = "Phone illustration",
-                    tint = Sikt_mørkeblå,
-                    modifier = Modifier.align(CenterHorizontally).size(100.dp),
-                )
+                Sikt_skyillustasjon()
                 Text(
-                    modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
-                    text = "Informasjon",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    text = "Innstillinger",
                     textAlign = TextAlign.Center,
-                    fontSize = 32.sp,
+                    fontSize = 30.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.size(50.dp))
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Din posisjon:",
-                    textAlign = TextAlign.Center,
-                    fontSize = 18.sp,
+                    text = "Slett alle favoritter:",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                //Legg inn "slett alle favoritter"-knapp
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Darkmode:",
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    //Placeholder for ditt koordinat:
-                    text = "59.99436° N, 10,71848° Ø",
-                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                    text = "Kommer snart.",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Normal
                 )
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Nødnummer:",
-                    textAlign = TextAlign.Center,
-                    fontSize = 18.sp,
+                    text = "Utviklet av:",
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Row(
+                Column(
                     modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Medisinsk Nødtelefon:",
-                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Ebba Maja Olsson",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        text = "113",
-                        textAlign = TextAlign.End,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = "Brann:",
-                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Elisabeth Bårdstu",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        text = "110",
-                        textAlign = TextAlign.End,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = "Politi:",
-                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Nabil Hassen",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        text = "112",
-                        textAlign = TextAlign.End,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = "Politiets sentralbord:",
-                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Ola Juul Holm",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        text = "02800",
-                        textAlign = TextAlign.End,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = "Legevakten:",
-                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Synne Markmanrud",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        text = "116117",
-                        textAlign = TextAlign.End,
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Thea Hermansen Bakke",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     )
                 }
                 Spacer(modifier = Modifier.size(20.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "APIer:",
+                    textAlign = TextAlign.Start,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Vi har implementert følgende APIer via meteorologisk insitutt:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        text = "Locationforecast",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        text = "Nowcast",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        text = "MetAlerts",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        text = "Sunrise",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        text = "Frost",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "I tillegg er kartet hentet fra:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        text = "Mapbox",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+                Spacer(modifier = Modifier.size(100.dp))
             }
         }
     }

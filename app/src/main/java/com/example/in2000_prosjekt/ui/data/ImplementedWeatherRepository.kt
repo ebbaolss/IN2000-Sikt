@@ -129,9 +129,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         Log.d("long", long.toString())
 
         return FrostInfo(
-            typeFrost = typeFrost.toString(), //ikke egt ha toString her
-            longFrost = long!!,
-            latFrost = lat!!,
+            sightcondition = typeFrost!!.toInt()
         )
     }
 }

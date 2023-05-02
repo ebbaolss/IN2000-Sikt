@@ -4,6 +4,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.serialization" version "1.8.20-Beta"
 }
 
+
 android {
     namespace 'com.example.in2000_prosjekt'
     compileSdk 33
@@ -56,7 +57,8 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation 'androidx.compose.material3:material3:1.0.0-alpha11'
 
-    implementation 'androidx.room:room-common:2.5.1'
+    //implementation 'androidx.room:room-common:2.5.1'
+
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -67,7 +69,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
     // Mapbox
-    implementation ('com.mapbox.maps:android:10.11.2'){
+    implementation ('com.mapbox.maps:android:10.12.1'){
         exclude group: 'group_name', module: 'module_name'
     }
 
@@ -94,6 +96,8 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:$compose_version")
     // test frost
     implementation "androidx.compose.material3:material3:1.0.0-beta03"
+
+    implementation("io.ktor:ktor-client-cio-jvm:2.2.4")
 
 
     // Dependencies for testene
@@ -138,6 +142,29 @@ dependencies {
 
     // test av api, ktors mock engine
     implementation "io.ktor:ktor-client-mock-jvm:2.2.3"
+
+
+
+
+
+
+    // Datepicker i Material 3 er kun tilgjengelig fra 1.1.0-alpha04: https://developer.android.com/reference/kotlin/androidx/compose/material3/package-summary#DatePicker(androidx.compose.material3.DatePickerState,androidx.compose.ui.Modifier,androidx.compose.material3.DatePickerFormatter,kotlin.Function1,kotlin.Function0,kotlin.Function0,kotlin.Boolean,androidx.compose.material3.DatePickerColors)
+    //implementation 'androidx.compose.material3:material3:1.1.0-alpha04'
+
+
+    //Dette er for Gamle Date picker:https://m2.material.io/components/date-pickers/android
+    implementation 'com.google.android.material:material:1.8.0'
+
+
+
+    // Date picker funnet på nett
+    implementation "io.github.boguszpawlowski.composecalendar:composecalendar:1.1.0"// 1.0.0 funka, 0.3.0 funka ikke, 1.1.0 funka ikke, 1.2.0
+
+
+    // separate artifact with utilities for working with kotlinx-datetime
+   implementation "io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.1.0"// 1.1.0, 0.3.0 funka ikke,1.1.0 funka ikke, 0.6.0
+
+
 
 
 }

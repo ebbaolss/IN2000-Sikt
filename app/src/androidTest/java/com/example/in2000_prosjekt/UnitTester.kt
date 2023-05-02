@@ -1,5 +1,5 @@
 package com.example.in2000_prosjekt
-/*
+
 import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
@@ -56,7 +56,9 @@ import kotlin.test.Test
 
 class testScreenStartpage {
     @get:Rule
+
     val rule = createComposeRule()
+
     lateinit var navController: TestNavHostController
 
     @Test

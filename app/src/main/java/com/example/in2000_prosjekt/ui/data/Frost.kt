@@ -65,16 +65,15 @@ data class Data_For_Koordinater (
 data class Geometri (
 
     var type : String?,
-    //@SerializedName("coordinates" ) var coordinates : ArrayList<Double> = arrayListOf(),
     var coordinates : List<Double>?,
     var nearest : Boolean?
 )
 data class Observations (
 
     var elementId : String?,
-    var value : Double?, //termperatur
+    var value : Int?, //Er en verdi mellom 0-8:(0 = no clouds, 8 = completely overcast).Ref.https://frost.met.no/elementtable
     var unit : String?,
-    var level : Level?,
+  //  var level : Level?, Denne gjelder ikke nå som vi bruker : mean(cloud_area_fraction P1D)
     var timeOffset : String?,
     var timeResolution : String?,
     var timeSeriesId : Int?,

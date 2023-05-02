@@ -2,16 +2,11 @@ package com.example.in2000_prosjekt.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -24,8 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -45,11 +38,11 @@ fun FavoriteScreen(viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, on
     val appUiState by viewModel.appUiState.collectAsState()
 
     when(appUiState){
-        is AppUiState.Loading -> 
+        is AppUiState.Loading ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Sikt_mellomblå), 
+                    .background(Sikt_mellomblå),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -58,9 +51,9 @@ fun FavoriteScreen(viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, on
             }
         is AppUiState.Error -> {
 
-           FavoriteScreenError( onNavigateToMap,
-               onNavigateToFav,onNavigateToSettings,
-               onNavigateToRules)
+            FavoriteScreenError( onNavigateToMap,
+                onNavigateToFav,onNavigateToSettings,
+                onNavigateToRules)
         }
         is AppUiState.Success -> {
             FavoriteScreenSuccess(
@@ -77,9 +70,11 @@ fun FavoriteScreen(viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, on
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
+
 fun FavoriteScreenSuccess(
     //weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel
+
 ) {
     var favorites = viewModel.allFavorites.value!!
     var weatherinfo = viewModel.getLocationList()
@@ -94,6 +89,7 @@ fun FavoriteScreenSuccess(
         }
     }
 }
+
 
 
 

@@ -59,6 +59,9 @@ class FavoriteViewModel(application: Application) : ViewModel() {
     @Composable
     fun getAlertInfo() : MutableList<MutableList<AlertInfo>> {
         return repository.getAlertInfo()
+
+    fun deleteAll(){
+        repository.deleteAll()
     }
 }
 

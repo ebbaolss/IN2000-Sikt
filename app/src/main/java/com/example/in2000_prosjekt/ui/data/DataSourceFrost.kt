@@ -3,6 +3,7 @@ package com.example.in2000_prosjekt.ui.data
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
@@ -10,10 +11,11 @@ import io.ktor.serialization.gson.*
 import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.statement.*
+import io.ktor.http.*
 
 class DataSourceFrost (val basePath: String) {
 
-    private val client = HttpClient() {
+    private val client = HttpClient(CIO) {
 
         install(Auth) {
             basic {
@@ -30,15 +32,11 @@ class DataSourceFrost (val basePath: String) {
             gson()
         }
 
-        /*
-        ResponseException()
-        https://github.com/ktorio/ktor-documentation/tree/2.2.4/codeSnippets/snippets/client-validate-non-2xx-response/src
 
-
-         */
     }
 
     suspend fun authURL(URL: String) : HttpResponse {
+
         return client.get(URL) {
             headers {append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")}}
     }
@@ -49,7 +47,23 @@ class DataSourceFrost (val basePath: String) {
         source: String
     ): Frost_API_Respons {
 
-        return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=$elements").body()
+        return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=$elements").body() // hvorfor har vi client i hver datasource når vi bruker .body påauth
+
+        /* fra tirs 18.04
+        try{
+
+            return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=$elements").body() // hvorfor har vi client i hver datasource når vi bruker .body påauth
+        } catch (cause: ResponseException) {
+            println(cause)
+            cause.response
+
+
+        }
+        return Frost_API_Respons( "Error har skjedd","","","","",3?,0.5,3.4)
+
+         */
+
+
     }
 
     //DENNE MÅ SEES PÅ SAMMEN PÅ ONSDAG 12.04
