@@ -25,7 +25,7 @@ class MapViewModel : ViewModel() {
     private val _appUistate2 = MutableStateFlow(MapCoordinatesInfo())
     val appUiState2 = _appUistate2.asStateFlow()
 
-    fun getDataSearch(query: String) {
+    fun getDataSearch(query: String) : Boolean {
 
         val path = "https://api.mapbox.com/search/searchbox/v1/suggest?q=$query&limit=10&" +
                 "session_token=[GENERATED-UUID]&country=NO&poi_category=mountain&poi_category_exclusions=street&" +
@@ -40,6 +40,7 @@ class MapViewModel : ViewModel() {
             _appUistate.value = MapInfo(mapSearchP.optionMountains, _appUistate.value.recentSearch)
             println("oppdatert") //kommer aldri hit
         }
+        return true
     }
     fun getDataSearchCoordinates(mapboxId: String) {
 
