@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.in2000_prosjekt.ui.APIViewModel
 
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
@@ -45,7 +46,8 @@ fun ShowMap(
     onNavigateToFav: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToRules: () -> Unit,
-    mapViewModel: MapViewModel
+    mapViewModel: MapViewModel,
+    apiViewModel: APIViewModel
 ) {
     val cameraOptionsUiState by mapViewModel.cameraOptionsUiState.collectAsState()
     val mountainUiState by mapViewModel.mountainUiState.collectAsState()
@@ -106,12 +108,12 @@ fun ShowMap(
             )
 
             if (locationCardState){
-                Sikt_LocationCard(mountainUiState)
+                Sikt_LocationCard(mountainUiState, apiViewModel)
             }
         }
 
-        // Menu
-        Sikt_BottomSheet()
+        // Menu (Kommer over LocationCard?)
+        //Sikt_BottomSheet()
     }
 }
 
