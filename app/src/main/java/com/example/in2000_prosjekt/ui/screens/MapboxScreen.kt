@@ -120,7 +120,6 @@ fun ShowMap(
             )
 
             if (locationCardState){
-                Log.d("Location Card", "Initialising")
                 when (appUiState) {
                     is AppUiState.Loading -> {
                         Column(
@@ -150,11 +149,12 @@ fun ShowMap(
                             onNavigateToRules)
                     }
                     is AppUiState.Success -> {
+                        Log.d("Location Card", "Initialising")
                         Sikt_LocationCard(
                             mountainUiState,
-                            apiViewModel.locationInfoState,
-                            apiViewModel.nowCastInfoState,
-                            apiViewModel.alertInfoState
+                            (appUiState as AppUiState.Success).locationF,
+                            (appUiState as AppUiState.Success).nowCastF,
+                            (appUiState as AppUiState.Success).alertListF
                         )
                     }
                 }
@@ -253,15 +253,14 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
         onFeatureClicked(it) { feature ->
             if (feature.id() != null) {
                 val name = feature.getStringProperty("name")
-                val elevation = feature.getStringProperty("elevation_m").toInt()
+                val elevation = 600 // feature.getStringProperty("elevation_m").toInt()
                 val point = feature.geometry() as Point
 
                 // Saving a clicked mountain to the UiState through the view model
                 mapViewModel.updateMountain(MapUiState.Mountain(name, point, elevation))
 
-                // Calling getAll
-                val latitude = point?.latitude()
-                val longitude = point?.longitude()
+                val latitude = 61.651356077904666 // point.latitude()
+                val longitude = 8.557801680731075 // point.longitude()
 
                 apiViewModel.getAll("$latitude", "$longitude", "$elevation")
 

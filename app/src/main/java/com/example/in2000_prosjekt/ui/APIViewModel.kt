@@ -22,14 +22,15 @@ class APIViewModel () : ViewModel()
     {
 
     //manual dependency injection, se codelab
-    val repository: WeatherRepository = ImplementedWeatherRepository() //lettvinte måten
+    private val repository: WeatherRepository = ImplementedWeatherRepository() //lettvinte måten
 
     private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
-    lateinit var locationInfoState: LocationInfo
-    lateinit var nowCastInfoState: NowCastInfo
-    lateinit var alertInfoState: MutableList<AlertInfo>
+
+    private val currentLatitude = 61.651356077904666
+    private val currentLongitude = 8.557801680731075
+    private val altitude: String = "600"
 
     fun getAll(latitude: String, longitude: String, altitude: String) {
         viewModelScope.launch() {
@@ -37,29 +38,29 @@ class APIViewModel () : ViewModel()
                 val locationDeferred = viewModelScope.async (Dispatchers.IO) {
                     repository.getLocation(latitude, longitude, altitude)
                 }
+                val locationP = locationDeferred.await()
+                Log.d("locationDeffered", "Success")
+
                 val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getNowCast(latitude, longitude, altitude)
                 }
+                Log.d("getAll", "Pre-deferred")
+                val nowCastP = nowCastDeferred.await()
+                Log.d("nowCastDeferred", "Success")
                 val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getSunrise(latitude, longitude)
                 }
+                val sunsetP = sunsetDeferred.await()
+                Log.d("sunriseDeferred", "Success")
                 val alertDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getAlert(latitude, longitude)
                 }
+
                 /*val frostDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getFrost(latitude, longitude)
                 }*/
 
-                nowCastInfoState = nowCastDeferred.await()
-                Log.d("nowCastDeferred", "Success")
-
-                locationInfoState = locationDeferred.await()
-                Log.d("locationDeffered", "Success")
-
-                val sunsetP = sunsetDeferred.await()
-                Log.d("sunriseDeferred", "Success")
-
-                alertInfoState = alertDeferred.await()
+                val alertP = alertDeferred.await()
                 Log.d("alertDeferred", "Success")
 
                 //val frostP = frostDeferred.await()
@@ -67,10 +68,10 @@ class APIViewModel () : ViewModel()
 
                 _appUistate.update {
                     AppUiState.Success(
-                        locationF = locationInfoState,
-                        nowCastF = nowCastInfoState,
+                        locationF = locationP,
+                        nowCastF = nowCastP,
                         sunriseF = sunsetP,
-                        alertListF = alertInfoState,
+                        alertListF = alertP,
                         //frostF = frostP
                     )
                 }
