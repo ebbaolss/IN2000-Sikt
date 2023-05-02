@@ -171,7 +171,7 @@ fun Sikt_HistoriskCard(){
         Column(
             modifier = Modifier.padding(20.dp),
         ) {
-            Sikt_Header("Fjelltopp")
+            //Sikt_Header("Fjelltopp", alertinfo)
             Sikt_MountainHight("1800")
             Spacer(modifier = Modifier.size(20.dp))
             illustrasjon(1469, -11f, 5f, "skyet", "delvisskyet", "klart")

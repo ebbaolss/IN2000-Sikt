@@ -2,22 +2,32 @@ package com.example.in2000_prosjekt.ui.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.APIViewModel
+import com.example.in2000_prosjekt.ui.AppUiState
+import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
-import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
 import com.example.in2000_prosjekt.ui.database.MapViewModel
+import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
+import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
@@ -26,9 +36,6 @@ import com.mapbox.maps.*
 import com.mapbox.maps.dsl.cameraOptions
 import com.mapbox.maps.extension.style.expressions.dsl.generated.eq
 import com.mapbox.maps.extension.style.layers.generated.circleLayer
-import com.mapbox.maps.extension.style.layers.generated.CircleLayer
-import com.mapbox.maps.extension.style.layers.generated.circleLayer
-import com.mapbox.maps.extension.style.layers.getLayerAs
 import com.mapbox.maps.extension.style.sources.generated.vectorSource
 import com.mapbox.maps.extension.style.style
 import com.mapbox.maps.plugin.compass.compass
@@ -36,7 +43,6 @@ import com.mapbox.maps.plugin.delegates.listeners.OnCameraChangeListener
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.scalebar.scalebar
-import kotlin.math.sqrt
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,9 +55,13 @@ fun ShowMap(
     mapViewModel: MapViewModel,
     apiViewModel: APIViewModel
 ) {
+
     val cameraOptionsUiState by mapViewModel.cameraOptionsUiState.collectAsState()
     val mountainUiState by mapViewModel.mountainUiState.collectAsState()
+    val appUiState by apiViewModel.appUiState.collectAsState()
+
     var locationCardState by remember { mutableStateOf(false) }
+
 
     Scaffold(
         bottomBar = {
@@ -78,9 +88,11 @@ fun ShowMap(
                     val mapboxMap = map.getMapboxMap()
 
                     mapboxMap.addOnMapClickListener(onMapClickListener = OnMapClickListener { point ->
-                        locationCardState = onMapClick(point, mapboxMap, mapViewModel)
                         Log.d("LocationCardState", "$locationCardState")
-                        locationCardState
+                        onMapClick(point, mapboxMap, mapViewModel, apiViewModel) {
+                            locationCardState = true
+                            Log.d("Location Card State", "$locationCardState")
+                        }
                     })
                     mapboxMap.addOnCameraChangeListener(onCameraChangeListener = OnCameraChangeListener {
                         Log.d("CameraChangeListener", "invoked")
@@ -108,7 +120,44 @@ fun ShowMap(
             )
 
             if (locationCardState){
-                Sikt_LocationCard(mountainUiState, apiViewModel)
+                Log.d("Location Card", "Initialising")
+                when (appUiState) {
+                    is AppUiState.Loading -> {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Sikt_mellomblå),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.outline_pending),
+                                contentDescription = "",
+                                tint = Sikt_hvit,
+                                modifier = Modifier.size(50.dp)
+                            )
+                            Text(
+                                text = "Loading",
+                                color = Sikt_hvit,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                    is AppUiState.Error -> {
+                        FavoriteScreenError( onNavigateToMap,
+                            onNavigateToFav,onNavigateToSettings,
+                            onNavigateToRules)
+                    }
+                    is AppUiState.Success -> {
+                        Sikt_LocationCard(
+                            mountainUiState,
+                            apiViewModel.locationInfoState,
+                            apiViewModel.nowCastInfoState,
+                            apiViewModel.alertInfoState
+                        )
+                    }
+                }
             }
         }
 
@@ -186,7 +235,7 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
 
 
 // Definerer hva som skal skje når brukeren trykker på kartet
-fun onMapClick(point: Point, mapboxMap: MapboxMap, viewModel: MapViewModel): Boolean {
+fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, onClick : () -> Unit) : Boolean {
     Log.d("Coordinate", point.toString())
     mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(ScreenBox(
@@ -208,7 +257,15 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, viewModel: MapViewModel): Boo
                 val point = feature.geometry() as Point
 
                 // Saving a clicked mountain to the UiState through the view model
-                viewModel.updateMountain(MapUiState.Mountain(name, point, elevation))
+                mapViewModel.updateMountain(MapUiState.Mountain(name, point, elevation))
+
+                // Calling getAll
+                val latitude = point?.latitude()
+                val longitude = point?.longitude()
+
+                apiViewModel.getAll("$latitude", "$longitude", "$elevation")
+
+                onClick()
 
                 // DEBUGGING
                 Log.d("Map Feature Clicked", feature.toString())

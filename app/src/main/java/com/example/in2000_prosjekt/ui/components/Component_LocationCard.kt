@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,6 +22,7 @@ import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.geojson.Point
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.APIViewModel
+import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.theme.*
@@ -29,29 +31,23 @@ import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_LocationCard(mountain: MapUiState.Mountain, apiViewModel: APIViewModel){
+fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
 
     val name = mountain.name
     val elevation = mountain.elevation
 
     val latitude = mountain.point?.latitude()
     val longitude = mountain.point?.longitude()
-    val dataL : LocationInfo
-    val dataN : NowCastInfo
 
     // Gir point koordinatene i lat, så long?
     println("latitude: " + latitude.toString()) // latitude: 8.557780981063843
     println("longitude: " + longitude.toString()) // longitude: 61.65138739947395
 
-    apiViewModel.getAll(latitude.toString(), longitude.toString(), elevation.toString())
-    runBlocking {
-        dataL = apiViewModel.repository.getLocation(latitude.toString(), longitude.toString(), elevation.toString())
-        //dataN = apiViewModel.repository.getNowCast(latitude.toString(), longitude.toString(), elevation.toString())
-    }
+    //dataN = apiViewModel.repository.getNowCast(latitude.toString(), longitude.toString(), elevation.toString())
 
-    val weather_high = dataL.cloud_area_fraction_high
-    val weather_mid = dataL.cloud_area_fraction_medium
-    val weather_low = dataL.cloud_area_fraction_low
+    val weather_high = locationInfo.cloud_area_fraction_high
+    val weather_mid = locationInfo.cloud_area_fraction_medium
+    val weather_low = locationInfo.cloud_area_fraction_low
 
    // val temp = dataN.temperatureNow
    // val wind = dataN.windN
@@ -67,7 +63,7 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, apiViewModel: APIViewModel)
         Column(
             modifier = Modifier.padding(20.dp),
         ) {
-            Sikt_Header(location = "$name")
+            Sikt_Header(location = "$name", alertinfo = mutableListOf()) // Husk å endre alertinfo
             Sikt_MountainHight(mountainheight = "$elevation")
             Spacer(modifier = Modifier.size(20.dp))
             illustrasjon(elevation, 10f,10f,"skyet", "delvisskyet", "klart")

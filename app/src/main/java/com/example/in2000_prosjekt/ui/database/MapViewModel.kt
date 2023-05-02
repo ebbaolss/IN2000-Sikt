@@ -1,7 +1,13 @@
 package com.example.in2000_prosjekt.ui.database
 
 import android.app.Application
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
+import com.example.in2000_prosjekt.ui.AlertInfo
+import com.example.in2000_prosjekt.ui.LocationInfo
+import com.example.in2000_prosjekt.ui.NowCastInfo
+import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.geojson.Point
 import kotlinx.coroutines.flow.MutableStateFlow

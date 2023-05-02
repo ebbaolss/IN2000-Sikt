@@ -29,7 +29,6 @@ data class AlertInfo( //sett A på slutten
 
 data class FrostInfo( //sett Frost på slutten, F brukes allerede
     val sightcondition: Int,
-
 )
 
 sealed interface AppUiState {
