@@ -96,6 +96,7 @@ import com.example.in2000_prosjekt.ui.data.DataSource
 import com.example.in2000_prosjekt.ui.data.DataSourceSunrise
 import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.uistate.MapUiState
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, rules : Boolean, settings : Boolean) {
@@ -364,41 +365,48 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
     }
 }
 
-@Composable
-fun Sikt_Turer_I_Naerheten(location : String, height : Int, temp : Int){
-    Card(
-        colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
-        modifier = Modifier.padding(20.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
-                modifier = Modifier.size(100.dp)
+fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mountain>, locationInfo: LocationInfo, nowCastInfo: NowCastInfo){
+    //location : String, height : Int, temp : Int
+
+    items(mountains.size) {
+        mountains.forEach { tur ->
+            val temp = nowCastInfo.temperatureNow
+
+            Card(
+                colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
+                modifier = Modifier.padding(20.dp)
             ) {
-                /*Image(
-                    painter = painterResource(id = R.drawable.turer_i_naerheten),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                )*/
-                Text(
-                    text = "7°",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp,
-                    color = Sikt_sort,
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                Column(
+                    modifier = Modifier.padding(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier.size(100.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.turer_i_naerheten),
+                            contentDescription = "",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        Text(
+                            text = "${temp}°",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 28.sp,
+                            color = Sikt_sort,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Text(
+                        text = "${tur.name}",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        color = Sikt_sort,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
-            Spacer(modifier = Modifier.size(10.dp))
-            Text(
-                text = "fjelltopp",
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
-                color = Sikt_sort,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
         }
     }
 }
@@ -596,22 +604,4 @@ fun TestComponent() {
 
     //Sikt_FinnTurer_card("test",550, 3,false, true, false)
 
-    Card(
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.padding(20.dp),
-    ) {
-
-        Column(
-        ) {
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
-            ) {
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-            }
-        }
-    }
 }

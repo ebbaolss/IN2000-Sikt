@@ -159,6 +159,7 @@ fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frost
 }
 */
 
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_HistoriskCard(){
@@ -194,12 +195,13 @@ fun Sikt_HistoriskCard(){
         }
     }
 }
+ */
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview(showSystemUi = true)
 @Composable
 fun HistoricalTest() {
 
-    Sikt_HistoriskCard()
+    //Sikt_HistoriskCard()
 
 }

@@ -3,6 +3,7 @@ package com.example.in2000_prosjekt.ui.components
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -34,6 +35,8 @@ import kotlinx.coroutines.runBlocking
 @Composable
 fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
 
+    // endre til lazylist:
+
     val name = mountain.name
     val elevation = mountain.elevation
 
@@ -44,14 +47,12 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
     println("latitude: " + latitude.toString()) // latitude: 8.557780981063843
     println("longitude: " + longitude.toString()) // longitude: 61.65138739947395
 
-    //dataN = apiViewModel.repository.getNowCast(latitude.toString(), longitude.toString(), elevation.toString())
-
     val weather_high = locationInfo.cloud_area_fraction_high
     val weather_mid = locationInfo.cloud_area_fraction_medium
     val weather_low = locationInfo.cloud_area_fraction_low
 
-   val temp = nowCastInfo.temperatureNow
-   val wind = nowCastInfo.windN
+    val temp = nowCastInfo.temperatureNow
+    val wind = nowCastInfo.windN
 
     println("weather_high = $weather_high")
     println("weather_mid = $weather_mid")
@@ -64,7 +65,7 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
         Column(
             modifier = Modifier.padding(20.dp),
         ) {
-            Sikt_Header(location = "$name", alertinfo = mutableListOf()) // Husk å endre alertinfo
+            Sikt_Header(location = "$name", alertinfo = alertInfoList)
             Sikt_MountainHight(mountainheight = "$elevation")
             Spacer(modifier = Modifier.size(20.dp))
             illustrasjon(elevation, temp,wind,weather_high, weather_mid, weather_low)
@@ -88,14 +89,19 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
             Spacer(modifier = Modifier.size(20.dp))
             Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.size(10.dp))
+
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                val testliste = mutableListOf<MapUiState.Mountain>()
+                testliste.add(mountain)
+                testliste.add(mountain)
+                Sikt_Turer_I_Naerheten(testliste,locationInfo, nowCastInfo)
+                //item { Sikt_Turer_I_Naerheten(mountain, locationInfo, nowCastInfo) }
+                //item { Sikt_Turer_I_Naerheten(mountain, locationInfo, nowCastInfo) }
+                //item { Sikt_Turer_I_Naerheten(mountain, locationInfo, nowCastInfo) }
+                //item { Sikt_Turer_I_Naerheten(mountain, locationInfo, nowCastInfo) }
+                //item { Sikt_Turer_I_Naerheten(mountain, locationInfo, nowCastInfo) }
             }
         }
     }

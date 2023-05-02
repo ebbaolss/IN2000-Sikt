@@ -150,6 +150,7 @@ fun ShowMap(
                     }
                     is AppUiState.Success -> {
                         Log.d("Location Card", "Initialising")
+
                         Sikt_LocationCard(
                             mountainUiState,
                             (appUiState as AppUiState.Success).locationF,
