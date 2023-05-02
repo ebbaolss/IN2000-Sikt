@@ -51,7 +51,6 @@ fun FavoriteScreen(viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, on
                 Text(text = "Loading", color = Sikt_hvit, fontSize = 30.sp, fontWeight = FontWeight.Bold)
             }
         is AppUiState.Error -> {
-
             FavoriteScreenError( onNavigateToMap,
                 onNavigateToFav,onNavigateToSettings,
                 onNavigateToRules)

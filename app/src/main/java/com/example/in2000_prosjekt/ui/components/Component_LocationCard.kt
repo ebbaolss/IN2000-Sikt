@@ -34,7 +34,7 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain){
             modifier = Modifier.padding(20.dp),
         ) {
             Sikt_Header("Fjelltopp")
-            // Text(text = "${mountain.name}", fontWeight = FontWeight.Bold, fontSize = 30.sp)
+            //Text(text = "${mountain.name}", fontWeight = FontWeight.Bold, fontSize = 30.sp)
             Sikt_MountainHight("1800")
             //Text(text = "${mountain.elevation} m.o.h.", fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.size(20.dp))
