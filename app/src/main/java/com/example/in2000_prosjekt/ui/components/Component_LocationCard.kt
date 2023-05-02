@@ -1,34 +1,23 @@
 package com.example.in2000_prosjekt.ui.components
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_sort
-import com.example.in2000_prosjekt.ui.uistate.MapUiState
-import com.mapbox.geojson.Point
 import com.example.in2000_prosjekt.R
-import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.theme.*
-import kotlinx.coroutines.runBlocking
+import com.example.in2000_prosjekt.ui.uistate.MapUiState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,8 +33,8 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
     val longitude = mountain.point?.longitude()
 
     // Gir point koordinatene i lat, så long?
-    println("latitude: " + latitude.toString()) // latitude: 8.557780981063843
-    println("longitude: " + longitude.toString()) // longitude: 61.65138739947395
+    println("latitude: " + latitude.toString()) // glittertind: latitude: 8.557780981063843
+    println("longitude: " + longitude.toString()) // glittertind: longitude: 61.65138739947395
 
     val weather_high = locationInfo.cloud_area_fraction_high
     val weather_mid = locationInfo.cloud_area_fraction_medium
@@ -97,11 +86,6 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
                 testliste.add(mountain)
                 testliste.add(mountain)
                 Sikt_Turer_I_Naerheten(testliste,locationInfo, nowCastInfo)
-                //item { Sikt_Turer_I_Naerheten(mountain, locationInfo, nowCastInfo) }
-                //item { Sikt_Turer_I_Naerheten(mountain, locationInfo, nowCastInfo) }
-                //item { Sikt_Turer_I_Naerheten(mountain, locationInfo, nowCastInfo) }
-                //item { Sikt_Turer_I_Naerheten(mountain, locationInfo, nowCastInfo) }
-                //item { Sikt_Turer_I_Naerheten(mountain, locationInfo, nowCastInfo) }
             }
         }
     }

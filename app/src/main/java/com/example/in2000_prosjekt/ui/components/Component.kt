@@ -2,100 +2,37 @@
 
 package com.example.in2000_prosjekt.ui.components
 
-import android.annotation.SuppressLint
-import android.util.Log
-import android.graphics.ColorSpace
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.PaintDrawable
-import android.media.Image
-import android.widget.DatePicker
-import androidx.compose.animation.VectorConverter
-
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
-import androidx.compose.material3.AlertDialogDefaults.containerColor
-import androidx.compose.material3.AlertDialogDefaults.titleContentColor
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.Surface
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.theme.*
-//import com.google.android.material.datepicker.MaterialDatePicker
-import kotlinx.coroutines.launch
-//import androidx.compose.material3.DatePickerColors Fjernet sammen med: 1.1.0-alpha04
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.core.graphics.toColor
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-/*
-import io.github.boguszpawlowski.composecalendar.*
-import io.github.boguszpawlowski.composecalendar.day.Day
-import io.github.boguszpawlowski.composecalendar.day.DayState
-import io.github.boguszpawlowski.composecalendar.day.DefaultDay
-import io.github.boguszpawlowski.composecalendar.day.NonSelectableDayState
-import io.github.boguszpawlowski.composecalendar.kotlinxDateTime.toKotlinYearMonth
-import io.github.boguszpawlowski.composecalendar.selection.DynamicSelectionState
-import io.github.boguszpawlowski.composecalendar.selection.EmptySelectionState
-import io.github.boguszpawlowski.composecalendar.selection.SelectionMode
-import io.github.boguszpawlowski.composecalendar.selection.SelectionState */
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import java.time.DayOfWeek
-import java.time.LocalDate
-import androidx.compose.material3.IconToggleButton
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
-import com.example.in2000_prosjekt.ui.data.DataSource
-import com.example.in2000_prosjekt.ui.data.DataSourceSunrise
-import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 
 @Composable
@@ -328,7 +265,7 @@ fun Sikt_skyillustasjon() {
 @OptIn(ExperimentalMaterial3Api::class)
 fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>) {
     //favorites er en mutableList med LocationInfo kan derfor kalle
-    // favorite.temperatureL etc.
+    //favorite.temperatureL etc.
     items(weatherinfo.size) {
         weatherinfo.forEach { favorite ->
             val location = weatherinfo[it]
@@ -411,9 +348,9 @@ fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mount
     }
 }
 
-//Knapp til Instillinger for å slette alle favoritter.
 @Composable
 fun DeleteAllButton(viewModel: FavoriteViewModel){
+    //Knapp til Instillinger for å slette alle favoritter.
     Button(
         onClick = {
             viewModel.deleteAll()
@@ -601,7 +538,5 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
-
-    //Sikt_FinnTurer_card("test",550, 3,false, true, false)
 
 }
