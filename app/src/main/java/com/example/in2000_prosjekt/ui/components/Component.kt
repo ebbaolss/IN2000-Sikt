@@ -313,24 +313,33 @@ fun Sikt_skyillustasjon() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo> ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-        colors = CardDefaults.cardColors(Sikt_lyseblå)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>) {
+    //favorites er en mutableList med LocationInfo kan derfor kalle
+    // favorite.temperatureL etc.
+    items(weatherinfo.size) {
+        weatherinfo.forEach { favorite ->
+            val location = weatherinfo[it]
+            val nowcast = nowcastinfo[it]
+            val alertInfo = alertInfo[it]
 
-            Sikt_Header("fjelltopp" /*, alertType : String, alertLevel : String */)
-            Sikt_MountainHight("1884")
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                colors = CardDefaults.cardColors(Sikt_lyseblå)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    //Sikt_Header("fjelltopp", alertType : String, alertLevel : String)
+                    Sikt_MountainHight("1884")
+                }
+            }
         }
     }
 }
