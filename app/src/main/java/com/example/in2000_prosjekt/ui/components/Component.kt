@@ -265,16 +265,12 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Placeholder-ikon for advarsel:
-        Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
-        //AlertButton(alertType = , alertLevel = ) {}
-        //Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
         var openDialog by remember {
             mutableStateOf(false)
         }
 
         if (alertinfo.size != 0){
-            AlertButton( alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA) {
+            AlertButton( alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA){
                 openDialog = true
             }
         }
@@ -284,7 +280,6 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
                 openDialog = false
             }
         }
-
         Text(text = "$location", fontWeight = FontWeight.Bold, fontSize = 30.sp)
         var checked by remember { mutableStateOf(false) }
         IconToggleButton(
@@ -307,6 +302,7 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
         }
     }
 }
+
 @Composable
 fun Sikt_MountainHight(mountainheight : String) {
     Text(
@@ -329,24 +325,41 @@ fun Sikt_skyillustasjon() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_Favorite_card(weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo> ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-        colors = CardDefaults.cardColors(Sikt_lyseblå)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>) {
+    //favorites er en mutableList med LocationInfo kan derfor kalle
+    // favorite.temperatureL etc.
+    items(weatherinfo.size) {
+        weatherinfo.forEach { favorite ->
+            val location = weatherinfo[it]
+            val nowcast = nowcastinfo[it]
+            val alertInfo = alertInfo[it]
 
-            Sikt_Header("fjelltopp" , alertinfo)
-            Sikt_MountainHight("1884")
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                colors = CardDefaults.cardColors(Sikt_lyseblå)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Sikt_Header("fjelltopp", alertInfo)
+                    Sikt_MountainHight("1884")
+                    illustrasjon(
+                        height = 1280,
+                        temp = nowcast.temperatureNow,
+                        vind = nowcast.windN,
+                        weatherHigh = location.cloud_area_fraction_high,
+                        weatherMid = location.cloud_area_fraction_medium,
+                        weatherLow = location.cloud_area_fraction_low
+                    )
+                }
+            }
         }
     }
 }
@@ -403,7 +416,7 @@ fun DeleteAllButton(viewModel: FavoriteViewModel){
 }
 
 @Composable
-fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : String, weatherMid : String, weatherLow : String){
+fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
 
     fun getHeightVisuals(height: Int?) : Int {
         return if (height != null) {
@@ -428,60 +441,60 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : String
     // Delvis skyet = Dårlig sikt = Sikt på 1-4 km (STOR SKY)
     // Skyet = Tåke = Sikt på mindre enn 1 km (STOR + LITEN SKY)
 
-    fun getHighClouds(highclouds: String): Int {
-        return if (highclouds == "skyet") {
+    fun getHighClouds(highclouds: Float): Int {
+        return if (highclouds >= 75) {
             R.drawable.clouds_high_both
-        } else if (highclouds == "delvisskyet") {
+        } else if (highclouds >= 50) {
             R.drawable.clouds_high_big
-        } else if (highclouds == "lettskyet") {
+        } else if (highclouds >= 25 ) {
             R.drawable.clouds_high_small
         } else {
             R.drawable.klart
         }
     }
 
-    fun getMidClouds(midclouds: String): Int {
-        return if (midclouds == "skyet") {
+    fun getMidClouds(midclouds: Float): Int {
+        return if (midclouds >= 75) {
             R.drawable.clouds_mid_both
-        } else if (midclouds == "delvisskyet") {
+        } else if (midclouds >= 50) {
             R.drawable.clouds_mid_big
-        } else if (midclouds == "lettskyet") {
+        } else if (midclouds>= 25) {
             R.drawable.clouds_mid_small
         } else {
             R.drawable.klart
         }
     }
 
-    fun getLowClouds(lowclouds: String): Int {
-        return if (lowclouds == "skyet") {
+    fun getLowClouds(lowclouds: Float): Int {
+        return if (lowclouds >= 75) {
             R.drawable.clouds_low_both
-        } else if (lowclouds == "delvisskyet") {
+        } else if (lowclouds >= 50) {
             R.drawable.clouds_low_big
-        } else if (lowclouds == "lettskyet") {
+        } else if (lowclouds >= 25) {
             R.drawable.clouds_low_small
         } else {
             R.drawable.klart
         }
     }
 
-    fun getRightWeather(weather: String): String {
-        return if (weather == "skyet") {
+    fun getRightWeather(weather: Float): String {
+        return if (weather >= 75) {
             "Meget dårlig sikt"
-        } else if (weather == "delvisskyet") {
+        } else if (weather >= 50) {
             "Dårlig sikt"
-        } else if (weather == "lettskyet") {
+        } else if (weather >= 25) {
             "Lettskyet"
         } else {
             "Klart vær"
         }
     }
 
-    fun getRightKm(km: String): String {
-        return if (km == "skyet") {
+    fun getRightKm(km: Float): String {
+        return if (km >= 75) {
             "> 1 km sikt"
-        } else if (km == "delvisskyet") {
+        } else if (km >= 50) {
             "1-4 km sikt"
-        } else if (km == "lettskyet") {
+        } else if (km >= 25) {
             "4-10 km sikt"
         } else {
             "< 10 km sikt"
