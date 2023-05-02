@@ -108,7 +108,7 @@ fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapVi
 
         composable("StartPage") { StartPage( onNavigateToNext = { navController.navigate("Map") })  }
         composable("Map") { ShowMap(map, favorite, settings, rules, mapviewmodel, apiViewModel)  }
-        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules) }
+        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules, viewModel = favoriteViewModel) }
         composable("Rules") { RulesScreen(map, favorite, settings, rules) }
         composable("Info") { SettingsScreen(map, favorite, settings, rules) }
         composable("Database") { DatabaseScreenTest(favoriteViewModel) }

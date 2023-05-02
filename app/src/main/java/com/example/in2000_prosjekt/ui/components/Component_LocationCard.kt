@@ -66,7 +66,7 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
             Sikt_Header(location = "$name", alertinfo = mutableListOf()) // Husk å endre alertinfo
             Sikt_MountainHight(mountainheight = "$elevation")
             Spacer(modifier = Modifier.size(20.dp))
-            illustrasjon(elevation, 10f,10f,"skyet", "delvisskyet", "klart")
+            //illustrasjon(elevation, 10f,10f,"skyet", "delvisskyet", "klart")
             Spacer(modifier = Modifier.size(20.dp))
             Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.size(10.dp))
