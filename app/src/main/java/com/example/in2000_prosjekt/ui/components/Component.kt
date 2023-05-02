@@ -259,15 +259,27 @@ fun Sikt_BottomBar2( ) {
 }
 
 @Composable
-fun Sikt_Header(location : String /*,alertType : String, alertLevel : String*/) {
+fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Placeholder-ikon for advarsel:
-        Icon(Icons.Outlined.Refresh, "", tint = Sikt_mørkeblå)
-        //AlertButton(alertType = , alertLevel = ) {}
+        var openDialog by remember {
+            mutableStateOf(false)
+        }
+
+        if (alertinfo.size != 0){
+            AlertButton( alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA){
+                openDialog = true
+            }
+        }
+
+        if (openDialog){
+            AlertDialog(alertinfo = alertinfo){
+                openDialog = false
+            }
+        }
         Text(text = "$location", fontWeight = FontWeight.Bold, fontSize = 30.sp)
         var checked by remember { mutableStateOf(false) }
         IconToggleButton(
@@ -336,8 +348,16 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    //Sikt_Header("fjelltopp", alertType : String, alertLevel : String)
+                    Sikt_Header("fjelltopp", alertInfo)
                     Sikt_MountainHight("1884")
+                    illustrasjon(
+                        height = 1280,
+                        temp = nowcast.temperatureNow,
+                        vind = nowcast.windN,
+                        weatherHigh = location.cloud_area_fraction_high,
+                        weatherMid = location.cloud_area_fraction_medium,
+                        weatherLow = location.cloud_area_fraction_low
+                    )
                 }
             }
         }
@@ -396,19 +416,23 @@ fun DeleteAllButton(viewModel: FavoriteViewModel){
 }
 
 @Composable
-fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : String, weatherMid : String, weatherLow : String){
+fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
 
-    fun getHeightVisuals(height: Int) : Int {
-        return if (height < 500) {
-            R.drawable.topp_under500
-        } else if (height < 1000) {
-            R.drawable.topp1000to500
-        } else if (height < 1500) {
-            R.drawable.topp1500to1000
-        } else if (height < 2000) {
-            R.drawable.topp2000to1500
+    fun getHeightVisuals(height: Int?) : Int {
+        return if (height != null) {
+            if (height < 500) {
+                R.drawable.topp_under500
+            } else if (height < 1000) {
+                R.drawable.topp1000to500
+            } else if (height < 1500) {
+                R.drawable.topp1500to1000
+            } else if (height < 2000) {
+                R.drawable.topp2000to1500
+            } else {
+                R.drawable.topp_over2000
+            }
         } else {
-            R.drawable.topp_over2000
+            R.drawable.topp_under500
         }
     }
 
@@ -417,60 +441,60 @@ fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : String,
     // Delvis skyet = Dårlig sikt = Sikt på 1-4 km (STOR SKY)
     // Skyet = Tåke = Sikt på mindre enn 1 km (STOR + LITEN SKY)
 
-    fun getHighClouds(highclouds: String): Int {
-        return if (highclouds == "skyet") {
+    fun getHighClouds(highclouds: Float): Int {
+        return if (highclouds >= 75) {
             R.drawable.clouds_high_both
-        } else if (highclouds == "delvisskyet") {
+        } else if (highclouds >= 50) {
             R.drawable.clouds_high_big
-        } else if (highclouds == "lettskyet") {
+        } else if (highclouds >= 25 ) {
             R.drawable.clouds_high_small
         } else {
             R.drawable.klart
         }
     }
 
-    fun getMidClouds(midclouds: String): Int {
-        return if (midclouds == "skyet") {
+    fun getMidClouds(midclouds: Float): Int {
+        return if (midclouds >= 75) {
             R.drawable.clouds_mid_both
-        } else if (midclouds == "delvisskyet") {
+        } else if (midclouds >= 50) {
             R.drawable.clouds_mid_big
-        } else if (midclouds == "lettskyet") {
+        } else if (midclouds>= 25) {
             R.drawable.clouds_mid_small
         } else {
             R.drawable.klart
         }
     }
 
-    fun getLowClouds(lowclouds: String): Int {
-        return if (lowclouds == "skyet") {
+    fun getLowClouds(lowclouds: Float): Int {
+        return if (lowclouds >= 75) {
             R.drawable.clouds_low_both
-        } else if (lowclouds == "delvisskyet") {
+        } else if (lowclouds >= 50) {
             R.drawable.clouds_low_big
-        } else if (lowclouds == "lettskyet") {
+        } else if (lowclouds >= 25) {
             R.drawable.clouds_low_small
         } else {
             R.drawable.klart
         }
     }
 
-    fun getRightWeather(weather: String): String {
-        return if (weather == "skyet") {
+    fun getRightWeather(weather: Float): String {
+        return if (weather >= 75) {
             "Meget dårlig sikt"
-        } else if (weather == "delvisskyet") {
+        } else if (weather >= 50) {
             "Dårlig sikt"
-        } else if (weather == "lettskyet") {
+        } else if (weather >= 25) {
             "Lettskyet"
         } else {
             "Klart vær"
         }
     }
 
-    fun getRightKm(km: String): String {
-        return if (km == "skyet") {
+    fun getRightKm(km: Float): String {
+        return if (km >= 75) {
             "> 1 km sikt"
-        } else if (km == "delvisskyet") {
+        } else if (km >= 50) {
             "1-4 km sikt"
-        } else if (km == "lettskyet") {
+        } else if (km >= 25) {
             "4-10 km sikt"
         } else {
             "< 10 km sikt"
@@ -565,133 +589,6 @@ fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : String,
         }
     }
 }
-
-//I vår composable funksjon som generer kalenderen vår (se neste Composable-funskjon: StaticCalender() ) så kan man bestemme innholdet til de ulike bestanddelene av en kalender, slikt som tittel, plassering av de ulike trykkbare komponetene i kalenderen, om den er scrollbar etc.
-//Dette er funksjonen som bestemmer dagsinnholdet i hver dag kalenderen StaticCalender()
-/*@Composable
-fun dayContent(dayState: NonSelectableDayState /*,frostinfo: FrostInfo*/) : MutableList<LocalDate> {
-
-    var alledager = mutableListOf<LocalDate>()
-    Card(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .padding(2.dp),
-
-        border =  BorderStroke(1.dp, Sikt_hvit)
-    )
-
-    {
-
-        Column(
-            modifier = Modifier.fillMaxWidth()
-
-        ) {
-
-            Text(text = dayState.date.dayOfMonth.toString()+".", modifier=Modifier.padding(start = 2.4.dp) // dette er datoen
-            )
-            /* Logic for å velge hva slags type ikon som skal dukke opp: Ikke implementert enda: Ref. det at viewmodelen vår ikke tar inn data for øyeblikket 25.04.23: Dette er blitt diskutert med gruppa på mandag 23.04:
-            if (frostinfo.typeFrost == 0) { // Picks icon to be shown depending on the sight / sikt conditions: The lower the APi value the more clear the sky is(the better the conditions)
-                weathericon = R.drawable.klart
-            } else if (0 < frostinfo.typeFrost && frostinfo.typeFrost < 3) {
-                weathericon = R.drawable.lettskyet
-            } else if (frostinfo.typeFrost > 4) {
-                weathericon = R.drawable.delvis_skyet
-            }
-             } else if (frostinfo.typeFrost > 4) {
-                weathericon = R.drawable.skyet
-            }
-             */
-
-            Image(painter = painterResource(id =  R.drawable.klart),
-                contentDescription = "test med fare i hver",
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(2f)
-                    .wrapContentSize(Alignment.Center)
-                    .size(30.dp))
-
-            alledager.add(dayState.date) // generer en liste med innholdet i kalenderen
-
-        }
-    }
-
-
-    return alledager
-}
-*/
-
-
-//Dette er en Composable funksjon som generer en kalender med et dagsinnhold bestemt av funksjonen dayContent
-//En StaticCalender er en kalender som kun presenterer en bruker for info tilknyttet hver dag i måneden. Biblioteket brukt for å generere denne kalenderen har andre typer kalendere (slikt som ukeskalendere mm.), men i henhold til kravspesifikasjonen så anså vi en StaticCalender som mest passende.
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showSystemUi = true)
-@Composable
-fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frostinfo: FrostInfo*/) { // api kallet er kommentert ut fordi jeg ikke får kjørt med apikallet
-    /*
-    val historicCardUiState by APIViewModel.appUiState.collectAsState()
-
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Sikt_lyseblå),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ){
-
-
-        //var calenderstate : CalendarState<EmptySelectionState> = rememberCalendarState()
-
-
-
-
-        StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.background(Sikt_lyseblå), calendarState =calenderstate, dayContent =  { it -> dayContent(
-            dayState =  it/*, frostinfo = frostinfo*/)
-
-        }
-        )
-
-        APIViewModel.getFrost( referencetimetest = ( dayContent()   )
-
-
-        /*Text(text= "Picture description:")
-
-
-        Text(text= "Klart:")
-        //Image(painter = painterResource(id = R.drawable.klart), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/))
-
-
-
-        Text(text= "Lettskyet:")
-        //Image(painter = painterResource(id = R.drawable.lettskyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
-
-
-        Text(text= "Delvis skyet:")
-        //Image(painter = painterResource(id = R.drawable.delvis_skyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
-
-        Text(text= "Skyet:")*/
-        //Image(painter = painterResource(id = R.drawable.skyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
-
-
-
-        //var kalenderdager= dayContent(dayState = DayState<EmptySelectionState>(selectionState = calenderstate.selectionState, day = Day(calenderstate.monthState.currentMonth.atDay(1))))
-
-
-        //Log.d("Halladagdate", dayContent(dayState = calenderstate) .date.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
-
-
-        // var datoertilgjengelig: List<LocalDate> = calenderstate.monthState.currentMonth
-
-
-        //var datoertilgjengelig = calenderstate.monthState.currentMonth.month
-
-
-        //Log.d("calenderstate.monthState.currentMonth.month", calenderstate.monthState.currentMonth.month.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
-
-    }*/
-
-}
-
-
 
 @Preview(showSystemUi = true)
 @Composable

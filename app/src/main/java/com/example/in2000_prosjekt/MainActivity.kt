@@ -2,7 +2,6 @@ package com.example.in2000_prosjekt
 
 import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val apiViewModel = APIViewModel()
 
                     val owner = LocalViewModelStoreOwner.current
 
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                             )
                         )
 
-                        MultipleScreenApp(favoriteViewModel, mapViewModel)
+                        MultipleScreenApp(favoriteViewModel, mapViewModel, apiViewModel)
                     }
                 }
             }
@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MultipleScreenApp(viewModel: FavoriteViewModel, mapviewmodel : MapViewModel) {
+fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapViewModel, apiViewModel: APIViewModel) {
 
     val navController = rememberNavController()
 
@@ -107,12 +107,11 @@ fun MultipleScreenApp(viewModel: FavoriteViewModel, mapviewmodel : MapViewModel)
         startDestination = "Map") {
 
         composable("StartPage") { StartPage( onNavigateToNext = { navController.navigate("Map") })  }
-
-        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules, viewModel = viewModel) }
-        composable("Map") { ShowMap(map, favorite, settings, rules, mapviewmodel)  }
+        composable("Map") { ShowMap(map, favorite, settings, rules, mapviewmodel, apiViewModel)  }
+        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules) }
         composable("Rules") { RulesScreen(map, favorite, settings, rules) }
         composable("Info") { SettingsScreen(map, favorite, settings, rules) }
-        composable("Database") { DatabaseScreenTest(viewModel) }
+        composable("Database") { DatabaseScreenTest(favoriteViewModel) }
     }
 }
 
