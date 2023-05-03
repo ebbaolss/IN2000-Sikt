@@ -22,8 +22,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.R
+import com.example.in2000_prosjekt.ui.components.DeleteAllButton
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_skyillustasjon
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
@@ -32,7 +34,7 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
+fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel){
 
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = false, settings = true, rules = false, map = false) }, containerColor = Sikt_mellomblå) {
         val scrollState = rememberScrollState()
@@ -64,6 +66,7 @@ fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     fontWeight = FontWeight.Bold
                 )
                 //Legg inn "slett alle favoritter"-knapp
+                DeleteAllButton(viewModel)
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(
                     modifier = Modifier.fillMaxWidth(),
