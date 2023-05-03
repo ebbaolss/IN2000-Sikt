@@ -186,7 +186,7 @@ fun SearchBar(viewModel: MapViewModel){
                         .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
                         .clickable( enabled = true, onClick = {
 
-                            val searchedBefore = viewModel.updateRecentSearch(mountain)
+                            val searchedBefore = viewModel.updateRecentSearch(mountain, false)
                             if (searchedBefore) {
                                 suggestionSearch(viewModel, mountain) //oppdaterer lista så vi kan hente mapbox_id
                                 //få koden til å ikke gå videre før suggestionSearch er ferdig
@@ -223,6 +223,12 @@ fun SearchBar(viewModel: MapViewModel){
                         contentDescription = null,
                         modifier = Modifier
                             .padding(end = 15.dp)
+                            .clickable(
+                                onClick = {
+                                    viewModel.updateRecentSearch(mountain, true)
+                                }
+                            )
+
                     )
                 }
             }
@@ -239,7 +245,7 @@ fun SearchBar(viewModel: MapViewModel){
                         .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
                         .clickable( enabled = true, onClick = {
 
-                            viewModel.updateRecentSearch(mountain)
+                            viewModel.updateRecentSearch(mountain, false)
 
                             retrieveSearch(viewModel, mapUiState.value.optionMountains[mountain]!!) //mapbox_id
                             //få koden til å ikke gå videre før retriveSearch er ferdig
@@ -261,12 +267,6 @@ fun SearchBar(viewModel: MapViewModel){
                         modifier = Modifier
                             .weight(1f),
                         textAlign = TextAlign.Start,
-                    )
-                    Icon(
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(end = 15.dp)
                     )
                 }
             }

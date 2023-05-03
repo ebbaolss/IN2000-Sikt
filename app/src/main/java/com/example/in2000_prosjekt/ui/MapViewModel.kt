@@ -66,21 +66,27 @@ class MapViewModel : ViewModel() {
         }
     }
 
-    fun updateRecentSearch(input : String) : Boolean {
+    fun updateRecentSearch(input : String, delete : Boolean) : Boolean {
 
-        val updatetList = appUiState.value.recentSearch
+        val updatetList: MutableList<String> = appUiState.value.recentSearch.toMutableList()
 
-        if (input in updatetList) return true
-        if (updatetList.isEmpty()) {
-            updatetList.add(input)
+        if (delete) {
+            updatetList.remove(input)
+
         } else {
-            updatetList.add(input)
-            for (i in updatetList.size - 1 downTo 1 ) {
-                updatetList[i] = updatetList[i - 1]
-            }
-            updatetList[0] = input
-            if (updatetList.size > 3) {
-                updatetList.removeAt(updatetList.lastIndex)
+
+            if (input in updatetList) return true
+            if (updatetList.isEmpty()) {
+                updatetList.add(input)
+            } else {
+                updatetList.add(input)
+                for (i in updatetList.size - 1 downTo 1 ) {
+                    updatetList[i] = updatetList[i - 1]
+                }
+                updatetList[0] = input
+                if (updatetList.size > 3) {
+                    updatetList.removeAt(updatetList.lastIndex)
+                }
             }
         }
         _appUistate.update {
