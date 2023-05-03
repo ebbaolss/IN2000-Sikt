@@ -29,11 +29,18 @@ class ImplementedWeatherRepository : WeatherRepository {
 
         val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
         val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
-        val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.get("precipitation_amount")
+        val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.precipitation_amount
         val cloud_high = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_high
         val cloud_mid = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_medium
         val cloud_low = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_low
         val cloudiness = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction
+
+        val tempNext6 = forecast.properties?.timeseries?.get(0)?.data?.next_6_hours?.details?.air_temperature_max
+        val cloudinessNext1 = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.summary?.get("symbol_code")
+        val cloudinessNext6 = forecast.properties?.timeseries?.get(0)?.data?.next_6_hours?.summary?.get("symbol_code")
+
+        Log.d("cloudinessNext1", "$cloudinessNext1")
+        Log.d("cloudinessNext6", "$cloudinessNext6")
 
         return LocationInfo(
             temperatureL = (temp ?: -273.5) as Float,
@@ -43,6 +50,10 @@ class ImplementedWeatherRepository : WeatherRepository {
             cloud_area_fraction_medium = cloud_mid!!,
             cloud_area_fraction_low = cloud_low!!,
             cloud_area_fraction = cloudiness!!,
+            tempNext1L = temp!!,
+            tempNext6L = tempNext6!!,
+            cloudinessNext1L = cloudinessNext1!!,
+            cloudinessNext6L = cloudinessNext6!!,
         )
     }
 

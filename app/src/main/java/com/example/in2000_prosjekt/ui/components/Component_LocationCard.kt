@@ -11,26 +11,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
-import com.example.in2000_prosjekt.ui.data.Next12
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
+import java.text.SimpleDateFormat
+import java.util.Date;
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
 
     items(1) {
-        // endre til lazylist:
 
         val name = mountain.name
         val elevation = mountain.elevation
-
         val latitude = mountain.point?.latitude()
         val longitude = mountain.point?.longitude()
 
@@ -56,17 +56,10 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
             testliste.add(mountain)
             testliste.add(mountain)
 
-        // TEST FOR NESTE 12 TIMER
-            val tidliste = mutableListOf<Int>()
-            tidliste.add(12)
-            tidliste.add(13)
-            tidliste.add(14)
-            tidliste.add(15)
-
         Card(
             colors = CardDefaults.cardColors(Sikt_lyseblå),
             modifier = Modifier.padding(20.dp),
-        ) {
+        ){
             Column(
                 modifier = Modifier.padding(20.dp),
             ) {
@@ -77,11 +70,11 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.size(10.dp))
-                LazyRow() {Sikt_LocationCard_Hour(tidliste, locationInfo, nowCastInfo) }
+                Sikt_LocationCard_Hour(locationInfo) }
                 Spacer(modifier = Modifier.size(20.dp))
-                //Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold)
-                //Spacer(modifier = Modifier.size(10.dp))
-                //Sikt_LocationCard_NextDays()
+                Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.size(10.dp))
+                Sikt_LocationCard_NextDays()
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.size(10.dp))
@@ -90,94 +83,128 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
             }
         }
     }
+
+@Composable
+fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
+
+    val tempNext1h = locationInfo.tempNext1L
+    val tempNext6h = locationInfo.tempNext6L
+    val cloudsNext1h = locationInfo.cloudinessNext1L
+    val cloudsNext6h = locationInfo.cloudinessNext6L
+
+    val currentTimeMillis = System.currentTimeMillis()
+    val date = Date(currentTimeMillis)
+    val dateFormat = SimpleDateFormat("HH")
+    val tidspunkt = dateFormat.format(date)
+    //val tid = "$tidspunkt:00"
+
+    fun add1hour(tidspunkt: String): String {
+        println("Tidspunkt: $tidspunkt")
+        val nestetime = tidspunkt.toInt()
+        val nesteh = nestetime + 1
+        return nesteh.toString()
+    }
+
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        item { Sikt_LocationCard_Hour_Card("Sikt nå:", tempNext1h, cloudsNext1h) }
+        val pluss1 = add1hour(tidspunkt)
+        item { Sikt_LocationCard_Hour_Card("$pluss1:00", tempNext1h, cloudsNext1h) }
+        val pluss2 = add1hour(pluss1)
+        item { Sikt_LocationCard_Hour_Card("$pluss2:00", tempNext6h, cloudsNext6h) }
+        val pluss3 = add1hour(pluss2)
+        item { Sikt_LocationCard_Hour_Card("$pluss3:00", tempNext6h, cloudsNext6h) }
+        val pluss4 = add1hour(pluss3)
+        item { Sikt_LocationCard_Hour_Card("$pluss4:00", tempNext6h, cloudsNext6h) }
+        val pluss5 = add1hour(pluss4)
+        item { Sikt_LocationCard_Hour_Card("$pluss5:00", tempNext6h, cloudsNext6h) }
+    }
+
 }
 
-fun LazyListScope.Sikt_LocationCard_Hour(next12hours: MutableList<Int>, locationInfo: LocationInfo, nowCastInfo: NowCastInfo) {
-    //time : Int, clouds : String, temp: Int) {
+@Composable
+fun Sikt_LocationCard_Hour_Card(tid : String, temp : Float, cloudiness : String) {
 
-    val clouds = locationInfo.cloud_area_fraction
-    println("clouds: $clouds")
-
-    fun getCloudVisuals(clouds: Float): Int {
-        return if (clouds >= 75) {
-            R.drawable.clouds_high_both
-        } else if (clouds >= 50) {
-            R.drawable.clouds_high_big
-        } else if (clouds >= 25 ) {
-            R.drawable.clouds_high_small
+    fun getCloudVisuals(clouds: String): Int {
+        val type = clouds.split("_")
+        val typeClouds = type[0]
+        return if (typeClouds == "cloudy") {
+            R.drawable.small_clouds_both
+        } else if (typeClouds == "partlycloudy") {
+            R.drawable.small_clouds_big
+        } else if (typeClouds == "fair") {
+            R.drawable.small_clouds_small
         } else {
-            R.drawable.klart
+            R.drawable.small_clouds_clear
         }
     }
 
-    fun getRightWeather(weather: Float): String {
-        return if (weather >= 75) {
+    fun getRightWeather(weather: String): String {
+        val type = weather.split("_")
+        val typeWeather = type[0]
+        return if (typeWeather == "cloudy") {
             "Meget dårlig sikt"
-        } else if (weather >= 50) {
+        } else if (typeWeather == "partlycloudy") {
             "Dårlig sikt"
-        } else if (weather >= 25) {
+        } else if (typeWeather == "fair") {
             "Lettskyet"
         } else {
             "Klart vær"
         }
     }
 
-    fun getRightKm(km: Float): String {
-        return if (km >= 75) {
+    fun getRightKm(km: String): String {
+        val type = km.split("_")
+        val typeKm = type[0]
+        return if (typeKm == "cloudy") {
             "> 1 km sikt"
-        } else if (km >= 50) {
+        } else if (typeKm == "partlycloudy") {
             "1-4 km sikt"
-        } else if (km >= 25) {
+        } else if (typeKm == "fair") {
             "4-10 km sikt"
         } else {
             "< 10 km sikt"
         }
     }
 
-    items(1) {
-        next12hours.forEach { tid ->
-
-            val temp = nowCastInfo.temperatureNow
-
-            Card(
-                colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
-                modifier = Modifier.padding(end = 10.dp)
+    Card(
+        colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
+        modifier = Modifier.padding(end = 10.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(
+                text = tid,
+                color = Sikt_sort,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Box(
+                modifier = Modifier.size(80.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(2.dp)
-                ) {
-                    Text(
-                        text = "$tid:00",
-                        color = Sikt_sort,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Box(
-                        modifier = Modifier.size(80.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = getCloudVisuals(clouds)),
-                            contentDescription = "",
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                    Text(
-                        text = getRightKm(clouds),
-                        fontSize = 12.sp,
-                        color = Sikt_sort,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(text = getRightWeather(clouds), fontSize = 12.sp, color = Sikt_sort)
-                    Text(
-                        text = "$temp°",
-                        color = Sikt_sort,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                Image(
+                    painter = painterResource(id = getCloudVisuals(cloudiness)),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxSize()
+                )
             }
+            Text(
+                text = getRightKm(cloudiness),
+                fontSize = 12.sp,
+                color = Sikt_sort,
+                fontWeight = FontWeight.Bold
+            )
+            Text(text = getRightWeather(cloudiness), fontSize = 12.sp, color = Sikt_sort)
+            Text(
+                text = "$temp°",
+                color = Sikt_sort,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
@@ -223,3 +250,36 @@ fun Sikt_LocationCard_NextDays() {
         }
     }
 }
+
+
+
+@Preview(showSystemUi = true)
+@Composable
+fun Test() {
+
+    /*
+    val currentTimeMillis = System.currentTimeMillis()
+    val date = Date(currentTimeMillis)
+    val dateFormat = SimpleDateFormat("HH")
+    val tidspunkt = dateFormat.format(date)
+    val tid = "$tidspunkt:00"
+
+    fun add1hour(tidspunkt: String): String {
+        println("Tidspunkt: $tidspunkt")
+        val nestetime = tidspunkt.toInt()
+        val nesteh = nestetime + 1
+        return nesteh.toString()
+    }
+
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        item { Sikt_LocationCard_Hour_Card("Sikt nå:", 10f, 60f) }
+        val pluss1 = add1hour(tidspunkt)
+        item { Sikt_LocationCard_Hour_Card("$pluss1:00", 7f, 30f) }
+        val pluss2 = add1hour(pluss1)
+        item { Sikt_LocationCard_Hour_Card("$pluss2:00", 5f, 80f) }
+    }
+     */
+}
+

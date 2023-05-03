@@ -33,15 +33,16 @@ data class Instant(
     val details: Details
 )
 data class Next12(
-    val summary: Map<String, String>?
+    val summary: Map<String, String>?,
+    val details: Details
 )
 data class Next1(
     val summary: Map<String, String>?,
-    val details: Map<String, Float>?
+    val details: Details
 )
 data class Next6(
     val summary: Map<String, String>?,
-    val details: Map<String, Float>?
+    val details: Details
 )
 
 data class Details(
