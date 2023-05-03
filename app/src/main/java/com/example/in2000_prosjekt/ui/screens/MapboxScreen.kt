@@ -241,7 +241,6 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
 }
 
 
-
 // Definerer hva som skal skje når brukeren trykker på kartet
 fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, onClick : () -> Unit) : Boolean {
     Log.d("Coordinate", point.toString())
