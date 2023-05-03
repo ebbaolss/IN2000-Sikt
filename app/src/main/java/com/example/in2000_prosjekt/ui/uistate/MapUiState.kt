@@ -4,11 +4,11 @@ import com.mapbox.geojson.Point
 
 sealed interface MapUiState {
     data class MapboxCameraOptions(
-        val currentScreenZoom: Double = 13.0,
+        val currentScreenZoom: Double = 3.258872624950135,
 
         // Glittertind
-        val currentScreenLatitude: Double = 61.651356077904666,
-        val currentScreenLongitude: Double = 8.557801680731075,
+        val currentScreenLatitude: Double = 65.15643802604247,
+        val currentScreenLongitude: Double = 16.99935690928433,
 
         //val currentScreenPitch: Double, // Relevant when going into 3D view
         //val currentScreenBearing: Double // Compass direction
