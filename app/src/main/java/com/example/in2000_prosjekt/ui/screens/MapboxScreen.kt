@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -21,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.AppUiState
+import com.example.in2000_prosjekt.ui.components.Alert_Card
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
@@ -150,12 +152,18 @@ fun ShowMap(
                     }
                     is AppUiState.Success -> {
                         Log.d("Location Card", "Initialising")
-                        Sikt_LocationCard(
-                            mountainUiState,
-                            (appUiState as AppUiState.Success).locationF,
-                            (appUiState as AppUiState.Success).nowCastF,
-                            (appUiState as AppUiState.Success).alertListF
-                        )
+
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                        ) {
+                            Sikt_LocationCard(
+                                mountainUiState,
+                                (appUiState as AppUiState.Success).locationF,
+                                (appUiState as AppUiState.Success).nowCastF,
+                                (appUiState as AppUiState.Success).alertListF
+                            )
+                        }
                     }
                 }
             }

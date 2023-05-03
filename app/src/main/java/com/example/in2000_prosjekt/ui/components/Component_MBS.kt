@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_sort
+import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import kotlinx.coroutines.launch
 
 
@@ -78,11 +79,11 @@ fun BottomSheetContent(){
                 horizontalArrangement = Arrangement.spacedBy(20.dp)
                 // Her skal listen over topper i nærheten:
             ) {
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                //item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                //item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                //item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                //item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                //item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
             }
         }
     }

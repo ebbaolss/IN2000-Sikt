@@ -1,100 +1,93 @@
 package com.example.in2000_prosjekt.ui.components
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_sort
-import com.example.in2000_prosjekt.ui.uistate.MapUiState
-import com.mapbox.geojson.Point
 import com.example.in2000_prosjekt.R
-import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.theme.*
-import kotlinx.coroutines.runBlocking
+import com.example.in2000_prosjekt.ui.uistate.MapUiState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
+fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
 
-    val name = mountain.name
-    val elevation = mountain.elevation
+    items(1) {
+        // endre til lazylist:
 
-    val latitude = mountain.point?.latitude()
-    val longitude = mountain.point?.longitude()
+        val name = mountain.name
+        val elevation = mountain.elevation
 
-    // Gir point koordinatene i lat, så long?
-    println("latitude: " + latitude.toString()) // latitude: 8.557780981063843
-    println("longitude: " + longitude.toString()) // longitude: 61.65138739947395
+        val latitude = mountain.point?.latitude()
+        val longitude = mountain.point?.longitude()
 
-    //dataN = apiViewModel.repository.getNowCast(latitude.toString(), longitude.toString(), elevation.toString())
+        // Gir point koordinatene i lat, så long?
+        println("latitude: " + latitude.toString()) // glittertind: latitude: 8.557780981063843
+        println("longitude: " + longitude.toString()) // glittertind: longitude: 61.65138739947395
 
-    val weather_high = locationInfo.cloud_area_fraction_high
-    val weather_mid = locationInfo.cloud_area_fraction_medium
-    val weather_low = locationInfo.cloud_area_fraction_low
+        val weather_high = locationInfo.cloud_area_fraction_high
+        val weather_mid = locationInfo.cloud_area_fraction_medium
+        val weather_low = locationInfo.cloud_area_fraction_low
 
-   // val temp = dataN.temperatureNow
-   // val wind = dataN.windN
+        val temp = nowCastInfo.temperatureNow
+        val wind = nowCastInfo.windN
 
-    println("weather_high = $weather_high")
-    println("weather_mid = $weather_mid")
-    println("weather_low = $weather_low")
+        println("weather_high = $weather_high")
+        println("weather_mid = $weather_mid")
+        println("weather_low = $weather_low")
 
-    Card (
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.padding(20.dp),
-    ) {
-        Column(
+        Card(
+            colors = CardDefaults.cardColors(Sikt_lyseblå),
             modifier = Modifier.padding(20.dp),
         ) {
-            Sikt_Header(location = "$name", alertinfo = mutableListOf()) // Husk å endre alertinfo
-            Sikt_MountainHight(mountainheight = "$elevation")
-            Spacer(modifier = Modifier.size(20.dp))
-            illustrasjon(mountain.elevation!!, nowCastInfo.temperatureNow,nowCastInfo.windN,locationInfo.cloud_area_fraction_high, locationInfo.cloud_area_fraction_medium, locationInfo.cloud_area_fraction_low)
-            Spacer(modifier = Modifier.size(20.dp))
-            Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.size(10.dp))
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            Column(
+                modifier = Modifier.padding(20.dp),
             ) {
-                item { Sikt_LocationCard_Hour(12,"skyet", 7) }
-                item { Sikt_LocationCard_Hour(13, "delvisskyet", 8) }
-                item { Sikt_LocationCard_Hour(14, "lettskyet", 8) }
-                item { Sikt_LocationCard_Hour(15, "klart", 7) }
-                item { Sikt_LocationCard_Hour(16, "skyet", 6) }
-                item { Sikt_LocationCard_Hour(17, "skyet", 4) }
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.size(10.dp))
-            Sikt_LocationCard_NextDays()
-            Spacer(modifier = Modifier.size(20.dp))
-            Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.size(10.dp))
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
-            ) {
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                Sikt_Header(location = "$name", alertinfo = alertInfoList)
+                Sikt_MountainHight(mountainheight = "$elevation")
+                Spacer(modifier = Modifier.size(20.dp))
+                illustrasjon(elevation, temp, wind, weather_high, weather_mid, weather_low)
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.size(10.dp))
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    item { Sikt_LocationCard_Hour(12, "skyet", 7) }
+                    item { Sikt_LocationCard_Hour(13, "delvisskyet", 8) }
+                    item { Sikt_LocationCard_Hour(14, "lettskyet", 8) }
+                    item { Sikt_LocationCard_Hour(15, "klart", 7) }
+                    item { Sikt_LocationCard_Hour(16, "skyet", 6) }
+                    item { Sikt_LocationCard_Hour(17, "skyet", 4) }
+                }
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.size(10.dp))
+                Sikt_LocationCard_NextDays()
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.size(10.dp))
+
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    val testliste = mutableListOf<MapUiState.Mountain>()
+                    testliste.add(mountain)
+                    testliste.add(mountain)
+                    Sikt_Turer_I_Naerheten(testliste, locationInfo, nowCastInfo)
+                }
             }
         }
     }
@@ -204,34 +197,4 @@ fun Sikt_LocationCard_NextDays() {
             }
         }
     }
-}
-
-@Composable
-fun Sikt_LoctationCard_Topper_i_naerheten() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(160.dp)
-            .padding(start = 20.dp, end = 20.dp, top = 5.dp),
-    ) {
-        Text(text = "Topper i nærheten: ", modifier = Modifier.align(Alignment.TopStart), fontWeight = FontWeight.Bold)
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-
-        }
-    }
-}
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showSystemUi = true)
-@Composable
-fun ComponentTest() {
-
-    //Sikt_LocationCard()
-
 }
