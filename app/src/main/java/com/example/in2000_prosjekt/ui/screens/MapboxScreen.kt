@@ -160,7 +160,7 @@ fun SearchBar(viewModel: MapViewModel, onSearch : () -> Unit){
                             if (input.length > 1) {
                                 viewModel.getDataSearch(input)
                                 showRecent = false
-                                focusManager.clearFocus()
+                                //focusManager.clearFocus()
                             }
 
                             input = ""
@@ -246,9 +246,8 @@ fun SearchBar(viewModel: MapViewModel, onSearch : () -> Unit){
 
                             focusManager.clearFocus()
                             showRecent = true
-                            //bruke koordinatene over til å få opp card
-                            //kalt på en funk i view, hente koord, bruke disse til å oppdaterer uistate
-                            //onSearch()
+                            //skal gjøre den true så carded vises i ShowMap()
+                            onSearch()
 
                         }),
 
