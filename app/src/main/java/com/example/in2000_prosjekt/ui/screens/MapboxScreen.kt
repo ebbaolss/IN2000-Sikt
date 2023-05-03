@@ -52,7 +52,9 @@ import java.lang.Thread.sleep
 @Composable
 fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit) {
     Scaffold(
-        topBar = {SearchBar(MapViewModel())},
+        topBar = {
+            SearchBar(MapViewModel()) { /* locationCardState = true */ }
+                 },
         bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings,
             favoritt = false, settings = false, rules = false, map = true) })
     {
@@ -89,7 +91,7 @@ fun onMapClick(point: Point): Boolean {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBar(viewModel: MapViewModel){
+fun SearchBar(viewModel: MapViewModel, onSearch : () -> Unit){
     //MANGLER :
     // at tastaturet forsvinner når man trykker på kart
 
@@ -98,7 +100,7 @@ fun SearchBar(viewModel: MapViewModel){
 
     var input by remember { mutableStateOf("") }
     var isTextFieldFocused by remember { mutableStateOf(false) }
-    var recentSearchHashmap : HashMap<String, String> = hashMapOf()
+    val recentSearchHashmap : HashMap<String, String> = hashMapOf()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var showRecent = true
@@ -125,12 +127,12 @@ fun SearchBar(viewModel: MapViewModel){
                     .onKeyEvent {
                         if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER){
                             if (input.length > 1) {
-                                suggestionSearch(viewModel, input)
+                                viewModel.getDataSearch(input)
                                 showRecent = false
                             }
                             input = ""
                         }
-                        false //??
+                        false
                     },
 
                 singleLine = true,
@@ -156,7 +158,7 @@ fun SearchBar(viewModel: MapViewModel){
                         onClick = {
 
                             if (input.length > 1) {
-                                suggestionSearch(viewModel, input)
+                                viewModel.getDataSearch(input)
                                 showRecent = false
                                 focusManager.clearFocus()
                             }
@@ -190,17 +192,14 @@ fun SearchBar(viewModel: MapViewModel){
 
                             viewModel.updateRecentSearch(mountain, false)
 
-                            retrieveSearch(viewModel, recentSearchHashmap[mountain]!!) //mapbox_id
-                            //få koden til å ikke gå videre før retriveSearch er ferdig
-
-                            //bruke koordinatene over til å få opp card
+                            viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!)
 
                             focusManager.clearFocus()
                             showRecent = true
 
-                            println("recent search: ${mapUiState.value.recentSearch}")
-                            println(mapUiStateCoordinates.value.latitude)
-                            println(mapUiStateCoordinates.value.longitude)
+                            onSearch()
+                            //bruke koordinatene over til å få opp card
+
                         }),
 
                     verticalAlignment = Alignment.CenterVertically
@@ -243,15 +242,14 @@ fun SearchBar(viewModel: MapViewModel){
 
                             recentSearchHashmap[mountain] = mapUiState.value.optionMountains[mountain]!!
 
-                            retrieveSearch(viewModel, mapUiState.value.optionMountains[mountain]!!) //mapbox_id
-                            //få koden til å ikke gå videre før retriveSearch er ferdig
-//                            println(mapUiStateCoordinates.value.latitude)
-//                            println(mapUiStateCoordinates.value.longitude)
+                            viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!)
 
                             focusManager.clearFocus()
-                            //bruke koordinatene over til å få opp card
-
                             showRecent = true
+                            //bruke koordinatene over til å få opp card
+                            //kalt på en funk i view, hente koord, bruke disse til å oppdaterer uistate
+                            //onSearch()
+
                         }),
 
                     verticalAlignment = Alignment.CenterVertically
@@ -269,19 +267,7 @@ fun SearchBar(viewModel: MapViewModel){
         }
     }
 }
-fun suggestionSearch(apiViewModel: MapViewModel, searchString : String) {
-    apiViewModel.getDataSearch(searchString)
-}
-fun retrieveSearch(apiViewModel: MapViewModel, mapboxId: String) {
 
-    //her skal man kalle på det andre apiet med mapbox_id
-    //dette må lages, men så og si bare å kopiere det man gjorde på getDataSearch
-    //da får man oppdatert koordinater, lat og long
-    println("retriveSearch")
-    apiViewModel.getDataSearchCoordinates(mapboxId)
-    println("ferdig med getDataSearchCoordinates")
-
-}
 
 
 

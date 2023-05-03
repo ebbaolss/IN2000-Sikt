@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
@@ -38,27 +39,26 @@ class MapViewModel : ViewModel() {
         }
         return true
     }
-    fun getDataSearchCoordinates(mapboxId: String) {
-
-        //ha denne her? må nesten det eller?
-        val path2 = "https://api.mapbox.com/search/searchbox/v1/retrieve/$mapboxId?" +
-                "session_token=[GENERATED-UUID]&" +
-                "access_token=pk.eyJ1IjoiZWxpc2FiZXRoYiIsImEiOiJjbGY2c3N3dDAxYWxsM3ludHY5em5wMnJxIn0.YVrKFoHYA1sCJhgBCbhudw"
-
+    fun showSelectedMountain( mapboxId : String) {
         viewModelScope.launch() {
-            val mapSearchCoordinatesDeferred = viewModelScope.async (Dispatchers.IO){
-                repository.getMapCoordinates(path2)
-            }
 
-            val mapSearchCoordinatesP = mapSearchCoordinatesDeferred.await()
+            val path2 = "https://api.mapbox.com/search/searchbox/v1/retrieve/$mapboxId?" +
+                    "session_token=[GENERATED-UUID]&" +
+                    "access_token=pk.eyJ1IjoiZWxpc2FiZXRoYiIsImEiOiJjbGY2c3N3dDAxYWxsM3ludHY5em5wMnJxIn0.YVrKFoHYA1sCJhgBCbhudw"
+
+
+            val mapSearchCoordinates = repository.getMapCoordinates(path2)
+
+            //åpne card
+            println(mapSearchCoordinates.latitude)
+            println(mapSearchCoordinates.longitude)
 
             _appUistate2.update {
                 MapCoordinatesInfo(
-                    latitude = mapSearchCoordinatesP.latitude,
-                    longitude = mapSearchCoordinatesP.longitude
+                    latitude = mapSearchCoordinates.latitude,
+                    longitude = mapSearchCoordinates.longitude
                 )
             }
-            println("update ferdig")
         }
     }
 
