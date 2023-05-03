@@ -18,11 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.AppUiState
-import com.example.in2000_prosjekt.ui.components.Alert_Card
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
@@ -34,6 +32,7 @@ import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
+import com.mapbox.geojson.Polygon
 import com.mapbox.maps.*
 import com.mapbox.maps.dsl.cameraOptions
 import com.mapbox.maps.extension.style.expressions.dsl.generated.eq
@@ -45,6 +44,8 @@ import com.mapbox.maps.plugin.delegates.listeners.OnCameraChangeListener
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.scalebar.scalebar
+import kotlin.math.cos
+import kotlin.math.sin
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -241,10 +242,10 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
 }
 
 
-
 // Definerer hva som skal skje når brukeren trykker på kartet
 fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, onClick : () -> Unit) : Boolean {
     Log.d("Coordinate", point.toString())
+
     mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(ScreenBox(
             ScreenCoordinate(
