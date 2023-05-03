@@ -37,7 +37,7 @@ sealed interface AppUiState {
         val nowCastF: NowCastInfo,
         val sunriseF: SunriseInfo,
         val alertListF: MutableList<AlertInfo>,
-        // val frostF: FrostInfo
+        val frostF: FrostInfo
     ) : AppUiState
     object Error : AppUiState
     object Loading : AppUiState

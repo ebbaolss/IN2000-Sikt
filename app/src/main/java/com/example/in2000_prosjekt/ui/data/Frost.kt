@@ -2,7 +2,9 @@ package com.example.in2000_prosjekt.ui.data
 
 import com.google.gson.annotations.SerializedName
 
-data class Frost_API_Respons(
+
+data class FrostResponsBuild(
+
 
     @SerializedName("@context") var context : String?,
     @SerializedName("@type") var type : String?,
@@ -17,8 +19,16 @@ data class Frost_API_Respons(
     var currentLink : String?,
     var data : List<DataFrost>?
 
+
 )
-data class Frost_API_Respons_for_koordinater (
+data class DataFrost(
+
+    var sourceId : String?,
+    var referenceTime : String?,
+    var observations : List<Observations?>? //spørsmålstegn også inni <> ?
+
+)
+data class FrostCoordinatesBuild (
 
     @SerializedName("@context") var context : String?,
     @SerializedName("@type") var type : String?,
@@ -35,16 +45,9 @@ data class Frost_API_Respons_for_koordinater (
 
 
 )
-data class DataFrost(
-
-    var sourceId : String?,
-    var referenceTime : String?,
-    var observations : List<Observations?>? //spørsmålstegn også inni <> ?
-
-)
 data class Data_For_Koordinater (
 
-    var type : String?,
+    @SerializedName("@type") var type : String?,
     var id : String?,
     var name : String?,
     var shortName : String?,
@@ -64,16 +67,15 @@ data class Data_For_Koordinater (
 )
 data class Geometri (
 
-    var type : String?,
+    @SerializedName("@type")  var type : String?,
     var coordinates : List<Double>?,
     var nearest : Boolean?
 )
 data class Observations (
 
     var elementId : String?,
-    var value : Int?, //Er en verdi mellom 0-8:(0 = no clouds, 8 = completely overcast).Ref.https://frost.met.no/elementtable
+    var value : Double?, // ankommer en sightconditions verdi som er mellom 0-8, kan være en desimal
     var unit : String?,
-  //  var level : Level?, Denne gjelder ikke nå som vi bruker : mean(cloud_area_fraction P1D)
     var timeOffset : String?,
     var timeResolution : String?,
     var timeSeriesId : Int?,
@@ -87,5 +89,3 @@ data class Level (
     var unit : String?,
     var value : Int?
 )
-
-

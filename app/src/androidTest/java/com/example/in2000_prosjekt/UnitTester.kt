@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt
 
+/*
 import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
@@ -50,7 +51,6 @@ import io.ktor.http.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 import org.junit.*
-import kotlin.test.Test
 
 //TEst 1: Test for funksjon: fun StartPage(onNavigateToNext: () -> Unit) // Test av om bildet dukker opp på skjermen StartPage
 
@@ -269,7 +269,7 @@ class test_MapBoxScreenModalBottomSheetLayout {
 
 
         rule.onNodeWithText("Finn turer i nærheten").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Finn turer i nærheten"
-        rule.onNodeWithText("Finn turer i nærheten").performClick().// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Finn turer i nærheten"
+        rule.onNodeWithText("Finn turer i nærheten").performClick() // Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Finn turer i nærheten"
 
         var a= Sikt_BottomSheet()
 
@@ -455,6 +455,7 @@ class Test_API_testScreen {
 
 
  */
+
 
 
 

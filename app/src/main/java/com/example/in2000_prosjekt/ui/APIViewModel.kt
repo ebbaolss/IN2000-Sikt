@@ -56,9 +56,11 @@ class APIViewModel () : ViewModel()
                     repository.getAlert(latitude, longitude)
                 }
 
-                /*val frostDeferred = viewModelScope.async (Dispatchers.IO){
+                val frostDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getFrost(latitude, longitude)
-                }*/
+                }
+                val frostP = frostDeferred.await()
+
 
                 val alertP = alertDeferred.await()
                 Log.d("alertDeferred", "Success")
@@ -72,7 +74,7 @@ class APIViewModel () : ViewModel()
                         nowCastF = nowCastP,
                         sunriseF = sunsetP,
                         alertListF = alertP,
-                        //frostF = frostP
+                        frostF = frostP
                     )
                 }
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd

@@ -24,6 +24,7 @@ import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
+import com.example.in2000_prosjekt.ui.components.Sikt_Historisk_Kalender
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
 import com.example.in2000_prosjekt.ui.database.MapViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
@@ -150,6 +151,10 @@ fun ShowMap(
                     }
                     is AppUiState.Success -> {
                         Log.d("Location Card", "Initialising")
+
+                        //Sikt_Historisk_Kalender( (appUiState as AppUiState.Success).frostF ) utkommentert for å fikse datasource og reposity
+
+
                         Sikt_LocationCard(
                             mountainUiState,
                             (appUiState as AppUiState.Success).locationF,

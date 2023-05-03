@@ -41,85 +41,33 @@ class DataSourceFrost (val basePath: String) {
             headers {append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")}}
     }
 
-    suspend fun fetchFrostTemp(
-        elements: String,
-        referencetime: String,
-        source: String
-    ): Frost_API_Respons {
 
-        return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=$elements").body() // hvorfor har vi client i hver datasource når vi bruker .body påauth
-
-        /* fra tirs 18.04
-        try{
-
-            return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=$elements").body() // hvorfor har vi client i hver datasource når vi bruker .body påauth
-        } catch (cause: ResponseException) {
-            println(cause)
-            cause.response
+    //Dette er en funksjon som genererer et polygon rundt koordinatet gitt fra kartet
+    fun coordinatesToPolygonConverter(latitude: Double, longitude: Double): String { // 60,10
+        val increase = 1 //Den 02.05, kl.19.55 Settesdenne variablen var 0.1, som tilsvarer et polygon med 11,1 km radiuus// tilsvarer en radius på rundt 11km, hvilket forholdsmessig gir en turgåer en anvendelig/formålstjenelig ide/info om siktforhold i nærheten av seg
+        var longpointincreased = longitude + increase
+        var latpointincreased = latitude + increase
 
 
-        }
-        return Frost_API_Respons( "Error har skjedd","","","","",3?,0.5,3.4)
+        var polygon ="POLYGON(($longitude%20$latitude%2C$longitude%20$latpointincreased%2C$longpointincreased%20$latitude%2C$longpointincreased%20$latpointincreased))"// // nettet sier at spaces kan foråsake 505 "HTTP version not supported" errors som jeg får stadig, selv om det har funka før, og lenken er gyldig
 
-         */
-
-
+        return polygon
     }
 
-    //DENNE MÅ SEES PÅ SAMMEN PÅ ONSDAG 12.04
-    suspend fun fetchApiSvarkoordinater(lat: String, long: String): Frost_API_Respons_for_koordinater {
-
-        val increasePolygon: Boolean = true //?? denne blir alltid true...
-        val increase: Double
-        // Foresporsel_om_Oke_str_polygon er True eller False nå, men kan endres til en String (som angir en gradvis økning, eller ja eller nei.
-        // Det er When-setningen eller if-setningen nå som bestemmer hvor stor økningen skal være)
-
-        if (increasePolygon) {
-
-            increase = 0.1 // når true Så er polygonet  11.1km * 11.1km
-
-        } else increase = 0.01// når false Så er polygonet  1.11km * 1.11km
+    suspend fun fetchFrostWeatherStation( latitude: Double, longitude: Double): FrostCoordinatesBuild {
 
 
-        fun coordinatesToPolygonConverter(longitutde: Double, latitude: Double): String {
-
-            // Eksemepl noen dypper inn galdehøpiggen= 61.3811 og 8.1845
-
-            /*
-            POLYGON((10 60,10 65, 11 65, 10 60)) // merk at det alltid er longitude som kommer først.
-
-             */
-
-            var long_Point1 = longitutde
-            var lat_Point1 = latitude
-
-            var long_Point2 = longitutde + increase
-            var lat_Point2 = latitude
-
-            var long_Point3 = longitutde
-            var lat_Point3 = latitude + increase
-
-            var long_Point4 = longitutde + increase
-            var lat_Point4 = latitude + increase
+        var polygon= coordinatesToPolygonConverter (latitude,  longitude) // generer deg et polygon fra et koordinat
 
 
-            // Dette er en firkant: kan endres til en seks- eller åttekant
-            var polygon =
-                "POLYGON((${long_Point1} $lat_Point1 , $long_Point2 $lat_Point2 ,${long_Point3} $lat_Point3 , $long_Point4 $lat_Point4 ))"
-
-            return polygon
-        }
-
-        var polygonMadeFromCoordinates =
-            coordinatesToPolygonConverter(long.toDouble(), lat.toDouble())
-
-        var urlPolygon =
-            "https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=${polygonMadeFromCoordinates}"
-
-        //get call her?? (authURL.....)
-        val respons2: Frost_API_Respons_for_koordinater = authURL(urlPolygon).body()
-        Log.d("API call2", respons2.toString())
-        return respons2
-
+        return  authURL("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&geometry=${polygon}").body() //trenger ikke authURL(URL: String) i Frost sitt api, proxy servern brukes bare på Met vær apier (NowCast, LocationForecast, MetAlert)
     }
+
+    suspend fun fetchFrost(  source: String, referencetime: String,): FrostResponsBuild {
+        return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)").body()
+    }
+
+
+
+
 }

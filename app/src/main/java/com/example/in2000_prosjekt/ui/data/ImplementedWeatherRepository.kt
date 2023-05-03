@@ -125,19 +125,26 @@ class ImplementedWeatherRepository : WeatherRepository {
 
     override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
 
-        val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)  //hardkoded parameterne, fiks dette
-        val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longitude)
 
-        val typeFrost = frost.type
-        val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
-        val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
 
-        Log.d("typefrost", typeFrost.toString())
-        Log.d("lat", lat.toString())
-        Log.d("long", long.toString())
+        Log.d("Saalangt", "Data retrieved")
+
+        val frostPolygon = dataFrost.fetchFrostWeatherStation(   latitude.toDouble(), longitude.toDouble() )
+        val weatherstationid  = frostPolygon.data!!.get(0).id // en værstasjon sin ID: Blindern = SN18700
+
+        Log.d("SN på første responsobjekt: skal være SN63595",  weatherstationid!!)
+
+        val frost = dataFrost.fetchFrost( weatherstationid!!, referencetime )
+
+        //Kommentar 22.04, her har vi 2 tilnmmærminger å gjære et apicall
+        // Alt 1: å gjøre et apicall per dag inni calendern vår
+
+        // eller Alt2: Å gjøre et apicall på en periode fra 01. av måneden til 30. av måneden
+        val sightconditions = frost.data?.get(0)?.observations?.get(0)?.value?.toInt() // Denne linjen avgjør tilnærming: Synes alt 1 var ryddigst
+
 
         return FrostInfo(
-            sightcondition = typeFrost!!.toInt()
+            sightcondition = sightconditions!!
         )
     }
 }
