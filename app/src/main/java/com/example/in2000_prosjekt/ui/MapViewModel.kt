@@ -19,9 +19,6 @@ class MapViewModel : ViewModel() {
     private val _appUistate = MutableStateFlow(MapInfo())
     val appUiState = _appUistate.asStateFlow()
 
-    //Må det lages ny uiState eller kan jeg sette de sammen til en data class? og bruke it.copy()
-    //Fjerne dette: feil på MapCoordinatesInfo update
-    //ha dette, feil på _appUistate2
     private val _appUistate2 = MutableStateFlow(MapCoordinatesInfo())
     val appUiState2 = _appUistate2.asStateFlow()
 
@@ -32,13 +29,12 @@ class MapViewModel : ViewModel() {
                 "access_token=pk.eyJ1IjoiZWxpc2FiZXRoYiIsImEiOiJjbGY2c3N3dDAxYWxsM3ludHY5em5wMnJxIn0.YVrKFoHYA1sCJhgBCbhudw"
 
         viewModelScope.launch() {
-            val mapSearchDeferred = viewModelScope.async (Dispatchers.IO){
+            val mapSearchDeferred = viewModelScope.async(Dispatchers.IO){
                 repository.getMap(path)
             }
             val mapSearchP = mapSearchDeferred.await()
 
             _appUistate.value = MapInfo(mapSearchP.optionMountains, _appUistate.value.recentSearch)
-            println("oppdatert") //kommer aldri hit
         }
         return true
     }

@@ -98,6 +98,7 @@ fun SearchBar(viewModel: MapViewModel){
 
     var input by remember { mutableStateOf("") }
     var isTextFieldFocused by remember { mutableStateOf(false) }
+    var recentSearchHashmap : HashMap<String, String> = hashMapOf()
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var showRecent = true
@@ -174,6 +175,7 @@ fun SearchBar(viewModel: MapViewModel){
                 }
             )
         }
+
         if (isTextFieldFocused && showRecent) {
 
             items(mapUiState.value.recentSearch) { mountain ->
@@ -186,19 +188,10 @@ fun SearchBar(viewModel: MapViewModel){
                         .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
                         .clickable( enabled = true, onClick = {
 
-                            val searchedBefore = viewModel.updateRecentSearch(mountain, false)
-                            if (searchedBefore) {
-                                suggestionSearch(viewModel, mountain) //oppdaterer lista så vi kan hente mapbox_id
-                                //få koden til å ikke gå videre før suggestionSearch er ferdig
-                                println(mapUiState.value.optionMountains[mountain]) //null
-                            }
+                            viewModel.updateRecentSearch(mountain, false)
 
-                            println("sjekker noe")
-
-                            retrieveSearch(viewModel, mapUiState.value.optionMountains[mountain]!!) //mapbox_id
+                            retrieveSearch(viewModel, recentSearchHashmap[mountain]!!) //mapbox_id
                             //få koden til å ikke gå videre før retriveSearch er ferdig
-                            println(mapUiStateCoordinates.value.latitude)
-                            println(mapUiStateCoordinates.value.longitude)
 
                             //bruke koordinatene over til å få opp card
 
@@ -206,6 +199,8 @@ fun SearchBar(viewModel: MapViewModel){
                             showRecent = true
 
                             println("recent search: ${mapUiState.value.recentSearch}")
+                            println(mapUiStateCoordinates.value.latitude)
+                            println(mapUiStateCoordinates.value.longitude)
                         }),
 
                     verticalAlignment = Alignment.CenterVertically
@@ -228,7 +223,6 @@ fun SearchBar(viewModel: MapViewModel){
                                     viewModel.updateRecentSearch(mountain, true)
                                 }
                             )
-
                     )
                 }
             }
@@ -247,10 +241,12 @@ fun SearchBar(viewModel: MapViewModel){
 
                             viewModel.updateRecentSearch(mountain, false)
 
+                            recentSearchHashmap[mountain] = mapUiState.value.optionMountains[mountain]!!
+
                             retrieveSearch(viewModel, mapUiState.value.optionMountains[mountain]!!) //mapbox_id
                             //få koden til å ikke gå videre før retriveSearch er ferdig
-                            println(mapUiStateCoordinates.value.latitude)
-                            println(mapUiStateCoordinates.value.longitude)
+//                            println(mapUiStateCoordinates.value.latitude)
+//                            println(mapUiStateCoordinates.value.longitude)
 
                             focusManager.clearFocus()
                             //bruke koordinatene over til å få opp card

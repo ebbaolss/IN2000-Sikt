@@ -121,7 +121,7 @@ class ImplementedWeatherRepository : WeatherRepository {
     override suspend fun getMap(path: String) : MapInfo {
         val mapJson = dataMap.fetchMapSearch(path)
 
-        val mountains = HashMap<String, String>() //maks 3 elementer, de siste 3 søkt på
+        val mountains = HashMap<String, String>()
 
         //lage en liste som bare inneholder mountains (poi)
         for (item in mapJson.suggestions) {
@@ -131,7 +131,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         }
 
         return MapInfo(
-            optionMountains = mountains //her returnerer vi bare option, må man også gjøre noe med recent her??
+            optionMountains = mountains
         )
     }
     override suspend fun getMapCoordinates(path: String) : MapCoordinatesInfo {
