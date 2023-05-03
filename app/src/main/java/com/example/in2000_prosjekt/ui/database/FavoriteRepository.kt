@@ -6,6 +6,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.in2000_prosjekt.ui.AlertInfo
+import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.data.DataSource
@@ -16,11 +17,9 @@ import kotlinx.coroutines.*
 class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
     val weatherRepository = ImplementedWeatherRepository()
-    val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") //dette er både forecast og nowcast
     val allFavorites: LiveData<List<Favorite>> = favoriteDao.getAllFavorites()
     val searchFavorites = MutableLiveData<List<Favorite>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
 
     fun addFavorite(newFavorite: Favorite) {
         coroutineScope.launch(Dispatchers.IO) {
@@ -51,9 +50,8 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
             return@async favoriteDao.findFavorite(longtitude, latitude)
         }
 
-    @Composable
+
     fun getLocationList() : MutableList<LocationInfo> {
-        val coroutineScope = rememberCoroutineScope()
         val favorites = allFavorites.value!!
 
         val forecastList : MutableList<LocationInfo> = mutableListOf()
@@ -62,7 +60,7 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
         favorites.forEach{ favorite ->
             coroutineScope.launch {
-                val forecast = weatherRepository.getLocation(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "")
+                val forecast = weatherRepository.getLocation(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "600")
                 forecastList.add(forecast)
             }
         }
@@ -70,10 +68,8 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         return forecastList
     }
 
-    @Composable
-     fun getNowList() : MutableList<NowCastInfo> {
-         val coroutineScope = rememberCoroutineScope()
 
+     fun getNowList() : MutableList<NowCastInfo> {
          val favorites = allFavorites.value!!
 
         val forecastList : MutableList<NowCastInfo> = mutableListOf()
@@ -81,7 +77,7 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         //Hvis vi får fikse suspend:
         favorites.forEach{ favorite ->
             coroutineScope.launch {
-                val forecast = weatherRepository.getNowCast(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "")
+                val forecast = weatherRepository.getNowCast(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "600")
                 forecastList.add(forecast)
             }
         }
@@ -89,9 +85,8 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         return forecastList
     }
 
-    @Composable
+
     fun getAlertInfo() : MutableList<MutableList<AlertInfo>> {
-        val coroutineScope = rememberCoroutineScope()
 
         val favorites = allFavorites.value!!
 
