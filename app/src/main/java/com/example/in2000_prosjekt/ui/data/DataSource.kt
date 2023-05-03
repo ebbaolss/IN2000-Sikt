@@ -44,11 +44,12 @@ class DataSource (val basePath:String) {
                 gson()
             }
         }
-
-        var coordinates: String = "lat=$latitude&lon=$longtitude"
+        var coordinates: String = ""
         if (altitude != null) {
             coordinates += "&altitude=$altitude"
         }
+        coordinates = "lat=$latitude&lon=$longtitude"
+
         val url = "$basePath/nowcast/2.0/complete?$coordinates"
         Log.d("DATASOURCE: fetchNowcast", url)
         return clientProxyServerCall(client, url).body()
