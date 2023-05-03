@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
@@ -95,76 +94,30 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
     val date = Date(currentTimeMillis)
     val dateFormat = SimpleDateFormat("HH")
     val tidspunkt = dateFormat.format(date)
-    //val tid = "$tidspunkt:00"
-
-    fun add1hour(tidspunkt: String): String {
-        println("Tidspunkt: $tidspunkt")
-        val nestetime = tidspunkt.toInt()
-        val nesteH = nestetime + 1
-        return nesteH.toString()
-    }
 
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        item { Sikt_LocationCard_Hour_Card("Sikt nå:", tempNext1h, cloudsNext1h) }
-        val pluss1 = add1hour(tidspunkt)
-        item { Sikt_LocationCard_Hour_Card("$pluss1:00", tempNext1h, cloudsNext1h) }
-        val pluss2 = add1hour(pluss1)
-        item { Sikt_LocationCard_Hour_Card("$pluss2:00", tempNext6h, cloudsNext6h) }
-        val pluss3 = add1hour(pluss2)
-        item { Sikt_LocationCard_Hour_Card("$pluss3:00", tempNext6h, cloudsNext6h) }
-        val pluss4 = add1hour(pluss3)
-        item { Sikt_LocationCard_Hour_Card("$pluss4:00", tempNext6h, cloudsNext6h) }
-        val pluss5 = add1hour(pluss4)
-        item { Sikt_LocationCard_Hour_Card("$pluss5:00", tempNext6h, cloudsNext6h) }
+        for (i in 0..5) {
+            val melding = if (i == 0 ) {
+                "Sikt nå:"
+            } else {
+                "${tidspunkt.toInt()+i}:00"
+            }
+            if (i == 0 || i == 1) {
+                item { Sikt_LocationCard_Hour_Card("$melding", tempNext1h, cloudsNext1h) }
+            } else {
+                item { Sikt_LocationCard_Hour_Card("$melding", tempNext6h, cloudsNext6h) }
+            }
+        }
     }
 }
 
 @Composable
 fun Sikt_LocationCard_Hour_Card(tid : String, temp : Float, cloudiness : String) {
 
-    fun getCloudVisuals(clouds: String): Int {
-        val type = clouds.split("_")
-        val typeClouds = type[0]
-        return if (typeClouds == "cloudy") {
-            R.drawable.small_clouds_both
-        } else if (typeClouds == "partlycloudy") {
-            R.drawable.small_clouds_big
-        } else if (typeClouds == "fair") {
-            R.drawable.small_clouds_small
-        } else {
-            R.drawable.small_clouds_clear
-        }
-    }
-
-    fun getRightWeather(weather: String): String {
-        val type = weather.split("_")
-        val typeWeather = type[0]
-        return if (typeWeather == "cloudy") {
-            "Meget dårlig sikt"
-        } else if (typeWeather == "partlycloudy") {
-            "Dårlig sikt"
-        } else if (typeWeather == "fair") {
-            "Lettskyet"
-        } else {
-            "Klart vær"
-        }
-    }
-
-    fun getRightKm(km: String): String {
-        val type = km.split("_")
-        val typeKm = type[0]
-        return if (typeKm == "cloudy") {
-            "> 1 km sikt"
-        } else if (typeKm == "partlycloudy") {
-            "1-4 km sikt"
-        } else if (typeKm == "fair") {
-            "4-10 km sikt"
-        } else {
-            "< 10 km sikt"
-        }
-    }
+    val cloudinessFinal = cloudiness.split("_")[0].uppercase()
+    val typeOfWeather = Sikt.valueOf(cloudinessFinal)
 
     Card(
         colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
@@ -185,18 +138,18 @@ fun Sikt_LocationCard_Hour_Card(tid : String, temp : Float, cloudiness : String)
                 modifier = Modifier.size(80.dp)
             ) {
                 Image(
-                    painter = painterResource(id = getCloudVisuals(cloudiness)),
+                    painter = painterResource(id = typeOfWeather.getIcon()),
                     contentDescription = "",
                     modifier = Modifier.fillMaxSize()
                 )
             }
             Text(
-                text = getRightKm(cloudiness),
+                text = typeOfWeather.sightInKm(),
                 fontSize = 12.sp,
                 color = Sikt_sort,
                 fontWeight = FontWeight.Bold
             )
-            Text(text = getRightWeather(cloudiness), fontSize = 12.sp, color = Sikt_sort)
+            Text(text = typeOfWeather.getRightWeather(), fontSize = 12.sp, color = Sikt_sort)
             Text(
                 text = "$temp°",
                 color = Sikt_sort,

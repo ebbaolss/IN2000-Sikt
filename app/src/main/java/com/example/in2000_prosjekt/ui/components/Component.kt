@@ -397,44 +397,30 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
         }
     }
 
-    // Klart vær = God sikt = Sikt på mer enn 10 km (INGEN SKYER) under 25%
-    // Lettskyet = Moderat sikt = Sikt på 4-10 km (LITEN SKY) 25% - 50%
-    // Delvis skyet = Dårlig sikt = Sikt på 1-4 km (STOR SKY) 50% - 75%
-    // Skyet = Tåke = Sikt på mindre enn 1 km (STOR + LITEN SKY) over 100%
-
     fun getHighClouds(highclouds: Float): Int {
-        return if (highclouds >= 75) {
-            R.drawable.clouds_high_both
-        } else if (highclouds >= 50) {
-            R.drawable.clouds_high_big
-        } else if (highclouds >= 25 ) {
-            R.drawable.clouds_high_small
-        } else {
-            R.drawable.klart
+        return when (highclouds.toInt()) {
+            in 75..100 -> R.drawable.clouds_high_both
+            in 50..74 -> R.drawable.clouds_high_big
+            in 25..49 -> R.drawable.clouds_high_small
+            else -> R.drawable.klart
         }
     }
 
     fun getMidClouds(midclouds: Float): Int {
-        return if (midclouds >= 75) {
-            R.drawable.clouds_mid_both
-        } else if (midclouds >= 50) {
-            R.drawable.clouds_mid_big
-        } else if (midclouds>= 25) {
-            R.drawable.clouds_mid_small
-        } else {
-            R.drawable.klart
+        return when (midclouds.toInt()) {
+            in 75..100 -> R.drawable.clouds_mid_both
+            in 50..74 -> R.drawable.clouds_mid_big
+            in 25..49 -> R.drawable.clouds_mid_small
+            else -> R.drawable.klart
         }
     }
 
     fun getLowClouds(lowclouds: Float): Int {
-        return if (lowclouds >= 75) {
-            R.drawable.clouds_low_both
-        } else if (lowclouds >= 50) {
-            R.drawable.clouds_low_big
-        } else if (lowclouds >= 25) {
-            R.drawable.clouds_low_small
-        } else {
-            R.drawable.klart
+        return when (lowclouds.toInt()) {
+            in 75..100 -> R.drawable.clouds_low_both
+            in 50..74 -> R.drawable.clouds_low_big
+            in 25..49 -> R.drawable.clouds_low_small
+            else -> R.drawable.klart
         }
     }
 
