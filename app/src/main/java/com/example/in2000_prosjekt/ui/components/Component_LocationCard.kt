@@ -158,6 +158,70 @@ fun Sikt_LocationCard_Hour(time : Int, clouds : String, temp: Int) {
 }
 
 @Composable
+fun Ebba_Hour(time : Int, clouds : String, temp: Int) {
+
+    fun getCloudVisuals(clouds: String): Int {
+        return if (clouds == "skyet") {
+            R.drawable.small_clouds_both
+        } else if (clouds == "delvisskyet") {
+            R.drawable.small_clouds_big
+        } else if (clouds == "lettskyet") {
+            R.drawable.small_clouds_small
+        } else {
+            R.drawable.small_clouds_clear
+        }
+    }
+
+    fun getRightWeather(weather: String): String {
+        return if (weather == "skyet") {
+            "Meget dårlig sikt"
+        } else if (weather == "delvisskyet") {
+            "Dårlig sikt"
+        } else if (weather == "lettskyet") {
+            "Lettskyet"
+        } else {
+            "Klart vær"
+        }
+    }
+
+    fun getRightKm(km: String): String {
+        return if (km == "skyet") {
+            "> 1 km sikt"
+        } else if (km == "delvisskyet") {
+            "1-4 km sikt"
+        } else if (km == "lettskyet") {
+            "4-10 km sikt"
+        } else {
+            "< 10 km sikt"
+        }
+    }
+
+    Card(
+        colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
+    ) {
+        Column(
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(text = "$time:00", color = Sikt_sort, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            Box(
+                modifier = Modifier.size(80.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = getCloudVisuals(clouds)),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            Text(text = getRightKm(clouds), fontSize = 12.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
+            Text(text = getRightWeather(clouds), fontSize = 12.sp, color = Sikt_sort)
+            Text(text = "$temp°", color = Sikt_sort, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+@Composable
 fun Sikt_LocationCard_NextDays() {
     Card(
         modifier = Modifier

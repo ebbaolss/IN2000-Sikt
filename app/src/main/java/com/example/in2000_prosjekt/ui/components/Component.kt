@@ -70,12 +70,12 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
 
                 IconButton(onClick = { onNavigateToFav() }) {
                     var iconfarge = Sikt_mørkeblå
-                    var iconChosen = Icons.Outlined.Favorite
+                    var iconChosen = R.drawable.outline_favorite
                     if (favoritt) {
-                        iconChosen = Icons.Filled.Favorite
+                        iconChosen = R.drawable.baseline_favorite_24
                     }
                     Icon(
-                        iconChosen,
+                        painter = painterResource(iconChosen),
                         contentDescription = "Localized description",
                         tint = iconfarge,
                         modifier = Modifier
