@@ -25,7 +25,6 @@ fun StartPage(onNavigateToNext: () -> Unit) {
             contentScale = ContentScale.FillWidth,
             modifier = Modifier.fillMaxSize(),
 
-
         )
         val configuration = LocalConfiguration.current
         val screenHeight = configuration.screenWidthDp.dp

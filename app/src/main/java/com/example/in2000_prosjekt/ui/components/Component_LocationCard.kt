@@ -2,6 +2,7 @@ package com.example.in2000_prosjekt.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -21,71 +22,72 @@ import com.example.in2000_prosjekt.ui.uistate.MapUiState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
+fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
 
-    // endre til lazylist:
+    items(1) {
+        // endre til lazylist:
 
-    val name = mountain.name
-    val elevation = mountain.elevation
+        val name = mountain.name
+        val elevation = mountain.elevation
 
-    val latitude = mountain.point?.latitude()
-    val longitude = mountain.point?.longitude()
+        val latitude = mountain.point?.latitude()
+        val longitude = mountain.point?.longitude()
 
-    // Gir point koordinatene i lat, så long?
-    println("latitude: " + latitude.toString()) // glittertind: latitude: 8.557780981063843
-    println("longitude: " + longitude.toString()) // glittertind: longitude: 61.65138739947395
+        // Gir point koordinatene i lat, så long?
+        println("latitude: " + latitude.toString()) // glittertind: latitude: 8.557780981063843
+        println("longitude: " + longitude.toString()) // glittertind: longitude: 61.65138739947395
 
-    val weather_high = locationInfo.cloud_area_fraction_high
-    val weather_mid = locationInfo.cloud_area_fraction_medium
-    val weather_low = locationInfo.cloud_area_fraction_low
+        val weather_high = locationInfo.cloud_area_fraction_high
+        val weather_mid = locationInfo.cloud_area_fraction_medium
+        val weather_low = locationInfo.cloud_area_fraction_low
 
-    val temp = nowCastInfo.temperatureNow
-    val wind = nowCastInfo.windN
+        val temp = nowCastInfo.temperatureNow
+        val wind = nowCastInfo.windN
 
-    println("weather_high = $weather_high")
-    println("weather_mid = $weather_mid")
-    println("weather_low = $weather_low")
+        println("weather_high = $weather_high")
+        println("weather_mid = $weather_mid")
+        println("weather_low = $weather_low")
 
-    Card (
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.padding(20.dp),
-    ) {
-        Column(
+        Card(
+            colors = CardDefaults.cardColors(Sikt_lyseblå),
             modifier = Modifier.padding(20.dp),
         ) {
-            Sikt_Header(location = "$name", alertinfo = alertInfoList)
-            Sikt_MountainHight(mountainheight = "$elevation")
-            Spacer(modifier = Modifier.size(20.dp))
-            illustrasjon(elevation, temp,wind,weather_high, weather_mid, weather_low)
-            Spacer(modifier = Modifier.size(20.dp))
-            Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.size(10.dp))
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            Column(
+                modifier = Modifier.padding(20.dp),
             ) {
-                item { Sikt_LocationCard_Hour(12,"skyet", 7) }
-                item { Sikt_LocationCard_Hour(13, "delvisskyet", 8) }
-                item { Sikt_LocationCard_Hour(14, "lettskyet", 8) }
-                item { Sikt_LocationCard_Hour(15, "klart", 7) }
-                item { Sikt_LocationCard_Hour(16, "skyet", 6) }
-                item { Sikt_LocationCard_Hour(17, "skyet", 4) }
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.size(10.dp))
-            Sikt_LocationCard_NextDays()
-            Spacer(modifier = Modifier.size(20.dp))
-            Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.size(10.dp))
+                Sikt_Header(location = "$name", alertinfo = alertInfoList)
+                Sikt_MountainHight(mountainheight = "$elevation")
+                Spacer(modifier = Modifier.size(20.dp))
+                illustrasjon(elevation, temp, wind, weather_high, weather_mid, weather_low)
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.size(10.dp))
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    item { Sikt_LocationCard_Hour(12, "skyet", 7) }
+                    item { Sikt_LocationCard_Hour(13, "delvisskyet", 8) }
+                    item { Sikt_LocationCard_Hour(14, "lettskyet", 8) }
+                    item { Sikt_LocationCard_Hour(15, "klart", 7) }
+                    item { Sikt_LocationCard_Hour(16, "skyet", 6) }
+                    item { Sikt_LocationCard_Hour(17, "skyet", 4) }
+                }
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.size(10.dp))
+                Sikt_LocationCard_NextDays()
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.size(10.dp))
 
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
-            ) {
-                val testliste = mutableListOf<MapUiState.Mountain>()
-                testliste.add(mountain)
-                testliste.add(mountain)
-                Sikt_Turer_I_Naerheten(testliste,locationInfo, nowCastInfo)
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    val testliste = mutableListOf<MapUiState.Mountain>()
+                    testliste.add(mountain)
+                    testliste.add(mountain)
+                    Sikt_Turer_I_Naerheten(testliste, locationInfo, nowCastInfo)
+                }
             }
         }
     }
