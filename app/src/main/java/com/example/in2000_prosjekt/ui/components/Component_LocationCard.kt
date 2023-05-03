@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.R
@@ -72,13 +71,13 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                 Spacer(modifier = Modifier.size(10.dp))
                 Sikt_LocationCard_Hour(locationInfo) }
                 Spacer(modifier = Modifier.size(20.dp))
-                Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold)
+                Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
                 Sikt_LocationCard_NextDays()
                 Spacer(modifier = Modifier.size(20.dp))
-                Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold)
+                Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
-                LazyRow() { Sikt_Turer_I_Naerheten(testliste, nowCastInfo) }
+                LazyRow(modifier = Modifier.padding(start = 20.dp, end = 20.dp)) { Sikt_Turer_I_Naerheten(testliste, nowCastInfo) }
                 Spacer(modifier = Modifier.size(100.dp))
             }
         }
@@ -101,8 +100,8 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
     fun add1hour(tidspunkt: String): String {
         println("Tidspunkt: $tidspunkt")
         val nestetime = tidspunkt.toInt()
-        val nesteh = nestetime + 1
-        return nesteh.toString()
+        val nesteH = nestetime + 1
+        return nesteH.toString()
     }
 
     LazyRow(
@@ -120,7 +119,6 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
         val pluss5 = add1hour(pluss4)
         item { Sikt_LocationCard_Hour_Card("$pluss5:00", tempNext6h, cloudsNext6h) }
     }
-
 }
 
 @Composable
@@ -252,34 +250,4 @@ fun Sikt_LocationCard_NextDays() {
 }
 
 
-
-@Preview(showSystemUi = true)
-@Composable
-fun Test() {
-
-    /*
-    val currentTimeMillis = System.currentTimeMillis()
-    val date = Date(currentTimeMillis)
-    val dateFormat = SimpleDateFormat("HH")
-    val tidspunkt = dateFormat.format(date)
-    val tid = "$tidspunkt:00"
-
-    fun add1hour(tidspunkt: String): String {
-        println("Tidspunkt: $tidspunkt")
-        val nestetime = tidspunkt.toInt()
-        val nesteh = nestetime + 1
-        return nesteh.toString()
-    }
-
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        item { Sikt_LocationCard_Hour_Card("Sikt nå:", 10f, 60f) }
-        val pluss1 = add1hour(tidspunkt)
-        item { Sikt_LocationCard_Hour_Card("$pluss1:00", 7f, 30f) }
-        val pluss2 = add1hour(pluss1)
-        item { Sikt_LocationCard_Hour_Card("$pluss2:00", 5f, 80f) }
-    }
-     */
-}
 

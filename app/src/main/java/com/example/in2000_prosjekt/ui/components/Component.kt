@@ -214,6 +214,18 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
             AlertButton( alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA){
                 openDialog = true
             }
+        } else {
+            // For å fikse at fjelltopp-text blir midtstilt
+            IconToggleButton(
+                checked = false,
+                onCheckedChange = { },
+            ) {
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = "Localized description",
+                    tint = Sikt_lyseblå
+                )
+            }
         }
 
         if (openDialog){
@@ -543,5 +555,17 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
 @Composable
 fun TestComponent() {
 
-    Sikt_BottomBar2()
+    //TEst med langt navn på fjelltopp og fjelltopp med flere ord
+    val mutableList : MutableList<AlertInfo> = mutableListOf()
+
+    Card(
+        colors = CardDefaults.cardColors(Sikt_lyseblå),
+        modifier = Modifier.padding(20.dp),
+    ){
+        Column(
+            modifier = Modifier.padding(20.dp),
+        ) {
+            Sikt_Header("Fjelltopp", mutableList)
+        }
+    }
 }
