@@ -18,13 +18,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.AppUiState
-import com.example.in2000_prosjekt.ui.components.Alert_Card
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
-
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
 import com.example.in2000_prosjekt.ui.database.MapViewModel

@@ -5,6 +5,7 @@ package com.example.in2000_prosjekt.ui.components
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -304,16 +305,16 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
     }
 }
 
-fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mountain>, locationInfo: LocationInfo, nowCastInfo: NowCastInfo){
-    //location : String, height : Int, temp : Int
+fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mountain>, nowCastInfo: NowCastInfo) {
 
-    items(mountains.size) {
-        mountains.forEach { tur ->
+    items(1) {
+        mountains.forEach { mountain ->
+
             val temp = nowCastInfo.temperatureNow
 
             Card(
                 colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
-                modifier = Modifier.padding(20.dp)
+                modifier = Modifier.padding(end = 10.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(10.dp),
@@ -337,7 +338,7 @@ fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mount
                     }
                     Spacer(modifier = Modifier.size(10.dp))
                     Text(
-                        text = "${tur.name}",
+                        text = "${mountain.name}",
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                         color = Sikt_sort,
@@ -542,4 +543,5 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
 @Composable
 fun TestComponent() {
 
+    Sikt_BottomBar2()
 }

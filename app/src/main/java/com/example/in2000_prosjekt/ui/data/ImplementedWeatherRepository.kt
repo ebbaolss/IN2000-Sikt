@@ -33,6 +33,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         val cloud_high = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_high
         val cloud_mid = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_medium
         val cloud_low = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_low
+        val cloudiness = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction
 
         return LocationInfo(
             temperatureL = (temp ?: -273.5) as Float,
@@ -41,6 +42,7 @@ class ImplementedWeatherRepository : WeatherRepository {
             cloud_area_fraction_high = cloud_high!!,
             cloud_area_fraction_medium = cloud_mid!!,
             cloud_area_fraction_low = cloud_low!!,
+            cloud_area_fraction = cloudiness!!,
         )
     }
 
