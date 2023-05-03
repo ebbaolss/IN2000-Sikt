@@ -77,9 +77,9 @@ class UnitTestComposableFunksjoner {
 
 
             rule.onAllNodes(hasNoClickAction()).onLast()
-                .assertHeightIsAtLeast(753.dp)//  Test på størrelsen til bilde som er satt til fillMaxsize, som svarer til høyden til emulatoren vår, hentet fra dokumentasjonen til emulatoren: Her så testes det om bilde fyller skjermens høyde, som skal være 730.dp høy
+                .assertHeightIsAtLeast(753.dp) //  Test på størrelsen til bilde som er satt til fillMaxsize, som svarer til høyden til landing page bildet, hentet fra Figma: Her så testes det om bilde fyller skjermens høyde, som skal være 730.dp høy
             rule.onAllNodes(hasNoClickAction()).onLast()
-                .assertWidthIsAtLeast(392.dp)//  Test på størrelsen til bilde som er satt til fillMaxsize,, som svarer til bredden til emulatoren vår, hentet fra dokumentasjonen til emulatoren: Her så testes det om bilde fyller skjermens bredde, som skal være 393.dp høy
+                .assertWidthIsAtLeast(392.dp) //  Test på størrelsen til bilde som er satt til fillMaxsize,, som svarer til bredden til landing page bildet, hentet fra Figma: Her så testes det om bilde fyller skjermens bredde, som skal være 393.dp høy
 
 
         }
@@ -201,7 +201,8 @@ class UnitTestComposableFunksjoner {
                     onNavigateToMap = { /**/ },
                     onNavigateToFav = { /*TODO*/ },
                     onNavigateToRules = { /*TODO*/ },
-                    onNavigateToSettings = { /*TODO*/ })
+                    onNavigateToSettings = { /*TODO*/ }
+                )
 
             }
             rule.onNodeWithText("Favoritter")
