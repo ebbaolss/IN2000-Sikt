@@ -28,9 +28,31 @@ class APIViewModel () : ViewModel()
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
 
+
+
     private val currentLatitude = 61.651356077904666
     private val currentLongitude = 8.557801680731075
     private val altitude: String = "600"
+
+        /*
+    fun getReferencetimeFrost( referencetime: String ) : String {
+        val referencedate = referencetime
+
+        viewModelScope.async (Dispatchers.IO) {
+            repository.getReferencetimeFrost(referencetime)
+        }
+        return referencedate
+
+    }
+
+         */
+    fun getReferencetimeFrost( referencetime: String )  {
+
+        viewModelScope.async (Dispatchers.IO) {
+            repository.getReferencetimeFrost(referencetime)
+        }
+
+    }
 
     fun getAll(latitude: String, longitude: String, altitude: String) {
         viewModelScope.launch() {
@@ -57,6 +79,7 @@ class APIViewModel () : ViewModel()
                 }
 
                 val frostDeferred = viewModelScope.async (Dispatchers.IO){
+                    //repository.getReferencetimeFrost() kl.20.26
                     repository.getFrost(latitude, longitude)
                 }
                 val frostP = frostDeferred.await()
@@ -65,7 +88,6 @@ class APIViewModel () : ViewModel()
                 val alertP = alertDeferred.await()
                 Log.d("alertDeferred", "Success")
 
-                //val frostP = frostDeferred.await()
 
 
                 _appUistate.update {

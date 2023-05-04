@@ -159,7 +159,9 @@ fun ShowMap(
                             mountainUiState,
                             (appUiState as AppUiState.Success).locationF,
                             (appUiState as AppUiState.Success).nowCastF,
-                            (appUiState as AppUiState.Success).alertListF
+                            (appUiState as AppUiState.Success).alertListF,
+                            (appUiState as AppUiState.Success).frostF,
+                            apiViewModel
                         )
                     }
                 }

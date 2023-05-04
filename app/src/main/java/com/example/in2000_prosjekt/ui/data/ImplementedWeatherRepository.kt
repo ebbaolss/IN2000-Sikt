@@ -11,9 +11,9 @@ class ImplementedWeatherRepository : WeatherRepository {
     val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
 
     //----------------------
-    //Frost:
+    //Frost: Disse variablene er uviktige per 03.05
+    //    var referencetime ="2021-05-17%2F2021-05-17" // Frost API, bruker UTC-tidsformat, denne ønskes senere å kunne bestemmes av en bruker ved hjelp av en Date picker (en bibloteksfunskjon i jetpack compose)
     var elements = "air_temperature"// Dette er værmålingen vi ønsker: For enkelthetsskyld så velges bare: air temperature
-    var referencetime ="2021-05-17%2F2021-05-17" // Frost API, bruker UTC-tidsformat, denne ønskes senere å kunne bestemmes av en bruker ved hjelp av en Date picker (en bibloteksfunskjon i jetpack compose)
     //var url_med_Polygon ="https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=POLYGON((7.9982%2058.1447%20%2C%208.0982%2058.1447%20%2C7.9982%2058.2447%20%2C%208.0982%2058.2447%20))"
     val source = "SN18700" //skjønner ikke denne, hvor får vi dette fra? Hva er det? Spørr Nebil
     //----------------------
@@ -122,9 +122,17 @@ class ImplementedWeatherRepository : WeatherRepository {
         return alertList
     }
 
+    // Dette er forsøk Alt:.1.2           kl.19.34, 04.05.23 : alt.
+    override suspend fun getReferencetimeFrost( calenderreferencetime: String ) {
+       // val referencetime = referencetime
+        //dataFrost.getReferencetimeFrost(referencetime)
 
-    override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
+        dataFrost.referencetime=calenderreferencetime
+    }
 
+
+
+    override suspend fun getFrost(latitude: String, longitude: String ): FrostInfo { //åssen får jeg referense time inni her:
 
 
         Log.d("Saalangt", "Data retrieved")
@@ -134,7 +142,7 @@ class ImplementedWeatherRepository : WeatherRepository {
 
         Log.d("SN på første responsobjekt: skal være SN63595",  weatherstationid!!)
 
-        val frost = dataFrost.fetchFrost( weatherstationid!!, referencetime )
+        val frost = dataFrost.fetchFrost( weatherstationid!! )
 
         //Kommentar 22.04, her har vi 2 tilnmmærminger å gjære et apicall
         // Alt 1: å gjøre et apicall per dag inni calendern vår

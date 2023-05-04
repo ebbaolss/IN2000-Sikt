@@ -27,10 +27,7 @@ fun StartPage(onNavigateToNext: () -> Unit) {
 
 
         )
-        val configuration = LocalConfiguration.current
-        val screenHeight = configuration.screenWidthDp.dp
 
-        Log.d ("test", screenHeight.toString())
 
     }
     LaunchedEffect(Unit) {

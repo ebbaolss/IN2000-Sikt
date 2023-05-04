@@ -20,20 +20,20 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_sort
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.geojson.Point
 import com.example.in2000_prosjekt.R
-import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.AlertInfo
-import com.example.in2000_prosjekt.ui.LocationInfo
-import com.example.in2000_prosjekt.ui.NowCastInfo
+import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.*
 import kotlinx.coroutines.runBlocking
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
+fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>, frostinfo: FrostInfo, apiViewModel: APIViewModel){
 
     val name = mountain.name
     val elevation = mountain.elevation
+
+
+    //apiViewModel.getAll("$latitude", "$longitude", "$elevation") // dette var gjort for å vise jamila om det går å sende info fra en
 
     val latitude = mountain.point?.latitude()
     val longitude = mountain.point?.longitude()
@@ -65,6 +65,13 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
             Sikt_Header(location = "$name", alertinfo = mutableListOf()) // Husk å endre alertinfo
             Sikt_MountainHight(mountainheight = "$elevation")
             Spacer(modifier = Modifier.size(20.dp))
+
+
+            // her skal kalendern brukes:
+            Sikt_Historisk_Kalender(   apiViewModel , frostinfo )
+
+
+        /*
             //illustrasjon(elevation, 10f,10f,"skyet", "delvisskyet", "klart")
             Spacer(modifier = Modifier.size(20.dp))
             Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
@@ -95,6 +102,9 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
                 item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
                 item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
             }
+
+ */
+
         }
     }
 }
