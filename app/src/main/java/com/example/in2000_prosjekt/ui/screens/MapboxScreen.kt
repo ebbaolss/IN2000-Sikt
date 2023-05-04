@@ -23,6 +23,7 @@ import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
+import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
 import com.example.in2000_prosjekt.ui.database.MapViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
@@ -118,6 +119,11 @@ fun ShowMap(
                 }
             )
 
+            if (!locationCardState) {
+                // Skal ta inn liste over topper i nærheten og nowcast:
+                Sikt_BottomSheet()
+            }
+
             if (locationCardState){
                 when (appUiState) {
                     is AppUiState.Loading -> {
@@ -154,6 +160,7 @@ fun ShowMap(
                             modifier = Modifier
                                 .fillMaxSize()
                         ) {
+                            // Må legge inn listen over fjelltopper i nærheten:
                             Sikt_LocationCard(
                                 mountainUiState,
                                 (appUiState as AppUiState.Success).locationF,
@@ -165,9 +172,6 @@ fun ShowMap(
                 }
             }
         }
-
-        // Menu (Kommer over LocationCard?)
-        //Sikt_BottomSheet()
     }
 }
 

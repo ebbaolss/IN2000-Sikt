@@ -380,20 +380,12 @@ fun DeleteAllButton(viewModel: FavoriteViewModel){
 fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
 
     fun getHeightVisuals(height: Int?) : Int {
-        return if (height != null) {
-            if (height < 500) {
-                R.drawable.topp_under500
-            } else if (height < 1000) {
-                R.drawable.topp1000to500
-            } else if (height < 1500) {
-                R.drawable.topp1500to1000
-            } else if (height < 2000) {
-                R.drawable.topp2000to1500
-            } else {
-                R.drawable.topp_over2000
-            }
-        } else {
-            R.drawable.topp_under500
+        return when (height) {
+            in 0 .. 500 -> R.drawable.topp_under500
+            in 501 .. 1000 -> R.drawable.topp1000to500
+            in 1001 .. 1500 -> R.drawable.topp1500to1000
+            in 1501 .. 2000 -> R.drawable.topp2000to1500
+            else -> R.drawable.topp_over2000
         }
     }
 
@@ -425,26 +417,20 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
     }
 
     fun getRightWeather(weather: Float): String {
-        return if (weather >= 75) {
-            "Meget dårlig sikt"
-        } else if (weather >= 50) {
-            "Dårlig sikt"
-        } else if (weather >= 25) {
-            "Lettskyet"
-        } else {
-            "Klart vær"
+        return when (weather.toInt()) {
+            in 75..100 -> "Meget dårlig sikt"
+            in 50..74 -> "Dårlig sikt"
+            in 25..49 -> "Lettskyet"
+            else -> "Klart vær"
         }
     }
 
     fun getRightKm(km: Float): String {
-        return if (km >= 75) {
-            "> 1 km sikt"
-        } else if (km >= 50) {
-            "1-4 km sikt"
-        } else if (km >= 25) {
-            "4-10 km sikt"
-        } else {
-            "< 10 km sikt"
+        return when (km.toInt()){
+            in 75..100 -> "> 1 km sikt"
+            in 50..74 -> "1-4 km sikt"
+            in 25..49 -> "4-10 km sikt"
+            else -> "< 10 km sikt"
         }
     }
 
@@ -541,17 +527,40 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
 @Composable
 fun TestComponent() {
 
-    //TEst med langt navn på fjelltopp og fjelltopp med flere ord
-    val mutableList : MutableList<AlertInfo> = mutableListOf()
-
     Card(
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.padding(20.dp),
-    ){
+        colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
+        modifier = Modifier.padding(end = 10.dp)
+    ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Sikt_Header("Fjelltopp", mutableList)
+            Box(
+                modifier = Modifier.size(100.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.turer_i_naerheten),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxSize()
+                )
+                Text(
+                    text = "0°",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp,
+                    color = Sikt_sort,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+            Spacer(modifier = Modifier.size(10.dp))
+            Text(
+                text = "fjell",
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                color = Sikt_sort,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
+
 }

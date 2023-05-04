@@ -29,30 +29,21 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
 
         val name = mountain.name
         val elevation = mountain.elevation
-        val latitude = mountain.point?.latitude()
-        val longitude = mountain.point?.longitude()
 
-        // Gir point koordinatene i lat, så long?
-        println("latitude: " + latitude.toString()) // glittertind: latitude: 8.557780981063843
-        println("longitude: " + longitude.toString()) // glittertind: longitude: 61.65138739947395
-
-        val weather_high = locationInfo.cloud_area_fraction_high
-        val weather_mid = locationInfo.cloud_area_fraction_medium
-        val weather_low = locationInfo.cloud_area_fraction_low
+        val weatherHigh = locationInfo.cloud_area_fraction_high
+        val weatherMid = locationInfo.cloud_area_fraction_medium
+        val weatherLow = locationInfo.cloud_area_fraction_low
 
         val temp = nowCastInfo.temperatureNow
         val wind = nowCastInfo.windN
 
-        println("weather_high = $weather_high")
-        println("weather_mid = $weather_mid")
-        println("weather_low = $weather_low")
-
         // SKAL SLETTES NÅR VI FÅR LISTE OVER FJELL I NÆRHETEN:
             val testliste = mutableListOf<MapUiState.Mountain>()
+        /*
             testliste.add(mountain)
             testliste.add(mountain)
             testliste.add(mountain)
-            testliste.add(mountain)
+            testliste.add(mountain)*/
 
         Card(
             colors = CardDefaults.cardColors(Sikt_lyseblå),
@@ -64,7 +55,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                 Sikt_Header(location = "$name", alertinfo = alertInfoList)
                 Sikt_MountainHight(mountainheight = "$elevation")
                 Spacer(modifier = Modifier.size(20.dp))
-                illustrasjon(elevation, temp, wind, weather_high, weather_mid, weather_low)
+                illustrasjon(elevation, temp, wind, weatherHigh, weatherMid, weatherLow)
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.size(10.dp))
@@ -76,7 +67,17 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
-                LazyRow(modifier = Modifier.padding(start = 20.dp, end = 20.dp)) { Sikt_Turer_I_Naerheten(testliste, nowCastInfo) }
+                // Bytt ut testliste med fjelltopper i nærheten:
+                if (testliste.size != 0) {
+                    LazyRow(
+                        modifier = Modifier.padding(
+                            start = 20.dp,
+                            end = 20.dp
+                        )
+                    ) { Sikt_Turer_I_Naerheten(testliste, nowCastInfo) }
+                } else {
+                    Text(text = "Ingen topper i nærheten...", modifier = Modifier.padding(start = 20.dp))
+                }
                 Spacer(modifier = Modifier.size(100.dp))
             }
         }
