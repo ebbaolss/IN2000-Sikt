@@ -123,7 +123,7 @@ class ImplementedWeatherRepository : WeatherRepository {
 
         val mountains = HashMap<String, String>()
 
-        //lage en liste som bare inneholder mountains (poi)
+        //lage en liste som bare inneholder mountains poi
         for (item in mapJson.suggestions) {
             if (item.feature_type == "poi") {
                 mountains[item.name!!] = item.mapbox_id!!
