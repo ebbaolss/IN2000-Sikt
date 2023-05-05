@@ -132,8 +132,6 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
 
 @Composable
 fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo ) { //
-
-
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Sikt_lyseblå), horizontalAlignment = Alignment.CenterHorizontally,)
@@ -159,10 +157,21 @@ fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo 
         Text(text= "Nr3: monthState.year: " + year.toString())
         Text(text= "Nr4: Apicall verdi: " + datesforfrostsightconditions)
         // test med aaaalle datoer 60 dager
-        LaunchedEffect(Unit) {
+
+
+     /*   LaunchedEffect(Unit) {
             snapshotFlow { monthState.currentMonth }
                 .collect { currentMonth ->
                     // viewModel.doSomething()
+                }
+        }*/
+
+        LaunchedEffect(Unit) {
+            snapshotFlow { datesforfrostsightconditions }
+                .collect { currentperiod ->
+                    // viewModel.doSomething()
+
+                    apiViewModel.getReferencetimeFrost(referencetime =  currentperiod )
                 }
         }
 
@@ -173,8 +182,6 @@ CalenderState(Måneden)
 StaticCalender(CalenderState)
 LaunchedEffect(Unit)
          */
-
-
         Text(text= "Picture description:")
         Text(text= "Klart:")
         Image(painter = painterResource(id = R.drawable.klart), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
