@@ -32,7 +32,6 @@ import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
-import com.mapbox.geojson.Polygon
 import com.mapbox.maps.*
 import com.mapbox.maps.dsl.cameraOptions
 import com.mapbox.maps.extension.style.expressions.dsl.generated.eq
@@ -40,12 +39,30 @@ import com.mapbox.maps.extension.style.layers.generated.circleLayer
 import com.mapbox.maps.extension.style.sources.generated.vectorSource
 import com.mapbox.maps.extension.style.style
 import com.mapbox.maps.plugin.compass.compass
-import com.mapbox.maps.plugin.delegates.listeners.OnCameraChangeListener
-import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.scalebar.scalebar
-import kotlin.math.cos
-import kotlin.math.sin
+import androidx.compose.runtime.Composable
+import android.view.KeyEvent
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.style.TextAlign
+import com.mapbox.maps.MapView
+import androidx.compose.ui.text.input.ImeAction
+import com.example.in2000_prosjekt.ui.SearchbarMapViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,7 +95,11 @@ fun ShowMap(
                 map = true,
                 settings = false
             )
-        }) {
+        },
+        topBar = {
+            SearchBar(SearchbarMapViewModel()) { /* locationCardState = true */ }
+        }
+    ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -90,14 +111,14 @@ fun ShowMap(
                     val map = createFactoryMap(it, cameraOptionsUiState)
                     val mapboxMap = map.getMapboxMap()
 
-                    mapboxMap.addOnMapClickListener(onMapClickListener = OnMapClickListener { point ->
+                    mapboxMap.addOnMapClickListener(onMapClickListener = { point ->
                         Log.d("LocationCardState", "$locationCardState")
                         onMapClick(point, mapboxMap, mapViewModel, apiViewModel) {
                             locationCardState = true
                             Log.d("Location Card State", "$locationCardState")
                         }
                     })
-                    mapboxMap.addOnCameraChangeListener(onCameraChangeListener = OnCameraChangeListener {
+                    mapboxMap.addOnCameraChangeListener(onCameraChangeListener = {
                         Log.d("CameraChangeListener", "invoked")
                         onCameraChange(mapboxMap, mapViewModel)
                     })
@@ -298,6 +319,183 @@ fun onFeatureClicked(
     if (expected.isValue && expected.value?.size!! > 0) {
         expected.value?.get(0)?.feature?.let { feature ->
             onFeatureClicked.invoke(feature)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@Composable
+fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit){
+    //MANGLER :
+    // at tastaturet forsvinner når man trykker på kart
+
+    val mapUiState = viewModel.appUiState.collectAsState()
+
+    var input by remember { mutableStateOf("") }
+    var isTextFieldFocused by remember { mutableStateOf(false) }
+    val recentSearchHashmap : HashMap<String, String> = hashMapOf()
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var showRecent = true
+
+    LazyColumn(
+        modifier = Modifier
+            .padding(
+                start = 20.dp,
+                end = 20.dp,
+                top = 20.dp
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+
+        item {
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .onFocusChanged {
+                        isTextFieldFocused = it.isFocused
+                    }
+                    .onKeyEvent {
+                        if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER){
+                            if (input.length > 1) {
+                                viewModel.getDataSearch(input)
+                                showRecent = false
+                            }
+                            input = ""
+                        }
+                        false
+                    },
+
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                        isTextFieldFocused = false
+                        focusManager.clearFocus()
+                    }),
+                value = input,
+                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                onValueChange = { input = it },
+                placeholder = { Text(text = "Søk her") },
+                label = {
+                    Text(
+                        text = "Søk her",
+                        textAlign = TextAlign.Center
+                    )
+                },
+                trailingIcon = { //søkeknappen
+                    Button(
+                        onClick = {
+
+                            if (input.length > 1) {
+                                viewModel.getDataSearch(input)
+                                showRecent = false
+                            }
+
+                            input = ""
+
+                        }, colors = ButtonDefaults.buttonColors(Color.White),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            tint = Color.Black,
+                            contentDescription = "Search icon",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
+            )
+        }
+
+        if (isTextFieldFocused && showRecent) {
+
+            items(mapUiState.value.recentSearch) { mountain ->
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .height(40.dp)
+                        .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
+                        .clickable( enabled = true, onClick = {
+
+                            viewModel.updateRecentSearch(mountain, false)
+
+                            viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!)
+
+                            focusManager.clearFocus()
+                            showRecent = true
+
+                            onSearch()
+                            //bruke koordinatene over til å få opp card
+
+                        }),
+
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = mountain,
+                        fontSize = 15.sp,
+                        modifier = Modifier
+                            .weight(1f),
+                        textAlign = TextAlign.Start,
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(end = 15.dp)
+                            .clickable(
+                                onClick = {
+                                    viewModel.updateRecentSearch(mountain, true)
+                                }
+                            )
+                    )
+                }
+            }
+        }
+        if (isTextFieldFocused && !showRecent) {
+
+            items(mapUiState.value.optionMountains.keys.toList()) { mountain ->
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .height(40.dp)
+                        .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
+                        .clickable( enabled = true, onClick = {
+
+                            viewModel.updateRecentSearch(mountain, false)
+
+                            recentSearchHashmap[mountain] = mapUiState.value.optionMountains[mountain]!!
+
+                            viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!)
+
+                            focusManager.clearFocus()
+                            showRecent = true
+
+                            //skal gjøre den true så carded vises i ShowMap():
+                            onSearch()
+
+                        }),
+
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = mountain,
+                        fontSize = 15.sp,
+                        modifier = Modifier
+                            .weight(1f),
+                        textAlign = TextAlign.Start,
+                    )
+                }
+            }
         }
     }
 }

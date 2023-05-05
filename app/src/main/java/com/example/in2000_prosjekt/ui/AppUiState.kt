@@ -15,7 +15,6 @@ data class LocationInfo( //gi ting navn med også L på slutten
     val cloudinessNext1L : String,
     val cloudinessNext6L : String,
 )
-
 data class NowCastInfo( //sette N eller Now på slutten
     val temperatureNow: Float,
     val windN : Float
@@ -37,6 +36,16 @@ data class AlertInfo( //sett A på slutten
 
 data class FrostInfo( //sett Frost på slutten, F brukes allerede
     val sightcondition: Int,
+)
+
+data class MapInfo(
+    //hashmap med forslag
+    val optionMountains : HashMap<String, String> = hashMapOf(),
+    val recentSearch : MutableList<String> = mutableListOf()
+)
+data class MapCoordinatesInfo(
+    val latitude : Double = 0.0, //double??
+    val longitude : Double = 0.0
 )
 
 sealed interface AppUiState {
