@@ -61,8 +61,6 @@ class DataSourceFrost (val basePath: String) {
 
 
     suspend fun fetchFrost(source: String): FrostResponsBuild {
-
-
         // Dette gjøres på tordsag kl.14.25 for å se om jeg faktisk sender variablen referencetime gjennom View-ViewModel-Model.
         //Vi hardkoder source til SN18700-Blindern: som alltid har resutlter for mean(cloud_area_fraction%20P1D)"
 
@@ -70,8 +68,8 @@ class DataSourceFrost (val basePath: String) {
         var url : String = "${basePath}sources=SN18700&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)"
         var frostsightconditons : FrostResponsBuild =  client.get(url).body()
 
-        Log.d("Referencetime",url )
-        Log.d("Referencetime",frostsightconditons.toString() )
+        Log.d("ReferencetimeUrl",url )
+        Log.d("ReferencetimeObject",frostsightconditons.toString() )
 
         return frostsightconditons
 

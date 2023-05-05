@@ -11,11 +11,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,71 +58,62 @@ fun Sikt_Historisk_KalenderGammelogNotMine() {
 //Dette er funksjonen som bestemmer dagsinnholdet i hver dag kalenderen StaticCalender()
 @Composable
 fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewModel: APIViewModel ) : MutableList<LocalDate> {
-
     var alledager = mutableListOf<LocalDate>()
-    Card(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .padding(2.dp),
-
-        border =  BorderStroke(1.dp, Sikt_hvit)
-    )
-
+    Card(modifier = Modifier
+        .aspectRatio(1f)
+        .padding(2.dp), border =  BorderStroke(1.dp, Sikt_hvit))
     {
+        Column(modifier = Modifier.fillMaxWidth()) {
 
-        Column(
-            modifier = Modifier.fillMaxWidth()
+            Text(text = dayState.date.dayOfMonth.toString()+".", modifier=Modifier.padding(start = 2.4.dp))
 
-        ) {
 
-            Text(text = dayState.date.dayOfMonth.toString()+".", modifier=Modifier.padding(start = 2.4.dp) // dette er datoen
-            )
-
-            //  date: YYYY-MM-DD "2021-05-12" // den monthValue-Trenger ikke å ha 0-symbolet forran seg: 05 og 5 funker
-            val year = dayState.date.year -2 // dette er året 2021
-
+            val year = dayState.date.year -2
+            //  date: YYYY-MM-DD "2021-05-12" // monthValue-Trenger ikke å ha 0-symbolet forran seg: 05 og 5 funker
             val date= year.toString()+"-"+dayState.date.monthValue.toString() +"-"+ dayState.date.dayOfMonth.toString()
 
+            //Api kallet
             apiViewModel.getReferencetimeFrost(referencetime =  date )
 
-            Log.d("frostinfo:SightConditions(FullDate: YYYY-MM-DD)", frostinfo.sightcondition.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
+            Log.d("Dato: også Api respons verdi (frostinfo:SightConditions)", "Dato: "+ date + " ApiResponsverdi for datoen: "+ frostinfo.sightcondition.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
 
+
+            var weathericon = painterResource(id = R.drawable.skyet)
+            if (frostinfo.sightcondition == 0) weathericon = painterResource(id = R.drawable.klart)
+            else if (frostinfo.sightcondition < 3) weathericon = painterResource(id = R.drawable.lettskyet)
+            else if (frostinfo.sightcondition  > 100) weathericon = painterResource(id = R.drawable.delvis_skyet)
+
+
+            Image(painter =  weathericon, contentDescription = "", modifier = Modifier
+                .fillMaxHeight()
+                .aspectRatio(2f)
+                .wrapContentSize(Alignment.Center)
+                .size(30.dp))
+
+
+/*
+            //val RememberState = dayState.value // går ikke
+            //val RememberState3 = dayState.selectionState.value // går ikke
+            // linjene under er et forsøk på å bruke DayState sin recomposition og remember, torsdag 04.05, kl.2055
+            val testRememberForHverdag by remember { mutableStateOf(dayState) }
+            val rememberyear = testRememberForHverdag.date.year -2
+            val rememberdate= rememberyear.toString()+"-"+testRememberForHverdag.date.monthValue.toString() +"-"+ testRememberForHverdag.date.dayOfMonth.toString()
+ */
+
+            // apikall på remembered Daystate variable: testRememberForHverdag torsdag 04.05, kl.2055
+
+            /*  LaunchedEffect(testRememberForHverdag.date.dayOfMonth){
+                  apiViewModel.getReferencetimeFrost(referencetime =  rememberdate )
+              }
+
+             */
+
+            // Log.d("Dato: også Api respons verdi (frostinfo:SightConditions)", "Dato: "+ rememberdate + " ApiResponsverdi for datoen: "+ frostinfo.sightcondition.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
 
             // Picks icon to be shown depending on the sight / sikt conditions: The lower the APi value the more clear the sky is(the better the conditions)
             // frostinfo.sightcondition is on a scale from: [0-8]: 0 being Great sight / sikt conditions, 8 being Poor sight / sikt conditions,
-            var weathericon = when {
-
-                (frostinfo.sightcondition == 0)  ->  painterResource(id = R.drawable.klart)
-                (0 < frostinfo.sightcondition && frostinfo.sightcondition < 3) -> painterResource(id = R.drawable.lettskyet)
-
-                (3 < frostinfo.sightcondition && frostinfo.sightcondition < 6) -> painterResource(id = R.drawable.delvis_skyet)
-                else ->painterResource(id = R.drawable.skyet) // Denne else'en representerer alle dager hvor
-            }
-
-
-
-            Log.d("FullDate: YYYY-MM-DD", date) // Er hele datoen for en kalenderdag: 2021-05-21
-/*
-            Log.d("dateNumber", dayState.date.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
-            Log.d("isCurrentDay", dayState.isCurrentDay.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
-            Log.d("isFromCurrentMonth",  dayState.isFromCurrentMonth.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
-            Log.d("isFromCurrentMonth",  dayState.selectionState.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
-
- */
-
-
-
-            Image(painter =  weathericon  ,//painterResource(id =  R.drawable.klart),
-                contentDescription = "test med fare i hver",
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(2f)
-                    .wrapContentSize(Alignment.Center)
-                    .size(30.dp))
 
             alledager.add(dayState.date) // generer en liste med innholdet i kalenderen
-
-
         }
     }
 
