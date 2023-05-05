@@ -82,8 +82,14 @@ fun ShowMap(
 
     var locationCardState by remember { mutableStateOf(false) }
 
+    val focusManager = LocalFocusManager.current
 
     Scaffold(
+        topBar = {
+            SearchBar(SearchbarMapViewModel(), {focusManager.clearFocus()
+                println("clear")
+            }) { /* locationCardState = true */ }
+        },
         bottomBar = {
             Sikt_BottomBar(
                 onNavigateToMap,
@@ -95,9 +101,6 @@ fun ShowMap(
                 map = true,
                 settings = false
             )
-        },
-        topBar = {
-            SearchBar(SearchbarMapViewModel()) { /* locationCardState = true */ }
         }
     ) {
         Box(
@@ -111,12 +114,21 @@ fun ShowMap(
                     val map = createFactoryMap(it, cameraOptionsUiState)
                     val mapboxMap = map.getMapboxMap()
 
+                    mapboxMap.addOnCameraChangeListener(onCameraChangeListener = {
+                        focusManager.clearFocus()
+                        locationCardState = false
+                    })
+
                     mapboxMap.addOnMapClickListener(onMapClickListener = { point ->
                         Log.d("LocationCardState", "$locationCardState")
+                        focusManager.clearFocus()
+                        locationCardState = false
+
                         onMapClick(point, mapboxMap, mapViewModel, apiViewModel) {
                             locationCardState = true
                             Log.d("Location Card State", "$locationCardState")
                         }
+
                     })
                     mapboxMap.addOnCameraChangeListener(onCameraChangeListener = {
                         Log.d("CameraChangeListener", "invoked")
@@ -183,6 +195,7 @@ fun ShowMap(
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
+                                .padding(top = 65.dp, bottom = 70.dp)
                         ) {
                             // Må legge inn listen over fjelltopper i nærheten:
                             Sikt_LocationCard(
@@ -325,7 +338,7 @@ fun onFeatureClicked(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit){
+fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit, clearFocus : () -> Unit){
     //MANGLER :
     // at tastaturet forsvinner når man trykker på kart
 
@@ -334,7 +347,7 @@ fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit){
     var input by remember { mutableStateOf("") }
     var isTextFieldFocused by remember { mutableStateOf(false) }
     val recentSearchHashmap : HashMap<String, String> = hashMapOf()
-    val focusManager = LocalFocusManager.current
+    //val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var showRecent = true
 
@@ -359,6 +372,9 @@ fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit){
                     }
                     .onKeyEvent {
                         if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER){
+                            input = input.replace("ø", "oe")
+                            input = input.replace("æ", "ae")
+                            input = input.replace("å", "aa")
                             if (input.length > 1) {
                                 viewModel.getDataSearch(input)
                                 showRecent = false
@@ -372,13 +388,25 @@ fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit){
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        keyboardController?.hide()
-                        isTextFieldFocused = false
-                        focusManager.clearFocus()
+                        input = input.replace("ø", "oe")
+                        input = input.replace("æ", "ae")
+                        input = input.replace("å", "aa")
+                        if (input.length > 1) {
+                            viewModel.getDataSearch(input)
+                            showRecent = false
+                        }
+                        input = ""
+                        //keyboardController?.hide()
+                        //isTextFieldFocused = false
+                        //focusManager.clearFocus()
                     }),
                 value = input,
                 colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-                onValueChange = { input = it },
+                onValueChange = {
+                    //if (it == "ø")
+                    println(it)
+                    input = it
+                                },
                 placeholder = { Text(text = "Søk her") },
                 label = {
                     Text(
@@ -391,8 +419,12 @@ fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit){
                         onClick = {
 
                             if (input.length > 1) {
-                                viewModel.getDataSearch(input)
                                 showRecent = false
+                                input = input.replace("ø", "oe")
+                                input = input.replace("æ", "ae")
+                                input = input.replace("å", "aa")
+                                viewModel.getDataSearch(input)
+
                             }
 
                             input = ""
@@ -426,7 +458,8 @@ fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit){
 
                             viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!)
 
-                            focusManager.clearFocus()
+                            //focusManager.clearFocus()
+                            clearFocus()
                             showRecent = true
 
                             onSearch()
@@ -476,7 +509,8 @@ fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit){
 
                             viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!)
 
-                            focusManager.clearFocus()
+                            //focusManager.clearFocus()
+                            clearFocus()
                             showRecent = true
 
                             //skal gjøre den true så carded vises i ShowMap():
