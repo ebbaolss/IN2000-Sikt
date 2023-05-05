@@ -10,7 +10,6 @@ import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
 import com.mapbox.geojson.Point
 import com.mapbox.maps.dsl.cameraOptions
-import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import android.annotation.SuppressLint
 import android.util.Log
@@ -34,8 +33,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -45,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
 import com.example.in2000_prosjekt.ui.MapViewModel
-import java.lang.Thread.sleep
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter") //burde unngå disse så langt det lar seg gjøre, men her måtte vi for å slippe padding
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,14 +75,14 @@ fun createFactoryMap(xt: Context) : MapView {
                 zoom(19.9)
             }
         }
-        mapboxMap.addOnMapClickListener(onMapClickListener = OnMapClickListener {point ->
+        mapboxMap.addOnMapClickListener(onMapClickListener = { point ->
             onMapClick(point)
         })
     }
 }
 fun onMapClick(point: Point): Boolean {
     Log.d("Coordinate", point.toString())
-    return@onMapClick true
+    return true
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -96,7 +92,6 @@ fun SearchBar(viewModel: MapViewModel, onSearch : () -> Unit){
     // at tastaturet forsvinner når man trykker på kart
 
     val mapUiState = viewModel.appUiState.collectAsState()
-    val mapUiStateCoordinates = viewModel.appUiState2.collectAsState()
 
     var input by remember { mutableStateOf("") }
     var isTextFieldFocused by remember { mutableStateOf(false) }
@@ -160,7 +155,6 @@ fun SearchBar(viewModel: MapViewModel, onSearch : () -> Unit){
                             if (input.length > 1) {
                                 viewModel.getDataSearch(input)
                                 showRecent = false
-                                //focusManager.clearFocus()
                             }
 
                             input = ""
@@ -246,7 +240,8 @@ fun SearchBar(viewModel: MapViewModel, onSearch : () -> Unit){
 
                             focusManager.clearFocus()
                             showRecent = true
-                            //skal gjøre den true så carded vises i ShowMap()
+
+                            //skal gjøre den true så carded vises i ShowMap():
                             onSearch()
 
                         }),

@@ -21,7 +21,6 @@ class MapViewModel : ViewModel() {
     val appUiState = _appUistate.asStateFlow()
 
     private val _appUistate2 = MutableStateFlow(MapCoordinatesInfo())
-    val appUiState2 = _appUistate2.asStateFlow()
 
     fun getDataSearch(query: String) : Boolean {
 
@@ -49,7 +48,7 @@ class MapViewModel : ViewModel() {
 
             val mapSearchCoordinates = repository.getMapCoordinates(path2)
 
-            //åpne card
+            //åpne card eller oppdatere det som får cardet til å vises
             println(mapSearchCoordinates.latitude)
             println(mapSearchCoordinates.longitude)
 
