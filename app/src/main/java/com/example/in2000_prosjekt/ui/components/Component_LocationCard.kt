@@ -13,146 +13,150 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
+import java.text.SimpleDateFormat
+import java.util.Date;
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
 
     items(1) {
-        // endre til lazylist:
 
         val name = mountain.name
         val elevation = mountain.elevation
 
-        val latitude = mountain.point?.latitude()
-        val longitude = mountain.point?.longitude()
-
-        // Gir point koordinatene i lat, så long?
-        println("latitude: " + latitude.toString()) // glittertind: latitude: 8.557780981063843
-        println("longitude: " + longitude.toString()) // glittertind: longitude: 61.65138739947395
-
-        val weather_high = locationInfo.cloud_area_fraction_high
-        val weather_mid = locationInfo.cloud_area_fraction_medium
-        val weather_low = locationInfo.cloud_area_fraction_low
+        val weatherHigh = locationInfo.cloud_area_fraction_high
+        val weatherMid = locationInfo.cloud_area_fraction_medium
+        val weatherLow = locationInfo.cloud_area_fraction_low
 
         val temp = nowCastInfo.temperatureNow
         val wind = nowCastInfo.windN
 
-        println("weather_high = $weather_high")
-        println("weather_mid = $weather_mid")
-        println("weather_low = $weather_low")
+        // SKAL SLETTES NÅR VI FÅR LISTE OVER FJELL I NÆRHETEN:
+            val testliste = mutableListOf<MapUiState.Mountain>()
+        /*
+            testliste.add(mountain)
+            testliste.add(mountain)
+            testliste.add(mountain)
+            testliste.add(mountain)*/
 
         Card(
             colors = CardDefaults.cardColors(Sikt_lyseblå),
             modifier = Modifier.padding(20.dp),
-        ) {
+        ){
             Column(
                 modifier = Modifier.padding(20.dp),
             ) {
                 Sikt_Header(location = "$name", alertinfo = alertInfoList)
                 Sikt_MountainHight(mountainheight = "$elevation")
                 Spacer(modifier = Modifier.size(20.dp))
-                illustrasjon(elevation, temp, wind, weather_high, weather_mid, weather_low)
+                illustrasjon(elevation, temp, wind, weatherHigh, weatherMid, weatherLow)
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.size(10.dp))
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    item { Sikt_LocationCard_Hour(12, "skyet", 7) }
-                    item { Sikt_LocationCard_Hour(13, "delvisskyet", 8) }
-                    item { Sikt_LocationCard_Hour(14, "lettskyet", 8) }
-                    item { Sikt_LocationCard_Hour(15, "klart", 7) }
-                    item { Sikt_LocationCard_Hour(16, "skyet", 6) }
-                    item { Sikt_LocationCard_Hour(17, "skyet", 4) }
-                }
+                Sikt_LocationCard_Hour(locationInfo) }
                 Spacer(modifier = Modifier.size(20.dp))
-                Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold)
+                Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
                 Sikt_LocationCard_NextDays()
                 Spacer(modifier = Modifier.size(20.dp))
-                Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold)
+                Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
-
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    val testliste = mutableListOf<MapUiState.Mountain>()
-                    testliste.add(mountain)
-                    testliste.add(mountain)
-                    Sikt_Turer_I_Naerheten(testliste, locationInfo, nowCastInfo)
+                // Bytt ut testliste med fjelltopper i nærheten:
+                if (testliste.size != 0) {
+                    LazyRow(
+                        modifier = Modifier.padding(
+                            start = 20.dp,
+                            end = 20.dp
+                        )
+                    ) { Sikt_Turer_I_Naerheten(testliste, nowCastInfo) }
+                } else {
+                    Text(text = "Ingen topper i nærheten...", modifier = Modifier.padding(start = 20.dp))
                 }
+                Spacer(modifier = Modifier.size(100.dp))
+            }
+        }
+    }
+
+@Composable
+fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
+
+    val tempNext1h = locationInfo.tempNext1L
+    val tempNext6h = locationInfo.tempNext6L
+    val cloudsNext1h = locationInfo.cloudinessNext1L
+    val cloudsNext6h = locationInfo.cloudinessNext6L
+
+    val currentTimeMillis = System.currentTimeMillis()
+    val date = Date(currentTimeMillis)
+    val dateFormat = SimpleDateFormat("HH")
+    val tidspunkt = dateFormat.format(date)
+
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        for (i in 0..5) {
+            val melding = if (i == 0 ) {
+                "Sikt nå:"
+            } else {
+                "${tidspunkt.toInt()+i}:00"
+            }
+            if (i == 0 || i == 1) {
+                item { Sikt_LocationCard_Hour_Card("$melding", tempNext1h, cloudsNext1h) }
+            } else {
+                item { Sikt_LocationCard_Hour_Card("$melding", tempNext6h, cloudsNext6h) }
             }
         }
     }
 }
 
 @Composable
-fun Sikt_LocationCard_Hour(time : Int, clouds : String, temp: Int) {
+fun Sikt_LocationCard_Hour_Card(tid : String, temp : Float, cloudiness : String) {
 
-    fun getCloudVisuals(clouds: String): Int {
-        return if (clouds == "skyet") {
-            R.drawable.small_clouds_both
-        } else if (clouds == "delvisskyet") {
-            R.drawable.small_clouds_big
-        } else if (clouds == "lettskyet") {
-            R.drawable.small_clouds_small
-        } else {
-            R.drawable.small_clouds_clear
-        }
-    }
-
-    fun getRightWeather(weather: String): String {
-        return if (weather == "skyet") {
-            "Meget dårlig sikt"
-        } else if (weather == "delvisskyet") {
-            "Dårlig sikt"
-        } else if (weather == "lettskyet") {
-            "Lettskyet"
-        } else {
-            "Klart vær"
-        }
-    }
-
-    fun getRightKm(km: String): String {
-        return if (km == "skyet") {
-            "> 1 km sikt"
-        } else if (km == "delvisskyet") {
-            "1-4 km sikt"
-        } else if (km == "lettskyet") {
-            "4-10 km sikt"
-        } else {
-            "< 10 km sikt"
-        }
-    }
+    val cloudinessFinal = cloudiness.split("_")[0].uppercase()
+    val typeOfWeather = Sikt.valueOf(cloudinessFinal)
 
     Card(
         colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
+        modifier = Modifier.padding(end = 10.dp),
     ) {
         Column(
             modifier = Modifier.padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            Text(text = "$time:00", color = Sikt_sort, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = tid,
+                color = Sikt_sort,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            )
             Box(
                 modifier = Modifier.size(80.dp)
             ) {
                 Image(
-                    painter = painterResource(id = getCloudVisuals(clouds)),
+                    painter = painterResource(id = typeOfWeather.getIcon()),
                     contentDescription = "",
                     modifier = Modifier.fillMaxSize()
                 )
             }
-            Text(text = getRightKm(clouds), fontSize = 12.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
-            Text(text = getRightWeather(clouds), fontSize = 12.sp, color = Sikt_sort)
-            Text(text = "$temp°", color = Sikt_sort, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = typeOfWeather.sightInKm(),
+                fontSize = 12.sp,
+                color = Sikt_sort,
+                fontWeight = FontWeight.Bold
+            )
+            Text(text = typeOfWeather.getRightWeather(), fontSize = 12.sp, color = Sikt_sort)
+            Text(
+                text = "$temp°",
+                color = Sikt_sort,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
@@ -262,3 +266,6 @@ fun Sikt_LocationCard_NextDays() {
         }
     }
 }
+
+
+

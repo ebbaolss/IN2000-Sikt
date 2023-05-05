@@ -5,15 +5,18 @@ package com.example.in2000_prosjekt.ui.components
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
@@ -211,6 +214,18 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
             AlertButton( alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA){
                 openDialog = true
             }
+        } else {
+            // For å fikse at fjelltopp-text blir midtstilt
+            IconToggleButton(
+                checked = false,
+                onCheckedChange = { },
+            ) {
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = "Localized description",
+                    tint = Sikt_lyseblå
+                )
+            }
         }
 
         if (openDialog){
@@ -302,16 +317,16 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
     }
 }
 
-fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mountain>, locationInfo: LocationInfo, nowCastInfo: NowCastInfo){
-    //location : String, height : Int, temp : Int
+fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mountain>, nowCastInfo: NowCastInfo) {
 
-    items(mountains.size) {
-        mountains.forEach { tur ->
+    items(1) {
+        mountains.forEach { mountain ->
+
             val temp = nowCastInfo.temperatureNow
 
             Card(
                 colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
-                modifier = Modifier.padding(20.dp)
+                modifier = Modifier.padding(end = 10.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(10.dp),
@@ -335,7 +350,7 @@ fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mount
                     }
                     Spacer(modifier = Modifier.size(10.dp))
                     Text(
-                        text = "${tur.name}",
+                        text = "${mountain.name}",
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                         color = Sikt_sort,
@@ -352,11 +367,12 @@ fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mount
 fun DeleteAllButton(viewModel: FavoriteViewModel){
     //Knapp til Instillinger for å slette alle favoritter.
     Button(
+        colors = ButtonDefaults.buttonColors(backgroundColor = Sikt_mørkeblå),
         onClick = {
             viewModel.deleteAll()
         }
     ){
-        Text("Slett alle favoritter")
+        Text("Slett alle favoritter", color = Sikt_hvit)
     }
 }
 
@@ -364,85 +380,57 @@ fun DeleteAllButton(viewModel: FavoriteViewModel){
 fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
 
     fun getHeightVisuals(height: Int?) : Int {
-        return if (height != null) {
-            if (height < 500) {
-                R.drawable.topp_under500
-            } else if (height < 1000) {
-                R.drawable.topp1000to500
-            } else if (height < 1500) {
-                R.drawable.topp1500to1000
-            } else if (height < 2000) {
-                R.drawable.topp2000to1500
-            } else {
-                R.drawable.topp_over2000
-            }
-        } else {
-            R.drawable.topp_under500
+        return when (height) {
+            in 0 .. 500 -> R.drawable.topp_under500
+            in 501 .. 1000 -> R.drawable.topp1000to500
+            in 1001 .. 1500 -> R.drawable.topp1500to1000
+            in 1501 .. 2000 -> R.drawable.topp2000to1500
+            else -> R.drawable.topp_over2000
         }
     }
 
-    // Klart vær = God sikt = Sikt på mer enn 10 km (INGEN SKYER) under 25%
-    // Lettskyet = Moderat sikt = Sikt på 4-10 km (LITEN SKY) 25% - 50%
-    // Delvis skyet = Dårlig sikt = Sikt på 1-4 km (STOR SKY) 50% - 75%
-    // Skyet = Tåke = Sikt på mindre enn 1 km (STOR + LITEN SKY) over 100%
-
     fun getHighClouds(highclouds: Float): Int {
-        return if (highclouds >= 75) {
-            R.drawable.clouds_high_both
-        } else if (highclouds >= 50) {
-            R.drawable.clouds_high_big
-        } else if (highclouds >= 25 ) {
-            R.drawable.clouds_high_small
-        } else {
-            R.drawable.klart
+        return when (highclouds.toInt()) {
+            in 75..100 -> R.drawable.clouds_high_both
+            in 50..74 -> R.drawable.clouds_high_big
+            in 25..49 -> R.drawable.clouds_high_small
+            else -> R.drawable.klart
         }
     }
 
     fun getMidClouds(midclouds: Float): Int {
-        return if (midclouds >= 75) {
-            R.drawable.clouds_mid_both
-        } else if (midclouds >= 50) {
-            R.drawable.clouds_mid_big
-        } else if (midclouds>= 25) {
-            R.drawable.clouds_mid_small
-        } else {
-            R.drawable.klart
+        return when (midclouds.toInt()) {
+            in 75..100 -> R.drawable.clouds_mid_both
+            in 50..74 -> R.drawable.clouds_mid_big
+            in 25..49 -> R.drawable.clouds_mid_small
+            else -> R.drawable.klart
         }
     }
 
     fun getLowClouds(lowclouds: Float): Int {
-        return if (lowclouds >= 75) {
-            R.drawable.clouds_low_both
-        } else if (lowclouds >= 50) {
-            R.drawable.clouds_low_big
-        } else if (lowclouds >= 25) {
-            R.drawable.clouds_low_small
-        } else {
-            R.drawable.klart
+        return when (lowclouds.toInt()) {
+            in 75..100 -> R.drawable.clouds_low_both
+            in 50..74 -> R.drawable.clouds_low_big
+            in 25..49 -> R.drawable.clouds_low_small
+            else -> R.drawable.klart
         }
     }
 
     fun getRightWeather(weather: Float): String {
-        return if (weather >= 75) {
-            "Meget dårlig sikt"
-        } else if (weather >= 50) {
-            "Dårlig sikt"
-        } else if (weather >= 25) {
-            "Lettskyet"
-        } else {
-            "Klart vær"
+        return when (weather.toInt()) {
+            in 75..100 -> "Meget dårlig sikt"
+            in 50..74 -> "Dårlig sikt"
+            in 25..49 -> "Lettskyet"
+            else -> "Klart vær"
         }
     }
 
     fun getRightKm(km: Float): String {
-        return if (km >= 75) {
-            "> 1 km sikt"
-        } else if (km >= 50) {
-            "1-4 km sikt"
-        } else if (km >= 25) {
-            "4-10 km sikt"
-        } else {
-            "< 10 km sikt"
+        return when (km.toInt()){
+            in 75..100 -> "> 1 km sikt"
+            in 50..74 -> "1-4 km sikt"
+            in 25..49 -> "4-10 km sikt"
+            else -> "< 10 km sikt"
         }
     }
 
@@ -538,5 +526,41 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
+
+    Card(
+        colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
+        modifier = Modifier.padding(end = 10.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier.size(100.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.turer_i_naerheten),
+                    contentDescription = "",
+                    modifier = Modifier.fillMaxSize()
+                )
+                Text(
+                    text = "0°",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp,
+                    color = Sikt_sort,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+            Spacer(modifier = Modifier.size(10.dp))
+            Text(
+                text = "fjell",
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                color = Sikt_sort,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
 
 }

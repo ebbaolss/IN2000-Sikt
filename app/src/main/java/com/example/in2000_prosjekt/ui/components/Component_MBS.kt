@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.material3.Button
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_sort
@@ -54,36 +56,43 @@ fun Sikt_BottomSheet() {
 
 @Composable
 fun BottomSheetContent(){
+
+    val mountains = mutableListOf<MapUiState.Mountain>()
+
     Surface(
         color = Sikt_lyseblå,
-        modifier = Modifier.height(200.dp),
+        modifier = Modifier.height(300.dp),
         // shape = RoundedCornerShape(20.dp) får ikke denne til å se bra ut :((
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowDown,
+                tint = Sikt_mellomblå,
+                contentDescription = "",
+                modifier = Modifier.padding(top = 20.dp)
+            )
             Text(
                 text = "Finn turer i nærheten",
                 fontSize = 20.sp,
-                modifier = Modifier.padding(top = 20.dp),
                 color = Sikt_sort,
                 fontWeight = FontWeight.Bold
             )
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp)
-                    .background(Sikt_lyseblå),
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
-                // Her skal listen over topper i nærheten:
-            ) {
-                //item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                //item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                //item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                //item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                //item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+            if (mountains.size != 0) {
+                LazyRow(
+                    modifier = Modifier.padding(
+                        start = 20.dp,
+                        end = 20.dp
+                    )
+                ) {
+                    // Må ta inn turer i nærheten liste og nowcastinfo:
+                    //Sikt_Turer_I_Naerheten(mountains, nowCastInfo) }
+                }
+            } else {
+                Text(text = "Ingen topper i nærheten...", modifier = Modifier.padding(start = 20.dp))
             }
         }
     }
@@ -132,7 +141,5 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
 @Preview(showSystemUi = true)
 @Composable
 fun MBSTest() {
-
-    BottomSheetContent()
 
 }
