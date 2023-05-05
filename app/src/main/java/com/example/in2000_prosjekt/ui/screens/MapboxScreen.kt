@@ -186,7 +186,6 @@ fun onCameraChange(mapboxMap: MapboxMap, viewModel: MapViewModel) {
     Log.d("onCameraChange", "Coordinates $screenCenter, Zoom level: $zoom")
 }
 
-
 fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraOptions) : MapView {
 
     val mapView = MapView(xt).apply {
@@ -244,7 +243,6 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
     return mapView
 }
 
-
 // Definerer hva som skal skje når brukeren trykker på kartet
 fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, onClick : () -> Unit) : Boolean {
     Log.d("Coordinate", point.toString())
@@ -292,8 +290,6 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
 
 // When panning and zooming the map view the center screen coordinates and camera settings are updated to the cameraUiState.
 // funOnScreenGesture(cameraOptions: MapboxCameraOptions)
-
-
 
 fun onFeatureClicked(
     expected: Expected<String, List<QueriedFeature>>,
