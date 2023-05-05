@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -32,10 +33,12 @@ import io.github.boguszpawlowski.composecalendar.StaticCalendar
 import io.github.boguszpawlowski.composecalendar.day.Day
 import io.github.boguszpawlowski.composecalendar.day.DayState
 import io.github.boguszpawlowski.composecalendar.day.NonSelectableDayState
+import io.github.boguszpawlowski.composecalendar.header.MonthState
 import io.github.boguszpawlowski.composecalendar.rememberCalendarState
 import io.github.boguszpawlowski.composecalendar.selection.EmptySelectionState
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.YearMonth
 
 @Composable
 fun Sikt_Historisk_KalenderGammelogNotMine() {
@@ -122,104 +125,103 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
 }
 
 
-
 //Dette er en Composable funksjon som generer en kalender med et dagsinnhold bestemt av funksjonen dayContent
 //En StaticCalender er en kalender som kun presenterer en bruker for info tilknyttet siktforholdene hver dag i måneden. Biblioteket brukt for å generere denne kalenderen har andre typer kalendere (slikt som ukeskalendere mm.), men i henhold til kravspesifikasjonen så anså vi en StaticCalender som mest passende.
 @OptIn(ExperimentalMaterial3Api::class)
+
+
 @Composable
 fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo ) { //
 
-    //val historicCardUiState by APIViewModel.appUiState.collectAsState()
 
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Sikt_lyseblå), horizontalAlignment = Alignment.CenterHorizontally,)
+    {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Sikt_lyseblå),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ){
-
-
-        var calenderstate : CalendarState<EmptySelectionState> = rememberCalendarState()
-
-
+        val monthState = rememberSaveable(saver = MonthState.Saver()) {
+            MonthState(initialMonth = YearMonth.now()) }// bruk java sin YearMonth ikke bogus
+        var calenderstate : CalendarState<EmptySelectionState> = rememberCalendarState(
+            monthState = monthState,)
         StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.background(Sikt_lyseblå), calendarState =calenderstate, dayContent =  { it -> dayContent(
-            dayState =  it , frostinfo = frostinfo,  apiViewModel)
+            dayState =  it , frostinfo = frostinfo,  apiViewModel) })
+        // monthState er en funksjon av MonthState fra bogus, som sin .currentMonth er av typen YearMonth fra java biblioteket
+        Text(text= "Nr1: monthState.currentMonth: "+monthState.currentMonth.toString()) // 2023-05
+        Text(text= "Nr2: monthState.currentMonth.monthValue: "+monthState.currentMonth.monthValue.toString()) // 05
+        val year =  monthState.currentMonth.year.toString() // 2023
+        val year21 =  monthState.currentMonth.year.minus(2).toString() // 2021
+        val year2021 =  monthState.currentMonth.minusYears(2).toString() //2021-05
+        val monthweneedresultsfrom =  monthState.currentMonth.monthValue.toString() // 05 BEginning period we want api call resutlts from, value dynamically ajusts to current month being shown on the calender
+        val nextmonthweneedresultsfrom =  monthState.currentMonth.monthValue.plus(1).toString()// 06 Ending period we want api call resutlts from, the value dynamically ajusts to next month being shown on the calender
 
+        //2021-05%2F2021-06
+        val datesforfrostsightconditions = year21+"-"+monthweneedresultsfrom+"%2F"+year21+"-"+nextmonthweneedresultsfrom
+        Text(text= "Nr3: monthState.year: " + year.toString())
+        Text(text= "Nr4: Apicall verdi: " + datesforfrostsightconditions)
+        // test med aaaalle datoer 60 dager
+        LaunchedEffect(Unit) {
+            snapshotFlow { monthState.currentMonth }
+                .collect { currentMonth ->
+                    // viewModel.doSomething()
+                }
         }
-        )
 
-        //APIViewModel.getFrost( referencetimetest = ( dayContent()   )
+
+        /*
+Måneden: Måned som ønskes lagret
+CalenderState(Måneden)
+StaticCalender(CalenderState)
+LaunchedEffect(Unit)
+         */
 
 
         Text(text= "Picture description:")
-
-
         Text(text= "Klart:")
         Image(painter = painterResource(id = R.drawable.klart), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
-
-
-
         Text(text= "Lettskyet:")
         Image(painter = painterResource(id = R.drawable.lettskyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
-
-
         Text(text= "Delvis skyet:")
         Image(painter = painterResource(id = R.drawable.delvis_skyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
-
         Text(text= "Skyet:")
         Image(painter = painterResource(id = R.drawable.skyet), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
 
 
 
-        var day : Day
-
-        var dagen: Daygen = Daygen() // kl 15.33 også
-
-
-        //var kalenderdager= dayContent(dayState = DayState<EmptySelectionState>(selectionState = calenderstate.selectionState, day = day /*Day(calenderstate.monthState.currentMonth.atDay(1))*/ ))
-
-
-
-        //Log.d("Halladagdate", dayContent(dayState = calenderstate) .date.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
-
-
-        //Log.d("Halladagdate", dayContent(dayState = calenderstate) .date.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
-
-
-        // var datoertilgjengelig: List<LocalDate> = calenderstate.monthState.currentMonth
-
-
-        //var datoertilgjengelig = calenderstate.monthState.currentMonth.month
-
-
-        //Log.d("calenderstate.monthState.currentMonth.month", calenderstate.monthState.currentMonth.month.toString()) // Er hele datoen for en kalenderdag: 2023-05-21
-
     }
 
 }
 
-class Daygen : Day {
-    public override val date: LocalDate
-        get() {
-            TODO()
-        }
-    public override val isCurrentDay: Boolean
-        get() {
-            TODO()
-        }
-    public override val isFromCurrentMonth: Boolean
-        get() {
-            TODO()
-        }
+/*
+Merk deg rekkefølgen i denne: https://github.com/boguszpawlowski/ComposeCalendar/issues/84
 
-    companion object{
-        fun Daygen (date: LocalDate, isCurrentday: Boolean, isFromCurrentMonth: Boolean)  {
 
-        }
-    }
+Måneden: Måned som ønskes lagret
+CalenderState(Måneden)
+StaticCalender(CalenderState)
+LaunchedEffect(Unit)
 
-}
+val monthState = rememberSaveable(saver = MonthState.Saver()) {
+    MonthState(initialMonth = YearMonth.now())
+  }
+
+  val calendarState = rememberCalendarState(
+    monthState = monthState,
+  )
+
+  StaticCalendar(
+    calendarState = calendarState,
+  )
+
+  LaunchedEffect(Unit) {
+    snapshotFlow { monthState.currentMonth }
+      .collect { currentMonth ->
+        // viewModel.doSomething()
+      }
+  }
+
+
+*/
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
