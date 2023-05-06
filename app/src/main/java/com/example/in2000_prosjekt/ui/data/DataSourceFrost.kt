@@ -43,7 +43,6 @@ class DataSourceFrost (val basePath: String) {
         var longpointincreased = longitude + increase
         var latpointincreased = latitude + increase
         var polygon ="POLYGON(($longitude%20$latitude%2C$longitude%20$latpointincreased%2C$longpointincreased%20$latitude%2C$longpointincreased%20$latpointincreased))"// // nettet sier at spaces kan foråsake 505 "HTTP version not supported" errors som jeg får stadig, selv om det har funka før, og lenken er gyldig
-
         return polygon
     }
 
@@ -51,17 +50,14 @@ class DataSourceFrost (val basePath: String) {
 
     suspend fun fetchFrostWeatherStation( latitude: Double, longitude: Double): FrostCoordinatesBuild {
         var polygon= coordinatesToPolygonConverter (latitude,  longitude) // generer deg et polygon fra et koordinat
-
-        //return  authURL("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=mean(cloud_area_fraction%20P1D)&geometry=${polygon}").body() //I denne linjen (kontra den under) vil TROLIG gi flere errors av typen "no results exist for current search parameteres, 505 eller 412". Fordi i dette forsøket så etterspør vi alle værstasjoner innafor polygon med målinger av typen mean(cloud_area_fraction%20P1D)&
         return  authURL("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&geometry=${polygon}").body() //trenger ikke authURL(URL: String) i Frost sitt api, proxy servern brukes bare på Met vær apier (NowCast, LocationForecast, MetAlert)
     }
 
-// forsøk Alternativ 1.2: Denne overskrives av funksjonen: getReferencetimeFrost(calenderreferencetime: String) - Fra repositoriet, som får verdien fra screenen der verdien ønskes hentet i fra: På samme måte som Mapbox kartet gir deg et koordinat når du trykker: Så gir Kalenderen en dato fro alle dagene apikallet skal gjøres
     var referencetime : String = "2021-05-12"
 
 
     suspend fun fetchFrost(source: String): FrostResponsBuild {
-        // Dette gjøres på tordsag kl.14.25 for å se om jeg faktisk sender variablen referencetime gjennom View-ViewModel-Model.
+        // Dette gjøres på tordsag kl.14.25 for å se om jeg faktisk sender variablen referencetime gjennom View-ViewModel-Model riktig:
         //Vi hardkoder source til SN18700-Blindern: som alltid har resutlter for mean(cloud_area_fraction%20P1D)"
 
         //var url : String = "${basePath}sources=$source&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)"

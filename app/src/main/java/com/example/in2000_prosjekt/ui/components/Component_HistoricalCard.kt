@@ -1,37 +1,27 @@
 package com.example.in2000_prosjekt.ui.components
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.FrostInfo
+import com.example.in2000_prosjekt.ui.data.FrostViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
 import io.github.boguszpawlowski.composecalendar.CalendarState
 import io.github.boguszpawlowski.composecalendar.StaticCalendar
-import io.github.boguszpawlowski.composecalendar.day.Day
-import io.github.boguszpawlowski.composecalendar.day.DayState
 import io.github.boguszpawlowski.composecalendar.day.NonSelectableDayState
 import io.github.boguszpawlowski.composecalendar.header.MonthState
 import io.github.boguszpawlowski.composecalendar.rememberCalendarState
@@ -76,16 +66,23 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
             val date= year.toString()+"-"+dayState.date.monthValue.toString() +"-"+ dayState.date.dayOfMonth.toString()
 
             //Api kallet
-            apiViewModel.getReferencetimeFrost(referencetime =  date )
+           // apiViewModel.getReferencetimeFrost(referencetime =  date )
 
-            Log.d("Dato: også Api respons verdi (frostinfo:SightConditions)", "Dato: "+ date + " ApiResponsverdi for datoen: "+ frostinfo.sightcondition.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
+            Log.d("Dato: også Api respons verdi (frostinfo:SightConditions)", "Dato: "+ date + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
 
 
-            var weathericon = painterResource(id = R.drawable.skyet)
-            if (frostinfo.sightcondition == 0) weathericon = painterResource(id = R.drawable.klart)
-            else if (frostinfo.sightcondition < 3) weathericon = painterResource(id = R.drawable.lettskyet)
-            else if (frostinfo.sightcondition  > 100) weathericon = painterResource(id = R.drawable.delvis_skyet)
+            /* Utkommentert kl.16.30 06.05
+           val sightconditions = frostinfo.sightconditionListofDataforMonth?.get(dayState.date.dayOfMonth)?.observations?.get(0)?.value // tallet skal jo starte med den 28
 
+
+
+            var weathericon = when {
+                (sightconditions == 0.0) -> painterResource(id = R.drawable.klart)
+                (0.0 <  sightconditions!! && sightconditions!! > 3.0 ) -> painterResource(id = R.drawable.lettskyet)
+                (3.0 < sightconditions!! && sightconditions!! > 6.0) -> painterResource(id = R.drawable.delvis_skyet)
+
+                else  -> painterResource(id = R.drawable.skyet)
+            }
 
             Image(painter =  weathericon, contentDescription = "", modifier = Modifier
                 .fillMaxHeight()
@@ -93,6 +90,8 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
                 .wrapContentSize(Alignment.Center)
                 .size(30.dp))
 
+
+             */
 
 /*
             //val RememberState = dayState.value // går ikke
@@ -131,14 +130,16 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
 
 
 @Composable
-fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo ) { //
+fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo, /* frostViewModel: FrostViewModel*/) { //
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Sikt_lyseblå), horizontalAlignment = Alignment.CenterHorizontally,)
     {
 
         val monthState = rememberSaveable(saver = MonthState.Saver()) {
-            MonthState(initialMonth = YearMonth.now()) }// bruk java sin YearMonth ikke bogus
+            MonthState(initialMonth = YearMonth.now())
+        }// bruker java sin YearMonth ikke bogus
+
         var calenderstate : CalendarState<EmptySelectionState> = rememberCalendarState(
             monthState = monthState,)
         StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.background(Sikt_lyseblå), calendarState =calenderstate, dayContent =  { it -> dayContent(
@@ -146,6 +147,8 @@ fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo 
         // monthState er en funksjon av MonthState fra bogus, som sin .currentMonth er av typen YearMonth fra java biblioteket
         Text(text= "Nr1: monthState.currentMonth: "+monthState.currentMonth.toString()) // 2023-05
         Text(text= "Nr2: monthState.currentMonth.monthValue: "+monthState.currentMonth.monthValue.toString()) // 05
+
+
         val year =  monthState.currentMonth.year.toString() // 2023
         val year21 =  monthState.currentMonth.year.minus(2).toString() // 2021
         val year2021 =  monthState.currentMonth.minusYears(2).toString() //2021-05
@@ -159,21 +162,40 @@ fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo 
         // test med aaaalle datoer 60 dager
 
 
-     /*   LaunchedEffect(Unit) {
-            snapshotFlow { monthState.currentMonth }
-                .collect { currentMonth ->
-                    // viewModel.doSomething()
-                }
-        }*/
+        apiViewModel.getReferencetimeFrost(referencetime =  datesforfrostsightconditions ) //  //2021-05%2F2021-06
+
+        Log.d("Periode sendt i api kall:", "Dato: "+ datesforfrostsightconditions + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
+
+
+
+
+
+        /*   LaunchedEffect(Unit) {
+               snapshotFlow { monthState.currentMonth }
+                   .collect { currentMonth ->
+                       // viewModel.doSomething()
+                   }
+           }*/
+
+
 
         LaunchedEffect(Unit) {
             snapshotFlow { datesforfrostsightconditions }
                 .collect { currentperiod ->
                     // viewModel.doSomething()
 
-                    apiViewModel.getReferencetimeFrost(referencetime =  currentperiod )
+
                 }
         }
+// når vi har gjort apikallet så sa emil lagre det i en ArrayList med datoer, 0605. kl. 14.48
+
+       val arraylistwithSightValues = frostinfo.sightconditionListofDataforMonth
+
+
+        // size skal være sånn 30 - 31 stk elementer, svarer til at api repsos for en måned gitt i apikallet
+        Log.d("Info om api repsons Json Array watergate","Størrelse: List<DataFrost>?: "+ frostinfo.sightconditionListofDataforMonth?.size )
+
+
 
 
         /*

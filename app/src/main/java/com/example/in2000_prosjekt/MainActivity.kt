@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.in2000_prosjekt.ui.APIViewModel
+import com.example.in2000_prosjekt.ui.data.FrostViewModel
 import com.example.in2000_prosjekt.ui.database.*
 import com.example.in2000_prosjekt.ui.screens.*
 
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val apiViewModel = APIViewModel()
+                    val frostViewModel = FrostViewModel()
 
                     val owner = LocalViewModelStoreOwner.current
 
@@ -53,7 +55,7 @@ class MainActivity : ComponentActivity() {
                             )
                         )
 
-                        MultipleScreenApp(favoriteViewModel, mapViewModel, apiViewModel)
+                        MultipleScreenApp(favoriteViewModel, mapViewModel, apiViewModel, frostViewModel)
                     }
                 }
             }
@@ -62,7 +64,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapViewModel, apiViewModel: APIViewModel) {
+fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapViewModel, apiViewModel: APIViewModel, frostViewModel: FrostViewModel) {
 
     val navController = rememberNavController()
 
@@ -107,7 +109,7 @@ fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapVi
         startDestination = "Map") {
 
         composable("StartPage") { StartPage( onNavigateToNext = { navController.navigate("Map") })  }
-        composable("Map") { ShowMap(map, favorite, settings, rules, mapviewmodel, apiViewModel)  }
+        composable("Map") { ShowMap(map, favorite, settings, rules, mapviewmodel, apiViewModel, frostViewModel )  }
         composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules, viewModel = favoriteViewModel) }
         composable("Rules") { RulesScreen(map, favorite, settings, rules) }
         composable("Info") { SettingsScreen(map, favorite, settings, rules) }

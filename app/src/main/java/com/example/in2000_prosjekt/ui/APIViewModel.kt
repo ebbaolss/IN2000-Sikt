@@ -34,7 +34,7 @@ class APIViewModel () : ViewModel()
     private val currentLongitude = 8.557801680731075
     private val altitude: String = "600"
 
-        /*
+
     fun getReferencetimeFrost( referencetime: String ) : String {
         val referencedate = referencetime
 
@@ -45,14 +45,8 @@ class APIViewModel () : ViewModel()
 
     }
 
-         */
-    fun getReferencetimeFrost( referencetime: String )  {
 
-        viewModelScope.async (Dispatchers.IO) {
-            repository.getReferencetimeFrost(referencetime)
-        }
 
-    }
 
     fun getAll(latitude: String, longitude: String, altitude: String) {
         viewModelScope.launch() {
@@ -61,32 +55,24 @@ class APIViewModel () : ViewModel()
                     repository.getLocation(latitude, longitude, altitude)
                 }
                 val locationP = locationDeferred.await()
-                Log.d("locationDeffered", "Success")
 
                 val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getNowCast(latitude, longitude, altitude)
                 }
-                Log.d("getAll", "Pre-deferred")
+
                 val nowCastP = nowCastDeferred.await()
-                Log.d("nowCastDeferred", "Success")
+
                 val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getSunrise(latitude, longitude)
                 }
                 val sunsetP = sunsetDeferred.await()
-                Log.d("sunriseDeferred", "Success")
                 val alertDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getAlert(latitude, longitude)
                 }
 
-                val frostDeferred = viewModelScope.async (Dispatchers.IO){
-                    //repository.getReferencetimeFrost() kl.20.26
-                    repository.getFrost(latitude, longitude)
-                }
-                val frostP = frostDeferred.await()
-
 
                 val alertP = alertDeferred.await()
-                Log.d("alertDeferred", "Success")
+
 
 
 
@@ -96,7 +82,7 @@ class APIViewModel () : ViewModel()
                         nowCastF = nowCastP,
                         sunriseF = sunsetP,
                         alertListF = alertP,
-                        frostF = frostP
+                        //frostF = frostP
                     )
                 }
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd

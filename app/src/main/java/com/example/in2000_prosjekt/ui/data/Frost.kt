@@ -72,7 +72,6 @@ data class Geometri (
     var nearest : Boolean?
 )
 data class Observations (
-
     var elementId : String?,
     var value : Double?, // ankommer en sightconditions verdi som er mellom 0-8, kan være en desimal
     var unit : String?,
@@ -84,7 +83,6 @@ data class Observations (
     var qualityCode : Int?
 )
 data class Level (
-
     var levelType : String?,
     var unit : String?,
     var value : Int?

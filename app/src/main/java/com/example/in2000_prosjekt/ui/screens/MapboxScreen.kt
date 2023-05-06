@@ -26,9 +26,11 @@ import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_Historisk_Kalender
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
+import com.example.in2000_prosjekt.ui.data.FrostViewModel
 import com.example.in2000_prosjekt.ui.database.MapViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
+import com.example.in2000_prosjekt.ui.uistate.FrostUiState
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
@@ -48,39 +50,21 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowMap(
-    onNavigateToMap: () -> Unit,
-    onNavigateToFav: () -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToRules: () -> Unit,
-    mapViewModel: MapViewModel,
-    apiViewModel: APIViewModel
+fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, mapViewModel: MapViewModel,
+    apiViewModel: APIViewModel,
+    frostViewModel: FrostViewModel
 ) {
-
     val cameraOptionsUiState by mapViewModel.cameraOptionsUiState.collectAsState()
     val mountainUiState by mapViewModel.mountainUiState.collectAsState()
     val appUiState by apiViewModel.appUiState.collectAsState()
 
+    val frostUiState by frostViewModel.frostUiState.collectAsState()
+
     var locationCardState by remember { mutableStateOf(false) }
-
-
     Scaffold(
         bottomBar = {
-            Sikt_BottomBar(
-                onNavigateToMap,
-                onNavigateToFav,
-                onNavigateToRules,
-                onNavigateToSettings,
-                favoritt = false,
-                rules = false,
-                map = true,
-                settings = false
-            )
-        }) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxWidth()
+            Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = false, rules = false, map = true, settings = false) }) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()
         ) {
             AndroidView(
                 modifier = Modifier,
@@ -90,7 +74,7 @@ fun ShowMap(
 
                     mapboxMap.addOnMapClickListener(onMapClickListener = OnMapClickListener { point ->
                         Log.d("LocationCardState", "$locationCardState")
-                        onMapClick(point, mapboxMap, mapViewModel, apiViewModel) {
+                        onMapClick(point, mapboxMap, mapViewModel, apiViewModel, frostViewModel) {
                             locationCardState = true
                             Log.d("Location Card State", "$locationCardState")
                         }
@@ -103,30 +87,25 @@ fun ShowMap(
                     map
                 },
                 update = {
-                    // pull cameraSettings from the UiState
-                    // Camera settings
+                    // pull cameraSettings from the UiState // Camera settings
                     it.getMapboxMap().setCamera(
                         cameraOptions {
                             // Henter kamerakoordinater fra UiState
                             val lng = cameraOptionsUiState.currentScreenLongitude
                             val lat = cameraOptionsUiState.currentScreenLatitude
                             val zoom = cameraOptionsUiState.currentScreenZoom
-
                             Log.d("Update Camera Coordinates", "Lng: $lng, Lat: $lat")
-
                             center(Point.fromLngLat(lng, lat))
                         }
                     )
                 }
             )
-
             if (locationCardState){
                 when (appUiState) {
                     is AppUiState.Loading -> {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(Sikt_mellomblå),
+                        Column(modifier = Modifier
+                            .fillMaxSize()
+                            .background(Sikt_mellomblå),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
@@ -150,26 +129,18 @@ fun ShowMap(
                             onNavigateToRules)
                     }
                     is AppUiState.Success -> {
-                        Log.d("Location Card", "Initialising")
-
-                        //Sikt_Historisk_Kalender( (appUiState as AppUiState.Success).frostF ) utkommentert for å fikse datasource og reposity
-
-
                         Sikt_LocationCard(
                             mountainUiState,
                             (appUiState as AppUiState.Success).locationF,
                             (appUiState as AppUiState.Success).nowCastF,
                             (appUiState as AppUiState.Success).alertListF,
-                            (appUiState as AppUiState.Success).frostF,
+                            (frostUiState as FrostUiState.Success).frostF,
                             apiViewModel
                         )
                     }
                 }
             }
         }
-
-        // Menu (Kommer over LocationCard?)
-        //Sikt_BottomSheet()
     }
 }
 
@@ -242,7 +213,7 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
 
 
 // Definerer hva som skal skje når brukeren trykker på kartet
-fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, onClick : () -> Unit) : Boolean {
+fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, frostViewModel: FrostViewModel, onClick : () -> Unit) : Boolean {
     Log.d("Coordinate", point.toString())
     mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(ScreenBox(
@@ -270,6 +241,7 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
                 val longitude = point.longitude()
 
                 apiViewModel.getAll("$latitude", "$longitude", "$elevation")
+                frostViewModel.getFrost("$latitude", "$longitude")
 
                 onClick()
 

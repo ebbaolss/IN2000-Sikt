@@ -1,5 +1,8 @@
 package com.example.in2000_prosjekt.ui
 
+import com.example.in2000_prosjekt.ui.data.DataFrost
+import com.example.in2000_prosjekt.ui.data.Observations
+
 data class LocationInfo( //gi ting navn med også L på slutten
     val temperatureL: Float,
     val fog_area_fractionL : Float,
@@ -28,8 +31,9 @@ data class AlertInfo( //sett A på slutten
 )
 
 data class FrostInfo( //sett Frost på slutten, F brukes allerede
-    val sightcondition: Int,
+    val sightconditionListofDataforMonth: List<DataFrost>?
 )
+
 
 sealed interface AppUiState {
     data class Success(
@@ -37,7 +41,7 @@ sealed interface AppUiState {
         val nowCastF: NowCastInfo,
         val sunriseF: SunriseInfo,
         val alertListF: MutableList<AlertInfo>,
-        val frostF: FrostInfo
+      //  val frostF: FrostInfo
     ) : AppUiState
     object Error : AppUiState
     object Loading : AppUiState

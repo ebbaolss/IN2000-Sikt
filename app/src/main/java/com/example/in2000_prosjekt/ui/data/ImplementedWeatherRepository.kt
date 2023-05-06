@@ -8,7 +8,6 @@ class ImplementedWeatherRepository : WeatherRepository {
     val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") //dette er både forecast og nowcast
     val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
 
     //----------------------
     //Frost: Disse variablene er uviktige per 03.05
@@ -123,12 +122,17 @@ class ImplementedWeatherRepository : WeatherRepository {
     }
 
     // Dette er forsøk Alt:.1.2           kl.19.34, 04.05.23 : alt.
+
+
+    val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
+
     override suspend fun getReferencetimeFrost( calenderreferencetime: String ) {
        // val referencetime = referencetime
         //dataFrost.getReferencetimeFrost(referencetime)
 
         dataFrost.referencetime=calenderreferencetime
     }
+
 
 
 
@@ -148,11 +152,13 @@ class ImplementedWeatherRepository : WeatherRepository {
         // Alt 1: å gjøre et apicall per dag inni calendern vår
 
         // eller Alt2: Å gjøre et apicall på en periode fra 01. av måneden til 30. av måneden
-        val sightconditions = frost.data?.get(0)?.observations?.get(0)?.value?.toInt() // Denne linjen avgjør tilnærming: Synes alt 1 var ryddigst
+        //Gammel fra før tilnærming tipset av emil som best: val sightconditions = frost.data?.get(0)?.observations?.get(0)?.value?.toInt() // Denne linjen avgjør tilnærming: Synes alt 1 var ryddigst
+
+        val sightconditionsListofDataforMonth = frost.data // Denne linjen avgjør tilnærming: Synes alt 1 var ryddigst
 
 
         return FrostInfo(
-            sightcondition = sightconditions!!
+            sightconditionListofDataforMonth = sightconditionsListofDataforMonth!!
         )
     }
 }
