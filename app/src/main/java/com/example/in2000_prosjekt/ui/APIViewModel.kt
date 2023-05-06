@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 import com.example.in2000_prosjekt.ui.data.*
+import com.example.in2000_prosjekt.ui.uistate.FrostUiState
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.geojson.Point
 import io.ktor.utils.io.errors.*
@@ -66,12 +67,21 @@ class APIViewModel () : ViewModel()
                     repository.getSunrise(latitude, longitude)
                 }
                 val sunsetP = sunsetDeferred.await()
+
                 val alertDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getAlert(latitude, longitude)
                 }
-
-
                 val alertP = alertDeferred.await()
+                val frostDeferred = viewModelScope.async(Dispatchers.IO) {
+                    repository.getFrost(latitude, longitude,)
+                }
+                val frostP = frostDeferred.await()
+
+                Log.d("FrostDeffered", "Success")
+
+
+
+
 
 
 
@@ -82,7 +92,7 @@ class APIViewModel () : ViewModel()
                         nowCastF = nowCastP,
                         sunriseF = sunsetP,
                         alertListF = alertP,
-                        //frostF = frostP
+                        frostF = frostP
                     )
                 }
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd

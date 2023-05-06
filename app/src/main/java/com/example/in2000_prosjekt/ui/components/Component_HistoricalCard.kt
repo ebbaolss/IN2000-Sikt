@@ -68,7 +68,9 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
             //Api kallet
            // apiViewModel.getReferencetimeFrost(referencetime =  date )
 
-            Log.d("Dato: også Api respons verdi (frostinfo:SightConditions)", "Dato: "+ date + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
+          // Logg ing hver dato fra perioden vi er , kommenteres ut for å teste hvordan jeg sender referencetime gjenom viewmodel
+            //kommentert ut kl.19.50, 06.05
+            // Log.d("Dato: også Api respons verdi (frostinfo:SightConditions)", "Dato: "+ date + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
 
 
             /* Utkommentert kl.16.30 06.05

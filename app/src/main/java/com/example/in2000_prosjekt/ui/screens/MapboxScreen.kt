@@ -60,6 +60,7 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
 
     val frostUiState by frostViewModel.frostUiState.collectAsState()
 
+
     var locationCardState by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
@@ -128,13 +129,14 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
                             onNavigateToFav,onNavigateToSettings,
                             onNavigateToRules)
                     }
-                    is AppUiState.Success -> {
+                    is AppUiState.Success -> {// åja du kanke caste appuiState til frostuiState jaaa, kl.19.55, 06.05 // på nederste linje pleide det å stå: (frostUiState as AppUiState.Success).frostF,
+
                         Sikt_LocationCard(
                             mountainUiState,
                             (appUiState as AppUiState.Success).locationF,
                             (appUiState as AppUiState.Success).nowCastF,
                             (appUiState as AppUiState.Success).alertListF,
-                            (frostUiState as FrostUiState.Success).frostF,
+                            (appUiState as AppUiState.Success).frostF,
                             apiViewModel
                         )
                     }
@@ -241,7 +243,7 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
                 val longitude = point.longitude()
 
                 apiViewModel.getAll("$latitude", "$longitude", "$elevation")
-                frostViewModel.getFrost("$latitude", "$longitude")
+               // frostViewModel.getFrost("$latitude", "$longitude")
 
                 onClick()
 

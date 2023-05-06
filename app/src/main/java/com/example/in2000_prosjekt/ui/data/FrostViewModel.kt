@@ -58,7 +58,7 @@ public class FrostViewModel () : ViewModel() {
     }
 
 // Forsøk 1 Denne tilnærmingen innebærer å kommentere ut frost fra ApiViewModel
-    fun getFrost(latitude: String, longitude: String) {
+    fun getFrost1(latitude: String, longitude: String) {
         viewModelScope.launch() {
             try {
 
