@@ -86,13 +86,17 @@ fun MainFavoriteScreen(
             Button(onClick = {
                 Log.d("ADD", "Kommer inn i Add med long: $favLongtitude, lat_ $favLatitude")
                 //if(favLatitude!= 0.0 || favLongtitude!=0.0){
-                    viewModel.addFavorite(
+                /*
+                viewModel.addFavorite(
                         Favorite(
                             favLongtitude,
-                            favLatitude
+                            favLatitude,
+
                         )
                     )
                     searching = false
+
+                 */
                 //}
             }) {
                 Text("Add")

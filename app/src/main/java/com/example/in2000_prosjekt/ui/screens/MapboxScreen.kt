@@ -63,6 +63,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
 import com.example.in2000_prosjekt.ui.SearchbarMapViewModel
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +74,8 @@ fun ShowMap(
     onNavigateToSettings: () -> Unit,
     onNavigateToRules: () -> Unit,
     mapViewModel: MapViewModel,
-    apiViewModel: APIViewModel
+    apiViewModel: APIViewModel,
+    favoriteViewModel: FavoriteViewModel
 ) {
 
     val cameraOptionsUiState by mapViewModel.cameraOptionsUiState.collectAsState()
@@ -202,7 +204,8 @@ fun ShowMap(
                                 mountainUiState,
                                 (appUiState as AppUiState.Success).locationF,
                                 (appUiState as AppUiState.Success).nowCastF,
-                                (appUiState as AppUiState.Success).alertListF
+                                (appUiState as AppUiState.Success).alertListF,
+                                favoriteViewModel
                             )
                         }
                     }

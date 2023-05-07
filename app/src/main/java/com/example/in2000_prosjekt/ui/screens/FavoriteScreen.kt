@@ -28,6 +28,7 @@ import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
 import com.example.in2000_prosjekt.ui.database.Favorite
+import com.example.in2000_prosjekt.ui.database.FavoriteUiState
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 //import com.example.in2000_prosjekt.ui.components.Sikt_favoritt_tekst
 import com.example.in2000_prosjekt.ui.theme.*
@@ -40,51 +41,52 @@ fun FavoriteScreen(apiViewModel: APIViewModel, viewModel: FavoriteViewModel, onN
     //viewModel.deleteAll()
     //addFavTest(viewModel)
 
-    val appUiState by apiViewModel.appUiState.collectAsState()
+    val favoriteUiState by viewModel.favUiState.collectAsState()
     val allFavorites by viewModel.allFavorites.observeAsState(listOf())
-
-    val listUi = checkFavs( apiViewModel = apiViewModel , allFavorites = allFavorites)
-
-    if(allFavorites.size != 0){
-        when(appUiState){
-            is AppUiState.Loading ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Sikt_mellomblå),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Icon(painter = painterResource(id = R.drawable.outline_pending), contentDescription = "", tint = Sikt_hvit, modifier = Modifier.size(50.dp))
-                    Text(text = "Loading", color = Sikt_hvit, fontSize = 30.sp, fontWeight = FontWeight.Bold)
-                }
-            is AppUiState.Error -> {
-                FavoriteScreenError( onNavigateToMap,
-                    onNavigateToFav,onNavigateToSettings,
-                    onNavigateToRules)
+    Log.d("FAV", "${allFavorites.size}")
+    //viewModel.deleteAll()
+    if(allFavorites.size > 0){
+        viewModel.update()
+    }
+    when(favoriteUiState){
+        is FavoriteUiState.Loading ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Sikt_mellomblå),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Icon(painter = painterResource(id = R.drawable.outline_pending), contentDescription = "", tint = Sikt_hvit, modifier = Modifier.size(50.dp))
+                Text(text = "Loading", color = Sikt_hvit, fontSize = 30.sp, fontWeight = FontWeight.Bold)
             }
-            is AppUiState.Success -> {
+        is FavoriteUiState.Error -> {
+            FavoriteScreenError( onNavigateToMap,
+                onNavigateToFav,onNavigateToSettings,
+                onNavigateToRules)
+        }
+        is FavoriteUiState.Success -> {
+            if(allFavorites.size > 0){
                 FavoriteScreenSuccess(
                     onNavigateToMap,
                     onNavigateToFav,
                     onNavigateToSettings,
                     onNavigateToRules,
                     viewModel,
-                    apiViewModel,
-                    allFavorites,
-                    listUi
+                    allFavorites
                 )
+            } else {
+                FavoriteEmpty(
+                    onNavigateToMap = onNavigateToMap,
+                    onNavigateToFav = onNavigateToFav,
+                    onNavigateToSettings = onNavigateToSettings) {
+
+                }
             }
         }
     }
 }
 
-//FOR TESTING ONLY, DELETE WHEN DONE
-fun addFavTest(viewModel: FavoriteViewModel){
-    Log.d("ADDFAV", "addet favorite to viewmodel")
-    val fav = Favorite(8.0,61.0)
-    viewModel.addFavorite(fav)
-}
 @Composable
 fun checkFavs(apiViewModel: APIViewModel, allFavorites: List<Favorite>) : MutableList<AppUiState>{
     val appUiState by apiViewModel.appUiState.collectAsState()
@@ -102,26 +104,44 @@ fun checkFavs(apiViewModel: APIViewModel, allFavorites: List<Favorite>) : Mutabl
 @Composable
 fun FavoriteScreenSuccess(
     //weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
-    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel, apiViewModel: APIViewModel, allFavorites : List<Favorite>,listUi : MutableList<AppUiState>
+    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel, allFavorites : List<Favorite>
 
 ) {
+    val favoriteUiState by viewModel.favUiState.collectAsState()
 
-    var weatherinfo : MutableList<LocationInfo> = mutableListOf()
-    var nowcastinfo : MutableList<NowCastInfo> = mutableListOf()
-    var alertinfo : MutableList<MutableList<AlertInfo>> = mutableListOf()
 
-    listUi.forEach{
-        weatherinfo.add((it as AppUiState.Success).locationF)
-        nowcastinfo.add(it.nowCastF)
-        alertinfo.add(it.alertListF)
-    }
-
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, info = false, map = false, settings = false)}
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, map = false, info = false,settings = false)}
     ) {
+        Log.d("SIZELOC", " ${(favoriteUiState as FavoriteUiState.Success).locationF.size}")
         LazyColumn(
             contentPadding = PaddingValues(20.dp)
         ) {
-            Sikt_Favorite_card(weatherinfo, nowcastinfo, alertinfo)
+            if (allFavorites.size != 0) {
+                Sikt_Favorite_card(
+                    (favoriteUiState as FavoriteUiState.Success).locationF,
+                    (favoriteUiState as FavoriteUiState.Success).nowCastF,
+                    (favoriteUiState as FavoriteUiState.Success).alertListF,
+                    allFavorites,
+                    viewModel
+                )
+            }
+        }
+    }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FavoriteEmpty(
+    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit
+){
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, map = false, info = false, settings = false)}
+        ,modifier = Modifier.padding(20.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp)
+        ) {
+            Text(text = "NO FAVORITES")
         }
     }
 }
