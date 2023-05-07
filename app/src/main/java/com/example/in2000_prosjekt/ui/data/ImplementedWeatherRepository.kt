@@ -1,7 +1,13 @@
 package com.example.in2000_prosjekt.ui.data
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.lifecycle.MutableLiveData
 import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.ui.uistate.FrostReferenceTime
+import com.example.in2000_prosjekt.ui.uistate.FrostReferencetimeUiState
 
 class ImplementedWeatherRepository : WeatherRepository {
 
@@ -126,11 +132,20 @@ class ImplementedWeatherRepository : WeatherRepository {
 
     val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
 
-    override suspend fun getReferencetimeFrost( calenderreferencetime: String ) {
-       // val referencetime = referencetime
+
+    override suspend fun getReferencetimeFrost( calenderreferencetime: String ) : FrostReferenceTime  {
+        // val referencetime = referencetime
         //dataFrost.getReferencetimeFrost(referencetime)
+        //var TimeReferencemutablestring =  MutableLiveData<String>()
+
+       // TimeReferencemutablestring.value =  calenderreferencetime
 
         dataFrost.referencetime=calenderreferencetime
+        Log.d("referenceTime,0605,22.00", calenderreferencetime)
+
+        val newdate = FrostReferenceTime (calenderreferencetime)
+
+        return newdate
     }
 
 
@@ -138,9 +153,7 @@ class ImplementedWeatherRepository : WeatherRepository {
 
     override suspend fun getFrost(latitude: String, longitude: String ): FrostInfo { //åssen får jeg referense time inni her:
 
-
         Log.d("Saalangt", "Data retrieved")
-
         val frostPolygon = dataFrost.fetchFrostWeatherStation(   latitude.toDouble(), longitude.toDouble() )
         val weatherstationid  = frostPolygon.data!!.get(0).id // en værstasjon sin ID: Blindern = SN18700
 

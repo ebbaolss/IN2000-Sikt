@@ -1,6 +1,7 @@
 package com.example.in2000_prosjekt.ui.data
 
 import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.ui.uistate.FrostReferenceTime
 
 interface WeatherRepository {
     suspend fun getLocation(latitude: String, longitude: String, altitude: String): LocationInfo
@@ -8,7 +9,7 @@ interface WeatherRepository {
     suspend fun getSunrise(latitude: String, longitude: String) : SunriseInfo
     suspend fun getAlert(latitude: String, longitude: String) : MutableList<AlertInfo>
    suspend fun getFrost(latitude: String, longitude: String ) : FrostInfo
-    suspend fun getReferencetimeFrost( referencetime: String )
+    suspend fun getReferencetimeFrost( referencetime: String ): FrostReferenceTime
 
 }
 

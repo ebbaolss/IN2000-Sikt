@@ -20,6 +20,7 @@ import com.example.in2000_prosjekt.ui.FrostInfo
 import com.example.in2000_prosjekt.ui.data.FrostViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
+import com.example.in2000_prosjekt.ui.uistate.FrostReferencetimeUiState
 import io.github.boguszpawlowski.composecalendar.CalendarState
 import io.github.boguszpawlowski.composecalendar.StaticCalendar
 import io.github.boguszpawlowski.composecalendar.day.NonSelectableDayState
@@ -132,11 +133,15 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
 
 
 @Composable
-fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo, /* frostViewModel: FrostViewModel*/) { //
+fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo,frostViewModel: FrostViewModel) { //
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Sikt_lyseblå), horizontalAlignment = Alignment.CenterHorizontally,)
     {
+
+        val frostUiState by frostViewModel.frostUiState.collectAsState() // Kan man oprette et uiState fra en composable
+
+        var uiStatetoChange by remember { mutableStateOf( false ) }
 
         val monthState = rememberSaveable(saver = MonthState.Saver()) {
             MonthState(initialMonth = YearMonth.now())
@@ -169,9 +174,24 @@ fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo,
         Log.d("Periode sendt i api kall:", "Dato: "+ datesforfrostsightconditions + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
 
 
+        LaunchedEffect(Unit) {
+            snapshotFlow { datesforfrostsightconditions }
+                .collect { currentperiod ->
+                    // viewModel.doSomething()
+                    frostViewModel.getReferencetimeFrost(datesforfrostsightconditions)
 
 
+                }
+        }
 
+        /*
+        if (monthState.){ // når monthstate endrer seg så endre uistate, når uistate endre seg, ta med endringen som er datoen // åja mkan kl-21-31 kan man bare sende monthstate gjennom tro
+            uiStatetoChange = true
+            frostViewModel.getReferencetimeFrost(datesforfrostsightconditions)
+
+            }
+
+         */
         /*   LaunchedEffect(Unit) {
                snapshotFlow { monthState.currentMonth }
                    .collect { currentMonth ->
@@ -181,14 +201,6 @@ fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo,
 
 
 
-        LaunchedEffect(Unit) {
-            snapshotFlow { datesforfrostsightconditions }
-                .collect { currentperiod ->
-                    // viewModel.doSomething()
-
-
-                }
-        }
 // når vi har gjort apikallet så sa emil lagre det i en ArrayList med datoer, 0605. kl. 14.48
 
        val arraylistwithSightValues = frostinfo.sightconditionListofDataforMonth

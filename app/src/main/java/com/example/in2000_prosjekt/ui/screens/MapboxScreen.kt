@@ -30,7 +30,6 @@ import com.example.in2000_prosjekt.ui.data.FrostViewModel
 import com.example.in2000_prosjekt.ui.database.MapViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
-import com.example.in2000_prosjekt.ui.uistate.FrostUiState
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
@@ -58,7 +57,7 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
     val mountainUiState by mapViewModel.mountainUiState.collectAsState()
     val appUiState by apiViewModel.appUiState.collectAsState()
 
-    val frostUiState by frostViewModel.frostUiState.collectAsState()
+    val frostUiState by frostViewModel.frostUiState.collectAsState() // brukes jo ikke, 06.05, kl. 21.03
 
 
     var locationCardState by remember { mutableStateOf(false) }
@@ -138,7 +137,11 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
                             (appUiState as AppUiState.Success).alertListF,
                             (appUiState as AppUiState.Success).frostF,
                             apiViewModel
+                        ,
+                            frostViewModel
                         )
+
+
                     }
                 }
             }

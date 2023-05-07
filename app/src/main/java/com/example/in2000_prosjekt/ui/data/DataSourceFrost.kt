@@ -1,6 +1,8 @@
 package com.example.in2000_prosjekt.ui.data
 
 import android.util.Log
+import androidx.compose.runtime.remember
+import androidx.lifecycle.MutableLiveData
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -13,7 +15,7 @@ import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 
-class DataSourceFrost (val basePath: String) {
+class DataSourceFrost (val basePath: String, /* var referencetime: String = "2021-05-6" */) {
     private val client = HttpClient(CIO) {
 
         install(Auth) {
@@ -52,11 +54,33 @@ class DataSourceFrost (val basePath: String) {
         var polygon= coordinatesToPolygonConverter (latitude,  longitude) // generer deg et polygon fra et koordinat
         return  authURL("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&geometry=${polygon}").body() //trenger ikke authURL(URL: String) i Frost sitt api, proxy servern brukes bare på Met vær apier (NowCast, LocationForecast, MetAlert)
     }
-
+// vi prøver å lage getters and setters, kl. 2140 06.05
     var referencetime : String = "2021-05-12"
 
+    //var referencetimetest_ = MutableLiveData<String>()
+    //var referencetimetest_ by remember { }
+   // referencetimetest_.value =
 
-    suspend fun fetchFrost(source: String): FrostResponsBuild {
+    //Log.d("Inni datasourcefrost", referencetimetest_ )
+
+    /*
+    get() = field
+
+    set (value) {
+        field=value
+    }
+    */
+
+
+
+    //Log.d("referencetime", referencetime.toString() )
+/*
+    init {
+        fetchFrost("SN18700", "2021-5-12")
+    }
+
+ */
+    suspend fun fetchFrost(source: String, /* referencetime : String */ ): FrostResponsBuild {
         // Dette gjøres på tordsag kl.14.25 for å se om jeg faktisk sender variablen referencetime gjennom View-ViewModel-Model riktig:
         //Vi hardkoder source til SN18700-Blindern: som alltid har resutlter for mean(cloud_area_fraction%20P1D)"
 

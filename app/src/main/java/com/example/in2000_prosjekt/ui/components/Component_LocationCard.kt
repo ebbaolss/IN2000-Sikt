@@ -21,13 +21,15 @@ import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.geojson.Point
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.ui.data.FrostViewModel
 import com.example.in2000_prosjekt.ui.theme.*
+import com.example.in2000_prosjekt.ui.uistate.FrostReferencetimeUiState
 import kotlinx.coroutines.runBlocking
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>, frostinfo: FrostInfo, apiViewModel: APIViewModel){
+fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>, frostinfo: FrostInfo, apiViewModel: APIViewModel, frostViewModel: FrostViewModel){
 
     val name = mountain.name
     val elevation = mountain.elevation
@@ -68,7 +70,7 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
 
 
             // her skal kalendern brukes:
-            Sikt_Historisk_Kalender(   apiViewModel , frostinfo )
+            Sikt_Historisk_Kalender(   apiViewModel , frostinfo , frostViewModel)
 
 
         /*
