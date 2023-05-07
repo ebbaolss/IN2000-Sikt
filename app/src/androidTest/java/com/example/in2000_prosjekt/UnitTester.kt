@@ -1,33 +1,26 @@
 package com.example.in2000_prosjekt
-
+/*
 import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
-import androidx.core.view.get
-import androidx.core.view.isVisible
 import androidx.navigation.testing.TestNavHostController
 //import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.internal.platform.ThreadChecker
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.SunriseInfo
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
-import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
-import com.example.in2000_prosjekt.ui.data.Frost_API_Respons
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import org.junit.Rule
 import org.junit.Test
 import com.example.in2000_prosjekt.ui.screens.*
-import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.exception.WorkerThreadException
 import io.ktor.client.*
@@ -42,15 +35,11 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
 import io.ktor.utils.io.*
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 
 import io.ktor.client.engine.mock.*
-import io.ktor.http.*
-import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 import org.junit.*
-import kotlin.test.Test
 
 //TEst 1: Test for funksjon: fun StartPage(onNavigateToNext: () -> Unit) // Test av om bildet dukker opp på skjermen StartPage
 
@@ -145,7 +134,7 @@ class testRules_fjellvettreglene {
 
         rule.setContent {
             IN2000_ProsjektTheme {
-                RulesScreen(onNavigateToMap =  { /*TODO*/ }, onNavigateToFav = { /*TODO*/ }, onNavigateToRules =  { /*TODO*/ },onNavigateToSettings = { /*TODO*/} )
+                InfoScreen(onNavigateToMap =  { /*TODO*/ }, onNavigateToFav = { /*TODO*/ }, onNavigateToRules =  { /*TODO*/ },onNavigateToSettings = { /*TODO*/} )
             }
 
         }
