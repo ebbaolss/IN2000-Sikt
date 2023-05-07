@@ -43,7 +43,7 @@ fun FavoriteScreen(apiViewModel: APIViewModel, viewModel: FavoriteViewModel, onN
 
     val favoriteUiState by viewModel.favUiState.collectAsState()
     val allFavorites by viewModel.allFavorites.observeAsState(listOf())
-    Log.d("FAV", "${allFavorites.size}")
+
     //viewModel.deleteAll()
     if(allFavorites.size > 0){
         viewModel.update()
@@ -87,23 +87,11 @@ fun FavoriteScreen(apiViewModel: APIViewModel, viewModel: FavoriteViewModel, onN
     }
 }
 
-@Composable
-fun checkFavs(apiViewModel: APIViewModel, allFavorites: List<Favorite>) : MutableList<AppUiState>{
-    val appUiState by apiViewModel.appUiState.collectAsState()
-    val listUi : MutableList<AppUiState> = mutableListOf()
-
-    allFavorites.forEach {
-        apiViewModel.getAll(it.latitude.toString(), it.longtitude.toString(), "50")
-        listUi.add(appUiState)
-    }
-    return listUi
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FavoriteScreenSuccess(
-    //weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel, allFavorites : List<Favorite>
 
 ) {

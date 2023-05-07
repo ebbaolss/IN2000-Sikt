@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
@@ -57,7 +58,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
             Column(
                 modifier = Modifier.padding(20.dp),
             ) {
-                Sikt_Header(location = "$name",elevation!!, latitude!!, longitude!!, alertinfo = mutableListOf(), favoriteViewModel) // Husk å endre alertinfo
+                Sikt_Header(location = "$name", elevation!!, latitude!!, longitude!!, alertinfo = mutableListOf(), favoriteViewModel) // Husk å endre alertinfo
                 Sikt_MountainHight(mountainheight = "$elevation")
                 Spacer(modifier = Modifier.size(20.dp))
                 illustrasjon(elevation, temp, wind, weatherHigh, weatherMid, weatherLow)

@@ -32,6 +32,6 @@ class Favorite {
         this.longtitude = longtitude
         this.latitude = latitude
         this.mountainName = mountainName
-        this
+        this.mountainHeight = mountainHeight
     }
 }

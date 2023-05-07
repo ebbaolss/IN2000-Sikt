@@ -2,6 +2,7 @@ package com.example.in2000_prosjekt.ui.database
 
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -28,7 +29,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
 
     val allFavorites: LiveData<List<Favorite>>
     private val repository: FavoriteRepository
-    val searchFavorites: MutableLiveData<List<Favorite>>
+    val searchFavorites: List<Favorite>
 
     init {
         val favoriteDb = FavoriteDatabase.getInstance(application)
@@ -40,20 +41,20 @@ class FavoriteViewModel(application: Application) : ViewModel() {
     }
 
     fun addFavorite(favorite: Favorite) {
+        //Log.d("ADDED", "with long: ${favorite.longtitude}, lat: ${favorite.latitude}, name: ${favorite.mountainName}, height: ${favorite.mountainHeight}")
         repository.addFavorite(favorite)
     }
 
-    fun findFavorite(longtitude: Double, latitude: Double) : Boolean{
+    fun findFavorite(longtitude: Double, latitude: Double,  location : String ,height : Int) : Boolean{
+        //Log.d("FINDING", "with long: $longtitude, lat : $latitude, name: $location, height: $height")
         repository.findFavorite(longtitude, latitude)
-        var check = false
-        if(repository.searchFavorites.value != null){
-            if(repository.searchFavorites.value!!.size >0) {
-                if(repository.searchFavorites.value!!.get(0).latitude == latitude && repository.searchFavorites.value!!.get(0).longtitude == longtitude){
-                    check = true
-                }
-            }
+        //Log.d("IN FIND", "search size = ${repository.searchFavorites.size}")
+        if(repository.searchFavorites.isEmpty()){
+            return false
+        } else if(repository.searchFavorites.contains(Favorite(latitude,longtitude,location,height))){
+            return true
         }
-        return check
+        return false
     }
 
     fun deleteFavorite(longtitude: Double, latitude: Double) {

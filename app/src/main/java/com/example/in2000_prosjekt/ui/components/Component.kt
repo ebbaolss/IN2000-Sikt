@@ -239,14 +239,16 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
             checked = checked,
             onCheckedChange = { checked = it },
         ) {
-            Log.d("FILL", "${viewModel.findFavorite(lon,lat)}")
+            var alreadyFav = viewModel.findFavorite(lon,lat,location,height)
+
+            Log.d("FAVORITE", "long: $lon , lat : $lat, loc : $location, height : $height")
             if (checked) {
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = "Localized description",
                     tint = Sikt_mørkeblå
                 )
-                if(!viewModel.findFavorite(lon,lat)){
+                if(!alreadyFav){
                     viewModel.addFavorite(Favorite(lon,lat,location,height))
                 }
             } else {
@@ -255,29 +257,10 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
                     contentDescription = "Localized description",
                     tint = Sikt_mørkeblå
                 )
-                /*
-                if(viewModel.findFavorite(lon,lat)){
+                if(alreadyFav){
                     viewModel.deleteFavorite(lon,lat)
                 }
-                */
             }
-
-            /*
-            //original:
-            if (checked) {
-                Icon(
-                    Icons.Filled.Favorite,
-                    contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
-                )
-            } else {
-                Icon(
-                    painterResource(id = R.drawable.outline_favorite),
-                    contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
-                )
-            }
-             */
         }
     }
 }
@@ -307,10 +290,14 @@ fun Sikt_skyillustasjon() {
 fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>, favorites: List<Favorite>, viewModel: FavoriteViewModel) {
     //favorites er en mutableList med LocationInfo kan derfor kalle
     // favorite.temperatureL etc.
+    /*
     Log.d("INFOSIZE", "${weatherinfo.size}")
+    Log.d("FAVS", "${favorites.size}")
     Log.d("AlertSIZE", "${alertInfo.size}")
+
+     */
     items(weatherinfo.size) {
-            Log.d("CARD", "STARTER CARD")
+            //Log.d("CARD", "STARTER CARD")
             val location = weatherinfo[it]
             val nowcast = nowcastinfo[it]
             val alertInfo = alertInfo[it]
