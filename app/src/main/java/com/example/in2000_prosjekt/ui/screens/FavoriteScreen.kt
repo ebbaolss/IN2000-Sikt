@@ -34,7 +34,7 @@ import com.example.in2000_prosjekt.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreen(apiViewModel: APIViewModel, viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
+fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel, apiViewModel: APIViewModel){
 
     //Used for testing:
     //viewModel.deleteAll()

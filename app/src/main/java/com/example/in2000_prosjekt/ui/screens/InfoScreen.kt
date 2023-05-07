@@ -28,17 +28,16 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InfoScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
-
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = false, settings = true, rules = false, map = false) }, containerColor = Sikt_mellomblå) {
-        val scrollState = rememberScrollState()
+fun InfoScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel){
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, favoritt = false, settings = false, info = true, map = false) }, containerColor = Sikt_mellomblå) {
+        val rules: Array<String> = stringArrayResource(id = R.array.rules)
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = 70.dp)
         ){
-            Sikt_SettingsCard(viewModel)
+            Sikt_InformationCard(rules)
         }
     }
 }
