@@ -310,7 +310,6 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
     Log.d("INFOSIZE", "${weatherinfo.size}")
     Log.d("AlertSIZE", "${alertInfo.size}")
     items(weatherinfo.size) {
-        weatherinfo.forEach { favorite ->
             Log.d("CARD", "STARTER CARD")
             val location = weatherinfo[it]
             val nowcast = nowcastinfo[it]
@@ -346,7 +345,6 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
             }
         }
     }
-}
 
 
 fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mountain>, nowCastInfo: NowCastInfo) {
