@@ -87,9 +87,17 @@ class DataSourceFrost (val basePath: String, /* var referencetime: String = "202
 
 //var referencetimetest_ by remember {mutableStateOf("") } FEIL 3:  mutableStateof MÅ brukes i Compsable funksjoner
 // val referencetimetest_.value =
-    var TimeReferencemutablestring =  MutableLiveData<String>("2021-05-12") // FEIL 4: MutableLiveData ga: NO transformation error
+    var referencetimeMutableLiveData =  MutableLiveData<String>("2021-05-12") // FEIL 4: MutableLiveData Funka ikke: Defaultveriden endrer seg aldri ga: NO transformation error
 
-    var  referencetime  : String = "2021-05-12"
+    //var  referencetime  : String = "2021-05-12"
+
+
+
+
+
+
+
+
 
 
     var referenceDatoer= MutableStateFlow<String>("")
@@ -97,21 +105,25 @@ class DataSourceFrost (val basePath: String, /* var referencetime: String = "202
 
     //Log.d("referencetime", referencetime.toString() )
 
-    suspend fun fetchFrost(source: String, /*referencetime : String*/ ): FrostResponsBuild {
-        // Dette gjøres på tordsag kl.14.25 for å se om jeg faktisk sender variablen referencetime gjennom View-ViewModel-Model riktig:
-        //Vi hardkoder source til SN18700-Blindern: som alltid har resutlter for mean(cloud_area_fraction%20P1D)"
+    var _referencetimeMutableStateFlow  = MutableStateFlow<String>("") // Error 5: MutableStateFlow Funka heeller ikke: Defaultveriden endrer seg aldri
+
+    suspend fun fetchFrost(source: String, referencetime : String  ): FrostResponsBuild {
+
+        Log.d("logg refrencetime inni fetchfrost",referencetime ) //  PostValue: Funka ikke
 
         //var url : String = "${basePath}sources=$source&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)"
-        var url : String = "${basePath}sources=SN18700&referencetime=${TimeReferencemutablestring.value}&elements=mean(cloud_area_fraction%20P1D)"
+        var url : String = "${basePath}sources=SN18700&referencetime=${referencetime}&elements=mean(cloud_area_fraction%20P1D)"
         var frostsightconditons : FrostResponsBuild =  client.get(url).body()
 
-        Log.d("ReferencetimeMutableLivePostValue()",TimeReferencemutablestring.value!! ) //  PostValue: Funka ikke
+        Log.d("ReferencetimeMutableLivePostValue()",referencetimeMutableLiveData.value!! ) //  PostValue: Funka ikke
 
         Log.d("ReferencetimeUrl",url )
         Log.d("ReferencetimeObject",frostsightconditons.toString() )
 
         return frostsightconditons
 
+        // Dette gjøres på tordsag kl.14.25 for å se om jeg faktisk sender variablen referencetime gjennom View-ViewModel-Model riktig:
+        //Vi hardkoder source til SN18700-Blindern: som alltid har resutlter for mean(cloud_area_fraction%20P1D)"
 
         // kommenteres ut for å logge urlen og reference time som genereres fra kalenderstate
         //return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)").body()

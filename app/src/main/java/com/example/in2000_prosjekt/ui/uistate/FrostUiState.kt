@@ -4,7 +4,7 @@ import com.example.in2000_prosjekt.ui.data.DataFrost
 
 sealed interface FrostReferencetimeUiState {
     data class Success(
-        val referencedate: FrostReferenceTime,
+        val referencedate: String, // pleide å være :FrostReferenceTime
        // val referencetime: String
     ) : FrostReferencetimeUiState
 

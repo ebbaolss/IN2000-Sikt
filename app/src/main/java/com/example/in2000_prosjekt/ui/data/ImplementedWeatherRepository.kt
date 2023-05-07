@@ -10,6 +10,9 @@ import com.example.in2000_prosjekt.ui.uistate.FrostReferenceTime
 import com.example.in2000_prosjekt.ui.uistate.FrostReferencetimeUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ImplementedWeatherRepository : WeatherRepository {
@@ -135,38 +138,19 @@ class ImplementedWeatherRepository : WeatherRepository {
 
     val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
 
+    var data: String ="2021-1%2F2021-2"
+    //var datamutable
 
-    override suspend fun getReferencetimeFrost( calenderreferencetime: String ) : FrostReferenceTime  {
+    override suspend fun getReferencetimeFrost( calenderreferencetime: String )   { // denne er ikke suspend
         // val referencetime = referencetime
         //dataFrost.getReferencetimeFrost(referencetime)
         //var TimeReferencemutablestring =  MutableLiveData<String>()
 
-        GlobalScope.launch(Dispatchers.IO) {// nr 2: kl-1433, 0705
-            //dataFrost.TimeReferencemutablestring.value=calenderreferencetime// MutableLiveData
-            // fetchFrost("SN18700", referencetime)
-        }
-
-       // TimeReferencemutablestring.value =  calenderreferencetime
-
-        dataFrost.referenceDatoer.value=calenderreferencetime // MutableState Flow
-
-
-        // gammelt attepmt med Mutable live data, gjort 07.05 kl. 1200
-       // dataFrost.TimeReferencemutablestring.value=calenderreferencetime// MutableLiveData
-
-        // attempt nr 1. kl.1433 07.05 // både MutableLivaData postValue og SetValue: Funka Ikke
-        dataFrost.TimeReferencemutablestring.postValue(calenderreferencetime)// MutableLiveData
+        data= calenderreferencetime
+        Log.d("repositoryvaibledata",data)
 
 
 
-
-
-        dataFrost.referencetime=calenderreferencetime // vanlig variable
-        Log.d("referenceTime,0605,22.00", calenderreferencetime)
-
-        val newdate = FrostReferenceTime (calenderreferencetime)
-
-        return newdate
     }
 
 
@@ -174,13 +158,13 @@ class ImplementedWeatherRepository : WeatherRepository {
 
     override suspend fun getFrost(latitude: String, longitude: String ): FrostInfo { //åssen får jeg referense time inni her:
 
-        Log.d("Saalangt", "Data retrieved")
+        Log.d("Saalangt", data)
         val frostPolygon = dataFrost.fetchFrostWeatherStation(   latitude.toDouble(), longitude.toDouble() )
         val weatherstationid  = frostPolygon.data!!.get(0).id // en værstasjon sin ID: Blindern = SN18700
 
         Log.d("SN på første responsobjekt: skal være SN63595",  weatherstationid!!)
 
-        val frost = dataFrost.fetchFrost( weatherstationid!! )
+        val frost = dataFrost.fetchFrost( weatherstationid!!, referencetime = data )
 
         //Kommentar 22.04, her har vi 2 tilnmmærminger å gjære et apicall
         // Alt 1: å gjøre et apicall per dag inni calendern vår

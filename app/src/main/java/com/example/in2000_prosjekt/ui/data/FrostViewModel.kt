@@ -23,6 +23,7 @@ public class FrostViewModel () : ViewModel() {
     private val repository: WeatherRepository = ImplementedWeatherRepository()
 
 
+
     private val _frostUistate: MutableStateFlow<FrostReferencetimeUiState> = MutableStateFlow(FrostReferencetimeUiState.Loading)
     val frostUiState: StateFlow<FrostReferencetimeUiState> = _frostUistate.asStateFlow()
 
@@ -34,22 +35,20 @@ public class FrostViewModel () : ViewModel() {
 
 
     fun getReferencetimeFrost(referencetime: String) {
-
         viewModelScope.launch() {
-            val referencetime1 = viewModelScope.async(Dispatchers.IO) {
+            val referencetimedeffered = viewModelScope.async(Dispatchers.IO) {
                 repository.getReferencetimeFrost(referencetime)
             }
-            val referencetime2 = referencetime1.await()
-
+            val referencetime = referencetimedeffered.await()
 
             // kl.21.06, 06.05
-            Log.d(" Referencetime sendes igjennom oppdatert! " , referencetime2.toString() )
+            Log.d(" Referencetime sendes igjennom oppdatert! " , referencetime.toString() )
 
             _frostUistate.update {
-                FrostReferenceTime(referencetime2.frostreferencetime) // attempt uten: Success, Loading Error I tilfelle feilen er der, 06.05.kl1512
+                //FrostReferenceTime(referencetime2.frostreferencetime) // attempt uten: Success, Loading Error I tilfelle feilen er der, 06.05.kl1512
 
                 FrostReferencetimeUiState.Success(
-                    referencedate = referencetime2
+                    referencedate = referencetime.toString()
                 )
             }
         }

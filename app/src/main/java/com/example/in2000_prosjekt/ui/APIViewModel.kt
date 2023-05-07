@@ -35,15 +35,22 @@ class APIViewModel () : ViewModel()
     private val altitude: String = "600"
 
 
+
+        // Vi har 2: getRefrenceTimeFRost: Begge funker fordi begge bruker ImplementedWeatherReposory sin: getReferencetimeFrost
     fun getReferencetimeFrost( referencetime: String ) : String {
         val referencedate = referencetime
 
         viewModelScope.async (Dispatchers.IO) {
             repository.getReferencetimeFrost(referencetime)
         }
+        Log.d(" Referencetime Test! " , referencedate.toString() )
+
         return referencedate
 
     }
+
+
+
 
 
 

@@ -62,27 +62,54 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
             Text(text = dayState.date.dayOfMonth.toString()+".", modifier=Modifier.padding(start = 2.4.dp))
 
 
-            val year = dayState.date.year -2
-            //  date: YYYY-MM-DD "2021-05-12" // monthValue-Trenger ikke å ha 0-symbolet forran seg: 05 og 5 funker
-            val date= year.toString()+"-"+dayState.date.monthValue.toString() +"-"+ dayState.date.dayOfMonth.toString()
-
-            //Api kallet
-           // apiViewModel.getReferencetimeFrost(referencetime =  date )
-
-          // Logg ing hver dato fra perioden vi er , kommenteres ut for å teste hvordan jeg sender referencetime gjenom viewmodel
-            //kommentert ut kl.19.50, 06.05
-            // Log.d("Dato: også Api respons verdi (frostinfo:SightConditions)", "Dato: "+ date + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
 
 
-            /* Utkommentert kl.16.30 06.05
-           val sightconditions = frostinfo.sightconditionListofDataforMonth?.get(dayState.date.dayOfMonth)?.observations?.get(0)?.value // tallet skal jo starte med den 28
+
+// Dette er et tall på dagen 0-30, veriden 0 er dag 1 i måneden, verdien 30 er dag 31 i måneden kl.1945, 07.05
+            val datoIArraylista = dayState.date.dayOfMonth.minus(1)
+
+            val sightconditions = frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.observations?.get(0)?.value // tallet skal jo starte med den 28
+
+           val referenceTime11 =frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.referenceTime
+            Log.d("Verdi og dag INNI kalenderdagene", "Plassnummer i arrayet"+ datoIArraylista+"Verdi: "+ sightconditions.toString()  + "Dato på dagen:"+ referenceTime11  ) // Er hele datoen for en kalenderdag: 2021-05-21
 
 
+
+//-------------------------- attempt med å matche nøyaktig dato fremvvist i øverste høyre hjørnet med verdien fra arraylist
+            //merk at vi bare har datoer: for en måned, neste måneds verdier vist i nederste høyre hjørne og forriges månedsverdier verdier er vist i øverste høyre hjørne
+
+
+            val datoforstfremvistOverstTilVenstre = dayState.date.dayOfMonth
+            // Bygg et år
+            val year =  dayState.date.year.minus(2).toString()// 2023
+            val month = dayState.date.dayOfMonth // Dette er 29. 30 31, også 1,2 ikke 01
+            val dayofYear = dayState.date.dayOfYear // er 181, altså den 01.05 er liksom dag 181 av året
+            val helelocaldate = dayState.date// er 181, altså den 01.05 er liksom dag 181 av året
+            val substringavkalender: String =year+helelocaldate?.toString()?.substring(4,10).toString()
+
+            Log.d("Dette er lokaldateee", substringavkalender ) // Er hele datoen for en kalenderdag: 2021-05-21
+
+
+            val sightconditionsforAParticularDate = frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.observations?.get(0)?.value // tallet skal jo starte med den 28
+
+
+
+            val substringavApikallDatoer =referenceTime11?.toString()?.substring(0,10)
+            Log.d("substring", substringavApikallDatoer!! ) // Er hele datoen for en kalenderdag: 2021-05-21
+
+            val sightcondtionsbasertpådato = when {
+
+                (substringavApikallDatoer == substringavkalender  )  -> frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.observations?.get(0)?.value
+                else -> "noe galt har skjedd"
+
+            }
+
+             //if (substringavApikallDatoer ==   )
 
             var weathericon = when {
                 (sightconditions == 0.0) -> painterResource(id = R.drawable.klart)
-                (0.0 <  sightconditions!! && sightconditions!! > 3.0 ) -> painterResource(id = R.drawable.lettskyet)
-                (3.0 < sightconditions!! && sightconditions!! > 6.0) -> painterResource(id = R.drawable.delvis_skyet)
+                (0.0 <  sightconditions!! && sightconditions!! < 3.0 ) -> painterResource(id = R.drawable.lettskyet)
+                (3.0 < sightconditions!! && sightconditions!! < 6.0) -> painterResource(id = R.drawable.delvis_skyet)
 
                 else  -> painterResource(id = R.drawable.skyet)
             }
@@ -94,30 +121,6 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
                 .size(30.dp))
 
 
-             */
-
-/*
-            //val RememberState = dayState.value // går ikke
-            //val RememberState3 = dayState.selectionState.value // går ikke
-            // linjene under er et forsøk på å bruke DayState sin recomposition og remember, torsdag 04.05, kl.2055
-            val testRememberForHverdag by remember { mutableStateOf(dayState) }
-            val rememberyear = testRememberForHverdag.date.year -2
-            val rememberdate= rememberyear.toString()+"-"+testRememberForHverdag.date.monthValue.toString() +"-"+ testRememberForHverdag.date.dayOfMonth.toString()
- */
-
-            // apikall på remembered Daystate variable: testRememberForHverdag torsdag 04.05, kl.2055
-
-            /*  LaunchedEffect(testRememberForHverdag.date.dayOfMonth){
-                  apiViewModel.getReferencetimeFrost(referencetime =  rememberdate )
-              }
-
-             */
-
-            // Log.d("Dato: også Api respons verdi (frostinfo:SightConditions)", "Dato: "+ rememberdate + " ApiResponsverdi for datoen: "+ frostinfo.sightcondition.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
-
-            // Picks icon to be shown depending on the sight / sikt conditions: The lower the APi value the more clear the sky is(the better the conditions)
-            // frostinfo.sightcondition is on a scale from: [0-8]: 0 being Great sight / sikt conditions, 8 being Poor sight / sikt conditions,
-
             alledager.add(dayState.date) // generer en liste med innholdet i kalenderen
         }
     }
@@ -125,6 +128,9 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
 
     return alledager
 }
+
+
+
 
 
 //Dette er en Composable funksjon som generer en kalender med et dagsinnhold bestemt av funksjonen dayContent
@@ -169,16 +175,23 @@ fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo,
         // test med aaaalle datoer 60 dager
 
 
-        apiViewModel.getReferencetimeFrost(referencetime =  datesforfrostsightconditions ) //  //2021-05%2F2021-06
+
+//Denne var apiViewModel.getRefence....
+       // apiViewModel.getReferencetimeFrost(referencetime =  datesforfrostsightconditions ) //  //2021-05%2F2021-06
+
+        frostViewModel.getReferencetimeFrost(referencetime=datesforfrostsightconditions)
 
         Log.d("Periode sendt i api kall:", "Dato: "+ datesforfrostsightconditions + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
 
 
         LaunchedEffect(Unit) {
-            snapshotFlow { datesforfrostsightconditions }
+            snapshotFlow { datesforfrostsightconditions } // kanskje feil det som står her
                 .collect { currentperiod ->
                     // viewModel.doSomething()
-                    frostViewModel.getReferencetimeFrost(datesforfrostsightconditions)
+                    // Kommentar: søndag 07.05: kl.1900:Etter forslag Elisabeth: Det at vi bruker launched effect
+                    // gjør IKKE at variablen som blir sendt oppdaterer seg med nytt dato
+                   // Derfor kommenteres den ut i launched effect, kl 1923
+                    //frostViewModel.getReferencetimeFrost(referencetime=datesforfrostsightconditions)
 
 
                 }
@@ -204,11 +217,17 @@ fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo,
 // når vi har gjort apikallet så sa emil lagre det i en ArrayList med datoer, 0605. kl. 14.48
 
        val arraylistwithSightValues = frostinfo.sightconditionListofDataforMonth
-
-
         // size skal være sånn 30 - 31 stk elementer, svarer til at api repsos for en måned gitt i apikallet
         Log.d("Info om api repsons Json Array watergate","Størrelse: List<DataFrost>?: "+ frostinfo.sightconditionListofDataforMonth?.size )
 
+
+        Log.d("Antall observcation=Skalværelik30-31","Antallobservations: "+ frostinfo.sightconditionListofDataforMonth?.get(0)?.observations?.get(0)?.timeSeriesId.toString())
+        Log.d("DAg 3, 03.01, dato og value  ","Valie: "+ frostinfo.sightconditionListofDataforMonth?.get(2)?.observations?.get(0)?.value.toString() +"Dag"+ frostinfo.sightconditionListofDataforMonth?.get(0)?.referenceTime.toString())
+
+
+
+
+        Image(painter = painterResource(id = R.drawable.klart), contentDescription = "test med fare i hver", /*contentScale = ContentScale.FillWidth,*/ modifier = Modifier.size(30.dp)/*.fillMaxWidth(0.7f)*/)
 
 
 
