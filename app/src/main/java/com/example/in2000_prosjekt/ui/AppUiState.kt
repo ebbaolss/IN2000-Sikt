@@ -1,7 +1,5 @@
 package com.example.in2000_prosjekt.ui
 
-import com.example.in2000_prosjekt.ui.data.Next6
-
 data class LocationInfo( //gi ting navn med også L på slutten
     val temperatureL: Float,
     val fog_area_fractionL : Float,

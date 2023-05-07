@@ -22,7 +22,6 @@ import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import java.text.SimpleDateFormat
 import java.util.Date
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
 

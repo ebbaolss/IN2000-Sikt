@@ -107,9 +107,9 @@ fun FavoriteScreenSuccess(
 
 ) {
 
-    var weatherinfo : MutableList<LocationInfo> = mutableListOf()
-    var nowcastinfo : MutableList<NowCastInfo> = mutableListOf()
-    var alertinfo : MutableList<MutableList<AlertInfo>> = mutableListOf()
+    val weatherinfo : MutableList<LocationInfo> = mutableListOf()
+    val nowcastinfo : MutableList<NowCastInfo> = mutableListOf()
+    val alertinfo : MutableList<MutableList<AlertInfo>> = mutableListOf()
 
     listUi.forEach{
         weatherinfo.add((it as AppUiState.Success).locationF)
