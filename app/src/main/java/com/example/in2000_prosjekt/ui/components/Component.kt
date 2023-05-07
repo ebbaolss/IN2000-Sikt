@@ -37,7 +37,7 @@ import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 
 @Composable
-fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, info : Boolean, settings : Boolean) {
+fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, map : Boolean, favorite : Boolean, info : Boolean, settings : Boolean) {
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
@@ -72,7 +72,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 IconButton(onClick = { onNavigateToFav() }) {
                     var iconfarge = Sikt_mørkeblå
                     var iconChosen = R.drawable.outline_favorite
-                    if (favoritt) {
+                    if (favorite) {
                         iconChosen = R.drawable.baseline_favorite_24
                     }
                     Icon(
@@ -90,7 +90,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.width(98.dp)
             ) {
-                IconButton(onClick = { onNavigateToRules() }) {
+                IconButton(onClick = { onNavigateToInfo() }) {
                     var iconfarge = Sikt_mørkeblå
                     var iconChosen = R.drawable.outline_info_20
                     if (info) {

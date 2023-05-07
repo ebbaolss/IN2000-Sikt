@@ -34,7 +34,7 @@ import com.example.in2000_prosjekt.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel, apiViewModel: APIViewModel){
+fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel, apiViewModel: APIViewModel){
 
     //Used for testing:
     //viewModel.deleteAll()
@@ -59,16 +59,14 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     Text(text = "Loading", color = Sikt_hvit, fontSize = 30.sp, fontWeight = FontWeight.Bold)
                 }
             is AppUiState.Error -> {
-                FavoriteScreenError( onNavigateToMap,
-                    onNavigateToFav,onNavigateToSettings,
-                    onNavigateToRules)
+                FavoriteScreenError( onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings)
             }
             is AppUiState.Success -> {
                 FavoriteScreenSuccess(
                     onNavigateToMap,
                     onNavigateToFav,
                     onNavigateToSettings,
-                    onNavigateToRules,
+                    onNavigateToInfo,
                     viewModel,
                     apiViewModel,
                     allFavorites,
@@ -102,7 +100,7 @@ fun checkFavs(apiViewModel: APIViewModel, allFavorites: List<Favorite>) : Mutabl
 @Composable
 fun FavoriteScreenSuccess(
     //weatherinfo: LocationInfo, nowcastinfo: NowCastInfo, sunriseinfo: SunriseInfo, alertinfo: MutableList<AlertInfo>, //frostinfo: FrostInfo,
-    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel, apiViewModel: APIViewModel, allFavorites : List<Favorite>,listUi : MutableList<AppUiState>
+    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel, apiViewModel: APIViewModel, allFavorites : List<Favorite>,listUi : MutableList<AppUiState>
 
 ) {
 
@@ -116,7 +114,7 @@ fun FavoriteScreenSuccess(
         alertinfo.add(it.alertListF)
     }
 
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, info = false, map = false, settings = false)}
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, favorite = true, info = false, map = false, settings = false)}
     ) {
         LazyColumn(
             contentPadding = PaddingValues(20.dp)

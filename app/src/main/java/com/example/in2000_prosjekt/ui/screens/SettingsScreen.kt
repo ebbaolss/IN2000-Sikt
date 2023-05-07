@@ -32,7 +32,7 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 @Composable
 fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo:() -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel){
 
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, map = false, favoritt = false, info = false, settings = true) }, containerColor = Sikt_mellomblå) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, map = false, favorite = false, info = false, settings = true) }, containerColor = Sikt_mellomblå) {
         val scrollState = rememberScrollState()
 
         LazyColumn(

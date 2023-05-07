@@ -141,5 +141,5 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
 @Preview(showSystemUi = true)
 @Composable
 fun MBSTest() {
-
+    com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet()
 }

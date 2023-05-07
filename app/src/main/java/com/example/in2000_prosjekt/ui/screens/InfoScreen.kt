@@ -29,7 +29,7 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InfoScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel){
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, favoritt = false, settings = false, info = true, map = false) }, containerColor = Sikt_mellomblå) {
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, favorite = false, settings = false, info = true, map = false) }, containerColor = Sikt_mellomblå) {
         val rules: Array<String> = stringArrayResource(id = R.array.rules)
 
         LazyColumn(
