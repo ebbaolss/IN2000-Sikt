@@ -8,6 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.uistate.FrostReferenceTime
 import com.example.in2000_prosjekt.ui.uistate.FrostReferencetimeUiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class ImplementedWeatherRepository : WeatherRepository {
 
@@ -138,9 +141,27 @@ class ImplementedWeatherRepository : WeatherRepository {
         //dataFrost.getReferencetimeFrost(referencetime)
         //var TimeReferencemutablestring =  MutableLiveData<String>()
 
+        GlobalScope.launch(Dispatchers.IO) {// nr 2: kl-1433, 0705
+            //dataFrost.TimeReferencemutablestring.value=calenderreferencetime// MutableLiveData
+            // fetchFrost("SN18700", referencetime)
+        }
+
        // TimeReferencemutablestring.value =  calenderreferencetime
 
-        dataFrost.referencetime=calenderreferencetime
+        dataFrost.referenceDatoer.value=calenderreferencetime // MutableState Flow
+
+
+        // gammelt attepmt med Mutable live data, gjort 07.05 kl. 1200
+       // dataFrost.TimeReferencemutablestring.value=calenderreferencetime// MutableLiveData
+
+        // attempt nr 1. kl.1433 07.05 // både MutableLivaData postValue og SetValue: Funka Ikke
+        dataFrost.TimeReferencemutablestring.postValue(calenderreferencetime)// MutableLiveData
+
+
+
+
+
+        dataFrost.referencetime=calenderreferencetime // vanlig variable
         Log.d("referenceTime,0605,22.00", calenderreferencetime)
 
         val newdate = FrostReferenceTime (calenderreferencetime)

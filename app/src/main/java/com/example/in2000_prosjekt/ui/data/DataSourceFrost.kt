@@ -14,6 +14,10 @@ import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class DataSourceFrost (val basePath: String, /* var referencetime: String = "2021-05-6" */) {
     private val client = HttpClient(CIO) {
@@ -54,16 +58,12 @@ class DataSourceFrost (val basePath: String, /* var referencetime: String = "202
         var polygon= coordinatesToPolygonConverter (latitude,  longitude) // generer deg et polygon fra et koordinat
         return  authURL("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&geometry=${polygon}").body() //trenger ikke authURL(URL: String) i Frost sitt api, proxy servern brukes bare på Met vær apier (NowCast, LocationForecast, MetAlert)
     }
-// vi prøver å lage getters and setters, kl. 2140 06.05
-    var referencetime : String = "2021-05-12"
-
     //var referencetimetest_ = MutableLiveData<String>()
-    //var referencetimetest_ by remember { }
-   // referencetimetest_.value =
 
     //Log.d("Inni datasourcefrost", referencetimetest_ )
 
-    /*
+    /* FEIL 1: Kanke bruke getters og setteers: refencetime blir aldri oppdatert, forblir default value, og gunker ike uten
+   / vi prøver å lage getters and setters, kl. 2140 06.05
     get() = field
 
     set (value) {
@@ -72,21 +72,40 @@ class DataSourceFrost (val basePath: String, /* var referencetime: String = "202
     */
 
 
+    //FEIL 2: init blokka kanke brukes på suspend funksjonen fetchFrost
 
-    //Log.d("referencetime", referencetime.toString() )
-/*
-    init {
-        fetchFrost("SN18700", "2021-5-12")
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
+    init { // brukes ikke til noe enda, per 07.05. kl 1437, bruk denne etter: ALLe mutableStateFlow, mutableLiveData etc. ,
+        coroutineScope.launch(Dispatchers.IO) {
+            var referencetime: String = "2021-05-12"
+           // fetchFrost("SN18700", referencetime)
+        }
     }
 
- */
-    suspend fun fetchFrost(source: String, /* referencetime : String */ ): FrostResponsBuild {
+
+
+//var referencetimetest_ by remember {mutableStateOf("") } FEIL 3:  mutableStateof MÅ brukes i Compsable funksjoner
+// val referencetimetest_.value =
+    var TimeReferencemutablestring =  MutableLiveData<String>("2021-05-12") // FEIL 4: MutableLiveData ga: NO transformation error
+
+    var  referencetime  : String = "2021-05-12"
+
+
+    var referenceDatoer= MutableStateFlow<String>("")
+
+
+    //Log.d("referencetime", referencetime.toString() )
+
+    suspend fun fetchFrost(source: String, /*referencetime : String*/ ): FrostResponsBuild {
         // Dette gjøres på tordsag kl.14.25 for å se om jeg faktisk sender variablen referencetime gjennom View-ViewModel-Model riktig:
         //Vi hardkoder source til SN18700-Blindern: som alltid har resutlter for mean(cloud_area_fraction%20P1D)"
 
         //var url : String = "${basePath}sources=$source&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)"
-        var url : String = "${basePath}sources=SN18700&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)"
+        var url : String = "${basePath}sources=SN18700&referencetime=${TimeReferencemutablestring.value}&elements=mean(cloud_area_fraction%20P1D)"
         var frostsightconditons : FrostResponsBuild =  client.get(url).body()
+
+        Log.d("ReferencetimeMutableLivePostValue()",TimeReferencemutablestring.value!! ) //  PostValue: Funka ikke
 
         Log.d("ReferencetimeUrl",url )
         Log.d("ReferencetimeObject",frostsightconditons.toString() )
@@ -97,8 +116,4 @@ class DataSourceFrost (val basePath: String, /* var referencetime: String = "202
         // kommenteres ut for å logge urlen og reference time som genereres fra kalenderstate
         //return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)").body()
     }
-
-
-
-
 }

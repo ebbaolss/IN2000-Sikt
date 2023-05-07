@@ -7,11 +7,18 @@ sealed interface FrostReferencetimeUiState {
         val referencedate: FrostReferenceTime,
        // val referencetime: String
     ) : FrostReferencetimeUiState
+
+
     object Error : FrostReferencetimeUiState
     object Loading : FrostReferencetimeUiState
 
 
+
+
 }
+
+
+
 
 data class FrostReferenceTime( //sett Frost på slutten, F brukes allerede
     val frostreferencetime: String
