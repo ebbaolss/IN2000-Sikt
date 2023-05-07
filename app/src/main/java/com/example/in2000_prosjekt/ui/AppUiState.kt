@@ -10,10 +10,12 @@ data class LocationInfo( //gi ting navn med også L på slutten
     var cloud_area_fraction_low: Float,
     var cloud_area_fraction_medium: Float,
     val rainL : Float,
-    val tempNext1L : Float,
-    val tempNext6L: Float,
-    val cloudinessNext1L : String,
-    val cloudinessNext6L : String,
+    val tempNext1 : Float,
+    val tempNext6: Float,
+    val tempNext12: Float,
+    val cloudinessNext1 : String,
+    val cloudinessNext6 : String,
+    val cloudinessNext12 : String,
 )
 data class NowCastInfo( //sette N eller Now på slutten
     val temperatureNow: Float,

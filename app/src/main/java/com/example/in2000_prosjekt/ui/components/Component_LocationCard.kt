@@ -64,7 +64,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
-                Sikt_LocationCard_NextDays()
+                Sikt_LocationCard_NextDays(locationInfo)
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
@@ -87,10 +87,12 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
 @Composable
 fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
 
-    val tempNext1h = locationInfo.tempNext1L
-    val tempNext6h = locationInfo.tempNext6L
-    val cloudsNext1h = locationInfo.cloudinessNext1L
-    val cloudsNext6h = locationInfo.cloudinessNext6L
+    val tempNext1h = locationInfo.tempNext1
+    val tempNext6h = locationInfo.tempNext6
+    val tempNext12h = locationInfo.tempNext6
+    val cloudsNext1h = locationInfo.cloudinessNext1
+    val cloudsNext6h = locationInfo.cloudinessNext6
+    val cloudsNext12h = locationInfo.cloudinessNext6
 
     val currentTimeMillis = System.currentTimeMillis()
     val date = Date(currentTimeMillis)
@@ -109,8 +111,10 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
             if (i == 0 || i == 1) {
                 item { Sikt_LocationCard_Hour_Card(melding, tempNext1h, cloudsNext1h) }
             } else {
-                item { Sikt_LocationCard_Hour_Card(melding, tempNext6h, cloudsNext6h) }
+                item { Sikt_LocationCard_Hour_Card("Om 6 timer:", tempNext6h, cloudsNext6h) }
+                item { Sikt_LocationCard_Hour_Card("Om 12 timer:", tempNext12h, cloudsNext12h) }
             }
+
         }
     }
 }
@@ -163,71 +167,10 @@ fun Sikt_LocationCard_Hour_Card(tid : String, temp : Float, cloudiness : String)
 }
 
 @Composable
-fun Ebba_Hour(time : Int, clouds : String, temp: Int) {
-
-    fun getCloudVisuals(clouds: String): Int {
-        return if (clouds == "skyet") {
-            R.drawable.small_clouds_both
-        } else if (clouds == "delvisskyet") {
-            R.drawable.small_clouds_big
-        } else if (clouds == "lettskyet") {
-            R.drawable.small_clouds_small
-        } else {
-            R.drawable.small_clouds_clear
-        }
-    }
-
-    fun getRightWeather(weather: String): String {
-        return if (weather == "skyet") {
-            "Meget dårlig sikt"
-        } else if (weather == "delvisskyet") {
-            "Dårlig sikt"
-        } else if (weather == "lettskyet") {
-            "Lettskyet"
-        } else {
-            "Klart vær"
-        }
-    }
-
-    fun getRightKm(km: String): String {
-        return if (km == "skyet") {
-            "> 1 km sikt"
-        } else if (km == "delvisskyet") {
-            "1-4 km sikt"
-        } else if (km == "lettskyet") {
-            "4-10 km sikt"
-        } else {
-            "< 10 km sikt"
-        }
-    }
-
-    Card(
-        colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
-    ) {
-        Column(
-            modifier = Modifier.padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            Text(text = "$time:00", color = Sikt_sort, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            Box(
-                modifier = Modifier.size(80.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = getCloudVisuals(clouds)),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            Text(text = getRightKm(clouds), fontSize = 12.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
-            Text(text = getRightWeather(clouds), fontSize = 12.sp, color = Sikt_sort)
-            Text(text = "$temp°", color = Sikt_sort, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        }
-    }
-}
-
-@Composable
-fun Sikt_LocationCard_NextDays() {
+fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo) {
+    val tempNext1 = locationInfo.tempNext1
+    val tempNext6 = locationInfo.tempNext6
+    val tempNext12 = locationInfo.tempNext12
     Card(
         modifier = Modifier
             .fillMaxWidth()
