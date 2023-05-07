@@ -20,7 +20,7 @@ import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import java.text.SimpleDateFormat
-import java.util.Date;
+import java.util.Date
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -107,9 +107,9 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
                 "${tidspunkt.toInt()+i}:00"
             }
             if (i == 0 || i == 1) {
-                item { Sikt_LocationCard_Hour_Card("$melding", tempNext1h, cloudsNext1h) }
+                item { Sikt_LocationCard_Hour_Card(melding, tempNext1h, cloudsNext1h) }
             } else {
-                item { Sikt_LocationCard_Hour_Card("$melding", tempNext6h, cloudsNext6h) }
+                item { Sikt_LocationCard_Hour_Card(melding, tempNext6h, cloudsNext6h) }
             }
         }
     }

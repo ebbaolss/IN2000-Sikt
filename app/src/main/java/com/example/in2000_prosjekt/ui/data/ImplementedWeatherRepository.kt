@@ -9,7 +9,7 @@ class ImplementedWeatherRepository : WeatherRepository {
     val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
-
+    val dataMap = DataSourceMap()
     //----------------------
     //Frost:
     var elements = "air_temperature"// Dette er værmålingen vi ønsker: For enkelthetsskyld så velges bare: air temperature
@@ -135,7 +135,6 @@ class ImplementedWeatherRepository : WeatherRepository {
         return alertList
     }
 
-
     override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
 
         val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)  //hardkoded parameterne, fiks dette
@@ -151,6 +150,34 @@ class ImplementedWeatherRepository : WeatherRepository {
 
         return FrostInfo(
             sightcondition = typeFrost!!.toInt()
+        )
+    }
+
+    override suspend fun getMap(path: String) : MapInfo {
+        val mapJson = dataMap.fetchMapSearch(path)
+
+        val mountains = HashMap<String, String>()
+
+        //lage en liste som bare inneholder mountains poi
+        for (item in mapJson.suggestions) {
+            if (item.feature_type == "poi") {
+                mountains[item.name!!] = item.mapbox_id!!
+            }
+        }
+
+        return MapInfo(
+            optionMountains = mountains
+        )
+    }
+    override suspend fun getMapCoordinates(path: String) : MapCoordinatesInfo {
+        val mapCoordinatesJson = dataMap.fetchMapCoordinates(path)
+
+        val longitudeMap = mapCoordinatesJson.features?.get(0)?.geometry?.coordinates?.get(0)
+        val latitudeMap = mapCoordinatesJson.features?.get(0)?.geometry?.coordinates?.get(1)
+
+        return MapCoordinatesInfo(
+            latitude = latitudeMap!!,
+            longitude = longitudeMap!!
         )
     }
 }
