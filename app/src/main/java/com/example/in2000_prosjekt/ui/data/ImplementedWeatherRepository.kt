@@ -46,6 +46,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         val cloud_mid = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_medium
         val cloud_low = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_low
         val cloudiness = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction
+
         val tempNext1 = forecast.properties?.timeseries?.get(1)?.data?.instant?.details?.air_temperature
         val tempNext2 = forecast.properties?.timeseries?.get(2)?.data?.instant?.details?.air_temperature
         val tempNext3 = forecast.properties?.timeseries?.get(3)?.data?.instant?.details?.air_temperature
@@ -75,12 +76,13 @@ class ImplementedWeatherRepository : WeatherRepository {
         val temp_day1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.air_temperature
         val temp_day2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.air_temperature
         val temp_day3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature
-        val temp_day4 = forecast.properties?.timeseries?.get(timeDay4)?.data?.instant?.details?.air_temperature
+        val temp_day4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature
 
         val cloud_day1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.cloud_area_fraction
         val cloud_day2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.cloud_area_fraction
         val cloud_day3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
-        val cloud_day4 = forecast.properties?.timeseries?.get(timeDay4)?.data?.instant?.details?.cloud_area_fraction
+        val cloud_day4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
+
 
         return LocationInfo(
             temperatureL = (temp ?: -273.5) as Float,
