@@ -231,7 +231,11 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
                 openDialog = false
             }
         }
-        Text(text = "$location", fontWeight = FontWeight.Bold, fontSize = 30.sp)
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "$location",
+            fontWeight = FontWeight.Bold,
+            fontSize = 30.sp)
         var checked by remember { mutableStateOf(false) }
         IconToggleButton(
             checked = checked,
@@ -387,51 +391,6 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
         }
     }
 
-    fun getHighClouds(highclouds: Float): Int {
-        return when (highclouds.toInt()) {
-            in 75..100 -> R.drawable.clouds_high_both
-            in 50..74 -> R.drawable.clouds_high_big
-            in 25..49 -> R.drawable.clouds_high_small
-            else -> R.drawable.klart
-        }
-    }
-
-    fun getMidClouds(midclouds: Float): Int {
-        return when (midclouds.toInt()) {
-            in 75..100 -> R.drawable.clouds_mid_both
-            in 50..74 -> R.drawable.clouds_mid_big
-            in 25..49 -> R.drawable.clouds_mid_small
-            else -> R.drawable.klart
-        }
-    }
-
-    fun getLowClouds(lowclouds: Float): Int {
-        return when (lowclouds.toInt()) {
-            in 75..100 -> R.drawable.clouds_low_both
-            in 50..74 -> R.drawable.clouds_low_big
-            in 25..49 -> R.drawable.clouds_low_small
-            else -> R.drawable.klart
-        }
-    }
-
-    fun getRightWeather(weather: Float): String {
-        return when (weather.toInt()) {
-            in 75..100 -> "Meget dårlig sikt"
-            in 50..74 -> "Dårlig sikt"
-            in 25..49 -> "Lettskyet"
-            else -> "Klart vær"
-        }
-    }
-
-    fun getRightKm(km: Float): String {
-        return when (km.toInt()){
-            in 75..100 -> "> 1 km sikt"
-            in 50..74 -> "1-4 km sikt"
-            in 25..49 -> "4-10 km sikt"
-            else -> "< 10 km sikt"
-        }
-    }
-
     Box(
         modifier = Modifier.aspectRatio(1f)
     ){
@@ -497,7 +456,7 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
             ) {
                 Text(text = "2000 - 5000 m.o.h.", fontSize = 12.sp, color = Sikt_sort)
                 Text(text = getRightKm(weatherHigh), fontSize = 16.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
-                Text(text = getRightWeather(weatherHigh), fontSize = 12.sp, color = Sikt_sort)
+                Text(text = getRightSikt(weatherHigh), fontSize = 12.sp, color = Sikt_sort)
             }
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.width(100.dp))
             Column(
@@ -506,7 +465,7 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
             ) {
                 Text(text = "1000 - 2000 m.o.h.", fontSize = 12.sp, color = Sikt_sort)
                 Text(text = getRightKm(weatherMid), fontSize = 16.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
-                Text(text = getRightWeather(weatherMid), fontSize = 12.sp, color = Sikt_sort)
+                Text(text = getRightSikt(weatherMid), fontSize = 12.sp, color = Sikt_sort)
             }
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.width(100.dp))
             Column(
@@ -515,7 +474,7 @@ fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float,
             ) {
                 Text(text = "0 - 1000 m.o.h.", fontSize = 12.sp, color = Sikt_sort)
                 Text(text = getRightKm(weatherLow), fontSize = 16.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
-                Text(text = getRightWeather(weatherLow), fontSize = 12.sp, color = Sikt_sort)
+                Text(text = getRightSikt(weatherLow), fontSize = 12.sp, color = Sikt_sort)
             }
         }
     }
@@ -891,5 +850,5 @@ fun TestComponent() {
             )
         }
     }
-
 }
+
