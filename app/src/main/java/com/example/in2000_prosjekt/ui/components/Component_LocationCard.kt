@@ -93,6 +93,12 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
     val cloudsNext1h = locationInfo.cloudinessNext1
     val cloudsNext6h = locationInfo.cloudinessNext6
     val cloudsNext12h = locationInfo.cloudinessNext6
+    val temp_day1 = locationInfo.temp_day1
+    val temp_day2 = locationInfo.temp_day2
+    val temp_day3 = locationInfo.temp_day3
+    val cloud_day1 = locationInfo.cloud_day1
+    val cloud_day2 = locationInfo.cloud_day2
+    val cloud_day3 = locationInfo.cloud_day3
 
     val currentTimeMillis = System.currentTimeMillis()
     val date = Date(currentTimeMillis)
@@ -102,17 +108,15 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        for (i in 0..5) {
+        for (i in 0..11) {
             val melding = if (i == 0 ) {
                 "Sikt nå:"
             } else {
                 "${tidspunkt.toInt()+i}:00"
             }
-            if (i == 0 || i == 1) {
-                item { Sikt_LocationCard_Hour_Card(melding, tempNext1h, cloudsNext1h) }
-            } else {
-                item { Sikt_LocationCard_Hour_Card("Om 6 timer:", tempNext6h, cloudsNext6h) }
-                item { Sikt_LocationCard_Hour_Card("Om 12 timer:", tempNext12h, cloudsNext12h) }
+            for (i in 0..11) {
+
+                //item { Sikt_LocationCard_Hour_Card(melding, locationInfo.tempNext1, locationInfo.cloudinessNext1) }
             }
 
         }
@@ -168,9 +172,14 @@ fun Sikt_LocationCard_Hour_Card(tid : String, temp : Float, cloudiness : String)
 
 @Composable
 fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo) {
-    val tempNext1 = locationInfo.tempNext1
-    val tempNext6 = locationInfo.tempNext6
-    val tempNext12 = locationInfo.tempNext12
+    val temp_day1 = locationInfo.temp_day1
+    val temp_day2 = locationInfo.temp_day2
+    val temp_day3 = locationInfo.temp_day3
+    val temp_day4 = locationInfo.temp_day4
+    val cloud_day1 = locationInfo.cloud_day1
+    val cloud_day2 = locationInfo.cloud_day2
+    val cloud_day3 = locationInfo.cloud_day3
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -189,23 +198,23 @@ fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo) {
             ) {
                 Text(text = "Idag", color = Sikt_sort, fontSize = 12.sp)
                 Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Lettskyet", color = Sikt_sort, fontSize = 12.sp)
+                Text(text = "Temp: $temp_day1 Cloud: $cloud_day1", color = Sikt_sort, fontSize = 12.sp)
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = "Fredag", color = Sikt_sort, fontSize = 12.sp)
+                Text(text = "Imorgen", color = Sikt_sort, fontSize = 12.sp)
                 Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Lettskyet", color = Sikt_sort, fontSize = 12.sp)
+                Text(text = "Temp: $temp_day2 Cloud: $cloud_day2", color = Sikt_sort, fontSize = 12.sp)
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = "Lørdag", color = Sikt_sort, fontSize = 12.sp)
+                Text(text = "Om 2 dager:", color = Sikt_sort, fontSize = 12.sp)
                 Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Lettskyet", color = Sikt_sort, fontSize = 12.sp)
+                Text(text = "Temp: $temp_day3 Cloud: $cloud_day3", color = Sikt_sort, fontSize = 12.sp)
             }
         }
     }
