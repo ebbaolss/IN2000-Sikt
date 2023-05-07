@@ -5,7 +5,6 @@ package com.example.in2000_prosjekt.ui.components
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -15,8 +14,6 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
@@ -39,7 +36,7 @@ import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 
 @Composable
-fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, rules : Boolean, settings : Boolean) {
+fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, info : Boolean, settings : Boolean) {
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
@@ -94,9 +91,9 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             ) {
                 IconButton(onClick = { onNavigateToRules() }) {
                     var iconfarge = Sikt_mørkeblå
-                    var iconChosen = R.drawable.outline_view_list_outlined
-                    if (rules) {
-                        iconChosen = R.drawable.baseline_view_list_filled
+                    var iconChosen = R.drawable.outline_info_20
+                    if (info) {
+                        iconChosen = R.drawable.baseline_info_filled
                     }
                     Icon(
                         painter = painterResource(iconChosen),
@@ -108,7 +105,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Fjellvettreglene", fontSize = 13.sp)
+                Text(text = "Info", fontSize = 13.sp)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -116,9 +113,9 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             ) {
                 IconButton(onClick = { onNavigateToSettings() }) {
                     var iconfarge = Sikt_mørkeblå
-                    var iconChosen = R.drawable.outline_info_outlined
+                    var iconChosen = R.drawable.outline_settings
                     if (settings) {
-                        iconChosen = R.drawable.baseline_info_filled
+                        iconChosen = R.drawable._settings_filled
                     }
                     Icon(
                         painterResource(iconChosen),
@@ -175,7 +172,7 @@ fun Sikt_BottomBar2( ) {
             ) {
                 IconButton(onClick = {  }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.outline_info_outlined),
+                        painter = painterResource(id = R.drawable.outline_info),
                         "",
                         tint = Sikt_mørkeblå,
                     )

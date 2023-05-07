@@ -97,7 +97,7 @@ fun ShowMap(
                 onNavigateToRules,
                 onNavigateToSettings,
                 favoritt = false,
-                rules = false,
+                info = false,
                 map = true,
                 settings = false
             )
