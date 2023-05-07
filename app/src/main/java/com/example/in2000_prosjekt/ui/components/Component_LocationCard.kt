@@ -64,7 +64,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
-                Sikt_LocationCard_NextDays(locationInfo)
+                Sikt_LocationCard_NextDays(locationInfo, nowCastInfo)
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
@@ -171,16 +171,9 @@ fun Sikt_LocationCard_Hour_Card(tid : String, temp : Float, cloudiness : String)
 }
 
 @Composable
-fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo) {
-    val temp_day1 = locationInfo.temp_day1
-    val temp_day2 = locationInfo.temp_day2
-    val temp_day3 = locationInfo.temp_day3
-    val temp_day4 = locationInfo.temp_day4
-    val cloud_day1 = locationInfo.cloud_day1
-    val cloud_day2 = locationInfo.cloud_day2
-    val cloud_day3 = locationInfo.cloud_day3
+fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo, nowCastInfo: NowCastInfo) {
 
-    Card(
+    /*Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp),
@@ -198,7 +191,7 @@ fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo) {
             ) {
                 Text(text = "Idag", color = Sikt_sort, fontSize = 12.sp)
                 Spacer(modifier = Modifier.height(30.dp))
-                Text(text = "Temp: $temp_day1 Cloud: $cloud_day1", color = Sikt_sort, fontSize = 12.sp)
+                Text(text = "Temp: ${nowCastInfo.temperatureNow} Cloud: ${locationInfo.cloudinessNext1}", color = Sikt_sort, fontSize = 12.sp)
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -218,6 +211,8 @@ fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo) {
             }
         }
     }
+
+     */
 }
 
 
