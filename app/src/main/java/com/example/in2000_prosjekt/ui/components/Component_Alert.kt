@@ -133,24 +133,6 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                                 textAlign = TextAlign.Center
                             )
                         )
-                        //favoritt icon button
-                        var checked by remember { mutableStateOf(false) }
-                        IconToggleButton(
-                            checked = checked,
-                            onCheckedChange = { checked = it },
-                            modifier = Modifier
-                                .padding(5.dp)
-                                .weight(1f)
-                        ) {
-                            if (checked) {
-                                Icon(Icons.Filled.Favorite, contentDescription = "Favorite filled")
-                            } else {
-                                Icon(
-                                    Icons.Outlined.Favorite,
-                                    contentDescription = "Favorite outlined"
-                                )
-                            }
-                        }
 
                     }
 
