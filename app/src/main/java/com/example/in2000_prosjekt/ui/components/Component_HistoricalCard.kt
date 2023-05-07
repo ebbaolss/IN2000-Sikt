@@ -108,8 +108,8 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
 
             var weathericon = when {
                 (sightconditions == 0.0) -> painterResource(id = R.drawable.klart)
-                (0.0 <  sightconditions!! && sightconditions!! < 3.0 ) -> painterResource(id = R.drawable.lettskyet)
-                (3.0 < sightconditions!! && sightconditions!! < 6.0) -> painterResource(id = R.drawable.delvis_skyet)
+                (0.0 <  sightconditions!! && sightconditions!! <= 3.0 ) -> painterResource(id = R.drawable.lettskyet)
+                (3.0 < sightconditions!! && sightconditions!! <= 6.0) -> painterResource(id = R.drawable.delvis_skyet)
 
                 else  -> painterResource(id = R.drawable.skyet)
             }
@@ -155,7 +155,7 @@ fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo,
 
         var calenderstate : CalendarState<EmptySelectionState> = rememberCalendarState(
             monthState = monthState,)
-        StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.background(Sikt_lyseblå), calendarState =calenderstate, dayContent =  { it -> dayContent(
+        StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.background(Sikt_lyseblå), showAdjacentMonths = false, calendarState =calenderstate, dayContent =  { it -> dayContent(
             dayState =  it , frostinfo = frostinfo,  apiViewModel) })
         // monthState er en funksjon av MonthState fra bogus, som sin .currentMonth er av typen YearMonth fra java biblioteket
         Text(text= "Nr1: monthState.currentMonth: "+monthState.currentMonth.toString()) // 2023-05
