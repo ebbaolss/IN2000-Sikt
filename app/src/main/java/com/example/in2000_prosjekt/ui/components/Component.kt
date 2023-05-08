@@ -277,9 +277,8 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
             } else {
                 false
             }
-
             Log.d("ALREADYFAV", "$alreadyFav")
-            Log.d("FAVORITE", "long: $lon , lat : $lat, loc : $location, height : $height")
+
             if (checked) {
                 Icon(
                     Icons.Filled.Favorite,
@@ -287,6 +286,12 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
                     tint = Sikt_mørkeblå
                 )
                 viewModel.addFavorite(Favorite(lon,lat,location,height))
+            } else if (alreadyFav){
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = "Localized description",
+                    tint = Sikt_mørkeblå
+                )
             } else {
                 Icon(
                     painterResource(id = R.drawable.outline_favorite),
@@ -299,7 +304,7 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
 }
 
 @Composable
-fun Sikt_Favorite_Header(location : String, viewModel: FavoriteViewModel, alertinfo: MutableList<AlertInfo>) {
+fun Sikt_Favorite_Header(location : String , height: Int, lat: Double, lon: Double, alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -377,8 +382,8 @@ fun Sikt_Favorite_Header(location : String, viewModel: FavoriteViewModel, alerti
                     contentDescription = "Localized description",
                     tint = Sikt_mørkeblå
                 )
+                viewModel.deleteFavorite(lon,lat)
             }
-            //onClick = { viewModel.deleteFavorite() }
         }
     }
 }
@@ -435,7 +440,7 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Sikt_Header(name,height, favorites[it].latitude, favorites[it].longtitude, alertInfo, viewModel)
+                    Sikt_Favorite_Header(name,height, favorites[it].latitude, favorites[it].longtitude, alertInfo, viewModel)
                     Sikt_MountainHight(height.toString())
                     illustrasjon(
                         height = height,
