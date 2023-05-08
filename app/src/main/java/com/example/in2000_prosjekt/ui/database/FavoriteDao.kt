@@ -6,16 +6,16 @@ import androidx.room.*
 @Dao
 interface FavoriteDao {
 
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavorite(favorite: Favorite)
 
-    @Query("SELECT * FROM Favorites WHERE longtitude = :longtitude AND latitude = :latitude")
+    @Query("SELECT * FROM favorites WHERE longtitude LIKE :longtitude AND latitude LIKE :latitude")
     fun findFavorite(longtitude: Double, latitude: Double): List<Favorite>
 
     @Query("SELECT * FROM favorites")
     fun getAllFavorites(): LiveData<List<Favorite>>
 
-    @Query("DELETE FROM favorites WHERE longtitude = :longtitude AND latitude = :latitude")
+    @Query("DELETE FROM favorites WHERE longtitude LIKE :longtitude AND latitude LIKE :latitude")
     fun deleteFav(longtitude: Double, latitude: Double)
 
     @Query("DELETE FROM favorites")

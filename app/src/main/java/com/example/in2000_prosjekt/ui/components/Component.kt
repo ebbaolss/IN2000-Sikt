@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.ui.database.Favorite
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
@@ -196,7 +198,7 @@ fun Sikt_BottomBar2( ) {
 }
 
 @Composable
-fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
+fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -222,8 +224,8 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
                     tint = Sikt_lyseblå
                 )
             }
-        }
 
+        }
         if (openDialog){
             AlertDialog(alertinfo = alertinfo){
                 openDialog = false
@@ -261,12 +263,30 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
             checked = checked,
             onCheckedChange = { checked = it },
         ) {
+            var alreadyFav by remember { mutableStateOf(false)}
+
+            viewModel.findFavorite(lon,lat,location,height)
+
+            Log.d("VIEWSIZE", "${viewModel.searchFavorites.value?.size}")
+            alreadyFav = if (viewModel.searchFavorites.value != null) {
+                if (viewModel.searchFavorites.value!!.isNotEmpty()) {
+                    viewModel.searchFavorites.value!![0].latitude == lat && viewModel.searchFavorites.value!![0].longtitude == lon
+                } else {
+                    false
+                }
+            } else {
+                false
+            }
+
+            Log.d("ALREADYFAV", "$alreadyFav")
+            Log.d("FAVORITE", "long: $lon , lat : $lat, loc : $location, height : $height")
             if (checked) {
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = "Localized description",
                     tint = Sikt_mørkeblå
                 )
+                viewModel.addFavorite(Favorite(lon,lat,location,height))
             } else {
                 Icon(
                     painterResource(id = R.drawable.outline_favorite),
@@ -385,14 +405,21 @@ fun Sikt_skyillustasjon() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>) {
+fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>, favorites: List<Favorite>, viewModel: FavoriteViewModel) {
     //favorites er en mutableList med LocationInfo kan derfor kalle
-    //favorite.temperatureL etc.
+    // favorite.temperatureL etc.
+
+    Log.d("INFOSIZE", "${weatherinfo.size}")
+    Log.d("FAVS", "${favorites.size}")
+    Log.d("AlertSIZE", "${alertInfo.size}")
+
     items(weatherinfo.size) {
-        weatherinfo.forEach { favorite ->
+            //Log.d("CARD", "STARTER CARD")
             val location = weatherinfo[it]
             val nowcast = nowcastinfo[it]
             val alertInfo = alertInfo[it]
+            val name = favorites[it].mountainName
+            val height = favorites[it].mountainHeight
 
             Card(
                 modifier = Modifier
@@ -408,10 +435,10 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Sikt_Header("fjelltopp", alertInfo)
-                    Sikt_MountainHight("1884")
+                    Sikt_Header(name,height, favorites[it].latitude, favorites[it].longtitude, alertInfo, viewModel)
+                    Sikt_MountainHight(height.toString())
                     illustrasjon(
-                        height = 1280,
+                        height = height,
                         temp = nowcast.temperatureNow,
                         vind = nowcast.windN,
                         weatherHigh = location.cloud_area_fraction_high,
@@ -422,7 +449,7 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
             }
         }
     }
-}
+
 
 fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mountain>, nowCastInfo: NowCastInfo) {
 

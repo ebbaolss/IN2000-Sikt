@@ -26,9 +26,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         longitude: String,
         altitude: String
     ): LocationInfo {
-        Log.d("getLocationEntry", "Entried")
         val forecast = dataSource.fetchLocationForecast(latitude, longitude, altitude)
-        Log.d("getLocation", "Data retrieved")
 
         val currentTimeMillis = System.currentTimeMillis()
         val date = Date(currentTimeMillis)
@@ -84,7 +82,6 @@ class ImplementedWeatherRepository : WeatherRepository {
         val cloud_day3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
         val cloud_day4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
 
-
         return LocationInfo(
             temperatureL = (temp ?: -273.5) as Float,
             fog_area_fractionL = airfog!!,
@@ -93,6 +90,7 @@ class ImplementedWeatherRepository : WeatherRepository {
             cloud_area_fraction_medium = cloud_mid!!,
             cloud_area_fraction_low = cloud_low!!,
             cloud_area_fraction = cloudiness!!,
+
             tempNext1 = tempNext1!!,
             tempNext2 = tempNext2!!,
             tempNext3 = tempNext3!!,
@@ -105,6 +103,7 @@ class ImplementedWeatherRepository : WeatherRepository {
             tempNext10 = tempNext10!!,
             tempNext11 = tempNext11!!,
             tempNext12 = tempNext12!!,
+            
             cloudinessNext1 = cloudinessNext1!!,
             cloudinessNext2 = cloudinessNext2!!,
             cloudinessNext3 = cloudinessNext3!!,
@@ -117,6 +116,7 @@ class ImplementedWeatherRepository : WeatherRepository {
             cloudinessNext10 = cloudinessNext10!!,
             cloudinessNext11 = cloudinessNext11!!,
             cloudinessNext12 = cloudinessNext12!!,
+            
             temp_day1 = temp_day1!!,
             temp_day2 = temp_day2!!,
             temp_day3 = temp_day3!!,
@@ -133,9 +133,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         longitude: String,
         altitude: String
     ): NowCastInfo {
-        Log.d("getNowCastEntry", "Entried")
         val forecastNow = dataSource.fetchNowCast(latitude, longitude, altitude)
-        Log.d("getNowCast", "Data retrieved")
 
         val tempNow =
             forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
@@ -148,9 +146,7 @@ class ImplementedWeatherRepository : WeatherRepository {
     }
 
     override suspend fun getSunrise(latitude: String, longitude: String): SunriseInfo {
-        Log.d("getSunriseEntry", "Entried")
         val sunrise = dataSunrise.fetchSunrise(latitude, longitude)
-        Log.d("getSunrise", "Data retrieved")
 
         val sunriseToday = sunrise.properties?.sunrise?.time
         val sunsetToday = sunrise.properties?.sunset?.time
@@ -162,9 +158,7 @@ class ImplementedWeatherRepository : WeatherRepository {
     }
 
     override suspend fun getAlert(latitude: String, longitude: String): MutableList<AlertInfo> {
-        Log.d("getAlertEntry", "Entried")
         val alert = dataMet.fetchMetAlert(latitude, longitude)
-        Log.d("getAlert", "Data retrieved")
 
         val alertList : MutableList<AlertInfo> = mutableListOf()
         //Dette er klønete, men appen kræsjer ikke hvis det ikke er fare
@@ -214,10 +208,6 @@ class ImplementedWeatherRepository : WeatherRepository {
         val typeFrost = frost.type
         val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
         val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
-
-        Log.d("typefrost", typeFrost.toString())
-        Log.d("lat", lat.toString())
-        Log.d("long", long.toString())
 
         return FrostInfo(
             sightcondition = typeFrost!!.toInt()

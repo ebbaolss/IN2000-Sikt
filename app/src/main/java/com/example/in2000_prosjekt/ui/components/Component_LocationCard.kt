@@ -1,5 +1,6 @@
 package com.example.in2000_prosjekt.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
@@ -19,6 +20,7 @@ import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
+import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
@@ -26,12 +28,15 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
-fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>){
+fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>,favoriteViewModel: FavoriteViewModel){
 
     items(1) {
 
         val name = mountain.name
         val elevation = mountain.elevation
+
+        val latitude = mountain.point?.latitude()
+        val longitude = mountain.point?.longitude()
 
         val weatherHigh = locationInfo.cloud_area_fraction_high
         val weatherMid = locationInfo.cloud_area_fraction_medium
@@ -55,7 +60,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
             Column(
                 modifier = Modifier.padding(20.dp),
             ) {
-                Sikt_Header(location = "$name", alertinfo = alertInfoList)
+                Sikt_Header(location = "$name", elevation!!, latitude!!, longitude!!, alertinfo = mutableListOf(), favoriteViewModel) // Husk å endre alertinfo
                 Sikt_MountainHight(mountainheight = "$elevation")
                 Spacer(modifier = Modifier.size(20.dp))
                 illustrasjon(elevation, temp, wind, weatherHigh, weatherMid, weatherLow)
