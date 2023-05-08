@@ -16,7 +16,8 @@ sealed interface MapUiState {
 
     data class Mountain(
         val name: String? = null,
-        val point: Point? = null,
+        val latitude : String? = null,
+        val longitude: String? = null,
         val elevation: Int? = null
     )
 

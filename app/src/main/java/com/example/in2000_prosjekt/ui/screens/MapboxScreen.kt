@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
@@ -62,8 +63,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
-import com.example.in2000_prosjekt.R
-import com.example.in2000_prosjekt.ui.SearchbarMapViewModel
+import com.example.in2000_prosjekt.ui.*
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,9 +88,7 @@ fun ShowMap(
 
     Scaffold(
         topBar = {
-            SearchBar(SearchbarMapViewModel(), {focusManager.clearFocus()
-                println("clear")
-            }) { /* locationCardState = true */ }
+            SearchBar(mapViewModel, apiViewModel, {focusManager.clearFocus()}, {locationCardState = true}) { /* locationCardState = true */ }
         },
         bottomBar = {
             Sikt_BottomBar(
@@ -146,7 +145,7 @@ fun ShowMap(
                             // Henter kamerakoordinater fra UiState
                             val lng = cameraOptionsUiState.currentScreenLongitude
                             val lat = cameraOptionsUiState.currentScreenLatitude
-                            val zoom = cameraOptionsUiState.currentScreenZoom
+                            //val zoom = cameraOptionsUiState.currentScreenZoom
 
                             Log.d("Update Camera Coordinates", "Lng: $lng, Lat: $lat")
 
@@ -221,11 +220,11 @@ fun onCameraChange(mapboxMap: MapboxMap, viewModel: MapViewModel) {
     Log.d("onCameraChange", "Coordinates $screenCenter, Zoom level: $zoom")
 }
 
-fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraOptions) : MapView {
+fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraOptions) : MapView {
 
     val mapView = MapView(xt).apply {
         val mapboxMap = getMapboxMap()
-        val cameraOptionsUiState = cameraOptionsUiState
+        val cameraOptionsUiState = CameraOptionsUiState
 
         mapboxMap.loadStyle(
             // Declares map style
@@ -300,14 +299,13 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
                 val name = feature.getStringProperty("name")
                 val elevation = feature.getStringProperty("elevation_m").toInt()
                 val point = feature.geometry() as Point
+                val latitude =  point.latitude().toString()
+                val longitude = point.longitude().toString()
 
                 // Saving a clicked mountain to the UiState through the view model
-                mapViewModel.updateMountain(MapUiState.Mountain(name, point, elevation))
+                mapViewModel.updateMountain(MapUiState.Mountain(name, latitude, longitude, elevation))
 
-                val latitude =  point.latitude()
-                val longitude = point.longitude()
-
-                apiViewModel.getAll("$latitude", "$longitude", "$elevation")
+                apiViewModel.getAll(latitude, longitude, "$elevation")
 
                 onClick()
 
@@ -339,18 +337,19 @@ fun onFeatureClicked(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit, clearFocus : () -> Unit){
-    //MANGLER :
-    // at tastaturet forsvinner når man trykker på kart
+fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : () -> Unit, clearFocus : () -> Unit, onClick : () -> Unit){
 
-    val mapUiState = viewModel.appUiState.collectAsState()
+    val mapUiState = viewModel.mapInfoUiState.collectAsState()
+    val mapCooUiState = viewModel.CoordinatesUiState.collectAsState()
 
     var input by remember { mutableStateOf("") }
     var isTextFieldFocused by remember { mutableStateOf(false) }
     val recentSearchHashmap : HashMap<String, String> = hashMapOf()
-    //val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var showRecent = true
+
+    //bare midlertidlig
+    val elevetion = 2469
 
     LazyColumn(
         modifier = Modifier
@@ -457,15 +456,23 @@ fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit, clearFocu
 
                             viewModel.updateRecentSearch(mountain, false)
 
-                            viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!)
+                            viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!, mountain, elevetion)
 
-                            //focusManager.clearFocus()
                             clearFocus()
                             showRecent = true
 
                             onSearch()
-                            //bruke koordinatene over til å få opp card
 
+                            //------------------For å få opp card---------------
+
+                            println("se")
+                            println(mapCooUiState.value.latitude.toString())
+                            println(mapCooUiState.value.longitude.toString())
+
+                            //endre altitude på linja nedenfor!!
+                            ///viewModel.getAllSearch(mapCooUiState.value.latitude.toString(), mapCooUiState.value.longitude.toString(), elevetion.toString())
+                            //bruke koordinatene over til å få opp card
+                            onClick()
                         }),
 
                     verticalAlignment = Alignment.CenterVertically
@@ -493,42 +500,79 @@ fun SearchBar(viewModel: SearchbarMapViewModel, onSearch : () -> Unit, clearFocu
             }
         }
         if (isTextFieldFocused && !showRecent) {
+            if (mapUiState.value.optionMountains.size == 0){
+                item {
 
-            items(mapUiState.value.optionMountains.keys.toList()) { mountain ->
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White)
-                        .height(40.dp)
-                        .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
-                        .clickable( enabled = true, onClick = {
-
-                            viewModel.updateRecentSearch(mountain, false)
-
-                            recentSearchHashmap[mountain] = mapUiState.value.optionMountains[mountain]!!
-
-                            viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!)
-
-                            //focusManager.clearFocus()
-                            clearFocus()
-                            showRecent = true
-
-                            //skal gjøre den true så carded vises i ShowMap():
-                            onSearch()
-
-                        }),
-
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Text(
-                        text = mountain,
-                        fontSize = 15.sp,
+                    Row(
                         modifier = Modifier
-                            .weight(1f),
-                        textAlign = TextAlign.Start,
-                    )
+                            .fillMaxWidth()
+                            .background(Color.White)
+                            .height(40.dp)
+                            .padding(start = 20.dp, top = 9.dp, bottom = 7.dp),
+
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Text(
+                            text = "Finner ikke topp",
+                            fontSize = 15.sp,
+                            modifier = Modifier
+                                .weight(1f),
+                            textAlign = TextAlign.Start,
+                        )
+                    }
+                }
+            } else {
+
+                items(mapUiState.value.optionMountains.keys.toList()) { mountain ->
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White)
+                            .height(40.dp)
+                            .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
+                            .clickable( enabled = true, onClick = {
+
+                                viewModel.updateRecentSearch(mountain, false)
+
+                                recentSearchHashmap[mountain] = mapUiState.value.optionMountains[mountain]!!
+
+                                viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!, mountain, elevetion)
+
+                                //focusManager.clearFocus()
+                                clearFocus()
+                                showRecent = true
+
+                                //skal gjøre den true så carded vises i ShowMap():
+                                onSearch()
+
+                                //------------------For å få opp card---------------
+
+                                println("se2")
+                                println(mapCooUiState.value.latitude.toString())
+                                println(mapCooUiState.value.longitude.toString())
+
+                                //endre altitude på linja nedenfor!!
+                                //denne funker ikke fordi variablene rekker ikke å bli oppdatert før getAll kjøres.
+                                //så heller kalle på den i mapViewModel? men teit å kalle på et annet viewmodel fra et viewmodel
+                                //viewModel.getAllSearch(mapCooUiState.value.latitude.toString(), mapCooUiState.value.longitude.toString(), elevetion.toString())
+                                //bruke koordinatene over til å få opp card
+                                onClick()
+
+                            }),
+
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Text(
+                            text = mountain,
+                            fontSize = 15.sp,
+                            modifier = Modifier
+                                .weight(1f),
+                            textAlign = TextAlign.Start,
+                        )
+                    }
                 }
             }
         }

@@ -27,11 +27,6 @@ class APIViewModel () : ViewModel()
     private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
-
-    private val currentLatitude = 61.651356077904666
-    private val currentLongitude = 8.557801680731075
-    private val altitude: String = "600"
-
     fun getAll(latitude: String, longitude: String, altitude: String) {
         viewModelScope.launch() {
             try {
