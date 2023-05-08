@@ -280,6 +280,91 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
 }
 
 @Composable
+fun Sikt_Favorite_Header(location : String, viewModel: FavoriteViewModel, alertinfo: MutableList<AlertInfo>) {
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        var openDialog by remember {
+            mutableStateOf(false)
+        }
+        if (alertinfo.size != 0) {
+            AlertButton(alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA) {
+                openDialog = true
+            }
+        } else {
+            // For å fikse at fjelltopp-text blir midtstilt
+            IconToggleButton(
+                checked = false,
+                onCheckedChange = { },
+            ) {
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = "Localized description",
+                    tint = Sikt_lyseblå
+                )
+            }
+        }
+
+        if (openDialog) {
+            AlertDialog(alertinfo = alertinfo) {
+                openDialog = false
+            }
+        }
+
+        if (location.length <= 10) {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center
+            )
+        } else if (location.length <= 15) {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        } else {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        var checked by remember { mutableStateOf(true) }
+
+        IconToggleButton(
+            checked = checked,
+            onCheckedChange = { checked = it },
+        ) {
+            if (checked) {
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = "Localized description",
+                    tint = Sikt_mørkeblå
+                )
+            } else {
+                Icon(
+                    painterResource(id = R.drawable.outline_favorite),
+                    contentDescription = "Localized description",
+                    tint = Sikt_mørkeblå
+                )
+            }
+            //onClick = { viewModel.deleteFavorite() }
+        }
+    }
+}
+
+@Composable
 fun Sikt_MountainHight(mountainheight : String) {
     Text(
         text = "$mountainheight m.o.h",
@@ -869,10 +954,7 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
-
-    var fjell = "Fmemmolmmm moonfjell"
-
-
+    
     Card(
         colors = CardDefaults.cardColors(Sikt_lyseblå),
         modifier = Modifier.padding(20.dp),
@@ -880,42 +962,7 @@ fun TestComponent() {
         Column(
             modifier = Modifier.padding(20.dp),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,   
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                IconToggleButton(checked = false, onCheckedChange = { },) { Icon(Icons.Filled.Favorite, contentDescription = "Localized description", tint = Sikt_mørkeblå) }
-
-                if (fjell.length <= 10) {
-                    Text(
-                        modifier = Modifier.weight(2f),
-                        text = fjell,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp,
-                        textAlign = TextAlign.Center
-                    )
-                } else if (fjell.length <= 15) {
-                    Text(
-                        modifier = Modifier.weight(2f),
-                        text = fjell,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
-                        textAlign = TextAlign.Center
-                    )
-                } else {
-                    Text(
-                        modifier = Modifier.weight(2f),
-                        text = fjell,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
-                        textAlign = TextAlign.Center
-                    )
-                }
-                IconToggleButton(checked = false, onCheckedChange = { },) { Icon(Icons.Filled.Favorite, contentDescription = "Localized description", tint = Sikt_mørkeblå) }
-            }
+            ///Sikt_Favorite_Header(location, viewModel, alertinfo)
         }
     }
 }
-
