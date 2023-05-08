@@ -49,14 +49,14 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
 
     Log.d("FAVS", "${allFavorites.size}")
     //viewModel.deleteAll()
-    if(allFavorites.size > 0){
+    if(allFavorites.isNotEmpty()){
         viewModel.update()
     } else {
         FavoriteEmpty(
             onNavigateToMap = onNavigateToMap,
             onNavigateToFav = onNavigateToFav,
-            onNavigateToSettings = onNavigateToSettings) {
-        }
+            onNavigateToInfo = onNavigateToInfo,
+            onNavigateToSettings = onNavigateToSettings)
     }
 
     when(favoriteUiState){
@@ -90,7 +90,8 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 FavoriteEmpty(
                     onNavigateToMap = onNavigateToMap,
                     onNavigateToFav = onNavigateToFav,
-                    onNavigateToSettings = onNavigateToSettings){}
+                    onNavigateToInfo = onNavigateToInfo,
+                    onNavigateToSettings = onNavigateToSettings)
             }
         }
     }
@@ -135,7 +136,7 @@ fun FavoriteScreenSuccess(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteEmpty(
-    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit
+    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit,onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit
 ){
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favorite = true, map = false, info = false, settings = false)}
     ) {
