@@ -50,7 +50,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
 
         Card(
             colors = CardDefaults.cardColors(Sikt_lyseblå),
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
         ){
             Column(
                 modifier = Modifier.padding(20.dp),

@@ -194,8 +194,8 @@ fun ShowMap(
 
                         LazyColumn(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(top = 65.dp, bottom = 70.dp)
+                                //.fillMaxSize()
+                                .padding(top = 70.dp, bottom = 70.dp, start = 20.dp, end = 20.dp)
                         ) {
                             // Må legge inn listen over fjelltopper i nærheten:
                             Sikt_LocationCard(
