@@ -2,6 +2,8 @@ package com.example.in2000_prosjekt.ui.data
 
 import android.util.Log
 import com.example.in2000_prosjekt.ui.*
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class ImplementedWeatherRepository : WeatherRepository {
 
@@ -28,6 +30,16 @@ class ImplementedWeatherRepository : WeatherRepository {
         val forecast = dataSource.fetchLocationForecast(latitude, longitude, altitude)
         Log.d("getLocation", "Data retrieved")
 
+        val currentTimeMillis = System.currentTimeMillis()
+        val date = Date(currentTimeMillis)
+        val dateFormat = SimpleDateFormat("HH")
+        val tidspunkt = dateFormat.format(date)
+
+        val timeDay1 = 24-tidspunkt.toInt()+12
+        val timeDay2 = 24-tidspunkt.toInt()+12+24
+        val timeDay3 = 24-tidspunkt.toInt()+12+48
+        val timeDay4 = 24-tidspunkt.toInt()+12+72
+
         val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
         val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
         val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.precipitation_amount
@@ -36,12 +48,42 @@ class ImplementedWeatherRepository : WeatherRepository {
         val cloud_low = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_low
         val cloudiness = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction
 
-        val tempNext6 = forecast.properties?.timeseries?.get(0)?.data?.next_6_hours?.details?.air_temperature_max
-        val cloudinessNext1 = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.summary?.get("symbol_code")
-        val cloudinessNext6 = forecast.properties?.timeseries?.get(0)?.data?.next_6_hours?.summary?.get("symbol_code")
+        val tempNext1 = forecast.properties?.timeseries?.get(1)?.data?.instant?.details?.air_temperature
+        val tempNext2 = forecast.properties?.timeseries?.get(2)?.data?.instant?.details?.air_temperature
+        val tempNext3 = forecast.properties?.timeseries?.get(3)?.data?.instant?.details?.air_temperature
+        val tempNext4 = forecast.properties?.timeseries?.get(4)?.data?.instant?.details?.air_temperature
+        val tempNext5 = forecast.properties?.timeseries?.get(5)?.data?.instant?.details?.air_temperature
+        val tempNext6 = forecast.properties?.timeseries?.get(6)?.data?.instant?.details?.air_temperature
+        val tempNext7 = forecast.properties?.timeseries?.get(7)?.data?.instant?.details?.air_temperature
+        val tempNext8 = forecast.properties?.timeseries?.get(8)?.data?.instant?.details?.air_temperature
+        val tempNext9 = forecast.properties?.timeseries?.get(9)?.data?.instant?.details?.air_temperature
+        val tempNext10 = forecast.properties?.timeseries?.get(10)?.data?.instant?.details?.air_temperature
+        val tempNext11 = forecast.properties?.timeseries?.get(11)?.data?.instant?.details?.air_temperature
+        val tempNext12 = forecast.properties?.timeseries?.get(12)?.data?.instant?.details?.air_temperature
 
-        Log.d("cloudinessNext1", "$cloudinessNext1")
-        Log.d("cloudinessNext6", "$cloudinessNext6")
+        val cloudinessNext1 = forecast.properties?.timeseries?.get(1)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext2 = forecast.properties?.timeseries?.get(2)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext3 = forecast.properties?.timeseries?.get(3)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext4 = forecast.properties?.timeseries?.get(4)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext5 = forecast.properties?.timeseries?.get(5)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext6 = forecast.properties?.timeseries?.get(6)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext7 = forecast.properties?.timeseries?.get(7)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext8 = forecast.properties?.timeseries?.get(8)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext9 = forecast.properties?.timeseries?.get(9)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext10 = forecast.properties?.timeseries?.get(10)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext11 = forecast.properties?.timeseries?.get(11)?.data?.instant?.details?.cloud_area_fraction
+        val cloudinessNext12 = forecast.properties?.timeseries?.get(12)?.data?.instant?.details?.cloud_area_fraction
+
+        val temp_day1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.air_temperature
+        val temp_day2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.air_temperature
+        val temp_day3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature
+        val temp_day4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature
+
+        val cloud_day1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.cloud_area_fraction
+        val cloud_day2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.cloud_area_fraction
+        val cloud_day3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
+        val cloud_day4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
+
 
         return LocationInfo(
             temperatureL = (temp ?: -273.5) as Float,
@@ -51,10 +93,38 @@ class ImplementedWeatherRepository : WeatherRepository {
             cloud_area_fraction_medium = cloud_mid!!,
             cloud_area_fraction_low = cloud_low!!,
             cloud_area_fraction = cloudiness!!,
-            tempNext1L = temp!!,
-            tempNext6L = tempNext6!!,
-            cloudinessNext1L = cloudinessNext1!!,
-            cloudinessNext6L = cloudinessNext6!!,
+            tempNext1 = tempNext1!!,
+            tempNext2 = tempNext2!!,
+            tempNext3 = tempNext3!!,
+            tempNext4 = tempNext4!!,
+            tempNext5 = tempNext5!!,
+            tempNext6 = tempNext6!!,
+            tempNext7 = tempNext7!!,
+            tempNext8 = tempNext8!!,
+            tempNext9 = tempNext9!!,
+            tempNext10 = tempNext10!!,
+            tempNext11 = tempNext11!!,
+            tempNext12 = tempNext12!!,
+            cloudinessNext1 = cloudinessNext1!!,
+            cloudinessNext2 = cloudinessNext2!!,
+            cloudinessNext3 = cloudinessNext3!!,
+            cloudinessNext4 = cloudinessNext4!!,
+            cloudinessNext5 = cloudinessNext5!!,
+            cloudinessNext6 = cloudinessNext6!!,
+            cloudinessNext7 = cloudinessNext7!!,
+            cloudinessNext8 = cloudinessNext8!!,
+            cloudinessNext9 = cloudinessNext9!!,
+            cloudinessNext10 = cloudinessNext10!!,
+            cloudinessNext11 = cloudinessNext11!!,
+            cloudinessNext12 = cloudinessNext12!!,
+            temp_day1 = temp_day1!!,
+            temp_day2 = temp_day2!!,
+            temp_day3 = temp_day3!!,
+            temp_day4 = temp_day4!!,
+            cloud_day1 = cloud_day1!!,
+            cloud_day2 = cloud_day2!!,
+            cloud_day3 = cloud_day3!!,
+            cloud_day4 = cloud_day4!!,
         )
     }
 

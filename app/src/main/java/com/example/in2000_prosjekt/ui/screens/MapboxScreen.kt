@@ -19,8 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.in2000_prosjekt.R
+import com.example.in2000_prosjekt.ui.APIViewModel
+import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
+import com.example.in2000_prosjekt.ui.components.*
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
 import com.example.in2000_prosjekt.ui.database.MapViewModel
@@ -69,8 +72,8 @@ import com.example.in2000_prosjekt.ui.*
 fun ShowMap(
     onNavigateToMap: () -> Unit,
     onNavigateToFav: () -> Unit,
+    onNavigateToInfo: () -> Unit,
     onNavigateToSettings: () -> Unit,
-    onNavigateToRules: () -> Unit,
     mapViewModel: MapViewModel,
     apiViewModel: APIViewModel
 ) {
@@ -91,10 +94,10 @@ fun ShowMap(
             Sikt_BottomBar(
                 onNavigateToMap,
                 onNavigateToFav,
-                onNavigateToRules,
+                onNavigateToInfo,
                 onNavigateToSettings,
-                favoritt = false,
-                rules = false,
+                favorite = false,
+                info = false,
                 map = true,
                 settings = false
             )
@@ -184,7 +187,7 @@ fun ShowMap(
                     is AppUiState.Error -> {
                         FavoriteScreenError( onNavigateToMap,
                             onNavigateToFav,onNavigateToSettings,
-                            onNavigateToRules)
+                            onNavigateToInfo)
                     }
                     is AppUiState.Success -> {
                         Log.d("Location Card", "Initialising")

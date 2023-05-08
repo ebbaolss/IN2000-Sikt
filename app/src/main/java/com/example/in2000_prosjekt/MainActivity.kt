@@ -86,14 +86,14 @@ fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapVi
         launchSingleTop = true
         restoreState = true
     } }
-    val rules = { navController.navigate("Rules") {
+    val info = { navController.navigate("Info") {
         popUpTo(navController.graph.findStartDestination().id) {
             saveState = true
         }
         launchSingleTop = true
         restoreState = true
     } }
-    val settings = {navController.navigate("Info") {
+    val settings = {navController.navigate("Settings") {
         popUpTo(navController.graph.findStartDestination().id) {
             saveState = true
         }
@@ -107,10 +107,10 @@ fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapVi
         startDestination = "StartPage") {
 
         composable("StartPage") { StartPage( onNavigateToNext = { navController.navigate("Map") })  }
-        composable("Map") { ShowMap(map, favorite, settings, rules, mapviewmodel, apiViewModel)  }
-        composable("Favorite") { FavoriteScreen(onNavigateToMap = map, onNavigateToFav = favorite, onNavigateToSettings = settings, onNavigateToRules = rules, viewModel = favoriteViewModel, apiViewModel = apiViewModel) }
-        composable("Rules") { RulesScreen(map, favorite, settings, rules) }
-        composable("Info") { SettingsScreen(map, favorite, settings, rules, favoriteViewModel) }
+        composable("Map") { ShowMap(map, favorite, info, settings, mapviewmodel, apiViewModel)  }
+        composable("Favorite") { FavoriteScreen(map, favorite, info, settings, favoriteViewModel, apiViewModel) }
+        composable("Info") { InfoScreen(map, favorite, info, settings, favoriteViewModel) }
+        composable("Settings") { SettingsScreen(map, favorite, info, settings, favoriteViewModel) }
         composable("Database") { DatabaseScreenTest(favoriteViewModel) }
     }
 }
