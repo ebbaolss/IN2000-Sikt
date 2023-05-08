@@ -18,6 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,6 +29,7 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
+import com.example.in2000_prosjekt.ui.components.Sikt_SettingsCard
 import com.example.in2000_prosjekt.ui.database.Favorite
 import com.example.in2000_prosjekt.ui.database.FavoriteUiState
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
@@ -109,17 +112,20 @@ fun FavoriteScreenSuccess(
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, favorite = true, info = false, map = false, settings = false)}
     ) {
         Log.d("SIZELOC", " ${(favoriteUiState as FavoriteUiState.Success).locationF.size}")
-        LazyColumn(
-            contentPadding = PaddingValues(20.dp)
-        ) {
-            if (allFavorites.size != 0) {
-                Sikt_Favorite_card(
-                    (favoriteUiState as FavoriteUiState.Success).locationF,
-                    (favoriteUiState as FavoriteUiState.Success).nowCastF,
-                    (favoriteUiState as FavoriteUiState.Success).alertListF,
-                    allFavorites,
-                    viewModel
-                )
+
+        Box(modifier = Modifier.paint(painterResource(id = R.drawable.map_backround), contentScale = ContentScale.FillBounds).fillMaxSize()) {
+            LazyColumn(
+                contentPadding = PaddingValues(20.dp)
+            ) {
+                if (allFavorites.size != 0) {
+                    Sikt_Favorite_card(
+                        (favoriteUiState as FavoriteUiState.Success).locationF,
+                        (favoriteUiState as FavoriteUiState.Success).nowCastF,
+                        (favoriteUiState as FavoriteUiState.Success).alertListF,
+                        allFavorites,
+                        viewModel
+                    )
+                }
             }
         }
     }
@@ -134,10 +140,12 @@ fun FavoriteEmpty(
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favorite = true, map = false, info = false, settings = false)}
         ,modifier = Modifier.padding(20.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(20.dp)
-        ) {
-            Text(text = "NO FAVORITES")
+        Box(modifier = Modifier.paint(painterResource(id = R.drawable.map_backround), contentScale = ContentScale.FillBounds)) {
+            Column(
+                modifier = Modifier.padding(20.dp)
+            ) {
+                Text(text = "NO FAVORITES")
+            }
         }
     }
 }
