@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.uistate.FrostReferenceTime
@@ -133,23 +134,34 @@ class ImplementedWeatherRepository : WeatherRepository {
         return alertList
     }
 
-    // Dette er forsøk Alt:.1.2           kl.19.34, 04.05.23 : alt.
 
+
+    val testdatesMutableLiveData = MutableLiveData<String>("2021-2%2F2021-3")
 
     val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
-
-    var data: String ="2021-1%2F2021-2"
+    var data: String = "2021-10%2F2021-11" //---------------Dette er variablen vi ønsker å endre
     //var datamutable
+    var a  = mutableStateOf("")
+    var b : String =""
+    var c : String =""
 
-    override suspend fun getReferencetimeFrost( calenderreferencetime: String )   { // denne er ikke suspend
-        // val referencetime = referencetime
-        //dataFrost.getReferencetimeFrost(referencetime)
-        //var TimeReferencemutablestring =  MutableLiveData<String>()
+    init{
+        //data ="2021-1%2F2021-2" // Dette funket ikke, kl 13.00, 08.05
 
+    }
+    override suspend fun getReferencetimeFrost( calenderreferencetime: String ): String   { //---------------Dette er rikitg dato
         data= calenderreferencetime
-        Log.d("repositoryvaibledata",data)
+        a.value= calenderreferencetime
+        b= calenderreferencetime
+        dataFrost.getReferencetimeFrost(calenderreferencetime)
 
-
+        dataFrost.referenceDatoer.value=calenderreferencetime
+        dataFrost.data=calenderreferencetime
+        Log.d("repositoryvaibledataz",data) //---------------Dette er rikitg dato
+        Log.d("testt",calenderreferencetime) //---------------Dette er rikitg dato
+        Log.d("sdsdsdsdsd",a.value) //---------------Dette er rikitg dato
+        Log.d("sdsdsdsdseed",b) //---------------Dette er rikitg dato
+        return data
 
     }
 
@@ -158,22 +170,24 @@ class ImplementedWeatherRepository : WeatherRepository {
 
     override suspend fun getFrost(latitude: String, longitude: String ): FrostInfo { //åssen får jeg referense time inni her:
 
+        val tessstt = dataFrost.data
+
         Log.d("Saalangt", data)
+        Log.d("Saalangt45454frafrost", tessstt)
+        Log.d("Saalangdost", a.value)
         val frostPolygon = dataFrost.fetchFrostWeatherStation(   latitude.toDouble(), longitude.toDouble() )
         val weatherstationid  = frostPolygon.data!!.get(0).id // en værstasjon sin ID: Blindern = SN18700
 
+
+
+        val test1datesMutableLiveData =testdatesMutableLiveData
+        Log.d("test1datesMutableLiveData",  test1datesMutableLiveData.value!!)
         Log.d("SN på første responsobjekt: skal være SN63595",  weatherstationid!!)
 
-        val frost = dataFrost.fetchFrost( weatherstationid!!, referencetime = data )
+        val frost = dataFrost.fetchFrost( weatherstationid!!, referencetime = data )  //---------------Dette er rikitg dato
 
-        //Kommentar 22.04, her har vi 2 tilnmmærminger å gjære et apicall
-        // Alt 1: å gjøre et apicall per dag inni calendern vår
 
-        // eller Alt2: Å gjøre et apicall på en periode fra 01. av måneden til 30. av måneden
-        //Gammel fra før tilnærming tipset av emil som best: val sightconditions = frost.data?.get(0)?.observations?.get(0)?.value?.toInt() // Denne linjen avgjør tilnærming: Synes alt 1 var ryddigst
-
-        val sightconditionsListofDataforMonth = frost.data // Denne linjen avgjør tilnærming: Synes alt 1 var ryddigst
-
+        val sightconditionsListofDataforMonth = frost.data
 
         return FrostInfo(
             sightconditionListofDataforMonth = sightconditionsListofDataforMonth!!

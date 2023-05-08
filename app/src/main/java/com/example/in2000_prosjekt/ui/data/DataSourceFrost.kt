@@ -92,6 +92,23 @@ class DataSourceFrost (val basePath: String, /* var referencetime: String = "202
     //var  referencetime  : String = "2021-05-12"
 
 
+    var datoene = MutableLiveData<String> ("Ennellerannendato") // trenger denne en init
+
+    init {
+      //  datoene = "2021-9%2F2021-10"
+    }
+
+    var data: String = "dummyverdisomskalVæreOverwritten i metoden getReferencetimeFrost"
+    suspend fun getReferencetimeFrost( calenderreferencetime: String ): String   { //---------------Dette er rikitg dato
+        data= calenderreferencetime
+        //datoene.value=calenderreferencetime // denne
+        datoene.postValue(calenderreferencetime) // får denne java.lang.IllegalStateException: Cannot invoke setValue on a background thread
+
+        return calenderreferencetime
+
+        Log.d("CalenderreferenceInniDatasource'frost", data) //---------------Dette er rikitg dato
+        Log.d("DatoeneIScope",datoene.value!!) //---------------Dette er rikitg dato
+    }
 
 
 
@@ -99,8 +116,7 @@ class DataSourceFrost (val basePath: String, /* var referencetime: String = "202
 
 
 
-
-    var referenceDatoer= MutableStateFlow<String>("")
+    var referenceDatoer= MutableStateFlow<String>("dmmyvalue")
 
 
     //Log.d("referencetime", referencetime.toString() )
@@ -108,6 +124,12 @@ class DataSourceFrost (val basePath: String, /* var referencetime: String = "202
     var _referencetimeMutableStateFlow  = MutableStateFlow<String>("") // Error 5: MutableStateFlow Funka heeller ikke: Defaultveriden endrer seg aldri
 
     suspend fun fetchFrost(source: String, referencetime : String  ): FrostResponsBuild {
+
+
+       // val dattttt= getReferencetimeFrost()
+        Log.d("DatoeneUtenforScope",datoene.value!!) // kl.13.53 dato: 08.05
+        Log.d("DatoeneUtenforScopeThis.",this.data) // kl.14.34 08.05
+        Log.d("DatoeneUtenforScopeThis23334.",referenceDatoer.value) // kl.14.34 08.05
 
         Log.d("logg refrencetime inni fetchfrost",referencetime ) //  PostValue: Funka ikke
 

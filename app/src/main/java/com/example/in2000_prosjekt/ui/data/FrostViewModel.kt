@@ -38,8 +38,11 @@ public class FrostViewModel () : ViewModel() {
         viewModelScope.launch() {
             val referencetimedeffered = viewModelScope.async(Dispatchers.IO) {
                 repository.getReferencetimeFrost(referencetime)
+                //repository.testdatesMutableLiveData.postValue(referencetime) // funka ikke, kl 12.59, 08.05
+
             }
             val referencetime = referencetimedeffered.await()
+
 
             // kl.21.06, 06.05
             Log.d(" Referencetime sendes igjennom oppdatert! " , referencetime.toString() )

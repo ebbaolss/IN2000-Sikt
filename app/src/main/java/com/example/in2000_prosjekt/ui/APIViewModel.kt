@@ -78,8 +78,9 @@ class APIViewModel () : ViewModel()
                     repository.getAlert(latitude, longitude)
                 }
                 val alertP = alertDeferred.await()
+
                 val frostDeferred = viewModelScope.async(Dispatchers.IO) {
-                    repository.getFrost(latitude, longitude,)
+                    repository.getFrost(latitude, longitude,) // går ikke å sette funksjoenn getFrsot inni funksjonen getReferenceTime
                 }
                 val frostP = frostDeferred.await()
 
