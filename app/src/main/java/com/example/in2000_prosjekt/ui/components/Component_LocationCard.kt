@@ -199,10 +199,8 @@ fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo) {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            if (temp_day1 != null) {
-                Sikt_LocationCard_NextDaysContent("I dag", temp_day1, cloud_day1)
-                //endre denne til nowcast, temp_day1 er imorgen, altså dagens dato+1
-            }
+
+            Sikt_LocationCard_NextDaysContent("I dag", temp_day1, cloud_day1)
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
             Sikt_LocationCard_NextDaysContent("I morgen", temp_day2, cloud_day2)
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))

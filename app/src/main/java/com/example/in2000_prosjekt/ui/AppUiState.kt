@@ -32,7 +32,7 @@ data class LocationInfo( //gi ting navn med også L på slutten
     val cloudinessNext10: Float,
     val cloudinessNext11: Float,
     val cloudinessNext12: Float,
-    val temp_day1: Float?,
+    val temp_day1: Float,
     val temp_day2: Float,
     val temp_day3: Float,
     val temp_day4: Float,
