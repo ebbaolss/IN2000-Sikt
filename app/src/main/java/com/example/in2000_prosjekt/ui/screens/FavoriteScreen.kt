@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.R
@@ -29,11 +30,9 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
-import com.example.in2000_prosjekt.ui.components.Sikt_SettingsCard
 import com.example.in2000_prosjekt.ui.database.Favorite
 import com.example.in2000_prosjekt.ui.database.FavoriteUiState
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
-//import com.example.in2000_prosjekt.ui.components.Sikt_favoritt_tekst
 import com.example.in2000_prosjekt.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -138,18 +137,39 @@ fun FavoriteScreenSuccess(
 fun FavoriteEmpty(
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit,onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit
 ){
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favorite = true, map = false, info = false, settings = false)}
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToSettings, favorite = true, map = false, info = false, settings = false)}
     ) {
-        Box(modifier = Modifier.paint(painterResource(id = R.drawable.map_backround), contentScale = ContentScale.FillBounds).fillMaxSize()) {
-            Column(
-                modifier = Modifier.padding(20.dp).fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+        Box(
+            modifier = Modifier.paint(painterResource(id = R.drawable.map_backround),
+                contentScale = ContentScale.FillBounds).fillMaxSize())
+        {
+            Card(
+                colors = CardDefaults.cardColors(Sikt_lyseblå),
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 40.dp),
             ) {
-                Text(text = "NO FAVORITES", modifier = Modifier.background(Sikt_hvit))
+                Column(
+                    modifier = Modifier.padding(20.dp).fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    //verticalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        text = "Ingen favoritter enda...",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = "Hjertemarker en fjelltopp for å legge den til i favorittene dine",
+                        fontSize = 14.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }
 }
+
 
 
 
