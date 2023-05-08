@@ -10,6 +10,7 @@ class ImplementedWeatherRepository : WeatherRepository {
     val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
     val dataMap = DataSourceMap()
+
     //----------------------
     //Frost:
     var elements = "air_temperature"// Dette er værmålingen vi ønsker: For enkelthetsskyld så velges bare: air temperature
