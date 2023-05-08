@@ -1,34 +1,17 @@
 package com.example.in2000_prosjekt.ui.data
 
 import android.util.Log
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.uistate.FrostReferenceTime
-import com.example.in2000_prosjekt.ui.uistate.FrostReferencetimeUiState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import io.github.boguszpawlowski.composecalendar.header.MonthState
 
 class ImplementedWeatherRepository : WeatherRepository {
 
     val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") //dette er både forecast og nowcast
     val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-
-    //----------------------
-    //Frost: Disse variablene er uviktige per 03.05
-    //    var referencetime ="2021-05-17%2F2021-05-17" // Frost API, bruker UTC-tidsformat, denne ønskes senere å kunne bestemmes av en bruker ved hjelp av en Date picker (en bibloteksfunskjon i jetpack compose)
-    var elements = "air_temperature"// Dette er værmålingen vi ønsker: For enkelthetsskyld så velges bare: air temperature
-    //var url_med_Polygon ="https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=POLYGON((7.9982%2058.1447%20%2C%208.0982%2058.1447%20%2C7.9982%2058.2447%20%2C%208.0982%2058.2447%20))"
-    val source = "SN18700" //skjønner ikke denne, hvor får vi dette fra? Hva er det? Spørr Nebil
-    //----------------------
+    val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
 
     override suspend fun getLocation(
         latitude: String,
@@ -136,56 +119,23 @@ class ImplementedWeatherRepository : WeatherRepository {
 
 
 
-    val testdatesMutableLiveData = MutableLiveData<String>("2021-2%2F2021-3")
-
-    val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
-    var data: String = "2021-10%2F2021-11" //---------------Dette er variablen vi ønsker å endre
-    //var datamutable
-    var a  = mutableStateOf("")
-    var b : String =""
-    var c : String =""
-
-    init{
-        //data ="2021-1%2F2021-2" // Dette funket ikke, kl 13.00, 08.05
-
-    }
-    override suspend fun getReferencetimeFrost( calenderreferencetime: String ): String   { //---------------Dette er rikitg dato
-        data= calenderreferencetime
-        a.value= calenderreferencetime
-        b= calenderreferencetime
-        dataFrost.getReferencetimeFrost(calenderreferencetime)
-
-        dataFrost.referenceDatoer.value=calenderreferencetime
-        dataFrost.data=calenderreferencetime
-        Log.d("repositoryvaibledataz",data) //---------------Dette er rikitg dato
-        Log.d("testt",calenderreferencetime) //---------------Dette er rikitg dato
-        Log.d("sdsdsdsdsd",a.value) //---------------Dette er rikitg dato
-        Log.d("sdsdsdsdseed",b) //---------------Dette er rikitg dato
-        return data
-
-    }
 
 
 
 
-    override suspend fun getFrost(latitude: String, longitude: String ): FrostInfo { //åssen får jeg referense time inni her:
+    override suspend fun getFrost(latitude: String, longitude: String, referencetime: MonthState): FrostInfo { //åssen får jeg referense time inni her:
 
-        val tessstt = dataFrost.data
 
-        Log.d("Saalangt", data)
-        Log.d("Saalangt45454frafrost", tessstt)
-        Log.d("Saalangdost", a.value)
         val frostPolygon = dataFrost.fetchFrostWeatherStation(   latitude.toDouble(), longitude.toDouble() )
         val weatherstationid  = frostPolygon.data!!.get(0).id // en værstasjon sin ID: Blindern = SN18700
 
 
 
-        val test1datesMutableLiveData =testdatesMutableLiveData
-        Log.d("test1datesMutableLiveData",  test1datesMutableLiveData.value!!)
         Log.d("SN på første responsobjekt: skal være SN63595",  weatherstationid!!)
 
-        val frost = dataFrost.fetchFrost( weatherstationid!!, referencetime = data )  //---------------Dette er rikitg dato
+        val frost = dataFrost.fetchFrost( weatherstationid!!, referencetime = referencetime )  //---------------Dette er rikitg dato
 
+        Log.d("Dette er referencetime som endes gjennom",  referencetime.currentMonth.toString()!!)
 
         val sightconditionsListofDataforMonth = frost.data
 

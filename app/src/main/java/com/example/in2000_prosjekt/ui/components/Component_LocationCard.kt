@@ -18,18 +18,15 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_sort
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
-import com.mapbox.geojson.Point
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.data.FrostViewModel
 import com.example.in2000_prosjekt.ui.theme.*
-import com.example.in2000_prosjekt.ui.uistate.FrostReferencetimeUiState
-import kotlinx.coroutines.runBlocking
+import io.github.boguszpawlowski.composecalendar.header.MonthState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>, frostinfo: FrostInfo, apiViewModel: APIViewModel, frostViewModel: FrostViewModel){
+fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>, frostinfo: FrostInfo,  monthState: MonthState){
 
     val name = mountain.name
     val elevation = mountain.elevation
@@ -69,8 +66,9 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
             Spacer(modifier = Modifier.size(20.dp))
 
 
+
             // her skal kalendern brukes:
-            Sikt_Historisk_Kalender(   apiViewModel , frostinfo , frostViewModel)
+            Sikt_Historisk_Kalender(    frostinfo , monthState)
 
 
         /*

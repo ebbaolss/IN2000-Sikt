@@ -1,8 +1,7 @@
 package com.example.in2000_prosjekt.ui.data
 
-import androidx.lifecycle.MutableLiveData
 import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.uistate.FrostReferenceTime
+import io.github.boguszpawlowski.composecalendar.header.MonthState
 
 interface WeatherRepository {
    // abstract val testdatesMutableLiveData: MutableLiveData<String> funka ikke
@@ -11,8 +10,7 @@ interface WeatherRepository {
     suspend fun getNowCast(latitude: String, longitude: String, altitude: String) : NowCastInfo
     suspend fun getSunrise(latitude: String, longitude: String) : SunriseInfo
     suspend fun getAlert(latitude: String, longitude: String) : MutableList<AlertInfo>
-    suspend fun getFrost(latitude: String, longitude: String ) : FrostInfo
-    suspend fun  getReferencetimeFrost( referencetime: String ): String
+    suspend fun getFrost(latitude: String, longitude: String, referencetime: MonthState) : FrostInfo
 
 }
 

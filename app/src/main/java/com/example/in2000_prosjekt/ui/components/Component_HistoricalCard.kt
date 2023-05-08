@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -17,10 +16,8 @@ import androidx.compose.ui.unit.dp
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.FrostInfo
-import com.example.in2000_prosjekt.ui.data.FrostViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.uistate.FrostReferencetimeUiState
 import io.github.boguszpawlowski.composecalendar.CalendarState
 import io.github.boguszpawlowski.composecalendar.StaticCalendar
 import io.github.boguszpawlowski.composecalendar.day.NonSelectableDayState
@@ -29,7 +26,6 @@ import io.github.boguszpawlowski.composecalendar.rememberCalendarState
 import io.github.boguszpawlowski.composecalendar.selection.EmptySelectionState
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.YearMonth
 
 @Composable
 fun Sikt_Historisk_KalenderGammelogNotMine() {
@@ -51,7 +47,7 @@ fun Sikt_Historisk_KalenderGammelogNotMine() {
 //I vår composable funksjon som generer kalenderen vår (se neste Composable-funskjon: StaticCalender() ) så kan man bestemme innholdet til de ulike bestanddelene av en kalender, slikt som tittel, plassering av de ulike trykkbare komponetene i kalenderen, om den er scrollbar etc.
 //Dette er funksjonen som bestemmer dagsinnholdet i hver dag kalenderen StaticCalender()
 @Composable
-fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewModel: APIViewModel ) : MutableList<LocalDate> {
+fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  ) : MutableList<LocalDate> {
     var alledager = mutableListOf<LocalDate>()
     Card(modifier = Modifier
         .aspectRatio(1f)
@@ -71,7 +67,6 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
             val sightconditions = frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.observations?.get(0)?.value // tallet skal jo starte med den 28
 
            val referenceTime11 =frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.referenceTime
-            Log.d("Verdi og dag INNI kalenderdagene", "Plassnummer i arrayet"+ datoIArraylista+"Verdi: "+ sightconditions.toString()  + "Dato på dagen:"+ referenceTime11  ) // Er hele datoen for en kalenderdag: 2021-05-21
 
 
 
@@ -87,7 +82,6 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
             val helelocaldate = dayState.date// er 181, altså den 01.05 er liksom dag 181 av året
             val substringavkalender: String =year+helelocaldate?.toString()?.substring(4,10).toString()
 
-            Log.d("Dette er lokaldateee", substringavkalender ) // Er hele datoen for en kalenderdag: 2021-05-21
 
 
             val sightconditionsforAParticularDate = frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.observations?.get(0)?.value // tallet skal jo starte med den 28
@@ -139,24 +133,21 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  apiViewM
 
 
 @Composable
-fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo,frostViewModel: FrostViewModel) { //
+fun Sikt_Historisk_Kalender(   frostinfo: FrostInfo, monthState: MonthState) { //
     Column(modifier = Modifier
         .fillMaxSize()
         .background(Sikt_lyseblå), horizontalAlignment = Alignment.CenterHorizontally,)
     {
 
-        val frostUiState by frostViewModel.frostUiState.collectAsState() // Kan man oprette et uiState fra en composable
+        //val frostUiState by frostViewModel.frostUiState.collectAsState() // Kan man oprette et uiState fra en composable
 
         var uiStatetoChange by remember { mutableStateOf( false ) }
 
-        val monthState = rememberSaveable(saver = MonthState.Saver()) {
-            MonthState(initialMonth = YearMonth.now())
-        }// bruker java sin YearMonth ikke bogus
 
         var calenderstate : CalendarState<EmptySelectionState> = rememberCalendarState(
             monthState = monthState,)
         StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.background(Sikt_lyseblå), showAdjacentMonths = false, calendarState =calenderstate, dayContent =  { it -> dayContent(
-            dayState =  it , frostinfo = frostinfo,  apiViewModel) })
+            dayState =  it , frostinfo = frostinfo ) })
         // monthState er en funksjon av MonthState fra bogus, som sin .currentMonth er av typen YearMonth fra java biblioteket
         Text(text= "Nr1: monthState.currentMonth: "+monthState.currentMonth.toString()) // 2023-05
         Text(text= "Nr2: monthState.currentMonth.monthValue: "+monthState.currentMonth.monthValue.toString()) // 05
@@ -179,7 +170,7 @@ fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo,
 //Denne var apiViewModel.getRefence....
        // apiViewModel.getReferencetimeFrost(referencetime =  datesforfrostsightconditions ) //  //2021-05%2F2021-06
 
-        frostViewModel.getReferencetimeFrost(referencetime=datesforfrostsightconditions)
+        //frostViewModel.getReferencetimeFrost(referencetime=datesforfrostsightconditions)
 
         Log.d("Periode sendt i api kall:", "Dato: "+ datesforfrostsightconditions + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
 
@@ -196,33 +187,6 @@ fun Sikt_Historisk_Kalender(   apiViewModel: APIViewModel, frostinfo: FrostInfo,
 
                 }
         }
-
-        /*
-        if (monthState.){ // når monthstate endrer seg så endre uistate, når uistate endre seg, ta med endringen som er datoen // åja mkan kl-21-31 kan man bare sende monthstate gjennom tro
-            uiStatetoChange = true
-            frostViewModel.getReferencetimeFrost(datesforfrostsightconditions)
-
-            }
-
-         */
-        /*   LaunchedEffect(Unit) {
-               snapshotFlow { monthState.currentMonth }
-                   .collect { currentMonth ->
-                       // viewModel.doSomething()
-                   }
-           }*/
-
-
-
-// når vi har gjort apikallet så sa emil lagre det i en ArrayList med datoer, 0605. kl. 14.48
-
-       val arraylistwithSightValues = frostinfo.sightconditionListofDataforMonth
-        // size skal være sånn 30 - 31 stk elementer, svarer til at api repsos for en måned gitt i apikallet
-        Log.d("Info om api repsons Json Array watergate","Størrelse: List<DataFrost>?: "+ frostinfo.sightconditionListofDataforMonth?.size )
-
-
-        Log.d("Antall observcation=Skalværelik30-31","Antallobservations: "+ frostinfo.sightconditionListofDataforMonth?.get(0)?.observations?.get(0)?.timeSeriesId.toString())
-        Log.d("DAg 3, 03.01, dato og value  ","Valie: "+ frostinfo.sightconditionListofDataforMonth?.get(2)?.observations?.get(0)?.value.toString() +"Dag"+ frostinfo.sightconditionListofDataforMonth?.get(0)?.referenceTime.toString())
 
 
 
@@ -253,36 +217,6 @@ LaunchedEffect(Unit)
 
 }
 
-/*
-Merk deg rekkefølgen i denne: https://github.com/boguszpawlowski/ComposeCalendar/issues/84
-
-
-Måneden: Måned som ønskes lagret
-CalenderState(Måneden)
-StaticCalender(CalenderState)
-LaunchedEffect(Unit)
-
-val monthState = rememberSaveable(saver = MonthState.Saver()) {
-    MonthState(initialMonth = YearMonth.now())
-  }
-
-  val calendarState = rememberCalendarState(
-    monthState = monthState,
-  )
-
-  StaticCalendar(
-    calendarState = calendarState,
-  )
-
-  LaunchedEffect(Unit) {
-    snapshotFlow { monthState.currentMonth }
-      .collect { currentMonth ->
-        // viewModel.doSomething()
-      }
-  }
-
-
-*/
 
 
 

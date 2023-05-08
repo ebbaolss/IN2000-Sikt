@@ -1,16 +1,14 @@
 package com.example.in2000_prosjekt.ui.uistate
 import com.example.in2000_prosjekt.ui.FrostInfo
-import com.example.in2000_prosjekt.ui.data.DataFrost
 
-sealed interface FrostReferencetimeUiState {
+sealed interface FrostUiState {
     data class Success(
-        val referencedate: String, // pleide å være :FrostReferenceTime
-       // val referencetime: String
-    ) : FrostReferencetimeUiState
+
+        val frostF: FrostInfo    ) : FrostUiState
 
 
-    object Error : FrostReferencetimeUiState
-    object Loading : FrostReferencetimeUiState
+    object Error : FrostUiState
+    object Loading : FrostUiState
 
 
 

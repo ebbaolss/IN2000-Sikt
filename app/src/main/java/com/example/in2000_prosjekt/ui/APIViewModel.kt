@@ -36,23 +36,6 @@ class APIViewModel () : ViewModel()
 
 
 
-        // Vi har 2: getRefrenceTimeFRost: Begge funker fordi begge bruker ImplementedWeatherReposory sin: getReferencetimeFrost
-    fun getReferencetimeFrost( referencetime: String ) : String {
-        val referencedate = referencetime
-
-        viewModelScope.async (Dispatchers.IO) {
-            repository.getReferencetimeFrost(referencetime)
-        }
-        Log.d(" Referencetime Test! " , referencedate.toString() )
-
-        return referencedate
-
-    }
-
-
-
-
-
 
 
     fun getAll(latitude: String, longitude: String, altitude: String) {
@@ -79,12 +62,6 @@ class APIViewModel () : ViewModel()
                 }
                 val alertP = alertDeferred.await()
 
-                val frostDeferred = viewModelScope.async(Dispatchers.IO) {
-                    repository.getFrost(latitude, longitude,) // går ikke å sette funksjoenn getFrsot inni funksjonen getReferenceTime
-                }
-                val frostP = frostDeferred.await()
-
-                Log.d("FrostDeffered", "Success")
 
 
 
@@ -99,7 +76,7 @@ class APIViewModel () : ViewModel()
                         nowCastF = nowCastP,
                         sunriseF = sunsetP,
                         alertListF = alertP,
-                        frostF = frostP
+                        //frostF = frostP
                     )
                 }
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd

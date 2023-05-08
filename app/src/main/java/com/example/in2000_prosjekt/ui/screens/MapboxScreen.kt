@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -17,19 +18,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
-import com.example.in2000_prosjekt.ui.components.Sikt_Historisk_Kalender
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
 import com.example.in2000_prosjekt.ui.data.FrostViewModel
 import com.example.in2000_prosjekt.ui.database.MapViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
+import com.example.in2000_prosjekt.ui.uistate.FrostUiState
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
@@ -45,6 +45,8 @@ import com.mapbox.maps.plugin.delegates.listeners.OnCameraChangeListener
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.scalebar.scalebar
+import io.github.boguszpawlowski.composecalendar.header.MonthState
+import java.time.YearMonth
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,6 +63,12 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
 
 
     var locationCardState by remember { mutableStateOf(false) }
+
+    val monthState = rememberSaveable(saver = MonthState.Saver()) {
+        MonthState(initialMonth = YearMonth.now())
+    }// bruker java sin YearMonth ikke bogus
+    Log.d("testhoist", monthState.currentMonth.monthValue.toString())
+
     Scaffold(
         bottomBar = {
             Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = false, rules = false, map = true, settings = false) }) {
@@ -74,7 +82,7 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
 
                     mapboxMap.addOnMapClickListener(onMapClickListener = OnMapClickListener { point ->
                         Log.d("LocationCardState", "$locationCardState")
-                        onMapClick(point, mapboxMap, mapViewModel, apiViewModel, frostViewModel) {
+                        onMapClick(point, mapboxMap, mapViewModel, apiViewModel, frostViewModel, monthState) {
                             locationCardState = true
                             Log.d("Location Card State", "$locationCardState")
                         }
@@ -130,16 +138,50 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
                     }
                     is AppUiState.Success -> {// åja du kanke caste appuiState til frostuiState jaaa, kl.19.55, 06.05 // på nederste linje pleide det å stå: (frostUiState as AppUiState.Success).frostF,
 
-                        Sikt_LocationCard(
-                            mountainUiState,
-                            (appUiState as AppUiState.Success).locationF,
-                            (appUiState as AppUiState.Success).nowCastF,
-                            (appUiState as AppUiState.Success).alertListF,
-                            (appUiState as AppUiState.Success).frostF,
-                            apiViewModel
-                        ,
-                            frostViewModel
-                        )
+                        when (frostUiState) {
+                            is FrostUiState.Loading -> {
+                                Column(modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Sikt_mellomblå),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.outline_pending),
+                                        contentDescription = "",
+                                        tint = Sikt_hvit,
+                                        modifier = Modifier.size(50.dp)
+                                    )
+                                    Text(
+                                        text = "Loading",
+                                        color = Sikt_hvit,
+                                        fontSize = 30.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
+                            is FrostUiState.Error -> {
+                                FavoriteScreenError( onNavigateToMap,
+                                    onNavigateToFav,onNavigateToSettings,
+                                    onNavigateToRules)
+                            }
+                            is FrostUiState.Success -> {
+
+                                Sikt_LocationCard(
+                                    mountainUiState,
+                                    (appUiState as AppUiState.Success).locationF,
+                                    (appUiState as AppUiState.Success).nowCastF,
+                                    (appUiState as AppUiState.Success).alertListF,
+                                    (frostUiState as FrostUiState.Success).frostF,
+
+
+                                    monthState
+
+                                )
+
+                            }
+
+                        }
 
 
                     }
@@ -218,7 +260,7 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
 
 
 // Definerer hva som skal skje når brukeren trykker på kartet
-fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, frostViewModel: FrostViewModel, onClick : () -> Unit) : Boolean {
+fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, frostViewModel: FrostViewModel, monthState:MonthState, onClick : () -> Unit) : Boolean {
     Log.d("Coordinate", point.toString())
     mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(ScreenBox(
@@ -246,7 +288,15 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
                 val longitude = point.longitude()
 
                 apiViewModel.getAll("$latitude", "$longitude", "$elevation")
-               // frostViewModel.getFrost("$latitude", "$longitude")
+
+                LaunchedEffect(Unit) {
+                    snapshotFlow { monthState.currentMonth }
+                        .collect { currentMonth ->
+                            // viewModel.doSomething()
+                        }
+                }
+                frostViewModel.getFrost("$latitude", "$longitude" , monthState)
+
 
                 onClick()
 

@@ -3,6 +3,7 @@ package com.example.in2000_prosjekt.ui.data
 import android.util.Log
 import androidx.compose.runtime.remember
 import androidx.lifecycle.MutableLiveData
+import io.github.boguszpawlowski.composecalendar.header.MonthState
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -58,96 +59,28 @@ class DataSourceFrost (val basePath: String, /* var referencetime: String = "202
         var polygon= coordinatesToPolygonConverter (latitude,  longitude) // generer deg et polygon fra et koordinat
         return  authURL("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&geometry=${polygon}").body() //trenger ikke authURL(URL: String) i Frost sitt api, proxy servern brukes bare på Met vær apier (NowCast, LocationForecast, MetAlert)
     }
-    //var referencetimetest_ = MutableLiveData<String>()
 
-    //Log.d("Inni datasourcefrost", referencetimetest_ )
+    suspend fun fetchFrost(source: String, referencetime : MonthState): FrostResponsBuild {
 
-    /* FEIL 1: Kanke bruke getters og setteers: refencetime blir aldri oppdatert, forblir default value, og gunker ike uten
-   / vi prøver å lage getters and setters, kl. 2140 06.05
-    get() = field
+        val year =  referencetime.currentMonth.year.toString() // 2023
+        val year21 =  referencetime.currentMonth.year.minus(2).toString() // 2021
+        val year2021 =  referencetime.currentMonth.minusYears(2).toString() //2021-05
+        val monthweneedresultsfrom =  referencetime.currentMonth.monthValue.toString() // 05 BEginning period we want api call resutlts from, value dynamically ajusts to current month being shown on the calender
+        val nextmonthweneedresultsfrom =  referencetime.currentMonth.monthValue.plus(1).toString()// 06 Ending period we want api call resutlts from, the value dynamically ajusts to next month being shown on the calender
 
-    set (value) {
-        field=value
-    }
-    */
+        //2021-05%2F2021-06
+        val datesforfrostsightconditions = year21+"-"+monthweneedresultsfrom+"%2F"+year21+"-"+nextmonthweneedresultsfrom
 
-
-    //FEIL 2: init blokka kanke brukes på suspend funksjonen fetchFrost
-
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
-
-    init { // brukes ikke til noe enda, per 07.05. kl 1437, bruk denne etter: ALLe mutableStateFlow, mutableLiveData etc. ,
-        coroutineScope.launch(Dispatchers.IO) {
-            var referencetime: String = "2021-05-12"
-           // fetchFrost("SN18700", referencetime)
-        }
-    }
-
-
-
-//var referencetimetest_ by remember {mutableStateOf("") } FEIL 3:  mutableStateof MÅ brukes i Compsable funksjoner
-// val referencetimetest_.value =
-    var referencetimeMutableLiveData =  MutableLiveData<String>("2021-05-12") // FEIL 4: MutableLiveData Funka ikke: Defaultveriden endrer seg aldri ga: NO transformation error
-
-    //var  referencetime  : String = "2021-05-12"
-
-
-    var datoene = MutableLiveData<String> ("Ennellerannendato") // trenger denne en init
-
-    init {
-      //  datoene = "2021-9%2F2021-10"
-    }
-
-    var data: String = "dummyverdisomskalVæreOverwritten i metoden getReferencetimeFrost"
-    suspend fun getReferencetimeFrost( calenderreferencetime: String ): String   { //---------------Dette er rikitg dato
-        data= calenderreferencetime
-        //datoene.value=calenderreferencetime // denne
-        datoene.postValue(calenderreferencetime) // får denne java.lang.IllegalStateException: Cannot invoke setValue on a background thread
-
-        return calenderreferencetime
-
-        Log.d("CalenderreferenceInniDatasource'frost", data) //---------------Dette er rikitg dato
-        Log.d("DatoeneIScope",datoene.value!!) //---------------Dette er rikitg dato
-    }
-
-
-
-
-
-
-
-    var referenceDatoer= MutableStateFlow<String>("dmmyvalue")
-
-
-    //Log.d("referencetime", referencetime.toString() )
-
-    var _referencetimeMutableStateFlow  = MutableStateFlow<String>("") // Error 5: MutableStateFlow Funka heeller ikke: Defaultveriden endrer seg aldri
-
-    suspend fun fetchFrost(source: String, referencetime : String  ): FrostResponsBuild {
-
-
-       // val dattttt= getReferencetimeFrost()
-        Log.d("DatoeneUtenforScope",datoene.value!!) // kl.13.53 dato: 08.05
-        Log.d("DatoeneUtenforScopeThis.",this.data) // kl.14.34 08.05
-        Log.d("DatoeneUtenforScopeThis23334.",referenceDatoer.value) // kl.14.34 08.05
-
-        Log.d("logg refrencetime inni fetchfrost",referencetime ) //  PostValue: Funka ikke
 
         //var url : String = "${basePath}sources=$source&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)"
-        var url : String = "${basePath}sources=SN18700&referencetime=${referencetime}&elements=mean(cloud_area_fraction%20P1D)"
+        var url : String = "${basePath}sources=SN18700&referencetime=${datesforfrostsightconditions}&elements=mean(cloud_area_fraction%20P1D)"
         var frostsightconditons : FrostResponsBuild =  client.get(url).body()
 
-        Log.d("ReferencetimeMutableLivePostValue()",referencetimeMutableLiveData.value!! ) //  PostValue: Funka ikke
+        Log.d("datesforfrostsightconditions()",datesforfrostsightconditions!! ) //  PostValue: Funka ikke
 
         Log.d("ReferencetimeUrl",url )
         Log.d("ReferencetimeObject",frostsightconditons.toString() )
 
         return frostsightconditons
-
-        // Dette gjøres på tordsag kl.14.25 for å se om jeg faktisk sender variablen referencetime gjennom View-ViewModel-Model riktig:
-        //Vi hardkoder source til SN18700-Blindern: som alltid har resutlter for mean(cloud_area_fraction%20P1D)"
-
-        // kommenteres ut for å logge urlen og reference time som genereres fra kalenderstate
-        //return authURL("${basePath}sources=$source&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)").body()
     }
 }
