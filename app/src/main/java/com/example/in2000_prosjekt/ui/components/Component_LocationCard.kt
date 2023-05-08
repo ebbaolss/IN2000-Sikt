@@ -35,8 +35,8 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
         val name = mountain.name
         val elevation = mountain.elevation
 
-        val latitude = mountain.point?.latitude()
-        val longitude = mountain.point?.longitude()
+        val latitude = mountain.latitude
+        val longitude = mountain.longitude
 
         val weatherHigh = locationInfo.cloud_area_fraction_high
         val weatherMid = locationInfo.cloud_area_fraction_medium
@@ -60,7 +60,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
             Column(
                 modifier = Modifier.padding(20.dp),
             ) {
-                Sikt_Header(location = "$name", elevation!!, latitude!!, longitude!!, alertinfo = mutableListOf(), favoriteViewModel) // Husk å endre alertinfo
+                Sikt_Header(location = "$name", elevation!!, latitude!!.toDouble(), longitude!!.toDouble(),alertInfoList, favoriteViewModel) // Husk å endre alertinfo
                 Sikt_MountainHight(mountainheight = "$elevation")
                 Spacer(modifier = Modifier.size(20.dp))
                 illustrasjon(elevation, temp, wind, weatherHigh, weatherMid, weatherLow)

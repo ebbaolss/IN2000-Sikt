@@ -63,7 +63,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
-import com.example.in2000_prosjekt.ui.SearchbarMapViewModel
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.*
 
