@@ -201,11 +201,13 @@ fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo, nowCastInfo: NowCastI
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
+
             Sikt_LocationCard_NextDaysContent("I dag", tempToday, cloudsToday)
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
             Sikt_LocationCard_NextDaysContent("I morgen", temp_day1, cloud_day1)
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
             Sikt_LocationCard_NextDaysContent("Om 2 dager", temp_day2, cloud_day2)
+
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
             Sikt_LocationCard_NextDaysContent("Om 3 dager", temp_day3, cloud_day3)
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))

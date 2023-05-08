@@ -91,7 +91,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             ) {
                 IconButton(onClick = { onNavigateToInfo() }) {
                     var iconfarge = Sikt_mørkeblå
-                    var iconChosen = R.drawable.outline_info_20
+                    var iconChosen = R.drawable.outline_info
                     if (info) {
                         iconChosen = R.drawable.baseline_info_filled
                     }
@@ -100,7 +100,6 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                         "",
                         tint = iconfarge,
                         modifier = Modifier
-                            .size(120.dp)
                             .clip(CircleShape)
                             .padding(5.dp)
                     )
