@@ -138,13 +138,13 @@ fun FavoriteEmpty(
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit
 ){
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favorite = true, map = false, info = false, settings = false)}
-        ,modifier = Modifier.padding(20.dp)
     ) {
-        Box(modifier = Modifier.paint(painterResource(id = R.drawable.map_backround), contentScale = ContentScale.FillBounds)) {
+        Box(modifier = Modifier.paint(painterResource(id = R.drawable.map_backround), contentScale = ContentScale.FillBounds).fillMaxSize()) {
             Column(
-                modifier = Modifier.padding(20.dp)
+                modifier = Modifier.padding(20.dp).fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
             ) {
-                Text(text = "NO FAVORITES")
+                Text(text = "NO FAVORITES", modifier = Modifier.background(Sikt_hvit))
             }
         }
     }
