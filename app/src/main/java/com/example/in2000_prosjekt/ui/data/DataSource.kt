@@ -23,9 +23,7 @@ class DataSource (val basePath:String) {
             coordinates += "&altitude=$altitude"
         }
         val  url = "$basePath/locationforecast/2.0/complete?$coordinates"
-        Log.d("DATASOURCE: fetchlocation", url)
         val body  = clientProxyServerCall(client, url)
-        Log.d("DATASOURCE: returned body", body.toString())
         return body.body()
     }
 
@@ -51,7 +49,6 @@ class DataSource (val basePath:String) {
         coordinates = "lat=$latitude&lon=$longtitude"
 
         val url = "$basePath/nowcast/2.0/complete?$coordinates"
-        Log.d("DATASOURCE: fetchNowcast", url)
         return clientProxyServerCall(client, url).body()
     }
 }

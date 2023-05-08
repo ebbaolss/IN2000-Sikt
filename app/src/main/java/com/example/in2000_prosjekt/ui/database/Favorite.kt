@@ -6,17 +6,21 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "Favorites")
+@Entity(tableName = "Favorites", primaryKeys = ["longtitude", "latitude"])
 class Favorite {
 
+    /*
     @PrimaryKey(autoGenerate = true)
     @NonNull
     @ColumnInfo(name = "FavoriteId")
     var coordinates: Int = 0
+    */
 
+    @NonNull
     @ColumnInfo(name = "longtitude")
     var longtitude: Double = 0.0
 
+    @NonNull
     @ColumnInfo(name = "latitude")
     var latitude: Double = 0.0
 

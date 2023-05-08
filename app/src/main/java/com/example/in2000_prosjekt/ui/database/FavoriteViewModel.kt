@@ -29,7 +29,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
 
     val allFavorites: LiveData<List<Favorite>>
     private val repository: FavoriteRepository
-    val searchFavorites: List<Favorite>
+    val searchFavorites: MutableLiveData<List<Favorite>>
 
     init {
         val favoriteDb = FavoriteDatabase.getInstance(application)
@@ -41,20 +41,13 @@ class FavoriteViewModel(application: Application) : ViewModel() {
     }
 
     fun addFavorite(favorite: Favorite) {
-        //Log.d("ADDED", "with long: ${favorite.longtitude}, lat: ${favorite.latitude}, name: ${favorite.mountainName}, height: ${favorite.mountainHeight}")
+        Log.d("ADDED", "with long: ${favorite.longtitude}, lat: ${favorite.latitude}, name: ${favorite.mountainName}, height: ${favorite.mountainHeight}")
         repository.addFavorite(favorite)
     }
 
-    fun findFavorite(longtitude: Double, latitude: Double,  location : String ,height : Int) : Boolean{
-        //Log.d("FINDING", "with long: $longtitude, lat : $latitude, name: $location, height: $height")
+    fun findFavorite(longtitude: Double, latitude: Double,  location : String , height : Int){
+        Log.d("FINDING", "with long: $longtitude, lat : $latitude, name: $location, height: $height")
         repository.findFavorite(longtitude, latitude)
-        //Log.d("IN FIND", "search size = ${repository.searchFavorites.size}")
-        if(repository.searchFavorites.isEmpty()){
-            return false
-        } else if(repository.searchFavorites.contains(Favorite(latitude,longtitude,location,height))){
-            return true
-        }
-        return false
     }
 
     fun deleteFavorite(longtitude: Double, latitude: Double) {

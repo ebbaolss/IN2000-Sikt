@@ -2,26 +2,19 @@ package com.example.in2000_prosjekt.ui.database
 
 
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.in2000_prosjekt.ui.AlertInfo
-import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
-import com.example.in2000_prosjekt.ui.data.DataSource
 import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
-import com.example.in2000_prosjekt.ui.data.WeatherRepository
 import kotlinx.coroutines.*
 
 class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
     val weatherRepository = ImplementedWeatherRepository()
     val allFavorites: LiveData<List<Favorite>> = favoriteDao.getAllFavorites()
-    var searchFavorites : List<Favorite> = listOf()
+    val searchFavorites = MutableLiveData<List<Favorite>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     fun addFavorite(newFavorite: Favorite) {
@@ -38,9 +31,8 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
     fun findFavorite(longtitude: Double, latitude: Double) {
         coroutineScope.launch(Dispatchers.Main) {
-            val check = asyncFind(longtitude, latitude).await()
-            searchFavorites = check!!
-            //Log.d("SF.VAL", "${searchFavorites.size}")
+            searchFavorites.value = asyncFind(longtitude, latitude).await()
+            Log.d("SF.VAL", "${searchFavorites.value?.size}")
         }
     }
 
@@ -52,9 +44,7 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
     private fun asyncFind(longtitude: Double, latitude: Double): Deferred<List<Favorite>?> =
         coroutineScope.async(Dispatchers.IO) {
-            val res = favoriteDao.findFavorite(longtitude, latitude)
-            //Log.d("RES", "asynch find = ${res.size}")
-            return@async res
+            return@async favoriteDao.findFavorite(longtitude, latitude)
         }
 
     suspend fun getLocationList() : MutableList<LocationInfo> {
@@ -77,7 +67,7 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
         //Hvis vi får fikse suspend:
         favorites.forEach{ favorite ->
-            val forecast = weatherRepository.getNowCast(favorite.latitude.toString(), favorite.longtitude.toString(), altitude = "600")
+            val forecast = weatherRepository.getNowCast(favorite.latitude.toString(), favorite.longtitude.toString(), favorite.mountainHeight.toString())
             forecastList.add(forecast)
             //Log.d("NOWCASTlist", "${forecastList.size}")
         }

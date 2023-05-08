@@ -44,10 +44,18 @@ fun FavoriteScreen(apiViewModel: APIViewModel, viewModel: FavoriteViewModel, onN
     val favoriteUiState by viewModel.favUiState.collectAsState()
     val allFavorites by viewModel.allFavorites.observeAsState(listOf())
 
+    Log.d("FAVS", "${allFavorites.size}")
     //viewModel.deleteAll()
     if(allFavorites.size > 0){
         viewModel.update()
+    } else {
+        FavoriteEmpty(
+            onNavigateToMap = onNavigateToMap,
+            onNavigateToFav = onNavigateToFav,
+            onNavigateToSettings = onNavigateToSettings) {
+        }
     }
+
     when(favoriteUiState){
         is FavoriteUiState.Loading ->
             Column(
@@ -79,9 +87,7 @@ fun FavoriteScreen(apiViewModel: APIViewModel, viewModel: FavoriteViewModel, onN
                 FavoriteEmpty(
                     onNavigateToMap = onNavigateToMap,
                     onNavigateToFav = onNavigateToFav,
-                    onNavigateToSettings = onNavigateToSettings) {
-
-                }
+                    onNavigateToSettings = onNavigateToSettings){}
             }
         }
     }
