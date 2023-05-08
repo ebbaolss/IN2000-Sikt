@@ -1,6 +1,7 @@
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -11,15 +12,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
+import com.example.in2000_prosjekt.ui.theme.*
 
 @Composable
 fun Sikt_Historisk_Kalender() {
@@ -159,49 +161,72 @@ fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frost
 }
 */
 
-/*
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun Sikt_HistoriskCard(){
+fun Sikt_HistoriskCard(dato : String, cloudiness : Float, temp : Float){
 
     Card(
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.padding(20.dp),
+        colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
+        modifier = Modifier.padding(end = 2.dp),
     ) {
-
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(top = 10.dp, start = 5.dp, bottom = 10.dp, end = 5.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(5.dp),
         ) {
-            //Sikt_Header("Fjelltopp")
-            Sikt_MountainHight("1800")
-            Spacer(modifier = Modifier.size(20.dp))
-            //illustrasjon(1469, -11f, 5f, "skyet", "delvisskyet", "klart")
-            Spacer(modifier = Modifier.size(20.dp))
-            Text(text = "Historisk Kalender: ", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.size(10.dp))
-            Sikt_Historisk_Kalender()
-            Spacer(modifier = Modifier.size(20.dp))
-            Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.size(10.dp))
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
-            ) {
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-            }
+            Text(
+                text = dato,
+                color = Sikt_sort,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Image(
+                painter = painterResource(id = getRightCloudiness(cloudiness)),
+                contentDescription = "",
+                modifier = Modifier.size(30.dp)
+            )
+            Text(
+                text = "$temp°",
+                color = Sikt_sort,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
- */
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview(showSystemUi = true)
 @Composable
 fun HistoricalTest() {
 
-    //Sikt_HistoriskCard()
-
+    Card(
+        colors = CardDefaults.cardColors(Sikt_lyseblå),
+        modifier = Modifier.padding(20.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+        ) {
+            Text(text = "Historisk siktvarsel", fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.size(20.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(5.dp),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Sikt_HistoriskCard("01.05", 21f, 9f)
+                    Sikt_HistoriskCard("02.05", 29f, 4f)
+                    Sikt_HistoriskCard("03.05", 59f, -9f)
+                    Sikt_HistoriskCard("04.05", 18f, -18f)
+                    Sikt_HistoriskCard("05.05", 27f, 9f)
+                    Sikt_HistoriskCard("06.05", 27f, 2f)
+                    Sikt_HistoriskCard("07.05", 71f, 9f)
+                }
+            }
+        }
+    }
 }
