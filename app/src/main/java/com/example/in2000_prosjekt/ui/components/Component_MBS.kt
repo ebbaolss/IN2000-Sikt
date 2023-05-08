@@ -22,13 +22,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.ui.NowCastInfo
+import com.example.in2000_prosjekt.ui.theme.Sikt_grønn
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
 import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_rød
 import com.example.in2000_prosjekt.ui.theme.Sikt_sort
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import kotlinx.coroutines.launch
@@ -48,7 +52,8 @@ fun Sikt_BottomSheet() {
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
-        sheetContent = { BottomSheetContent() }
+        sheetContent = { BottomSheetContent() },
+        sheetBackgroundColor = Color.Transparent
     ) {
         ModalSheetWithAnchor(sheetState, showModalSheet)
     }
@@ -62,7 +67,7 @@ fun BottomSheetContent(){
     Surface(
         color = Sikt_lyseblå,
         modifier = Modifier.height(300.dp),
-        // shape = RoundedCornerShape(20.dp) får ikke denne til å se bra ut :((
+        shape = RoundedCornerShape(20.dp)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -104,7 +109,7 @@ fun BottomSheetContent(){
 fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: MutableState<Boolean>) {
     val scope = rememberCoroutineScope()
 
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally, ) {
         Button(
             modifier = Modifier
                 .height(165.dp)
@@ -141,5 +146,7 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
 @Preview(showSystemUi = true)
 @Composable
 fun MBSTest() {
-
+    Scaffold(bottomBar = { Sikt_BottomBar2() }, containerColor = Sikt_rød) {
+        com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet()
+    }
 }

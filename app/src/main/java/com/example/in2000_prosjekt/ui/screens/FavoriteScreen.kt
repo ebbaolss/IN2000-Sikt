@@ -35,7 +35,7 @@ import com.example.in2000_prosjekt.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreen(apiViewModel: APIViewModel, viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit){
+fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel, apiViewModel: APIViewModel){
 
     //Used for testing:
     //viewModel.deleteAll()
@@ -78,8 +78,8 @@ fun FavoriteScreen(apiViewModel: APIViewModel, viewModel: FavoriteViewModel, onN
                 FavoriteScreenSuccess(
                     onNavigateToMap,
                     onNavigateToFav,
+                    onNavigateToInfo,
                     onNavigateToSettings,
-                    onNavigateToRules,
                     viewModel,
                     allFavorites
                 )
@@ -98,13 +98,15 @@ fun FavoriteScreen(apiViewModel: APIViewModel, viewModel: FavoriteViewModel, onN
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FavoriteScreenSuccess(
-    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToSettings: () -> Unit, onNavigateToRules: () -> Unit, viewModel: FavoriteViewModel, allFavorites : List<Favorite>
+    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel, allFavorites : List<Favorite>
+
 
 ) {
     val favoriteUiState by viewModel.favUiState.collectAsState()
 
 
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToRules, onNavigateToSettings, favoritt = true, map = false, info = false,settings = false)}
+
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, favorite = true, info = false, map = false, settings = false)}
     ) {
         Log.d("SIZELOC", " ${(favoriteUiState as FavoriteUiState.Success).locationF.size}")
         LazyColumn(

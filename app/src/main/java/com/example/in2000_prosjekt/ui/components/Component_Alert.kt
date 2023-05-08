@@ -7,14 +7,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconToggleButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +24,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,6 +33,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_sort
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -66,7 +66,7 @@ fun AlertDialog(alertinfo: MutableList<AlertInfo>, onDismiss: () -> Unit){
     ) {
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize().padding(top = 1.dp, bottom = 1.dp)
         ) {
             Alert_Card(alertinfo)
         }
@@ -76,10 +76,11 @@ fun AlertDialog(alertinfo: MutableList<AlertInfo>, onDismiss: () -> Unit){
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
-    items(alertinfo.size) {
-        alertinfo.forEach { alert ->
 
-            val typebind = alert.alertTypeA.split("; ")
+    items(alertinfo.size) {
+        val alert = alertinfo[it]
+
+            val typebind =alert.alertTypeA.split("; ")
             val type = typebind[1].split("-")
             val level = alert.alertLevelA.split("; ")
 
@@ -96,21 +97,19 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
             val alertLevel = level[0]
 
             Card(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                backgroundColor = Sikt_lyseblå
+                modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(Sikt_lyseblå)
             ) {
                 Column(
-                    //Spacer
-                    modifier = Modifier
-                        .padding(10.dp)
+                    modifier = Modifier.padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     //Farevarsel ikon
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.Bottom
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Image(
                             modifier = Modifier.weight(1f),
@@ -120,65 +119,44 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                             alignment = Alignment.TopStart
                         )
                         Text(
-                            modifier = Modifier
-                                .wrapContentSize(align = Alignment.Center)
-                                .weight(4f),
+                            modifier = Modifier.weight(4f),
                             text = alert.areaA,
-                            //Prøver å resize til å passe på en linje
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                             style = TextStyle(
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp,
-                                textAlign = TextAlign.Center
+                                fontSize = 18.sp,
                             )
                         )
-
                     }
 
-                    Spacer(
-                        modifier = Modifier
-                            .height(10.dp)
-                    )
+                    //Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
 
                     //Alert Melding8
                     Text(
-                        text = alert.typeA, fontFamily = FontFamily.Monospace,
+                        text = alert.typeA,
                         fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
+                        style = TextStyle(textDecoration = TextDecoration.Underline),
+                        fontSize = 20.sp,
                         modifier = Modifier.fillMaxWidth()
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .height(20.dp)
                     )
 
                     val beskrivelselist = alert.descriptionA.split(": ")
-                    Text(
-                        text = "Beskrivelse: \n" + beskrivelselist[1],
-                        fontFamily = FontFamily.Monospace
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .height(20.dp)
-                    )
-                    Text(
-                        text = "Konsekvens: \n" + alert.consequenseA,
-                        fontFamily = FontFamily.Monospace
-                    )
-                    Spacer(
-                        modifier = Modifier
-                            .height(20.dp)
-                    )
-                    Text(
-                        text = "Anbefaling: \n" + alert.recomendationA,
-                        fontFamily = FontFamily.Monospace
-                    )
 
-                    Spacer(
-                        modifier = Modifier
-                            .height(20.dp)
-                    )
+                    Column() {
+                        Text(text = "Beskrivelse:", fontWeight = FontWeight.Bold)
+                        Text(text = beskrivelselist[1])
+                    }
+
+                    Column() {
+                        Text(text = "Konsekvens:", fontWeight = FontWeight.Bold)
+                        Text(text = alert.consequenseA)
+                    }
+
+                    Column() {
+                        Text(text = "Anbefaling:", fontWeight = FontWeight.Bold)
+                        Text(text = alert.recomendationA)
+                    }
 
                     if (alert.timeIntervalA != null) {
 
@@ -189,23 +167,12 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                         val endtid = endtime?.get(1)?.split(":")
                         val end = "${endtid?.get(0)}:${endtid?.get(1)}"
 
-                        Text(text = "Tidsperiode ", fontFamily = FontFamily.Monospace)
-                        //Skal vi endre dato format? står nå på YYYY-MM-DD, uoversiktlig å lese?
-                        Text(
-                            text = "Fra: ${starttime?.get(0)} - $start",
-                            fontFamily = FontFamily.Monospace
-                        )
-                        Text(
-                            text = "Til: ${endtime?.get(0)} - $end",
-                            fontFamily = FontFamily.Monospace
-                        )
-
+                        Column() {
+                            Text(text = "Tidsperiode:", fontWeight = FontWeight.Bold)
+                            Text(text = "Fra: ${starttime?.get(0)} - kl: $start")
+                            Text(text = "Til: ${endtime?.get(0)} - kl: $end")
+                        }
                     }
-
-                    Spacer(
-                        modifier = Modifier
-                            .height(20.dp)
-                    )
 
                     //For å endre farge og boldness på det der faren er
                     var highlight1 = Color.Gray
@@ -219,7 +186,6 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                     var fontweight4 = FontWeight.Normal
                     var fontweight5 = FontWeight.Normal
 
-                    //kommentert ut at de blir bold intill vi blir enige om hva vi liker best.
                     if (alertLevel == "1") {
                         highlight1 = Color.Black
                         fontweight1 = FontWeight.Bold
@@ -237,101 +203,87 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                         fontweight5 = FontWeight.Bold
                     }
 
-                    Text(text = "Faregrader ", fontFamily = FontFamily.Monospace)
-                    Row(
-                        modifier = Modifier
-                            .padding()
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.green),
-                            contentDescription = "green",
-                            modifier = Modifier
-                                .size(25.dp)
-                                .padding(5.dp),
-                            contentScale = ContentScale.FillWidth
-                        )
-                        Text(
-                            text = "Faregrad 1 - liten fare", fontFamily = FontFamily.Monospace,
-                            color = highlight1,
-                            fontWeight = fontweight1
-                        )
+                    Column() {
+                        Text(text = "Faregrader:", fontWeight = FontWeight.Bold)
+                        Row() {
+                            Image(
+                                painter = painterResource(R.drawable.green),
+                                contentDescription = "green",
+                                modifier = Modifier
+                                    .size(25.dp)
+                                    .padding(5.dp),
+                                contentScale = ContentScale.FillWidth
+                            )
+                            Text(
+                                text = "Faregrad 1 - liten fare",
+                                color = highlight1,
+                                fontWeight = fontweight1
+                            )
+                        }
+                        Row() {
+                            Image(
+                                painter = painterResource(R.drawable.yellow),
+                                contentDescription = "yellow",
+                                modifier = Modifier
+                                    .size(25.dp)
+                                    .padding(5.dp),
+                                contentScale = ContentScale.FillWidth
+                            )
+                            Text(
+                                text = "Faregrad 2 - liten fare",
+                                color = highlight2,
+                                fontWeight = fontweight2
+                            )
+                        }
+                        Row() {
+                            Image(
+                                painter = painterResource(R.drawable.orange),
+                                contentDescription = "orange",
+                                modifier = Modifier
+                                    .size(25.dp)
+                                    .padding(5.dp),
+                                contentScale = ContentScale.FillWidth
+                            )
+                            Text(
+                                text = "Faregrad 3 - liten fare",
+                                color = highlight3,
+                                fontWeight = fontweight3
+                            )
+                        }
+                        Row() {
+                            Image(
+                                painter = painterResource(R.drawable.red),
+                                contentDescription = "green",
+                                modifier = Modifier
+                                    .size(25.dp)
+                                    .padding(5.dp),
+                                contentScale = ContentScale.FillWidth
+                            )
+                            Text(
+                                text = "Faregrad 4 - liten fare",
+                                color = highlight4,
+                                fontWeight = fontweight4
+                            )
+                        }
+                        Row() {
+                            Image(
+                                painter = painterResource(R.drawable.dark_red),
+                                contentDescription = "green",
+                                modifier = Modifier
+                                    .size(25.dp)
+                                    .padding(5.dp),
+                                contentScale = ContentScale.FillWidth
+                            )
+                            Text(
+                                text = "Faregrad 5 - liten fare",
+                                color = highlight5,
+                                fontWeight = fontweight5
+                            )
+                        }
                     }
-                    Row(
-                        modifier = Modifier
-                            .padding()
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.yellow),
-                            contentDescription = "yellow",
-                            modifier = Modifier
-                                .size(25.dp)
-                                .padding(5.dp),
-                            contentScale = ContentScale.FillWidth
-                        )
-                        Text(
-                            text = "Faregrad 2 - liten fare", fontFamily = FontFamily.Monospace,
-                            color = highlight2,
-                            fontWeight = fontweight2
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .padding()
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.orange),
-                            contentDescription = "orange",
-                            modifier = Modifier
-                                .size(25.dp)
-                                .padding(5.dp),
-                            contentScale = ContentScale.FillWidth
-                        )
-                        Text(
-                            text = "Faregrad 3 - liten fare", fontFamily = FontFamily.Monospace,
-                            color = highlight3,
-                            fontWeight = fontweight3
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .padding()
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.red),
-                            contentDescription = "green",
-                            modifier = Modifier
-                                .size(25.dp)
-                                .padding(5.dp),
-                            contentScale = ContentScale.FillWidth
-                        )
-                        Text(
-                            text = "Faregrad 4 - liten fare", fontFamily = FontFamily.Monospace,
-                            color = highlight4,
-                            fontWeight = fontweight4
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .padding()
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.dark_red),
-                            contentDescription = "green",
-                            modifier = Modifier
-                                .size(25.dp)
-                                .padding(5.dp),
-                            contentScale = ContentScale.FillWidth
-                        )
-                        Text(
-                            text = "Faregrad 5 - liten fare", fontFamily = FontFamily.Monospace,
-                            color = highlight5,
-                            fontWeight = fontweight5
-                        )
-                    }
-
                     //level, type, area, consequenses, instruction
                 }
             }
         }
-    }
+
 }
