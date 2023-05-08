@@ -50,7 +50,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
 
         Card(
             colors = CardDefaults.cardColors(Sikt_lyseblå),
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
         ){
             Column(
                 modifier = Modifier.padding(20.dp),
@@ -66,7 +66,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                 Spacer(modifier = Modifier.size(10.dp))
                 Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
-                Sikt_LocationCard_NextDays(locationInfo)
+                Sikt_LocationCard_NextDays(locationInfo, nowCastInfo)
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
                 Spacer(modifier = Modifier.size(10.dp))
@@ -177,15 +177,19 @@ fun Sikt_LocationCard_Hour_Card(tid : String, temp : Float, cloudiness : Float) 
 }
 
 @Composable
-fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo) {
+fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo, nowCastInfo: NowCastInfo) {
+
+    val tempToday = nowCastInfo.temperatureNow
     val temp_day1 = locationInfo.temp_day1
     val temp_day2 = locationInfo.temp_day2
     val temp_day3 = locationInfo.temp_day3
-    //val temp_day4 = locationInfo.temp_day4
+    val temp_day4 = locationInfo.temp_day4
+
+    val cloudsToday = locationInfo.cloud_area_fraction
     val cloud_day1 = locationInfo.cloud_day1
     val cloud_day2 = locationInfo.cloud_day2
     val cloud_day3 = locationInfo.cloud_day3
-    //val cloud_day4 = locationInfo.cloud_day4
+    val cloud_day4 = locationInfo.cloud_day4
 
     Card(
         modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
@@ -198,12 +202,16 @@ fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo) {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
 
+            Sikt_LocationCard_NextDaysContent("I dag", tempToday, cloudsToday)
+            Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
+            Sikt_LocationCard_NextDaysContent("I morgen", temp_day1, cloud_day1)
+            Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
+            Sikt_LocationCard_NextDaysContent("Om 2 dager", temp_day2, cloud_day2)
 
-            Sikt_LocationCard_NextDaysContent("I dag", temp_day1, cloud_day1)
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
-            Sikt_LocationCard_NextDaysContent("I morgen", temp_day2, cloud_day2)
+            Sikt_LocationCard_NextDaysContent("Om 3 dager", temp_day3, cloud_day3)
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
-            Sikt_LocationCard_NextDaysContent("Om 2 dager", temp_day3, cloud_day3)
+            Sikt_LocationCard_NextDaysContent("Om 4 dager", temp_day4, cloud_day4)
         }
     }
 }
