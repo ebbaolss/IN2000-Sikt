@@ -22,10 +22,10 @@ fun getRightSikt(sikt: Float): String {
 
 fun getRightKm(km: Float): String {
     return when (km.toInt()){
-        in 75..100 -> "> 1 km sikt"
+        in 75..100 -> "< 1 km sikt"
         in 50..74 -> "1-4 km sikt"
         in 25..49 -> "4-10 km sikt"
-        else -> "< 10 km sikt"
+        else -> "> 10 km sikt"
     }
 }
 

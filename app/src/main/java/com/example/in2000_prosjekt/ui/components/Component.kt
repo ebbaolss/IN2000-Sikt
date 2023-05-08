@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -201,7 +202,7 @@ fun Sikt_BottomBar2( ) {
 fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         var openDialog by remember {
@@ -212,7 +213,7 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
             AlertButton( alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA){
                 openDialog = true
             }
-        } else {
+        }  else {
             // For å fikse at fjelltopp-text blir midtstilt
             IconToggleButton(
                 checked = false,
@@ -231,11 +232,33 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
                 openDialog = false
             }
         }
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = "$location",
-            fontWeight = FontWeight.Bold,
-            fontSize = 30.sp)
+
+        if (location.length <= 10) {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center
+            )
+        } else if (location.length <= 15) {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        } else {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+
         var checked by remember { mutableStateOf(false) }
         IconToggleButton(
             checked = checked,
@@ -495,7 +518,9 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     painter = painterResource(id = R.drawable.outline_contact_phone),
                     contentDescription = "Phone illustration",
                     tint = Sikt_mørkeblå,
-                    modifier = Modifier.align(Alignment.CenterHorizontally).size(100.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .size(100.dp),
                 )
                 Text(
                     modifier = Modifier
@@ -514,7 +539,9 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp),
                     //Placeholder for ditt koordinat:
                     text = "59.99436° N, 10,71848° Ø",
                     fontSize = 18.sp,
@@ -528,7 +555,9 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     fontWeight = FontWeight.Bold
                 )
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -545,7 +574,9 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     )
                 }
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -562,7 +593,9 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     )
                 }
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -579,7 +612,9 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     )
                 }
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -596,7 +631,9 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     )
                 }
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
@@ -637,7 +674,9 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                                 //modifier = Modifier.padding(start = 20.dp)
                             )
                             Text(
-                                modifier = Modifier.fillMaxWidth().padding(end = 20.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(end = 20.dp),
                                 text = it,
                                 fontSize = 18.sp,
                                 fontFamily = FontFamily.SansSerif
@@ -690,7 +729,9 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp),
                     text = "Kommer snart.",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Normal
@@ -703,7 +744,9 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
                     fontWeight = FontWeight.Bold
                 )
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -753,7 +796,9 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
                     fontWeight = FontWeight.Bold
                 )
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -764,31 +809,41 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
                         text = "Locationforecast",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
                         text = "Nowcast",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
                         text = "MetAlerts",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
                         text = "Sunrise",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
                         text = "Frost",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
@@ -800,7 +855,9 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(start = 20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
                         text = "Mapbox",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
@@ -815,39 +872,51 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
 @Composable
 fun TestComponent() {
 
+    var fjell = "Fmemmolmmm moonfjell"
+
+
     Card(
-        colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
-        modifier = Modifier.padding(end = 10.dp)
+        colors = CardDefaults.cardColors(Sikt_lyseblå),
+        modifier = Modifier.padding(20.dp),
     ) {
         Column(
-            modifier = Modifier.padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.padding(20.dp),
         ) {
-            Box(
-                modifier = Modifier.size(100.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,   
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.turer_i_naerheten),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                )
-                Text(
-                    text = "0°",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp,
-                    color = Sikt_sort,
-                    modifier = Modifier.align(Alignment.Center)
-                )
+
+                IconToggleButton(checked = false, onCheckedChange = { },) { Icon(Icons.Filled.Favorite, contentDescription = "Localized description", tint = Sikt_mørkeblå) }
+
+                if (fjell.length <= 10) {
+                    Text(
+                        modifier = Modifier.weight(2f),
+                        text = fjell,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 30.sp,
+                        textAlign = TextAlign.Center
+                    )
+                } else if (fjell.length <= 15) {
+                    Text(
+                        modifier = Modifier.weight(2f),
+                        text = fjell,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp,
+                        textAlign = TextAlign.Center
+                    )
+                } else {
+                    Text(
+                        modifier = Modifier.weight(2f),
+                        text = fjell,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                IconToggleButton(checked = false, onCheckedChange = { },) { Icon(Icons.Filled.Favorite, contentDescription = "Localized description", tint = Sikt_mørkeblå) }
             }
-            Spacer(modifier = Modifier.size(10.dp))
-            Text(
-                text = "fjell",
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
-                color = Sikt_sort,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
         }
     }
 }
