@@ -105,7 +105,7 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 onNavigateToSettings)
         }
         is FavoriteUiState.Success -> {
-            if(allFavorites.isNotEmpty()){
+            if(allFavorites.size > 0){
                 FavoriteScreenSuccess(
                     onNavigateToMap,
                     onNavigateToFav,
@@ -176,7 +176,7 @@ fun FavoriteScreenSuccess(
 fun FavoriteEmpty(
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit
 ){
-    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToSettings, favorite = true, map = false, info = false, settings = false)}
+    Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, favorite = true, map = false, info = false, settings = false)}
     ) {
         Box(
             modifier = Modifier
@@ -214,7 +214,6 @@ fun FavoriteEmpty(
         }
     }
 }
-
 
 
 

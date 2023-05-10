@@ -41,7 +41,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
         val wind = nowCastInfo.windN
 
         // SKAL SLETTES NÅR VI FÅR LISTE OVER FJELL I NÆRHETEN:
-            val testliste = mutableListOf<MapUiState.Mountain>()
+        val testliste = mutableListOf<MapUiState.Mountain>()
         /*
             testliste.add(mountain)
             testliste.add(mountain)
@@ -63,28 +63,28 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                 Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.size(10.dp))
                 Sikt_LocationCard_Hour(locationInfo) }
-                Spacer(modifier = Modifier.size(10.dp))
-                Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
-                Spacer(modifier = Modifier.size(10.dp))
-                Sikt_LocationCard_NextDays(locationInfo, nowCastInfo)
-                Spacer(modifier = Modifier.size(20.dp))
-                Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
-                Spacer(modifier = Modifier.size(10.dp))
-                // Bytt ut testliste med fjelltopper i nærheten:
-                if (testliste.size != 0) {
-                    LazyRow(
-                        modifier = Modifier.padding(
-                            start = 20.dp,
-                            end = 20.dp
-                        )
-                    ) { Sikt_Turer_I_Naerheten(testliste, nowCastInfo) }
-                } else {
-                    Text(text = "Ingen topper i nærheten...", modifier = Modifier.padding(start = 20.dp))
-                }
-                Spacer(modifier = Modifier.size(100.dp))
+            Spacer(modifier = Modifier.size(10.dp))
+            Text(text = "Langtidsvarsel: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
+            Spacer(modifier = Modifier.size(10.dp))
+            Sikt_LocationCard_NextDays(locationInfo, nowCastInfo)
+            Spacer(modifier = Modifier.size(20.dp))
+            Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
+            Spacer(modifier = Modifier.size(10.dp))
+            // Bytt ut testliste med fjelltopper i nærheten:
+            if (testliste.size != 0) {
+                LazyRow(
+                    modifier = Modifier.padding(
+                        start = 20.dp,
+                        end = 20.dp
+                    )
+                ) { Sikt_Turer_I_Naerheten(testliste, nowCastInfo) }
+            } else {
+                Text(text = "Ingen topper i nærheten...", modifier = Modifier.padding(start = 20.dp))
             }
+            Spacer(modifier = Modifier.size(100.dp))
         }
     }
+}
 
 
 @Composable
