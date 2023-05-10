@@ -560,7 +560,7 @@ fun DeleteAllButton(viewModel: FavoriteViewModel){
 }
 
 @Composable
-fun Illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
+fun Illustrasjon(height: Int?, temp: Int, vind: Float, weatherHigh: Float, weatherMid: Float, weatherLow: Float){
 
     fun getHeightVisuals(height: Int?) : Int {
         return when (height) {
