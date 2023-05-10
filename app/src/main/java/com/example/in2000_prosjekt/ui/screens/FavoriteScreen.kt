@@ -19,6 +19,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +36,7 @@ import com.example.in2000_prosjekt.ui.database.FavoriteUiState
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel, apiViewModel: APIViewModel){
@@ -60,15 +62,29 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
 
     when(favoriteUiState){
         is FavoriteUiState.Loading ->
-            Column(
-                modifier = Modifier
+            Scaffold(bottomBar = {
+                Sikt_BottomBar(
+                    onNavigateToMap,
+                    onNavigateToFav,
+                    onNavigateToInfo,
+                    onNavigateToSettings,
+                    favorite = true,
+                    info = false,
+                    map = false,
+                    settings = false
+                )
+            }) {
+                Column(modifier = Modifier
                     .fillMaxSize()
-                    .background(Sikt_mellomblå),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Icon(painter = painterResource(id = R.drawable.outline_pending), contentDescription = "", tint = Sikt_hvit, modifier = Modifier.size(50.dp))
-                Text(text = "Loading", color = Sikt_hvit, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                    .paint(
+                        painterResource(id = R.drawable.map_backround),
+                        contentScale = ContentScale.FillBounds
+                    ), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "Laster inn..", fontWeight = FontWeight.Bold, fontSize = 24.sp, color = Sikt_hvit, modifier = Modifier
+                        .background(
+                            Color.Black.copy(alpha = 0.6f)
+                        ))
+                }
             }
         is FavoriteUiState.Error -> {
             FavoriteScreenError( onNavigateToMap,
@@ -113,7 +129,12 @@ fun FavoriteScreenSuccess(
     ) {
         Log.d("SIZELOC", " ${(favoriteUiState as FavoriteUiState.Success).locationF.size}")
 
-        Box(modifier = Modifier.paint(painterResource(id = R.drawable.map_backround), contentScale = ContentScale.FillBounds).fillMaxSize()) {
+        Box(modifier = Modifier
+            .paint(
+                painterResource(id = R.drawable.map_backround),
+                contentScale = ContentScale.FillBounds
+            )
+            .fillMaxSize()) {
             LazyColumn(
                 contentPadding = PaddingValues(20.dp)
             ) {
@@ -123,7 +144,12 @@ fun FavoriteScreenSuccess(
                         (favoriteUiState as FavoriteUiState.Success).nowCastF,
                         (favoriteUiState as FavoriteUiState.Success).alertListF,
                         allFavorites,
-                        viewModel
+                        viewModel,
+                        onNavigateToMap,
+                        onNavigateToFav,
+                        onNavigateToInfo,
+                        onNavigateToSettings
+
                     )
                 }
             }
@@ -135,20 +161,26 @@ fun FavoriteScreenSuccess(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteEmpty(
-    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit,onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit
+    onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit
 ){
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToSettings, onNavigateToSettings, favorite = true, map = false, info = false, settings = false)}
     ) {
         Box(
-            modifier = Modifier.paint(painterResource(id = R.drawable.map_backround),
-                contentScale = ContentScale.FillBounds).fillMaxSize())
+            modifier = Modifier
+                .paint(
+                    painterResource(id = R.drawable.map_backround),
+                    contentScale = ContentScale.FillBounds
+                )
+                .fillMaxSize())
         {
             Card(
                 colors = CardDefaults.cardColors(Sikt_lyseblå),
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 40.dp),
             ) {
                 Column(
-                    modifier = Modifier.padding(20.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     //verticalArrangement = Arrangement.Center,
                     verticalArrangement = Arrangement.spacedBy(10.dp)

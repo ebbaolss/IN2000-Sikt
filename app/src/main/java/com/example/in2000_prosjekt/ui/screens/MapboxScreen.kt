@@ -55,9 +55,11 @@ import androidx.compose.material3.*
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
@@ -65,6 +67,8 @@ import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_sort
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -164,25 +168,24 @@ fun ShowMap(
             if (locationCardState){
                 when (appUiState) {
                     is AppUiState.Loading -> {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(Sikt_mellomblå),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.outline_pending),
-                                contentDescription = "",
-                                tint = Sikt_hvit,
-                                modifier = Modifier.size(50.dp)
+                        Scaffold(bottomBar = {
+                            Sikt_BottomBar(
+                                onNavigateToMap,
+                                onNavigateToFav,
+                                onNavigateToInfo,
+                                onNavigateToSettings,
+                                favorite = false,
+                                info = false,
+                                map = true,
+                                settings = false
                             )
-                            Text(
-                                text = "Loading",
-                                color = Sikt_hvit,
-                                fontSize = 30.sp,
-                                fontWeight = FontWeight.Bold
-                            )
+                        }) {
+                            Column(modifier = Modifier.fillMaxSize().paint(painterResource(id = R.drawable.map_backround), contentScale = ContentScale.FillBounds), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(text = "Laster inn..", fontWeight = FontWeight.Bold, fontSize = 24.sp, color = Sikt_hvit, modifier = Modifier
+                                    .background(
+                                        Color.Black.copy(alpha = 0.6f)
+                                    ))
+                            }
                         }
                     }
                     is AppUiState.Error -> {
@@ -373,7 +376,7 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
                         isTextFieldFocused = it.isFocused
                     }
                     .onKeyEvent {
-                        if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER){
+                        if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
                             input = input.replace("ø", "oe")
                             input = input.replace("æ", "ae")
                             input = input.replace("å", "aa")
@@ -454,11 +457,15 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
                         .background(Color.White)
                         .height(40.dp)
                         .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
-                        .clickable( enabled = true, onClick = {
+                        .clickable(enabled = true, onClick = {
 
                             viewModel.updateRecentSearch(mountain, false)
 
-                            viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!, mountain, elevetion)
+                            viewModel.showSelectedMountain(
+                                recentSearchHashmap[mountain]!!,
+                                mountain,
+                                elevetion
+                            )
 
                             clearFocus()
                             showRecent = true
@@ -534,13 +541,18 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
                             .background(Color.White)
                             .height(40.dp)
                             .padding(start = 20.dp, top = 9.dp, bottom = 7.dp)
-                            .clickable( enabled = true, onClick = {
+                            .clickable(enabled = true, onClick = {
 
                                 viewModel.updateRecentSearch(mountain, false)
 
-                                recentSearchHashmap[mountain] = mapUiState.value.optionMountains[mountain]!!
+                                recentSearchHashmap[mountain] =
+                                    mapUiState.value.optionMountains[mountain]!!
 
-                                viewModel.showSelectedMountain(recentSearchHashmap[mountain]!!, mountain, elevetion)
+                                viewModel.showSelectedMountain(
+                                    recentSearchHashmap[mountain]!!,
+                                    mountain,
+                                    elevetion
+                                )
 
                                 //focusManager.clearFocus()
                                 clearFocus()

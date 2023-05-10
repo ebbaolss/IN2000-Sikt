@@ -1,13 +1,15 @@
 package com.example.in2000_prosjekt.ui.components
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
@@ -22,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -30,12 +34,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.database.Favorite
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
+import com.mapbox.maps.logD
+import kotlin.math.log
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, map : Boolean, favorite : Boolean, info : Boolean, settings : Boolean) {
@@ -409,8 +416,9 @@ fun Sikt_skyillustasjon() {
         )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
-fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>, favorites: List<Favorite>, viewModel: FavoriteViewModel) {
+fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>, favorites: List<Favorite>, viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit) {
     //favorites er en mutableList med LocationInfo kan derfor kalle
     // favorite.temperatureL etc.
 
@@ -425,36 +433,80 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
             val alertInfo = alertInfo[it]
             val name = favorites[it].mountainName
             val height = favorites[it].mountainHeight
+            val lon = favorites[it].longtitude
+            val lat = favorites[it].latitude
+            val mount = MapUiState.Mountain(name, lat.toString(), lon.toString(), height)
 
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                colors = CardDefaults.cardColors(Sikt_lyseblå)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
 
-                    Sikt_Favorite_Header(name,height, favorites[it].latitude, favorites[it].longtitude, alertInfo, viewModel)
-                    Sikt_MountainHight(height.toString())
-                    illustrasjon(
-                        height = height,
-                        temp = nowcast.temperatureNow,
-                        vind = nowcast.windN,
-                        weatherHigh = location.cloud_area_fraction_high,
-                        weatherMid = location.cloud_area_fraction_medium,
-                        weatherLow = location.cloud_area_fraction_low
-                    )
+        var popupControl by remember { mutableStateOf(false) }
+
+        if (popupControl) {
+            Popup(alignment = Alignment.Center) {
+
+                Scaffold(bottomBar = { Sikt_BottomBar(
+                    onNavigateToMap,
+                    onNavigateToFav,
+                    onNavigateToInfo,
+                    onNavigateToSettings,
+                    map = false,
+                    favorite = true,
+                    info = false,
+                    settings = false
+                )}) {
+                    Column(modifier = Modifier
+                        .fillMaxSize()
+                        .paint(
+                            painterResource(id = R.drawable.map_backround),
+                            contentScale = ContentScale.FillBounds
+                        )) {
+                        Button(onClick = { popupControl = false }, colors = ButtonDefaults.buttonColors(
+                            Sikt_hvit)) {
+                            Text(text = "X", color = Sikt_mørkeblå, fontWeight = FontWeight.Bold)
+                        }
+                        LazyColumn(
+                            modifier = Modifier
+                                //.fillMaxSize()
+                                .padding(top = 0.dp, bottom = 20.dp, start = 20.dp, end = 20.dp)
+
+                        ) {
+                            // Må legge inn listen over fjelltopper i nærheten:
+                            Sikt_LocationCard(
+                                mount, location, nowcast, alertInfo, viewModel
+                            )
+                        }
+                    }
                 }
             }
         }
-    }
 
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp).clickable { popupControl = true },
+            colors = CardDefaults.cardColors(Sikt_lyseblå)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Sikt_Favorite_Header(name,height, favorites[it].latitude, favorites[it].longtitude, alertInfo, viewModel)
+                Sikt_MountainHight(height.toString())
+                illustrasjon(
+                    height = height,
+                    temp = nowcast.temperatureNow,
+                    vind = nowcast.windN,
+                    weatherHigh = location.cloud_area_fraction_high,
+                    weatherMid = location.cloud_area_fraction_medium,
+                    weatherLow = location.cloud_area_fraction_low
+                )
+            }
+        }
+    }
+}
 
 fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mountain>, nowCastInfo: NowCastInfo) {
 
@@ -505,8 +557,8 @@ fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mount
 @Composable
 fun DeleteAllButton(viewModel: FavoriteViewModel){
     //Knapp til Instillinger for å slette alle favoritter.
-    Button(
-        colors = ButtonDefaults.buttonColors(backgroundColor = Sikt_mørkeblå),
+
+    Button(colors = ButtonDefaults.buttonColors(Sikt_mørkeblå),
         onClick = {
             viewModel.deleteAll()
         }
@@ -985,15 +1037,5 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
 @Preview(showSystemUi = true)
 @Composable
 fun TestComponent() {
-    
-    Card(
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.padding(20.dp),
-    ) {
-        Column(
-            modifier = Modifier.padding(20.dp),
-        ) {
-            ///Sikt_Favorite_Header(location, viewModel, alertinfo)
-        }
-    }
+
 }

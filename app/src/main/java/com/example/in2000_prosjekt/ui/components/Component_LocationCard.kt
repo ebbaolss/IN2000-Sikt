@@ -91,6 +91,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
         }
     }
 
+
 @Composable
 fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
 

@@ -17,9 +17,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.theme.Sikt_grønn
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
@@ -38,7 +42,8 @@ import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_BottomSheet() {
 
@@ -53,10 +58,13 @@ fun Sikt_BottomSheet() {
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = { BottomSheetContent() },
-        sheetBackgroundColor = Color.Transparent
+        sheetBackgroundColor = Color.Transparent,
+
     ) {
         ModalSheetWithAnchor(sheetState, showModalSheet)
+
     }
+
 }
 
 @Composable
@@ -147,6 +155,6 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
 @Composable
 fun MBSTest() {
     Scaffold(bottomBar = { Sikt_BottomBar2() }, containerColor = Sikt_rød) {
-        com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet()
+
     }
 }
