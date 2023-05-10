@@ -134,7 +134,7 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
 }
 
 @Composable
-fun Sikt_LocationCard_Hour_Card(tid : String, temp : Float, cloudiness : Float) {
+fun Sikt_LocationCard_Hour_Card(tid: String, temp: Int, cloudiness: Float) {
 
     Card(
         colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
@@ -218,7 +218,7 @@ fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo, nowCastInfo: NowCastI
 }
 
 @Composable
-fun Sikt_LocationCard_NextDaysContent(tekst : String, temp : Float, cloudiness: Float) {
+fun Sikt_LocationCard_NextDaysContent(tekst: String, temp: Int, cloudiness: Float) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(top=5.dp, bottom = 5.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,

@@ -37,7 +37,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         val timeDay3 = 24-tidspunkt.toInt()+12+48
         val timeDay4 = 24-tidspunkt.toInt()+12+72
 
-        val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
+        val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature?.toInt()
         val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
         val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.precipitation_amount
         val cloud_high = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_high
@@ -45,18 +45,18 @@ class ImplementedWeatherRepository : WeatherRepository {
         val cloud_low = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_low
         val cloudiness = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction
 
-        val tempNext1 = forecast.properties?.timeseries?.get(1)?.data?.instant?.details?.air_temperature
-        val tempNext2 = forecast.properties?.timeseries?.get(2)?.data?.instant?.details?.air_temperature
-        val tempNext3 = forecast.properties?.timeseries?.get(3)?.data?.instant?.details?.air_temperature
-        val tempNext4 = forecast.properties?.timeseries?.get(4)?.data?.instant?.details?.air_temperature
-        val tempNext5 = forecast.properties?.timeseries?.get(5)?.data?.instant?.details?.air_temperature
-        val tempNext6 = forecast.properties?.timeseries?.get(6)?.data?.instant?.details?.air_temperature
-        val tempNext7 = forecast.properties?.timeseries?.get(7)?.data?.instant?.details?.air_temperature
-        val tempNext8 = forecast.properties?.timeseries?.get(8)?.data?.instant?.details?.air_temperature
-        val tempNext9 = forecast.properties?.timeseries?.get(9)?.data?.instant?.details?.air_temperature
-        val tempNext10 = forecast.properties?.timeseries?.get(10)?.data?.instant?.details?.air_temperature
-        val tempNext11 = forecast.properties?.timeseries?.get(11)?.data?.instant?.details?.air_temperature
-        val tempNext12 = forecast.properties?.timeseries?.get(12)?.data?.instant?.details?.air_temperature
+        val tempNext1 = forecast.properties?.timeseries?.get(1)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext2 = forecast.properties?.timeseries?.get(2)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext3 = forecast.properties?.timeseries?.get(3)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext4 = forecast.properties?.timeseries?.get(4)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext5 = forecast.properties?.timeseries?.get(5)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext6 = forecast.properties?.timeseries?.get(6)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext7 = forecast.properties?.timeseries?.get(7)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext8 = forecast.properties?.timeseries?.get(8)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext9 = forecast.properties?.timeseries?.get(9)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext10 = forecast.properties?.timeseries?.get(10)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext11 = forecast.properties?.timeseries?.get(11)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempNext12 = forecast.properties?.timeseries?.get(12)?.data?.instant?.details?.air_temperature?.toInt()
 
         val cloudinessNext1 = forecast.properties?.timeseries?.get(1)?.data?.instant?.details?.cloud_area_fraction
         val cloudinessNext2 = forecast.properties?.timeseries?.get(2)?.data?.instant?.details?.cloud_area_fraction
@@ -71,10 +71,10 @@ class ImplementedWeatherRepository : WeatherRepository {
         val cloudinessNext11 = forecast.properties?.timeseries?.get(11)?.data?.instant?.details?.cloud_area_fraction
         val cloudinessNext12 = forecast.properties?.timeseries?.get(12)?.data?.instant?.details?.cloud_area_fraction
 
-        val temp_day1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.air_temperature
-        val temp_day2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.air_temperature
-        val temp_day3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature
-        val temp_day4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature
+        val temp_day1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.air_temperature?.toInt()
+        val temp_day2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.air_temperature?.toInt()
+        val temp_day3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature?.toInt()
+        val temp_day4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature?.toInt()
 
         val cloud_day1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.cloud_area_fraction
         val cloud_day2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.cloud_area_fraction
@@ -82,7 +82,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         val cloud_day4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
 
         return LocationInfo(
-            temperatureL = (temp ?: -273.5) as Float,
+            temperatureL = temp!!,
             fog_area_fractionL = airfog!!,
             rainL = rain!!,
             cloud_area_fraction_high = cloud_high!!,
@@ -135,11 +135,11 @@ class ImplementedWeatherRepository : WeatherRepository {
         val forecastNow = dataSource.fetchNowCast(latitude, longitude, altitude)
 
         val tempNow =
-            forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature
+            forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature?.toInt()
         val windN = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed
 
         return NowCastInfo(
-            temperatureNow = (tempNow ?: -273.5) as Float, //dette må fikses bedre
+            temperatureNow = tempNow!!, //dette må fikses bedre
             windN = windN!! //funker dette eller må jeg gjøre som over?
         )
     }
