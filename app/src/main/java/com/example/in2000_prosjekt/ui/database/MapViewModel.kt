@@ -1,7 +1,6 @@
 package com.example.in2000_prosjekt.ui.database
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.in2000_prosjekt.ui.*

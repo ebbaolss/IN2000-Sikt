@@ -11,12 +11,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 import com.example.in2000_prosjekt.ui.data.*
-import com.example.in2000_prosjekt.ui.uistate.MapUiState
-import com.mapbox.geojson.Point
 import io.ktor.utils.io.errors.*
 
 import kotlinx.coroutines.async
-import java.time.LocalDate
 
 class APIViewModel () : ViewModel()
     {

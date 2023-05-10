@@ -3,16 +3,10 @@ package com.example.in2000_prosjekt.ui.database
 
 import android.app.Application
 import android.util.Log
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.in2000_prosjekt.ui.AlertInfo
-import com.example.in2000_prosjekt.ui.AppUiState
-import com.example.in2000_prosjekt.ui.LocationInfo
-import com.example.in2000_prosjekt.ui.NowCastInfo
-import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +14,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class FavoriteViewModel(application: Application) : ViewModel() {
 

@@ -22,7 +22,7 @@ import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import java.text.SimpleDateFormat
 import java.util.Date
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>,favoriteViewModel: FavoriteViewModel){
 
     items(1) {
@@ -58,7 +58,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                 Sikt_Header(location = "$name", elevation!!, latitude!!.toDouble(), longitude!!.toDouble(),alertInfoList, favoriteViewModel) // Husk å endre alertinfo
                 Sikt_MountainHight(mountainheight = "$elevation")
                 Spacer(modifier = Modifier.size(20.dp))
-                illustrasjon(elevation, temp, wind, weatherHigh, weatherMid, weatherLow)
+                Illustrasjon(elevation, temp, wind, weatherHigh, weatherMid, weatherLow)
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.size(10.dp))
@@ -85,6 +85,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
             }
         }
     }
+
 
 @Composable
 fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
