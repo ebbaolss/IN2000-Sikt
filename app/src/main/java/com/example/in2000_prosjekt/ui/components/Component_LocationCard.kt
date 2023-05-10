@@ -1,6 +1,5 @@
 package com.example.in2000_prosjekt.ui.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
@@ -12,22 +11,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
-import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import java.text.SimpleDateFormat
 import java.util.Date
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>,favoriteViewModel: FavoriteViewModel){
 
     items(1) {
@@ -63,7 +58,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                 Sikt_Header(location = "$name", elevation!!, latitude!!.toDouble(), longitude!!.toDouble(),alertInfoList, favoriteViewModel) // Husk å endre alertinfo
                 Sikt_MountainHight(mountainheight = "$elevation")
                 Spacer(modifier = Modifier.size(20.dp))
-                illustrasjon(elevation, temp, wind, weatherHigh, weatherMid, weatherLow)
+                Illustrasjon(elevation, temp, wind, weatherHigh, weatherMid, weatherLow)
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Dagens siktvarsel: ", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.size(10.dp))
@@ -90,6 +85,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
             }
         }
     }
+
 
 @Composable
 fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {

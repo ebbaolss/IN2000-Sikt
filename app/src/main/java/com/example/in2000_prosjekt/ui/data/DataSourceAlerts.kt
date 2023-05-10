@@ -1,6 +1,5 @@
 package com.example.in2000_prosjekt.ui.data
 
-import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*

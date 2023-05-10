@@ -1,6 +1,5 @@
 package com.example.in2000_prosjekt.ui.uistate
 
-import com.mapbox.geojson.Point
 
 sealed interface MapUiState {
     data class MapboxCameraOptions(

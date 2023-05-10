@@ -1,7 +1,6 @@
 package com.example.in2000_prosjekt.ui.data
 
 import com.google.gson.annotations.SerializedName
-import com.mapbox.geojson.Polygon
 
 data class Build (
     val features: List<Features>?,

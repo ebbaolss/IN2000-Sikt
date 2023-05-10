@@ -3,7 +3,6 @@ package com.example.in2000_prosjekt.ui.database
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
 
 @Entity(tableName = "Favorites", primaryKeys = ["longtitude", "latitude"])

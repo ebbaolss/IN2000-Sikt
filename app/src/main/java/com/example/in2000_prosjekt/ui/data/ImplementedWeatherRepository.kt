@@ -1,6 +1,5 @@
 package com.example.in2000_prosjekt.ui.data
 
-import android.util.Log
 import com.example.in2000_prosjekt.ui.*
 import java.text.SimpleDateFormat
 import java.util.Date
