@@ -75,7 +75,7 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             painterResource(id = R.drawable.map_backround),
                             contentScale = ContentScale.FillBounds
                         )
-                        .fillMaxSize())
+                        .fillMaxSize(), contentAlignment = Alignment.Center)
                 {
                     Card(
                         colors = CardDefaults.cardColors(Sikt_lyseblå),
@@ -184,7 +184,7 @@ fun FavoriteEmpty(
                     painterResource(id = R.drawable.map_backround),
                     contentScale = ContentScale.FillBounds
                 )
-                .fillMaxSize())
+                .fillMaxSize(), contentAlignment = Alignment.Center)
         {
             Card(
                 colors = CardDefaults.cardColors(Sikt_lyseblå),

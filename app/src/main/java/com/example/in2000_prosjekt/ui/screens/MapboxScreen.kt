@@ -184,9 +184,9 @@ fun ShowMap(
                                         painterResource(id = R.drawable.map_backround),
                                         contentScale = ContentScale.FillBounds
                                     )
-                                    .fillMaxSize())
+                                    .fillMaxSize(), contentAlignment = Alignment.Center
+                            )
                             {
-                                Spacer(modifier = Modifier.height(50.dp))
                                 Card(
                                     colors = CardDefaults.cardColors(Sikt_lyseblå),
                                     modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 40.dp),
