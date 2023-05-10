@@ -1,12 +1,16 @@
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -20,22 +24,45 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_sort
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.ui.data.FrostViewModel
 import com.example.in2000_prosjekt.ui.theme.*
 import io.github.boguszpawlowski.composecalendar.header.MonthState
+import java.time.YearMonth
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>, frostinfo: FrostInfo,  monthState: MonthState){
+fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>, frostinfo: FrostInfo, frostViewModel: FrostViewModel,monthState:MonthState){
 
     val name = mountain.name
     val elevation = mountain.elevation
 
+    val monthState = rememberSaveable(saver = MonthState.Saver()) {
+        MonthState(initialMonth = YearMonth.now())
+    }// bruker java sin YearMonth ikke bogus
+    Log.d("testhoist", monthState.currentMonth.monthValue.toString())
 
-    //apiViewModel.getAll("$latitude", "$longitude", "$elevation") // dette var gjort for å vise jamila om det går å sende info fra en
+
 
     val latitude = mountain.point?.latitude()
     val longitude = mountain.point?.longitude()
+
+    //frostViewModel.getFrost("$latitude", "$longitude" , monthState)
+
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { monthState.currentMonth }
+            .collect { currentMonth ->
+                // viewModel.doSomething()
+                frostViewModel.getFrost("$latitude", "$longitude" , monthState)
+                Log.d("testhoist_apikallverdi", monthState.currentMonth.monthValue.toString())
+
+            }
+    }
+
+
+
+
 
     // Gir point koordinatene i lat, så long?
     println("latitude: " + latitude.toString()) // latitude: 8.557780981063843

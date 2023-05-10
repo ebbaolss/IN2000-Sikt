@@ -124,12 +124,8 @@ class ImplementedWeatherRepository : WeatherRepository {
 
 
     override suspend fun getFrost(latitude: String, longitude: String, referencetime: MonthState): FrostInfo { //åssen får jeg referense time inni her:
-
-
         val frostPolygon = dataFrost.fetchFrostWeatherStation(   latitude.toDouble(), longitude.toDouble() )
         val weatherstationid  = frostPolygon.data!!.get(0).id // en værstasjon sin ID: Blindern = SN18700
-
-
 
         Log.d("SN på første responsobjekt: skal være SN63595",  weatherstationid!!)
 

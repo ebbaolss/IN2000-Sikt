@@ -26,6 +26,7 @@ import io.github.boguszpawlowski.composecalendar.rememberCalendarState
 import io.github.boguszpawlowski.composecalendar.selection.EmptySelectionState
 import java.time.DayOfWeek
 import java.time.LocalDate
+import kotlin.time.Duration.Companion.days
 
 @Composable
 fun Sikt_Historisk_KalenderGammelogNotMine() {
@@ -46,8 +47,9 @@ fun Sikt_Historisk_KalenderGammelogNotMine() {
 
 //I vår composable funksjon som generer kalenderen vår (se neste Composable-funskjon: StaticCalender() ) så kan man bestemme innholdet til de ulike bestanddelene av en kalender, slikt som tittel, plassering av de ulike trykkbare komponetene i kalenderen, om den er scrollbar etc.
 //Dette er funksjonen som bestemmer dagsinnholdet i hver dag kalenderen StaticCalender()
+@OptIn(ExperimentalStdlibApi::class)
 @Composable
-fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  ) : MutableList<LocalDate> {
+fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo, monthState:MonthState  ) : MutableList<LocalDate> {
     var alledager = mutableListOf<LocalDate>()
     Card(modifier = Modifier
         .aspectRatio(1f)
@@ -59,16 +61,77 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  ) : Muta
 
 
 
+        // Dette er et tall på datoene 0-30, veriden 0 er dag 1 i måneden, verdien 30 er dag 31 i måneden kl.1945, 07.05
+
+            val datoIArraylista = dayState.date.dayOfMonth.minus(1)  // når vi er på dato 01, så hent plass 0 i arrayList med api kall resultater
+            // måneden mai: 0-30 elementer
 
 
-// Dette er et tall på dagen 0-30, veriden 0 er dag 1 i måneden, verdien 30 er dag 31 i måneden kl.1945, 07.05
-            val datoIArraylista = dayState.date.dayOfMonth.minus(1)
+            //Log.d("Sjekke", datoIArraylista.toString())
 
-            val sightconditions = frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.observations?.get(0)?.value // tallet skal jo starte med den 28
+            val datesightcondition = monthState.currentMonth.month.value.days.toString()
+         //   Log.d("Teste MonthYear og DayState", datesightcondition) // prøv å finne et array av alle dagene i monthState
 
-           val referenceTime11 =frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.referenceTime
+// Nå kl.17.59 dato: 10.05
+
+            //val range = dayState.date.range(monthState.currentMonth)
+            val r1 = dayState.date.withMonth(monthState.currentMonth.monthValue).dayOfMonth
+            val r2 = dayState.date.withMonth(monthState.currentMonth.monthValue).dayOfMonth
+            //val r3 = dayState.date.range()
+            val r4 = dayState.date.rangeTo(dayState.date.withMonth(monthState.currentMonth.monthValue)) //  2023-05-01..2023-05-01
+            val r6 = dayState.date.rangeUntil(monthState.currentMonth.atEndOfMonth()) // 2023-05-30..<2023-05-31
+            //val temporalrange = LocalDate of(monthState.currentMonth.year,monthState.currentMonth.year,)
+          //  Log.d("Teste MonthYear og DayState", dayState.date.ValueRange(monthState.currentMonth.monthValue)) // prøv å finne et array av alle dagene i monthState
+            //Log.d("Teste MonthYear og DayState", r4.toString()) // prøv å finne et array av alle dagene i monthState
+
+            val datoIArraylistaee = dayState.date.dayOfMonth.rangeTo(monthState.currentMonth.lengthOfMonth())
+            val datoIArraylistsaee = dayState.date.dayOfMonth.coerceAtMost(monthState.currentMonth.lengthOfMonth()) // funka ikke ga fortsatt 2 mnd
+            val dae = dayState.date.dayOfMonth
+            val dae3 = dayState.date.dayOfMonth..monthState.currentMonth.atEndOfMonth().dayOfMonth
+            val makslengde = IntArray (monthState.currentMonth.lengthOfMonth() )
+
+            var i by remember { mutableStateOf(0)}
+
+            val dateswitinmonth  = when {
+                (dayState.date.month == monthState.currentMonth.month  ) -> dayState.date.dayOfMonth.minus(1)
+
+                else  -> 0
+            }
+
+           // val dateswitinmonth = if (dayState.date.month == monthState.currentMonth.month  ) { dayState.date.dayOfMonth.minus(1) }
 
 
+            val sightconditions = frostinfo.sightconditionListofDataforMonth?.get(dateswitinmonth)?.observations?.get(0)?.value // tallet skal jo starte med den 28
+
+            //Log.d("BareDAtoff", makslengde[i].toString()) // prøv å finne et array av alle dagene i monthState
+            Log.d("BareDAtoff", dateswitinmonth.toString()) // prøv å finne et array av alle dagene i monthState
+
+
+            var weathericon = when {
+                (sightconditions == 0.0) -> painterResource(id = R.drawable.klart)
+                (0.0 <  sightconditions!! && sightconditions!! <= 3.0 ) -> painterResource(id = R.drawable.lettskyet)
+                (3.0 < sightconditions!! && sightconditions!! <= 6.0) -> painterResource(id = R.drawable.delvis_skyet)
+
+                else  -> painterResource(id = R.drawable.skyet)
+            }
+
+            Image(painter =  weathericon, contentDescription = "", modifier = Modifier
+                .fillMaxHeight()
+                .aspectRatio(2f)
+                .wrapContentSize(Alignment.Center)
+                .size(30.dp))
+
+
+            // dette funka ikke ahhahahaha
+            //Log.d("iFØRINKREMENT", i.toString()) // prøv å finne et array av alle dagene i monthState
+           // i++
+           // Log.d("iETTERINKREMENT", i.toString()) // prøv å finne et array av alle dagene i monthState
+
+
+
+
+            //---------------------------------------------------------kl.17.51, onsdag 10.05
+         //  val referenceTime11 =frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.referenceTime
 
 //-------------------------- attempt med å matche nøyaktig dato fremvvist i øverste høyre hjørnet med verdien fra arraylist
             //merk at vi bare har datoer: for en måned, neste måneds verdier vist i nederste høyre hjørne og forriges månedsverdier verdier er vist i øverste høyre hjørne
@@ -84,35 +147,27 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo,  ) : Muta
 
 
 
-            val sightconditionsforAParticularDate = frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.observations?.get(0)?.value // tallet skal jo starte med den 28
+
+//            val sightconditionsforAParticularDate = frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.observations?.get(0)?.value // tallet skal jo starte med den 28
 
 
 
-            val substringavApikallDatoer =referenceTime11?.toString()?.substring(0,10)
-            Log.d("substring", substringavApikallDatoer!! ) // Er hele datoen for en kalenderdag: 2021-05-21
+
+          //  val substringavApikallDatoer =referenceTime11?.toString()?.substring(0,10)
+           // Log.d("substring", substringavApikallDatoer!! ) // Er hele datoen for en kalenderdag: 2021-05-21
 
             val sightcondtionsbasertpådato = when {
 
-                (substringavApikallDatoer == substringavkalender  )  -> frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.observations?.get(0)?.value
+             //   (substringavApikallDatoer == substringavkalender  )  -> frostinfo.sightconditionListofDataforMonth?.get(datoIArraylista)?.observations?.get(0)?.value
                 else -> "noe galt har skjedd"
 
             }
+           // Log.d("sdfasdfgadgfasdfgsdfgsdf", "Verdi"+ sightcondtionsbasertpådato + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
+          //  Log.d("substringavApikallDatoer", "Dato å basere apikall på"+ substringavApikallDatoer ) // Er hele datoen for en kalenderdag: 2021-05-21
 
-             //if (substringavApikallDatoer ==   )
 
-            var weathericon = when {
-                (sightconditions == 0.0) -> painterResource(id = R.drawable.klart)
-                (0.0 <  sightconditions!! && sightconditions!! <= 3.0 ) -> painterResource(id = R.drawable.lettskyet)
-                (3.0 < sightconditions!! && sightconditions!! <= 6.0) -> painterResource(id = R.drawable.delvis_skyet)
 
-                else  -> painterResource(id = R.drawable.skyet)
-            }
-
-            Image(painter =  weathericon, contentDescription = "", modifier = Modifier
-                .fillMaxHeight()
-                .aspectRatio(2f)
-                .wrapContentSize(Alignment.Center)
-                .size(30.dp))
+            //if (substringavApikallDatoer ==   )
 
 
             alledager.add(dayState.date) // generer en liste med innholdet i kalenderen
@@ -147,10 +202,10 @@ fun Sikt_Historisk_Kalender(   frostinfo: FrostInfo, monthState: MonthState) { /
         var calenderstate : CalendarState<EmptySelectionState> = rememberCalendarState(
             monthState = monthState,)
         StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.background(Sikt_lyseblå), showAdjacentMonths = false, calendarState =calenderstate, dayContent =  { it -> dayContent(
-            dayState =  it , frostinfo = frostinfo ) })
+            dayState =  it , frostinfo = frostinfo, monthState  ) })
         // monthState er en funksjon av MonthState fra bogus, som sin .currentMonth er av typen YearMonth fra java biblioteket
         Text(text= "Nr1: monthState.currentMonth: "+monthState.currentMonth.toString()) // 2023-05
-        Text(text= "Nr2: monthState.currentMonth.monthValue: "+monthState.currentMonth.monthValue.toString()) // 05
+        Text(text= "Nr2: monthState.currentMonth.monthValue: " + monthState.currentMonth.monthValue.toString())
 
 
         val year =  monthState.currentMonth.year.toString() // 2023
@@ -172,7 +227,7 @@ fun Sikt_Historisk_Kalender(   frostinfo: FrostInfo, monthState: MonthState) { /
 
         //frostViewModel.getReferencetimeFrost(referencetime=datesforfrostsightconditions)
 
-        Log.d("Periode sendt i api kall:", "Dato: "+ datesforfrostsightconditions + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
+       // Log.d("Periode sendt i api kall:", "Dato: "+ datesforfrostsightconditions + " ApiResponsverdi for datoen: "+ frostinfo.sightconditionListofDataforMonth.toString() ) // Er hele datoen for en kalenderdag: 2021-05-21
 
 
         LaunchedEffect(Unit) {

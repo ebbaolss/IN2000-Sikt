@@ -2,6 +2,8 @@ package com.example.in2000_prosjekt.ui.data
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.in2000_prosjekt.ui.AppUiState
+import com.example.in2000_prosjekt.ui.FrostInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,11 +11,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-import com.example.in2000_prosjekt.ui.uistate.FrostReferenceTime
 import com.example.in2000_prosjekt.ui.uistate.FrostUiState
 import io.github.boguszpawlowski.composecalendar.header.MonthState
 
 import kotlinx.coroutines.async
+
 
 
 public class FrostViewModel () : ViewModel() {
@@ -22,14 +24,23 @@ public class FrostViewModel () : ViewModel() {
 
 
 
+
     private val _frostUistate: MutableStateFlow<FrostUiState> = MutableStateFlow(FrostUiState.Loading)
     val frostUiState: StateFlow<FrostUiState> = _frostUistate.asStateFlow()
 
 
 
+/* Attept 1, å ha et frostuiState: som bare sender ut repsonsen til apikallet. Altså den har bare 1 state (ikke success, loading, og error)
+    val sightconditionListofDataforMonth = listOf<DataFrost>()
+    val frostresponse =  FrostInfo(sightconditionListofDataforMonth=sightconditionListofDataforMonth)
 
-    private val _frostUistate_attempt1_alpaca: MutableStateFlow<FrostReferenceTime> = MutableStateFlow(FrostReferenceTime(""))
-    val frostUiState_attempt1_alpaca: StateFlow<FrostReferenceTime> = _frostUistate_attempt1_alpaca.asStateFlow()
+    val frostuistate = FrostUiState(frostresponse)
+
+    private val _frostUistate= MutableStateFlow(frostuistate)
+    val frostUiState: StateFlow<FrostUiState> = _frostUistate.asStateFlow()
+
+ */
+
 
 
     fun getFrost(latitude: String, longitude: String, referencetime: MonthState) {
@@ -61,4 +72,3 @@ public class FrostViewModel () : ViewModel() {
 
 
 }
-

@@ -74,12 +74,16 @@ class DataSourceFrost (val basePath: String, /* var referencetime: String = "202
 
         //var url : String = "${basePath}sources=$source&referencetime=$referencetime&elements=mean(cloud_area_fraction%20P1D)"
         var url : String = "${basePath}sources=SN18700&referencetime=${datesforfrostsightconditions}&elements=mean(cloud_area_fraction%20P1D)"
+
         var frostsightconditons : FrostResponsBuild =  client.get(url).body()
 
-        Log.d("datesforfrostsightconditions()",datesforfrostsightconditions!! ) //  PostValue: Funka ikke
+        //Log.d("datesforfrostsightconditions()",datesforfrostsightconditions!! ) //  PostValue: Funka ikke
 
-        Log.d("ReferencetimeUrl",url )
-        Log.d("ReferencetimeObject",frostsightconditons.toString() )
+        //Log.d("ReferencetimeUrl",url )
+        //Log.d("ReferencetimeObject",frostsightconditons.toString() )
+       //// Log.d("ReferencetimeObjectPLASS17.Dato17",frostsightconditons?.data?.get(25)?.referenceTime.toString() ) // skal gi oss været for 2021
+       // Log.d("ReferencetimeObjectPLASS17.size",frostsightconditons?.data?.size.toString() ) // skal gi oss 31 for mai, og 30 for juni
+       // Log.d("ReferencetimeObjectPLASS17.size",frostsightconditons?.data?.get(25)?.observations.toString() ) // Dette skal gi oss api kall resultatet på 18.06
 
         return frostsightconditons
     }

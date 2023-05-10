@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -60,14 +61,19 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
     val appUiState by apiViewModel.appUiState.collectAsState()
 
     val frostUiState by frostViewModel.frostUiState.collectAsState() // brukes jo ikke, 06.05, kl. 21.03
+    val scope = rememberCoroutineScope()
 
 
     var locationCardState by remember { mutableStateOf(false) }
+
 
     val monthState = rememberSaveable(saver = MonthState.Saver()) {
         MonthState(initialMonth = YearMonth.now())
     }// bruker java sin YearMonth ikke bogus
     Log.d("testhoist", monthState.currentMonth.monthValue.toString())
+    Log.d("testhoistlengde på måneden", monthState.currentMonth.lengthOfMonth().toString())
+
+
 
     Scaffold(
         bottomBar = {
@@ -82,7 +88,7 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
 
                     mapboxMap.addOnMapClickListener(onMapClickListener = OnMapClickListener { point ->
                         Log.d("LocationCardState", "$locationCardState")
-                        onMapClick(point, mapboxMap, mapViewModel, apiViewModel, frostViewModel, monthState) {
+                        onMapClick(point, mapboxMap, mapViewModel, apiViewModel, frostViewModel, monthState ) {
                             locationCardState = true
                             Log.d("Location Card State", "$locationCardState")
                         }
@@ -125,7 +131,7 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
                             )
                             Text(
                                 text = "Loading",
-                                color = Sikt_hvit,
+                                color = Color.Red,
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -154,7 +160,7 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
                                     )
                                     Text(
                                         text = "Loading",
-                                        color = Sikt_hvit,
+                                        color = Color.Green,
                                         fontSize = 30.sp,
                                         fontWeight = FontWeight.Bold
                                     )
@@ -165,6 +171,7 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
                                     onNavigateToFav,onNavigateToSettings,
                                     onNavigateToRules)
                             }
+
                             is FrostUiState.Success -> {
 
                                 Sikt_LocationCard(
@@ -174,10 +181,11 @@ fun ShowMap(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigate
                                     (appUiState as AppUiState.Success).alertListF,
                                     (frostUiState as FrostUiState.Success).frostF,
 
+                                    frostViewModel, monthState
 
-                                    monthState
 
-                                )
+                                    )
+
 
                             }
 
@@ -260,7 +268,7 @@ fun createFactoryMap(xt: Context, cameraOptionsUiState: MapUiState.MapboxCameraO
 
 
 // Definerer hva som skal skje når brukeren trykker på kartet
-fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, frostViewModel: FrostViewModel, monthState:MonthState, onClick : () -> Unit) : Boolean {
+fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, frostViewModel: FrostViewModel, monthState:MonthState,  onClick : () -> Unit) : Boolean {
     Log.d("Coordinate", point.toString())
     mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(ScreenBox(
@@ -289,14 +297,27 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
 
                 apiViewModel.getAll("$latitude", "$longitude", "$elevation")
 
-                LaunchedEffect(Unit) {
+
+                frostViewModel.getFrost("$latitude", "$longitude" , monthState)
+                Log.d("testhoist_apikallverdi", monthState.currentMonth.monthValue.toString())
+
+/*
+                LaunchedEffect(monthState) {
                     snapshotFlow { monthState.currentMonth }
                         .collect { currentMonth ->
                             // viewModel.doSomething()
+                            frostViewModel.getFrost("$latitude", "$longitude" , monthState)
+                            Log.d("testhoist_apikallverdi", monthState.currentMonth.monthValue.toString())
+
                         }
                 }
-                frostViewModel.getFrost("$latitude", "$longitude" , monthState)
 
+                SideEffect {
+                    Thread.sleep(1000)
+                    timer++
+                }
+
+ */
 
                 onClick()
 
