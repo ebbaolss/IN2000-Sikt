@@ -51,11 +51,7 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
     if(allFavorites.isNotEmpty()){
         viewModel.update()
     } else {
-        FavoriteEmpty(
-            onNavigateToMap = onNavigateToMap,
-            onNavigateToFav = onNavigateToFav,
-            onNavigateToInfo = onNavigateToInfo,
-            onNavigateToSettings = onNavigateToSettings)
+        viewModel.updateEmpty()
     }
 
     when(favoriteUiState){
@@ -76,7 +72,7 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 onNavigateToSettings)
         }
         is FavoriteUiState.Success -> {
-            if(allFavorites.size > 0){
+            if(allFavorites.isNotEmpty()){
                 FavoriteScreenSuccess(
                     onNavigateToMap,
                     onNavigateToFav,

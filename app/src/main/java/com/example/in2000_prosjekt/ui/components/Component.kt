@@ -286,13 +286,21 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
                     tint = Sikt_mørkeblå
                 )
                 viewModel.addFavorite(Favorite(lon,lat,location,height))
+            } else if(alreadyFav && !checked) {
+                Icon(
+                    painterResource(id = R.drawable.outline_favorite),
+                    contentDescription = "Localized description",
+                    tint = Sikt_mørkeblå
+                )
+                viewModel.deleteFavorite(lon,lat)
             } else if (alreadyFav){
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = "Localized description",
                     tint = Sikt_mørkeblå
                 )
-            } else {
+
+            }else {
                 Icon(
                     painterResource(id = R.drawable.outline_favorite),
                     contentDescription = "Localized description",

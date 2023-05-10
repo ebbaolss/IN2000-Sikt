@@ -84,6 +84,23 @@ class FavoriteViewModel(application: Application) : ViewModel() {
             }
         }
     }
+    fun updateEmpty(){
+        viewModelScope.launch() {
+            try {
+                _Uistate.update {
+                    FavoriteUiState.Success(
+                        mutableListOf(),
+                        mutableListOf(),
+                        mutableListOf()
+                    )
+                }
+            } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
+                _Uistate.update {
+                    FavoriteUiState.Error
+                }
+            }
+        }
+    }
 
     fun deleteAll(){
         repository.deleteAll()
