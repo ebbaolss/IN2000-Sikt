@@ -1,6 +1,5 @@
 package com.example.in2000_prosjekt.ui.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
@@ -12,16 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
-import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import java.text.SimpleDateFormat
@@ -138,7 +133,7 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
 }
 
 @Composable
-fun Sikt_LocationCard_Hour_Card(tid : String, temp : Float, cloudiness : Float) {
+fun Sikt_LocationCard_Hour_Card(tid: String, temp: Int, cloudiness: Float) {
 
     Card(
         colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
@@ -222,7 +217,7 @@ fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo, nowCastInfo: NowCastI
 }
 
 @Composable
-fun Sikt_LocationCard_NextDaysContent(tekst : String, temp : Float, cloudiness: Float) {
+fun Sikt_LocationCard_NextDaysContent(tekst: String, temp: Int, cloudiness: Float) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(top=5.dp, bottom = 5.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,

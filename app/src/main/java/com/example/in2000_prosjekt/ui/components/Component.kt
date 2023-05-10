@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -524,7 +523,7 @@ fun DeleteAllButton(viewModel: FavoriteViewModel){
 }
 
 @Composable
-fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
+fun illustrasjon(height: Int?, temp: Int, vind: Float, weatherHigh: Float, weatherMid: Float, weatherLow: Float){
 
     fun getHeightVisuals(height: Int?) : Int {
         return when (height) {
