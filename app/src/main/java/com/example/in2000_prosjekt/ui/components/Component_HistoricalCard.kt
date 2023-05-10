@@ -95,31 +95,39 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo, monthStat
             val dateswitinmonth  = when {
                 (dayState.date.month == monthState.currentMonth.month  ) -> dayState.date.dayOfMonth.minus(1)
 
-                else  -> 0
+                else  -> dayState.date.dayOfMonth.minus(1)
             }
 
-           // val dateswitinmonth = if (dayState.date.month == monthState.currentMonth.month  ) { dayState.date.dayOfMonth.minus(1) }
 
 
-            val sightconditions = frostinfo.sightconditionListofDataforMonth?.get(dateswitinmonth)?.observations?.get(0)?.value // tallet skal jo starte med den 28
-
-            //Log.d("BareDAtoff", makslengde[i].toString()) // prøv å finne et array av alle dagene i monthState
-            Log.d("BareDAtoff", dateswitinmonth.toString()) // prøv å finne et array av alle dagene i monthState
+           if (dayState.date.month == monthState.currentMonth.month  ) {
 
 
-            var weathericon = when {
-                (sightconditions == 0.0) -> painterResource(id = R.drawable.klart)
-                (0.0 <  sightconditions!! && sightconditions!! <= 3.0 ) -> painterResource(id = R.drawable.lettskyet)
-                (3.0 < sightconditions!! && sightconditions!! <= 6.0) -> painterResource(id = R.drawable.delvis_skyet)
+               val sightconditions = frostinfo.sightconditionListofDataforMonth?.get(dayState.date.dayOfMonth.minus(1))?.observations?.get(0)?.value // tallet skal jo starte med den 28
 
-                else  -> painterResource(id = R.drawable.skyet)
-            }
+               //Log.d("BareDAtoff", makslengde[i].toString()) // prøv å finne et array av alle dagene i monthState
+             //  Log.d("BareDAtoff", dateswitinmonth.toString()) // prøv å finne et array av alle dagene i monthState
+               Log.d("BareDAtoff", dayState.isFromCurrentMonth.toString()) // prøv å finne et array av alle dagene i monthState
 
-            Image(painter =  weathericon, contentDescription = "", modifier = Modifier
-                .fillMaxHeight()
-                .aspectRatio(2f)
-                .wrapContentSize(Alignment.Center)
-                .size(30.dp))
+
+               var weathericon = when {
+                   (sightconditions == 0.0) -> painterResource(id = R.drawable.klart)
+                   (0.0 <  sightconditions!! && sightconditions!! <= 3.0 ) -> painterResource(id = R.drawable.lettskyet)
+                   (3.0 < sightconditions!! && sightconditions!! <= 6.0) -> painterResource(id = R.drawable.delvis_skyet)
+
+                   else  -> painterResource(id = R.drawable.skyet)
+               }
+
+               Image(painter =  weathericon, contentDescription = "", modifier = Modifier
+                   .fillMaxHeight()
+                   .aspectRatio(2f)
+                   .wrapContentSize(Alignment.Center)
+                   .size(30.dp))
+
+           } else Unit
+
+
+
 
 
             // dette funka ikke ahhahahaha
