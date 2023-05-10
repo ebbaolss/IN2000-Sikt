@@ -28,7 +28,6 @@ import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
 import com.example.in2000_prosjekt.ui.database.MapViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
-import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
@@ -67,8 +66,7 @@ import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_sort
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)

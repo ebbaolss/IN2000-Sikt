@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -22,10 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -41,8 +38,6 @@ import com.example.in2000_prosjekt.ui.database.Favorite
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
-import com.mapbox.maps.logD
-import kotlin.math.log
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, map : Boolean, favorite : Boolean, info : Boolean, settings : Boolean) {
@@ -57,7 +52,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.width(120.dp)
             ){
                 IconButton(onClick = { onNavigateToMap() }) {
-                    var iconfarge = Sikt_mørkeblå
+                    val iconfarge = Sikt_mørkeblå
                     var iconChosen = R.drawable.outline_place_outline
                     if (map) {
                         iconChosen = R.drawable.baseline_place_filled
@@ -78,7 +73,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             ) {
 
                 IconButton(onClick = { onNavigateToFav() }) {
-                    var iconfarge = Sikt_mørkeblå
+                    val iconfarge = Sikt_mørkeblå
                     var iconChosen = R.drawable.outline_favorite
                     if (favorite) {
                         iconChosen = R.drawable.baseline_favorite_24
@@ -99,7 +94,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.width(98.dp)
             ) {
                 IconButton(onClick = { onNavigateToInfo() }) {
-                    var iconfarge = Sikt_mørkeblå
+                    val iconfarge = Sikt_mørkeblå
                     var iconChosen = R.drawable.outline_info
                     if (info) {
                         iconChosen = R.drawable.baseline_info_filled
@@ -120,7 +115,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 modifier = Modifier.width(75.dp)
             ) {
                 IconButton(onClick = { onNavigateToSettings() }) {
-                    var iconfarge = Sikt_mørkeblå
+                    val iconfarge = Sikt_mørkeblå
                     var iconChosen = R.drawable.outline_settings
                     if (settings) {
                         iconChosen = R.drawable._settings_filled
@@ -495,7 +490,7 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
 
                 Sikt_Favorite_Header(name,height, favorites[it].latitude, favorites[it].longtitude, alertInfo, viewModel)
                 Sikt_MountainHight(height.toString())
-                illustrasjon(
+                Illustrasjon(
                     height = height,
                     temp = nowcast.temperatureNow,
                     vind = nowcast.windN,
@@ -568,7 +563,7 @@ fun DeleteAllButton(viewModel: FavoriteViewModel){
 }
 
 @Composable
-fun illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
+fun Illustrasjon(height : Int?, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
 
     fun getHeightVisuals(height: Int?) : Int {
         return when (height) {
@@ -698,7 +693,7 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.size(50.dp))
-                Text(
+                /*Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Din posisjon:",
                     fontSize = 20.sp,
@@ -714,6 +709,8 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     fontWeight = FontWeight.Normal
                 )
                 Spacer(modifier = Modifier.size(20.dp))
+
+                 */
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Nødnummer:",
@@ -890,7 +887,7 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Darkmode:",
+                    text = "Kommer snart:",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -898,7 +895,15 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 20.dp),
-                    text = "Kommer snart.",
+                    text = "Topper i nærheten",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp),
+                    text = "Darkmode",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Normal
                 )
