@@ -49,7 +49,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
             Column (horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(120.dp)
+                //modifier = Modifier.width(120.dp)
             ){
                 IconButton(onClick = { onNavigateToMap() }) {
                     val iconfarge = Sikt_mørkeblå
@@ -65,11 +65,11 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .clip(CircleShape)
                             .padding(5.dp))
                 }
-                Text(text = "Utforsk", fontSize = 13.sp)
+                Text(text = "   Utforsk   ", fontSize = 13.sp)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(75.dp)
+                //modifier = Modifier.width(75.dp)
             ) {
 
                 IconButton(onClick = { onNavigateToFav() }) {
@@ -87,11 +87,11 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Favoritter", fontSize = 13.sp)
+                Text(text = " Favoritter ", fontSize = 13.sp)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(98.dp)
+                //modifier = Modifier.width(98.dp)
             ) {
                 IconButton(onClick = { onNavigateToInfo() }) {
                     val iconfarge = Sikt_mørkeblå
@@ -108,11 +108,11 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Info", fontSize = 13.sp)
+                Text(text = "    Info    ", fontSize = 13.sp) //12
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(75.dp)
+                //modifier = Modifier.width(75.dp)
             ) {
                 IconButton(onClick = { onNavigateToSettings() }) {
                     val iconfarge = Sikt_mørkeblå
@@ -129,7 +129,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Innstillinger", fontSize = 13.sp)
+                Text(text = "Innstillinger", fontSize = 13.sp) //13
             }
         }
     }
