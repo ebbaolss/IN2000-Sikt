@@ -466,7 +466,7 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
                         LazyColumn(
                             modifier = Modifier
                                 //.fillMaxSize()
-                                .padding(top = 0.dp, bottom = 20.dp, start = 20.dp, end = 20.dp)
+                                .padding(top = 0.dp, bottom = 70.dp, start = 20.dp, end = 20.dp)
 
                         ) {
                             // Må legge inn listen over fjelltopper i nærheten:

@@ -136,7 +136,7 @@ fun FavoriteScreenSuccess(
             )
             .fillMaxSize()) {
             LazyColumn(
-                contentPadding = PaddingValues(20.dp)
+                contentPadding = PaddingValues(20.dp), modifier = Modifier.padding(top = 0.dp, bottom = 70.dp, start = 20.dp, end = 20.dp)
             ) {
                 if (allFavorites.size != 0) {
                     Sikt_Favorite_card(
