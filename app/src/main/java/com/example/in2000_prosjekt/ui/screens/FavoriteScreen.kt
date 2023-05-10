@@ -73,16 +73,34 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     settings = false
                 )
             }) {
-                Column(modifier = Modifier
-                    .fillMaxSize()
-                    .paint(
-                        painterResource(id = R.drawable.map_backround),
-                        contentScale = ContentScale.FillBounds
-                    ), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Laster inn..", fontWeight = FontWeight.Bold, fontSize = 24.sp, color = Sikt_hvit, modifier = Modifier
-                        .background(
-                            Color.Black.copy(alpha = 0.6f)
-                        ))
+                Box(
+                    modifier = Modifier
+                        .paint(
+                            painterResource(id = R.drawable.map_backround),
+                            contentScale = ContentScale.FillBounds
+                        )
+                        .fillMaxSize())
+                {
+                    Card(
+                        colors = CardDefaults.cardColors(Sikt_lyseblå),
+                        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 40.dp),
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(20.dp)
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            //verticalArrangement = Arrangement.Center,
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Text(
+                                text = "Laster inn...",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 24.sp,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
                 }
             }
         is FavoriteUiState.Error -> {

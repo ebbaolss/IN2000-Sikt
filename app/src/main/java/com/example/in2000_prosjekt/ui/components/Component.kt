@@ -895,7 +895,7 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 20.dp),
-                    text = "Topper i nærheten",
+                    text = "Darkmode",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Normal
                 )
@@ -903,7 +903,15 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 20.dp),
-                    text = "Darkmode",
+                    text = "Historisk data",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp),
+                    text = "Topper i nærheten",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Normal
                 )
