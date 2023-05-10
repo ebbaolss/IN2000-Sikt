@@ -288,21 +288,13 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
                     tint = Sikt_mørkeblå
                 )
                 viewModel.addFavorite(Favorite(lon,lat,location,height))
-            } else if(alreadyFav && !checked) {
-                Icon(
-                    painterResource(id = R.drawable.outline_favorite),
-                    contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
-                )
-                viewModel.deleteFavorite(lon,lat)
             } else if (alreadyFav){
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = "Localized description",
                     tint = Sikt_mørkeblå
                 )
-
-            }else {
+            } else {
                 Icon(
                     painterResource(id = R.drawable.outline_favorite),
                     contentDescription = "Localized description",
@@ -416,7 +408,7 @@ fun Sikt_skyillustasjon() {
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
             .fillMaxWidth()
-        )
+    )
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -430,15 +422,15 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
     Log.d("AlertSIZE", "${alertInfo.size}")
 
     items(weatherinfo.size) {
-            //Log.d("CARD", "STARTER CARD")
-            val location = weatherinfo[it]
-            val nowcast = nowcastinfo[it]
-            val alertInfo = alertInfo[it]
-            val name = favorites[it].mountainName
-            val height = favorites[it].mountainHeight
-            val lon = favorites[it].longtitude
-            val lat = favorites[it].latitude
-            val mount = MapUiState.Mountain(name, lat.toString(), lon.toString(), height)
+        //Log.d("CARD", "STARTER CARD")
+        val location = weatherinfo[it]
+        val nowcast = nowcastinfo[it]
+        val alertInfo = alertInfo[it]
+        val name = favorites[it].mountainName
+        val height = favorites[it].mountainHeight
+        val lon = favorites[it].longtitude
+        val lat = favorites[it].latitude
+        val mount = MapUiState.Mountain(name, lat.toString(), lon.toString(), height)
 
 
         var popupControl by remember { mutableStateOf(false) }
@@ -461,11 +453,7 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
                         .paint(
                             painterResource(id = R.drawable.map_backround),
                             contentScale = ContentScale.FillBounds
-                        )) {
-                        Button(onClick = { popupControl = false }, colors = ButtonDefaults.buttonColors(
-                            Sikt_hvit)) {
-                            Text(text = "X", color = Sikt_mørkeblå, fontWeight = FontWeight.Bold)
-                        }
+                        ).clickable { popupControl = false }) {
                         LazyColumn(
                             modifier = Modifier
                                 //.fillMaxSize()
@@ -485,7 +473,8 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp).clickable { popupControl = true },
+                .padding(20.dp)
+                .clickable { popupControl = true },
             colors = CardDefaults.cardColors(Sikt_lyseblå)
         ) {
             Column(
@@ -725,6 +714,7 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -782,6 +772,7 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                         fontWeight = FontWeight.Normal
                     )
                 }
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -820,13 +811,14 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                         fontWeight = FontWeight.Normal
                     )
                 }
-                Spacer(modifier = Modifier.size(20.dp))
+                Spacer(modifier = Modifier.size(30.dp))
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Fjellvettreglene:",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
+                Spacer(modifier = Modifier.size(10.dp))
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,

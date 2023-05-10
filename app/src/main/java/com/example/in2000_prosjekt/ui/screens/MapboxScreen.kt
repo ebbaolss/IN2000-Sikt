@@ -51,14 +51,18 @@ import androidx.compose.material3.*
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
+import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
@@ -173,25 +177,35 @@ fun ShowMap(
                                 map = true,
                                 settings = false
                             )
-                        }) {
-                            Card(
-                                colors = CardDefaults.cardColors(Sikt_lyseblå),
-                                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 40.dp),
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .padding(20.dp)
-                                        .fillMaxWidth(),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    //verticalArrangement = Arrangement.Center,
-                                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                                ) {
-                                    Text(
-                                        text = "Laster inn...",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 24.sp,
-                                        textAlign = TextAlign.Center
+                        }, modifier = Modifier.fillMaxSize()) {
+                            Box(
+                                modifier = Modifier
+                                    .paint(
+                                        painterResource(id = R.drawable.map_backround),
+                                        contentScale = ContentScale.FillBounds
                                     )
+                                    .fillMaxSize())
+                            {
+                                Spacer(modifier = Modifier.height(50.dp))
+                                Card(
+                                    colors = CardDefaults.cardColors(Sikt_lyseblå),
+                                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 40.dp),
+                                ) {
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(20.dp)
+                                            .fillMaxWidth(),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        //verticalArrangement = Arrangement.Center,
+                                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                                    ) {
+                                        Text(
+                                            text = "Laster inn...",
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 24.sp,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -419,7 +433,7 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
                     //if (it == "ø")
                     println(it)
                     input = it
-                                },
+                },
                 placeholder = { Text(text = "Søk her") },
                 label = {
                     Text(
