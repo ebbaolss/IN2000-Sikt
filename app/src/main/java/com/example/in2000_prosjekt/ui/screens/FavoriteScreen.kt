@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -18,7 +17,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -105,7 +103,7 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 onNavigateToSettings)
         }
         is FavoriteUiState.Success -> {
-            if(allFavorites.size > 0){
+            if(allFavorites.isNotEmpty()){
                 FavoriteScreenSuccess(
                     onNavigateToMap,
                     onNavigateToFav,
@@ -151,7 +149,7 @@ fun FavoriteScreenSuccess(
             LazyColumn(
                 contentPadding = PaddingValues(20.dp), modifier = Modifier.padding(top = 0.dp, bottom = 70.dp)
             ) {
-                if (allFavorites.size != 0) {
+                if (allFavorites.isNotEmpty()) {
                     Sikt_Favorite_card(
                         (favoriteUiState as FavoriteUiState.Success).locationF,
                         (favoriteUiState as FavoriteUiState.Success).nowCastF,
