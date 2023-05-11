@@ -24,7 +24,7 @@ class DataSourceAlerts (val basePath:String){
         //val strCounty: String = "county=$county"
         //byttet til koordinater fordi county kan være tom.
 
-        var coordinates = "lat=$latitude&lon=$longtitude"
+        val coordinates = "lat=$latitude&lon=$longtitude"
 
         return authURL("$basePath/metalerts/1.1/.json?$coordinates").body()
     }

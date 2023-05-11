@@ -109,7 +109,11 @@ fun BottomSheetContent(){
 fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: MutableState<Boolean>) {
     val scope = rememberCoroutineScope()
 
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally, ) {
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Button(
             modifier = Modifier
                 .height(165.dp)

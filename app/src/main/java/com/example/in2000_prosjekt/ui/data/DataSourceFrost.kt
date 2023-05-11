@@ -88,30 +88,30 @@ class DataSourceFrost (val basePath: String) {
 
              */
 
-            var long_Point1 = longitutde
-            var lat_Point1 = latitude
+            val long_Point1 = longitutde
+            val lat_Point1 = latitude
 
-            var long_Point2 = longitutde + increase
-            var lat_Point2 = latitude
+            val long_Point2 = longitutde + increase
+            val lat_Point2 = latitude
 
-            var long_Point3 = longitutde
-            var lat_Point3 = latitude + increase
+            val long_Point3 = longitutde
+            val lat_Point3 = latitude + increase
 
-            var long_Point4 = longitutde + increase
-            var lat_Point4 = latitude + increase
+            val long_Point4 = longitutde + increase
+            val lat_Point4 = latitude + increase
 
 
             // Dette er en firkant: kan endres til en seks- eller åttekant
-            var polygon =
+            val polygon =
                 "POLYGON((${long_Point1} $lat_Point1 , $long_Point2 $lat_Point2 ,${long_Point3} $lat_Point3 , $long_Point4 $lat_Point4 ))"
 
             return polygon
         }
 
-        var polygonMadeFromCoordinates =
+        val polygonMadeFromCoordinates =
             coordinatesToPolygonConverter(long.toDouble(), lat.toDouble())
 
-        var urlPolygon =
+        val urlPolygon =
             "https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=${polygonMadeFromCoordinates}"
 
         //get call her?? (authURL.....)

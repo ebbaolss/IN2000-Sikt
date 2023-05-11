@@ -7,8 +7,8 @@ import com.example.in2000_prosjekt.R
 // Delvis skyet = Dårlig sikt = Sikt på 1-4 km (STOR SKY) 50% - 75%
 // Skyet = Tåke = Sikt på mindre enn 1 km (STOR + LITEN SKY) over 100%
 
-enum class Sikt(val weather: String) {
-    CLOUDY("cloudy") {
+enum class Sikt {
+    CLOUDY {
         override fun getRightWeather(): String {
             return "Meget dårlig sikt"
         }
@@ -21,7 +21,7 @@ enum class Sikt(val weather: String) {
             return "> 1 km sikt"
         }
     },
-    PARTLYCLOUDY("partlycloudy") {
+    PARTLYCLOUDY {
         override fun getRightWeather(): String {
             return "Dårlig sikt"
         }
@@ -34,7 +34,7 @@ enum class Sikt(val weather: String) {
             return "1-4 km sikt"
         }
     },
-    FAIR("fair") {
+    FAIR {
         override fun getRightWeather(): String {
             return "Lettskyet"
         }
@@ -48,7 +48,7 @@ enum class Sikt(val weather: String) {
 
         }
     },
-    CLEARSKY("clearsky") {
+    CLEARSKY {
         override fun getRightWeather(): String {
             return "Klart vær"
         }
