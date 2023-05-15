@@ -40,6 +40,7 @@ fun AlertButton(alertType : String, alertLevel : String, onButtonClick: () -> Un
     val context = LocalContext.current.applicationContext
     val id = context.resources.getIdentifier(buttonimage.lowercase(), "drawable", context.packageName)
 
+    Log.d("ID", "id: $id")
 
     Image(modifier = Modifier.clickable { onButtonClick() },
         //hardkodet inn snow_yellow for test
