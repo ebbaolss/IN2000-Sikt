@@ -441,7 +441,7 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
                         textAlign = TextAlign.Center
                     )
                 },
-                trailingIcon = { //søkeknappen
+                trailingIcon = {
                     Button(
                         onClick = {
 
