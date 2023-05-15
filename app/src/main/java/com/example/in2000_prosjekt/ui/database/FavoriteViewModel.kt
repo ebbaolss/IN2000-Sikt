@@ -67,7 +67,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                 }
                 val alertP = alertInfo.await()
 
-                if(deletedP){
+                //if(deletedP){
                     _Uistate.update {
                         FavoriteUiState.Success(
                             locationP,
@@ -75,7 +75,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                             alertP
                         )
                     }
-                }
+                //}
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
                 _Uistate.update {
                     FavoriteUiState.Error
@@ -91,14 +91,17 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                     repository.getLocationList()
                 }
                 val locationP = locationInfo.await()
+                Log.d("UPDATE", "locationinfo updated size: ${locationP.size}")
                 val nowCastInfo = viewModelScope.async {
                     repository.getNowList()
                 }
                 val nowCastP = nowCastInfo.await()
+                Log.d("UPDATE", "nowcast updated size: ${nowCastP.size}")
                 val alertInfo = viewModelScope.async {
                     repository.getAlertInfo()
                 }
                 val alertP = alertInfo.await()
+                Log.d("UPDATE", "alert updated size: ${alertP.size}")
 
                 _Uistate.update {
                     FavoriteUiState.Success(
@@ -107,7 +110,8 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                         alertP
                     )
                 }
-            } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
+            } catch (e: IOException) {
+                Log.d("ERROR", "error i update")
                 _Uistate.update {
                     FavoriteUiState.Error
                 }

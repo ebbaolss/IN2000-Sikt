@@ -48,6 +48,7 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
     Log.d("FAVS", "${allFavorites.size}")
     //viewModel.deleteAll()
     if(allFavorites.isNotEmpty()){
+        Log.d("UPDATING", "oppdaterer")
         viewModel.update()
     } else {
         viewModel.updateEmpty()
@@ -100,7 +101,7 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
         is FavoriteUiState.Error -> {
             FavoriteScreenError( onNavigateToMap,
                 onNavigateToFav,onNavigateToInfo,
-                onNavigateToSettings)
+                onNavigateToSettings, viewModel)
         }
         is FavoriteUiState.Success -> {
             if(allFavorites.isNotEmpty()){
@@ -129,8 +130,6 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
 @Composable
 fun FavoriteScreenSuccess(
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel, allFavorites : List<Favorite>
-
-
 ) {
     val favoriteUiState by viewModel.favUiState.collectAsState()
 
@@ -162,7 +161,6 @@ fun FavoriteScreenSuccess(
                             onNavigateToFav,
                             onNavigateToInfo,
                             onNavigateToSettings
-
                         )
                     } else {
                         viewModel.update()

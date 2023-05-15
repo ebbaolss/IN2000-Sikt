@@ -211,7 +211,7 @@ fun ShowMap(
                         }
                     }
                     is AppUiState.Error -> {
-                        FavoriteScreenError( onNavigateToMap,
+                        AppScreenError( onNavigateToMap,
                             onNavigateToFav,onNavigateToSettings,
                             onNavigateToInfo)
                     }
