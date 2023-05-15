@@ -23,10 +23,13 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         }
     }
 
-    fun deleteFavorite(longtitude: Double, latitude: Double) {
+    fun deleteFavorite(longtitude: Double, latitude: Double) : Boolean{
+        var deleted = false
         coroutineScope.launch(Dispatchers.IO) {
             favoriteDao.deleteFav(longtitude, latitude)
+            deleted = true
         }
+        return deleted
     }
 
     fun findFavorite(longtitude: Double, latitude: Double) {

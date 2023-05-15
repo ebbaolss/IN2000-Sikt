@@ -47,6 +47,43 @@ class FavoriteViewModel(application: Application) : ViewModel() {
         repository.deleteFavorite(longtitude, latitude)
     }
 
+    fun deleteUpdate(longtitude: Double, latitude: Double) {
+        viewModelScope.launch() {
+            try {
+                val deleted = viewModelScope.async {
+                    repository.deleteFavorite(longtitude, latitude)
+                }
+                val deletedP = deleted.await()
+                val locationInfo = viewModelScope.async {
+                    repository.getLocationList()
+                }
+                val locationP = locationInfo.await()
+                val nowCastInfo = viewModelScope.async {
+                    repository.getNowList()
+                }
+                val nowCastP = nowCastInfo.await()
+                val alertInfo = viewModelScope.async {
+                    repository.getAlertInfo()
+                }
+                val alertP = alertInfo.await()
+
+                if(deletedP){
+                    _Uistate.update {
+                        FavoriteUiState.Success(
+                            locationP,
+                            nowCastP,
+                            alertP
+                        )
+                    }
+                }
+            } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
+                _Uistate.update {
+                    FavoriteUiState.Error
+                }
+            }
+        }
+    }
+
     fun update() {
         viewModelScope.launch() {
             try {
