@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import com.example.in2000_prosjekt.ui.data.*
+import com.example.in2000_prosjekt.data.*
 import junit.framework.TestCase.*
 
 
