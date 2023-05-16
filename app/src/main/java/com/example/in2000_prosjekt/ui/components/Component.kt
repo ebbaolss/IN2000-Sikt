@@ -199,6 +199,7 @@ fun Sikt_BottomBar2( ) {
     }
 }
 
+//ADD: boolean for når den kommer fra favorite screen.
 @Composable
 fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel) {
     Row(
@@ -288,25 +289,24 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
                     tint = Sikt_mørkeblå
                 )
                 viewModel.addFavorite(Favorite(lon,lat,location,height))
-            }  else if(!checked && !alreadyFav) {
-                Icon(
-                    painterResource(id = R.drawable.outline_favorite),
-                    contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
-                )
-            } else if (!checked) {
-                Icon(
-                    painterResource(id = R.drawable.outline_favorite),
-                    contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
-                )
-                viewModel.deleteUpdate(lon, lat)
-            } else {
+            } else if(alreadyFav){
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = "Localized description",
                     tint = Sikt_mørkeblå
                 )
+            }else{
+                Icon(
+                    painterResource(id = R.drawable.outline_favorite),
+                    contentDescription = "Localized description",
+                    tint = Sikt_mørkeblå
+                )
+                /*
+                if(alreadyFav){
+                    viewModel.deleteUpdate(lon, lat)
+                }
+
+                 */
             }
         }
     }
