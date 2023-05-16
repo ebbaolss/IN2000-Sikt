@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 
 class FavoriteViewModel(application: Application) : ViewModel() {
 
-    private val _Uistate: MutableStateFlow<FavoriteUiState> = MutableStateFlow(FavoriteUiState.Loading)
-    val favUiState: StateFlow<FavoriteUiState> = _Uistate.asStateFlow()
+    private val uistate: MutableStateFlow<FavoriteUiState> = MutableStateFlow(FavoriteUiState.Loading)
+    val favUiState: StateFlow<FavoriteUiState> = uistate.asStateFlow()
 
     val allFavorites: LiveData<List<Favorite>>
     private val repository: FavoriteRepository
@@ -43,17 +43,17 @@ class FavoriteViewModel(application: Application) : ViewModel() {
         repository.findFavorite(longtitude, latitude)
     }
 
-    fun deleteFavorite(longtitude: Double, latitude: Double) {
+    /*fun deleteFavorite(longtitude: Double, latitude: Double) {
         repository.deleteFavorite(longtitude, latitude)
-    }
+    }*/
 
     fun deleteUpdate(longtitude: Double, latitude: Double) {
         viewModelScope.launch() {
             try {
-                val deleted = viewModelScope.async {
+                /*val deleted = viewModelScope.async {
                     repository.deleteFavorite(longtitude, latitude)
-                }
-                val deletedP = deleted.await()
+                }*/
+                //val deletedP = deleted.await()
                 val locationInfo = viewModelScope.async {
                     repository.getLocationList()
                 }
@@ -68,7 +68,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                 val alertP = alertInfo.await()
 
                 //if(deletedP){
-                    _Uistate.update {
+                    uistate.update {
                         FavoriteUiState.Success(
                             locationP,
                             nowCastP,
@@ -77,7 +77,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                     }
                 //}
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
-                _Uistate.update {
+                uistate.update {
                     FavoriteUiState.Error
                 }
             }
@@ -103,7 +103,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                 val alertP = alertInfo.await()
                 Log.d("UPDATE", "alert updated size: ${alertP.size}")
 
-                _Uistate.update {
+                uistate.update {
                     FavoriteUiState.Success(
                         locationP,
                         nowCastP,
@@ -112,7 +112,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                 }
             } catch (e: IOException) {
                 Log.d("ERROR", "error i update")
-                _Uistate.update {
+                uistate.update {
                     FavoriteUiState.Error
                 }
             }
@@ -121,7 +121,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
     fun updateEmpty(){
         viewModelScope.launch() {
             try {
-                _Uistate.update {
+                uistate.update {
                     FavoriteUiState.Success(
                         mutableListOf(),
                         mutableListOf(),
@@ -129,7 +129,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                     )
                 }
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
-                _Uistate.update {
+                uistate.update {
                     FavoriteUiState.Error
                 }
             }
