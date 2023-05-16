@@ -10,12 +10,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import com.example.in2000_prosjekt.R
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_rød
+import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
+import com.example.in2000_prosjekt.ui.theme.Sikt_red
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -30,7 +27,7 @@ fun FavoriteScreenError ( onNavigateToMap: () -> Unit, onNavigateToFav: () -> Un
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(Sikt_lyseblå),
+                .background(Sikt_lightblue),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -60,7 +57,7 @@ fun AppScreenError ( onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, o
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(Sikt_rød),
+                .background(Sikt_red),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -68,5 +65,8 @@ fun AppScreenError ( onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, o
         }
     }
 }
+
+
+//mapboxscreen error handling når en topp har null i elevation
 
 

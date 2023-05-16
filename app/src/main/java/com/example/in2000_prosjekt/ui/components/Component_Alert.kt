@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.AlertInfo
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -92,7 +92,7 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
             Card(
                 modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(Sikt_lyseblå)
+                colors = CardDefaults.cardColors(Sikt_lightblue)
             ) {
                 Column(
                     modifier = Modifier.padding(20.dp),

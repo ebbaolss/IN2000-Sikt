@@ -28,9 +28,9 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
-import com.example.in2000_prosjekt.ui.database.Favorite
-import com.example.in2000_prosjekt.ui.database.FavoriteUiState
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
+import com.example.in2000_prosjekt.database.Favorite
+import com.example.in2000_prosjekt.database.FavoriteUiState
+import com.example.in2000_prosjekt.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,7 +77,7 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                         .fillMaxSize(), contentAlignment = Alignment.Center)
                 {
                     Card(
-                        colors = CardDefaults.cardColors(Sikt_lyseblå),
+                        colors = CardDefaults.cardColors(Sikt_lightblue),
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 40.dp),
                     ) {
                         Column(
@@ -188,7 +188,7 @@ fun FavoriteEmpty(
                 .fillMaxSize(), contentAlignment = Alignment.Center)
         {
             Card(
-                colors = CardDefaults.cardColors(Sikt_lyseblå),
+                colors = CardDefaults.cardColors(Sikt_lightblue),
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 40.dp),
             ) {
                 Column(

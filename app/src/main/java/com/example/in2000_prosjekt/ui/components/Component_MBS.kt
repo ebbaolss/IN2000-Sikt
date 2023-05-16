@@ -26,9 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_rød
+import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
+import com.example.in2000_prosjekt.ui.theme.Sikt_blue
+import com.example.in2000_prosjekt.ui.theme.Sikt_red
 import com.example.in2000_prosjekt.ui.theme.Sikt_sort
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import kotlinx.coroutines.launch
@@ -65,7 +65,7 @@ fun BottomSheetContent(){
     val mountains = mutableListOf<MapUiState.Mountain>()
 
     Surface(
-        color = Sikt_lyseblå,
+        color = Sikt_lightblue,
         modifier = Modifier.height(300.dp),
         shape = RoundedCornerShape(20.dp)
     ) {
@@ -76,7 +76,7 @@ fun BottomSheetContent(){
         ) {
             Icon(
                 imageVector = Icons.Default.KeyboardArrowDown,
-                tint = Sikt_mellomblå,
+                tint = Sikt_blue,
                 contentDescription = "",
                 modifier = Modifier.padding(top = 20.dp)
             )
@@ -120,7 +120,7 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
                 .fillMaxWidth()
                 .padding(30.dp),
             shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
-            colors = ButtonDefaults.buttonColors(Sikt_lyseblå),
+            colors = ButtonDefaults.buttonColors(Sikt_lightblue),
             onClick = {
                 showModalSheet.value = !showModalSheet.value
                 scope.launch {
@@ -135,7 +135,7 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowUp,
-                    tint = Sikt_mellomblå,
+                    tint = Sikt_blue,
                     contentDescription = "",
                     modifier = Modifier
                 )
@@ -150,7 +150,7 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
 @Preview(showSystemUi = true)
 @Composable
 fun MBSTest() {
-    Scaffold(bottomBar = { Sikt_BottomBar2() }, containerColor = Sikt_rød) {
+    Scaffold(bottomBar = { Sikt_BottomBar2() }, containerColor = Sikt_red) {
 
     }
 }

@@ -3,6 +3,8 @@ package com.example.in2000_prosjekt.ui
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.in2000_prosjekt.data.ImplementedWeatherRepository
+import com.example.in2000_prosjekt.data.WeatherRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-import com.example.in2000_prosjekt.ui.data.*
+import com.example.in2000_prosjekt.data.*
 import io.ktor.utils.io.errors.*
 
 import kotlinx.coroutines.async

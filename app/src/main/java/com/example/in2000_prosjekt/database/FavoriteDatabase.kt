@@ -1,4 +1,4 @@
-package com.example.in2000_prosjekt.ui.database
+package com.example.in2000_prosjekt.database
 
 
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.example.in2000_prosjekt.ui.data
+package com.example.in2000_prosjekt.data
 
 data class MapBuild(
     val suggestions: List<Contents>,

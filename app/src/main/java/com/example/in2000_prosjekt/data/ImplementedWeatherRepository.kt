@@ -1,4 +1,4 @@
-package com.example.in2000_prosjekt.ui.data
+package com.example.in2000_prosjekt.data
 
 import com.example.in2000_prosjekt.ui.*
 import java.text.SimpleDateFormat

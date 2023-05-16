@@ -1,4 +1,4 @@
-package com.example.in2000_prosjekt.ui.data
+package com.example.in2000_prosjekt.data
 
 //Denne brukes både for locationForecast og NowCast
 

@@ -16,8 +16,12 @@ import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.database.FavoriteViewModelFactory
+import com.example.in2000_prosjekt.database.MapViewModel
+import com.example.in2000_prosjekt.database.MapViewModelFactory
 import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.database.*
+import com.example.in2000_prosjekt.database.*
 import com.example.in2000_prosjekt.ui.screens.*
 
 class MainActivity : ComponentActivity() {

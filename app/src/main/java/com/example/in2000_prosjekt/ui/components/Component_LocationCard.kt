@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
+import com.example.in2000_prosjekt.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import java.text.SimpleDateFormat
@@ -49,7 +49,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
             testliste.add(mountain)*/
 
         Card(
-            colors = CardDefaults.cardColors(Sikt_lyseblå),
+            colors = CardDefaults.cardColors(Sikt_lightblue),
             modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
         ){
             Column(
@@ -137,7 +137,7 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
 fun Sikt_LocationCard_Hour_Card(tid: String, temp: Int, cloudiness: Float) {
 
     Card(
-        colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
+        colors = CardDefaults.cardColors(Sikt_backroundBlue),
         modifier = Modifier.padding(end = 5.dp),
     ) {
         Column(
@@ -195,7 +195,7 @@ fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo, nowCastInfo: NowCastI
     Card(
         modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
         shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(Sikt_bakgrunnblå)
+        colors = CardDefaults.cardColors(Sikt_backroundBlue)
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(10.dp),

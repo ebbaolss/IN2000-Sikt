@@ -1,4 +1,4 @@
-package com.example.in2000_prosjekt.ui.database
+package com.example.in2000_prosjekt.database
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
@@ -15,11 +15,11 @@ class Favorite {
     var coordinates: Int = 0
     */
 
-    @NonNull
+    //@NonNull
     @ColumnInfo(name = "longtitude")
     var longtitude: Double = 0.0
 
-    @NonNull
+    //@NonNull
     @ColumnInfo(name = "latitude")
     var latitude: Double = 0.0
 

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
+import com.example.in2000_prosjekt.ui.theme.Sikt_white
 
 @Composable
 fun Sikt_Historisk_Kalender() {
@@ -16,7 +16,7 @@ fun Sikt_Historisk_Kalender() {
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .background(Sikt_hvit),
+            .background(Sikt_white),
     ) {
         Text(text = "Kalender")
     }

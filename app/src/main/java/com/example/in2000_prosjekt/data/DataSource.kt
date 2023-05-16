@@ -1,4 +1,4 @@
-package com.example.in2000_prosjekt.ui.data
+package com.example.in2000_prosjekt.data
 
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -34,7 +34,7 @@ class DataSource (val basePath:String) {
         }
     }
 
-    suspend fun fetchNowCast(latitude: String, longtitude: String, altitude: String? = null): Model{
+    suspend fun fetchNowCast(latitude: String, longtitude: String, altitude: String? = null): Model {
         //datasource for nowcast og locationForecast
         val client = HttpClient() {
             install(ContentNegotiation) {

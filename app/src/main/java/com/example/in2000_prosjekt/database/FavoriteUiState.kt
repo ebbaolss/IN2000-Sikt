@@ -1,4 +1,4 @@
-package com.example.in2000_prosjekt.ui.database
+package com.example.in2000_prosjekt.database
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo

@@ -1,11 +1,11 @@
-package com.example.in2000_prosjekt.ui.database
+package com.example.in2000_prosjekt.database
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
-import com.example.in2000_prosjekt.ui.data.WeatherRepository
+import com.example.in2000_prosjekt.data.ImplementedWeatherRepository
+import com.example.in2000_prosjekt.data.WeatherRepository
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.geojson.Point
 import kotlinx.coroutines.Dispatchers

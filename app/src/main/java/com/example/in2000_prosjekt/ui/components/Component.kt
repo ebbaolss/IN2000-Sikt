@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.database.Favorite
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
+import com.example.in2000_prosjekt.database.Favorite
+import com.example.in2000_prosjekt.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 
@@ -44,7 +44,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
-        containerColor = Sikt_hvit,
+        containerColor = Sikt_white,
 
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
@@ -52,7 +52,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 //modifier = Modifier.width(120.dp)
             ){
                 IconButton(onClick = { onNavigateToMap() }) {
-                    val iconfarge = Sikt_mørkeblå
+                    val iconfarge = Sikt_darkblue
                     var iconChosen = R.drawable.outline_place_outline
                     if (map) {
                         iconChosen = R.drawable.baseline_place_filled
@@ -73,7 +73,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             ) {
 
                 IconButton(onClick = { onNavigateToFav() }) {
-                    val iconfarge = Sikt_mørkeblå
+                    val iconfarge = Sikt_darkblue
                     var iconChosen = R.drawable.outline_favorite
                     if (favorite) {
                         iconChosen = R.drawable.baseline_favorite_24
@@ -94,7 +94,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 //modifier = Modifier.width(98.dp)
             ) {
                 IconButton(onClick = { onNavigateToInfo() }) {
-                    val iconfarge = Sikt_mørkeblå
+                    val iconfarge = Sikt_darkblue
                     var iconChosen = R.drawable.outline_info
                     if (info) {
                         iconChosen = R.drawable.baseline_info_filled
@@ -115,7 +115,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 //modifier = Modifier.width(75.dp)
             ) {
                 IconButton(onClick = { onNavigateToSettings() }) {
-                    val iconfarge = Sikt_mørkeblå
+                    val iconfarge = Sikt_darkblue
                     var iconChosen = R.drawable.outline_settings
                     if (settings) {
                         iconChosen = R.drawable._settings_filled
@@ -140,7 +140,7 @@ fun Sikt_BottomBar2( ) {
     //Denne brukes for for testing av design i preview
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
-        containerColor = Sikt_hvit,
+        containerColor = Sikt_white,
 
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
@@ -151,7 +151,7 @@ fun Sikt_BottomBar2( ) {
                     Icon(
                         Icons.Filled.LocationOn,
                         contentDescription = "Localized description",
-                        tint = Sikt_mørkeblå,
+                        tint = Sikt_darkblue,
                     )
                 }
                 Text(text = "Utforsk")
@@ -164,7 +164,7 @@ fun Sikt_BottomBar2( ) {
                     Icon(
                         Icons.Outlined.Favorite,
                         contentDescription = "Localized description",
-                        tint = Sikt_mørkeblå,
+                        tint = Sikt_darkblue,
                     )
                 }
                 Text(text = "Favoritter")
@@ -177,7 +177,7 @@ fun Sikt_BottomBar2( ) {
                     Icon(
                         painter = painterResource(id = R.drawable.outline_info),
                         "",
-                        tint = Sikt_mørkeblå,
+                        tint = Sikt_darkblue,
                     )
                 }
                 Text(text = "Fjellvettreglene")
@@ -190,7 +190,7 @@ fun Sikt_BottomBar2( ) {
                     Icon(
                         Icons.Outlined.Settings,
                         "",
-                        tint = Sikt_mørkeblå,
+                        tint = Sikt_darkblue,
                     )
                 }
                 Text(text = "Innstillinger")
@@ -224,7 +224,7 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = "Localized description",
-                    tint = Sikt_lyseblå
+                    tint = Sikt_lightblue
                 )
             }
 
@@ -282,31 +282,32 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
             }
             Log.d("ALREADYFAV", "$alreadyFav")
 
-            if (checked) {
+            if (alreadyFav){
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
+                    tint = Sikt_darkblue
                 )
-                viewModel.addFavorite(Favorite(lon,lat,location,height))
-            } else if(alreadyFav){
-                Icon(
-                    Icons.Filled.Favorite,
-                    contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
-                )
-            }else{
+            } else if(!checked && alreadyFav) {
                 Icon(
                     painterResource(id = R.drawable.outline_favorite),
                     contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
+                    tint = Sikt_darkblue
                 )
-                /*
-                if(alreadyFav){
-                    viewModel.deleteUpdate(lon, lat)
-                }
-
-                 */
+                viewModel.deleteUpdate(lon,lat)
+            } else if (checked) {
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = "Localized description",
+                    tint = Sikt_darkblue
+                )
+                viewModel.addFavorite(Favorite(lon,lat,location,height))
+            } else {
+                Icon(
+                    painterResource(id = R.drawable.outline_favorite),
+                    contentDescription = "Localized description",
+                    tint = Sikt_darkblue
+                )
             }
         }
     }
@@ -336,7 +337,7 @@ fun Sikt_Favorite_Header(location : String , height: Int, lat: Double, lon: Doub
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = "Localized description",
-                    tint = Sikt_lyseblå
+                    tint = Sikt_lightblue
                 )
             }
         }
@@ -383,13 +384,13 @@ fun Sikt_Favorite_Header(location : String , height: Int, lat: Double, lon: Doub
                 Icon(
                     Icons.Filled.Favorite,
                     contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
+                    tint = Sikt_darkblue
                 )
             } else {
                 Icon(
                     painterResource(id = R.drawable.outline_favorite),
                     contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
+                    tint = Sikt_darkblue
                 )
                 viewModel.deleteUpdate(lon,lat)
             }
@@ -482,7 +483,7 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
                 .fillMaxWidth()
                 .padding(20.dp)
                 .clickable { popupControl = true },
-            colors = CardDefaults.cardColors(Sikt_lyseblå)
+            colors = CardDefaults.cardColors(Sikt_lightblue)
         ) {
             Column(
                 modifier = Modifier
@@ -515,7 +516,7 @@ fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mount
             val temp = nowCastInfo.temperatureNow
 
             Card(
-                colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
+                colors = CardDefaults.cardColors(Sikt_backroundBlue),
                 modifier = Modifier.padding(end = 10.dp)
             ) {
                 Column(
@@ -557,12 +558,12 @@ fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mount
 fun DeleteAllButton(viewModel: FavoriteViewModel){
     //Knapp til Instillinger for å slette alle favoritter.
 
-    Button(colors = ButtonDefaults.buttonColors(Sikt_mørkeblå),
+    Button(colors = ButtonDefaults.buttonColors(Sikt_darkblue),
         onClick = {
             viewModel.deleteAll()
         }
     ){
-        Text("Slett alle favoritter", color = Sikt_hvit)
+        Text("Slett alle favoritter", color = Sikt_white)
     }
 }
 
@@ -674,7 +675,7 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
             modifier = Modifier
                 .padding(20.dp),
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(Sikt_lyseblå)
+            colors = CardDefaults.cardColors(Sikt_lightblue)
         ) {
             Column(
                 modifier = Modifier.padding(20.dp)
@@ -682,7 +683,7 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                 Icon(
                     painter = painterResource(id = R.drawable.outline_contact_phone),
                     contentDescription = "Phone illustration",
-                    tint = Sikt_mørkeblå,
+                    tint = Sikt_darkblue,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .size(100.dp),
@@ -867,7 +868,7 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
             modifier = Modifier
                 .padding(20.dp),
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(Sikt_lyseblå)
+            colors = CardDefaults.cardColors(Sikt_lightblue)
         ) {
             Column(
                 modifier = Modifier.padding(20.dp)

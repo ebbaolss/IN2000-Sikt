@@ -19,12 +19,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.AppUiState
-import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.*
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
-import com.example.in2000_prosjekt.ui.database.MapViewModel
+import com.example.in2000_prosjekt.database.MapViewModel
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
@@ -63,9 +62,9 @@ import androidx.compose.ui.text.style.TextAlign
 import com.mapbox.maps.MapView
 import androidx.compose.ui.text.input.ImeAction
 import com.example.in2000_prosjekt.R
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
+import com.example.in2000_prosjekt.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -188,7 +187,7 @@ fun ShowMap(
                             )
                             {
                                 Card(
-                                    colors = CardDefaults.cardColors(Sikt_lyseblå),
+                                    colors = CardDefaults.cardColors(Sikt_lightblue),
                                     modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 40.dp),
                                 ) {
                                     Column(

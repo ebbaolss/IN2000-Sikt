@@ -1,4 +1,4 @@
-package com.example.in2000_prosjekt.ui.database
+package com.example.in2000_prosjekt.database
 
 
 import android.util.Log
@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.in2000_prosjekt.ui.AlertInfo
 import com.example.in2000_prosjekt.ui.LocationInfo
 import com.example.in2000_prosjekt.ui.NowCastInfo
-import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
+import com.example.in2000_prosjekt.data.ImplementedWeatherRepository
 import kotlinx.coroutines.*
 
 class FavoriteRepository(private val favoriteDao: FavoriteDao) {
