@@ -3,9 +3,14 @@ package com.example.in2000_prosjekt.ui.components
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +37,7 @@ import java.time.YearMonth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>, frostinfo: FrostInfo, frostViewModel: FrostViewModel,monthState:MonthState){
+fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>, frostinfo: FrostInfo, frostViewModel: FrostViewModel, monthState:MonthState){
 
     val name = mountain.name
     val elevation = mountain.elevation
@@ -63,34 +68,22 @@ fun Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo,
 
 
 
-
-    // Gir point koordinatene i lat, så long?
-    println("latitude: " + latitude.toString()) // latitude: 8.557780981063843
-    println("longitude: " + longitude.toString()) // longitude: 61.65138739947395
-
     //dataN = apiViewModel.repository.getNowCast(latitude.toString(), longitude.toString(), elevation.toString())
 
     val weather_high = locationInfo.cloud_area_fraction_high
     val weather_mid = locationInfo.cloud_area_fraction_medium
     val weather_low = locationInfo.cloud_area_fraction_low
 
-   // val temp = dataN.temperatureNow
-   // val wind = dataN.windN
-
-    println("weather_high = $weather_high")
-    println("weather_mid = $weather_mid")
-    println("weather_low = $weather_low")
-
+    val scrolstate = rememberScrollState()
     Card (
         colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.padding(20.dp),
+        modifier = Modifier.padding(20.dp).verticalScroll(scrolstate )
     ) {
         Column(
             modifier = Modifier.padding(20.dp),
         ) {
             Sikt_Header(location = "$name", alertinfo = mutableListOf()) // Husk å endre alertinfo
             Sikt_MountainHight(mountainheight = "$elevation")
-            Spacer(modifier = Modifier.size(20.dp))
 
 
 

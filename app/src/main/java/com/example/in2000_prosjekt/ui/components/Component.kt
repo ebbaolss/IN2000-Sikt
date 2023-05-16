@@ -167,7 +167,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Fjellvettreglene", fontSize = 13.sp)
+                Text(text = "Info", fontSize = 13.sp)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
