@@ -142,7 +142,7 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
         }
 
         if (alertinfo.size != 0){
-            AlertButton( alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA){
+            AlertButton( alertinfo[0].alertTypeA, alertinfo[0].alertLevelA){
                 openDialog = true
             }
         }  else {
@@ -255,7 +255,7 @@ fun Sikt_Favorite_Header(location : String , height: Int, lat: Double, lon: Doub
             mutableStateOf(false)
         }
         if (alertinfo.size != 0) {
-            AlertButton(alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA) {
+            AlertButton(alertinfo[0].alertTypeA, alertinfo[0].alertLevelA) {
                 openDialog = true
             }
         } else {

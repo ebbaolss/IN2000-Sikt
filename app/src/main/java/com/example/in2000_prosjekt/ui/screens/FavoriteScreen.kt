@@ -99,9 +99,11 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 }
             }
         is FavoriteUiState.Error -> {
-            FavoriteScreenError( onNavigateToMap,
-                onNavigateToFav,onNavigateToInfo,
-                onNavigateToSettings, viewModel)
+            FavoriteScreenError(
+                onNavigateToMap,
+                onNavigateToFav, onNavigateToInfo,
+                onNavigateToSettings
+            )
         }
         is FavoriteUiState.Success -> {
             if(allFavorites.isNotEmpty()){

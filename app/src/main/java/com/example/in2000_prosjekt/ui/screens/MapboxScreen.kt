@@ -21,7 +21,6 @@ import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.*
-import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
 import com.example.in2000_prosjekt.ui.components.siktLocationcard
 import com.example.in2000_prosjekt.database.MapViewModel
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
@@ -156,11 +155,6 @@ fun ShowMap(
                     )
                 }
             )
-
-            if (!locationCardState) {
-                // Skal ta inn liste over topper i nærheten og nowcast:
-                Sikt_BottomSheet()
-            }
 
             if (locationCardState){
                 when (appUiState) {
