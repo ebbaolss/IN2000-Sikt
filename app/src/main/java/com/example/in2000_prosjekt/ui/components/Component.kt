@@ -1,187 +1,122 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.graphics.ColorSpace
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.PaintDrawable
-import android.media.Image
-import android.widget.DatePicker
-import androidx.compose.animation.VectorConverter
-
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
-import androidx.compose.material3.AlertDialogDefaults.containerColor
-import androidx.compose.material3.AlertDialogDefaults.titleContentColor
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.Surface
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.Popup
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.database.Favorite
+import com.example.in2000_prosjekt.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
-//import com.google.android.material.datepicker.MaterialDatePicker
-import kotlinx.coroutines.launch
-//import androidx.compose.material3.DatePickerColors Fjernet sammen med: 1.1.0-alpha04
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.core.graphics.toColor
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-/*
-import io.github.boguszpawlowski.composecalendar.*
-import io.github.boguszpawlowski.composecalendar.day.Day
-import io.github.boguszpawlowski.composecalendar.day.DayState
-import io.github.boguszpawlowski.composecalendar.day.DefaultDay
-import io.github.boguszpawlowski.composecalendar.day.NonSelectableDayState
-import io.github.boguszpawlowski.composecalendar.kotlinxDateTime.toKotlinYearMonth
-import io.github.boguszpawlowski.composecalendar.selection.DynamicSelectionState
-import io.github.boguszpawlowski.composecalendar.selection.EmptySelectionState
-import io.github.boguszpawlowski.composecalendar.selection.SelectionMode
-import io.github.boguszpawlowski.composecalendar.selection.SelectionState */
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import java.time.DayOfWeek
-import java.time.LocalDate
-import androidx.compose.material3.IconToggleButton
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
-import com.example.in2000_prosjekt.ui.data.DataSource
-import com.example.in2000_prosjekt.ui.data.DataSourceSunrise
-import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.uistate.MapUiState
 
 @Composable
-fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit, onNavigateToSettings: () -> Unit, favoritt : Boolean, map : Boolean, rules : Boolean, settings : Boolean) {
+fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, map : Boolean, favorite : Boolean, info : Boolean, settings : Boolean) {
 
     BottomAppBar(
         modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
-        containerColor = Sikt_hvit,
+        containerColor = Sikt_white,
 
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
             Column (horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(120.dp)
             ){
                 IconButton(onClick = { onNavigateToMap() }) {
-                    var iconfarge = Sikt_mørkeblå
+                    val iconfarge = Sikt_darkblue
                     var iconChosen = R.drawable.outline_place_outline
                     if (map) {
                         iconChosen = R.drawable.baseline_place_filled
                     }
                     Icon(
                         painter = painterResource(iconChosen),
-                        contentDescription = "Localized description",
+                        contentDescription = "Utforsk knapp",
                         tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
                             .padding(5.dp))
                 }
-                Text(text = "Utforsk", fontSize = 13.sp)
+                Text(text = "   Utforsk   ", fontSize = 13.sp)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(75.dp)
             ) {
 
                 IconButton(onClick = { onNavigateToFav() }) {
-                    var iconfarge = Sikt_mørkeblå
-                    var iconChosen = Icons.Outlined.Favorite
-                    if (favoritt) {
-                        iconChosen = Icons.Filled.Favorite
-                    }
-                    Icon(
-                        iconChosen,
-                        contentDescription = "Localized description",
-                        tint = iconfarge,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .padding(5.dp)
-                    )
-                }
-                Text(text = "Favoritter", fontSize = 13.sp)
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(98.dp)
-            ) {
-                IconButton(onClick = { onNavigateToRules() }) {
-                    var iconfarge = Sikt_mørkeblå
-                    var iconChosen = R.drawable.outline_view_list_outlined
-                    if (rules) {
-                        iconChosen = R.drawable.baseline_view_list_filled
+                    val iconfarge = Sikt_darkblue
+                    var iconChosen = R.drawable.outline_favorite
+                    if (favorite) {
+                        iconChosen = R.drawable.baseline_favorite_24
                     }
                     Icon(
                         painter = painterResource(iconChosen),
-                        "",
+                        contentDescription = "Favoritter knapp",
                         tint = iconfarge,
                         modifier = Modifier
-                            .size(120.dp)
                             .clip(CircleShape)
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Fjellvettreglene", fontSize = 13.sp)
+                Text(text = " Favoritter ", fontSize = 13.sp)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(75.dp)
             ) {
-                IconButton(onClick = { onNavigateToSettings() }) {
-                    var iconfarge = Sikt_mørkeblå
-                    var iconChosen = R.drawable.outline_info_outlined
-                    if (settings) {
+                IconButton(onClick = { onNavigateToInfo() }) {
+                    val iconfarge = Sikt_darkblue
+                    var iconChosen = R.drawable.outline_info
+                    if (info) {
                         iconChosen = R.drawable.baseline_info_filled
                     }
                     Icon(
+                        painter = painterResource(iconChosen),
+                        "Info knapp",
+                        tint = iconfarge,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .padding(5.dp)
+                    )
+                }
+                Text(text = "    Info    ", fontSize = 13.sp) //12
+            }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                IconButton(onClick = { onNavigateToSettings() }) {
+                    val iconfarge = Sikt_darkblue
+                    var iconChosen = R.drawable.outline_settings
+                    if (settings) {
+                        iconChosen = R.drawable._settings_filled
+                    }
+                    Icon(
                         painterResource(iconChosen),
-                        "",
+                        "Instillinger knapp",
                         tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
@@ -194,75 +129,12 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
     }
 }
 
+//ADD: boolean for når den kommer fra favorite screen.
 @Composable
-fun Sikt_BottomBar2( ) {
-    //Denne brukes for for testing av design i preview
-    BottomAppBar(
-        modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
-        containerColor = Sikt_hvit,
-
-        ) {
-        Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-            Column (horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(75.dp)
-            ){
-                IconButton(onClick = {  }) {
-                    Icon(
-                        Icons.Filled.LocationOn,
-                        contentDescription = "Localized description",
-                        tint = Sikt_mørkeblå,
-                    )
-                }
-                Text(text = "Utforsk")
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(75.dp)
-            ) {
-                IconButton(onClick = {  }) {
-                    Icon(
-                        Icons.Outlined.Favorite,
-                        contentDescription = "Localized description",
-                        tint = Sikt_mørkeblå,
-                    )
-                }
-                Text(text = "Favoritter")
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(93.dp)
-            ) {
-                IconButton(onClick = {  }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.outline_info_outlined),
-                        "",
-                        tint = Sikt_mørkeblå,
-                    )
-                }
-                Text(text = "Fjellvettreglene")
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(75.dp)
-            ) {
-                IconButton(onClick = {  }) {
-                    Icon(
-                        Icons.Outlined.Settings,
-                        "",
-                        tint = Sikt_mørkeblå,
-                    )
-                }
-                Text(text = "Innstillinger")
-            }
-        }
-    }
-}
-
-@Composable
-fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
+fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         var openDialog by remember {
@@ -273,15 +145,167 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
             AlertButton( alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA){
                 openDialog = true
             }
-        }
+        }  else {
+            // For å fikse at fjelltopp-text blir midtstilt
+            IconToggleButton(
+                checked = false,
+                onCheckedChange = { },
+            ) {
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = "Marker favoritt knapp",
+                    tint = Sikt_lightblue
+                )
+            }
 
+        }
         if (openDialog){
             AlertDialog(alertinfo = alertinfo){
                 openDialog = false
             }
         }
-        Text(text = "$location", fontWeight = FontWeight.Bold, fontSize = 30.sp)
+
+        if (location.length <= 10) {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center
+            )
+        } else if (location.length <= 15) {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        } else {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+
         var checked by remember { mutableStateOf(false) }
+        IconToggleButton(
+            checked = checked,
+            onCheckedChange = { checked = it },
+        ) {
+            var alreadyFav by remember { mutableStateOf(false)}
+
+            viewModel.findFavorite(lon,lat,location,height)
+
+            Log.d("VIEWSIZE", "${viewModel.searchFavorites.value?.size}")
+            alreadyFav = if (viewModel.searchFavorites.value != null) {
+                if (viewModel.searchFavorites.value!!.isNotEmpty()) {
+                    viewModel.searchFavorites.value!![0].latitude == lat && viewModel.searchFavorites.value!![0].longtitude == lon
+                } else {
+                    false
+                }
+            } else {
+                false
+            }
+            Log.d("ALREADYFAV", "$alreadyFav")
+
+            if (alreadyFav){
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = "Favoritt",
+                    tint = Sikt_darkblue
+                )
+            } else if(!checked && alreadyFav) {
+                Icon(
+                    painterResource(id = R.drawable.outline_favorite),
+                    contentDescription = "Ikke en favoritt",
+                    tint = Sikt_darkblue
+                )
+                viewModel.deleteUpdate(lon,lat)
+            } else if (checked) {
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = "Favoritt",
+                    tint = Sikt_darkblue
+                )
+                viewModel.addFavorite(Favorite(lon,lat,location,height))
+            } else {
+                Icon(
+                    painterResource(id = R.drawable.outline_favorite),
+                    contentDescription = "Ikke en favoritt",
+                    tint = Sikt_darkblue
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun Sikt_Favorite_Header(location : String , height: Int, lat: Double, lon: Double, alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel) {
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        var openDialog by remember {
+            mutableStateOf(false)
+        }
+        if (alertinfo.size != 0) {
+            AlertButton(alertinfo.get(0).alertTypeA, alertinfo.get(0).alertLevelA) {
+                openDialog = true
+            }
+        } else {
+            // For å fikse at fjelltopp-text blir midtstilt
+            IconToggleButton(
+                checked = false,
+                onCheckedChange = { },
+            ) {
+                Icon(
+                    Icons.Filled.Favorite,
+                    contentDescription = "Marker favoritt knapp",
+                    tint = Sikt_lightblue
+                )
+            }
+        }
+
+        if (openDialog) {
+            AlertDialog(alertinfo = alertinfo) {
+                openDialog = false
+            }
+        }
+
+        if (location.length <= 10) {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center
+            )
+        } else if (location.length <= 15) {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        } else {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = location,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        var checked by remember { mutableStateOf(true) }
+
         IconToggleButton(
             checked = checked,
             onCheckedChange = { checked = it },
@@ -289,15 +313,16 @@ fun Sikt_Header(location : String , alertinfo: MutableList<AlertInfo> ) {
             if (checked) {
                 Icon(
                     Icons.Filled.Favorite,
-                    contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
+                    contentDescription = "Favoritt",
+                    tint = Sikt_darkblue
                 )
             } else {
                 Icon(
                     painterResource(id = R.drawable.outline_favorite),
-                    contentDescription = "Localized description",
-                    tint = Sikt_mørkeblå
+                    contentDescription = "Ikke en favoritt",
+                    tint = Sikt_darkblue
                 )
+                viewModel.deleteUpdate(lon,lat)
             }
         }
     }
@@ -317,46 +342,141 @@ fun Sikt_MountainHight(mountainheight : String) {
 fun Sikt_skyillustasjon() {
     Image(
         painter = painterResource(id = R.drawable.clounds_image),
-        contentDescription = "sol",
+        contentDescription = "Sky illustrasjon",
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
             .fillMaxWidth()
-        )
+    )
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
-fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>) {
+fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>, favorites: List<Favorite>, viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit) {
     //favorites er en mutableList med LocationInfo kan derfor kalle
     // favorite.temperatureL etc.
-    items(weatherinfo.size) {
-        weatherinfo.forEach { favorite ->
-            val location = weatherinfo[it]
-            val nowcast = nowcastinfo[it]
-            val alertInfo = alertInfo[it]
 
-            Card(
+    Log.d("INFOSIZE", "${weatherinfo.size}")
+    Log.d("FAVS", "${favorites.size}")
+    Log.d("AlertSIZE", "${alertInfo.size}")
+
+    items(weatherinfo.size) {
+        //Log.d("CARD", "STARTER CARD")
+        val location = weatherinfo[it]
+        val nowcast = nowcastinfo[it]
+        val alertInfo = alertInfo[it]
+        val name = favorites[it].mountainName
+        val height = favorites[it].mountainHeight
+        val lon = favorites[it].longtitude
+        val lat = favorites[it].latitude
+        val mount = MapUiState.Mountain(name, lat.toString(), lon.toString(), height)
+
+
+        var popupControl by remember { mutableStateOf(false) }
+
+        if (popupControl) {
+            Popup(alignment = Alignment.Center) {
+
+                Scaffold(bottomBar = { Sikt_BottomBar(
+                    onNavigateToMap,
+                    onNavigateToFav,
+                    onNavigateToInfo,
+                    onNavigateToSettings,
+                    map = false,
+                    favorite = true,
+                    info = false,
+                    settings = false
+                )}) {
+                    Column(modifier = Modifier
+                        .fillMaxSize()
+                        .paint(
+                            painterResource(id = R.drawable.map_backround),
+                            contentScale = ContentScale.FillBounds
+                        ).clickable { popupControl = false }) {
+                        LazyColumn(
+                            modifier = Modifier
+                                //.fillMaxSize()
+                                .padding(top = 0.dp, bottom = 70.dp, start = 20.dp, end = 20.dp)
+
+                        ) {
+                            // Må legge inn listen over fjelltopper i nærheten:
+                            Sikt_LocationCard(
+                                mount, location, nowcast, alertInfo, viewModel
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+                .clickable { popupControl = true },
+            colors = CardDefaults.cardColors(Sikt_lightblue)
+        ) {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp),
-                colors = CardDefaults.cardColors(Sikt_lyseblå)
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Sikt_Favorite_Header(name,height, favorites[it].latitude, favorites[it].longtitude, alertInfo, viewModel)
+                Sikt_MountainHight(height.toString())
+                Illustrasjon(
+                    height = height,
+                    temp = nowcast.temperatureNow,
+                    vind = nowcast.windN,
+                    weatherHigh = location.cloud_area_fraction_high,
+                    weatherMid = location.cloud_area_fraction_medium,
+                    weatherLow = location.cloud_area_fraction_low
+                )
+            }
+        }
+    }
+}
+
+fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mountain>, nowCastInfo: NowCastInfo) {
+
+    items(1) {
+        mountains.forEach { mountain ->
+
+            val temp = nowCastInfo.temperatureNow
+
+            Card(
+                colors = CardDefaults.cardColors(Sikt_backroundBlue),
+                modifier = Modifier.padding(end = 10.dp)
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.padding(10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
-                    Sikt_Header("fjelltopp", alertInfo)
-                    Sikt_MountainHight("1884")
-                    illustrasjon(
-                        height = 1280,
-                        temp = nowcast.temperatureNow,
-                        vind = nowcast.windN,
-                        weatherHigh = location.cloud_area_fraction_high,
-                        weatherMid = location.cloud_area_fraction_medium,
-                        weatherLow = location.cloud_area_fraction_low
+                    Box(
+                        modifier = Modifier.size(100.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.turer_i_naerheten),
+                            contentDescription = "",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        Text(
+                            text = "${temp}°",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 28.sp,
+                            color = Sikt_sort,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Text(
+                        text = "${mountain.name}",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        color = Sikt_sort,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
@@ -365,139 +485,28 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
 }
 
 @Composable
-fun Sikt_Turer_I_Naerheten(location : String, height : Int, temp : Int){
-    Card(
-        colors = CardDefaults.cardColors(Sikt_bakgrunnblå),
-        modifier = Modifier.padding(20.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Box(
-                modifier = Modifier.size(100.dp)
-            ) {
-                /*Image(
-                    painter = painterResource(id = R.drawable.turer_i_naerheten),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                )*/
-                Text(
-                    text = "7°",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp,
-                    color = Sikt_sort,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-            Spacer(modifier = Modifier.size(10.dp))
-            Text(
-                text = "fjelltopp",
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
-                color = Sikt_sort,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-    }
-}
-
-//Knapp til Instillinger for å slette alle favoritter.
-@Composable
 fun DeleteAllButton(viewModel: FavoriteViewModel){
-    Button(
+    //Knapp til Instillinger for å slette alle favoritter.
+
+    Button(colors = ButtonDefaults.buttonColors(Sikt_darkblue),
         onClick = {
             viewModel.deleteAll()
         }
     ){
-        Text("Slett alle favoritter")
+        Text("Slett alle favoritter", color = Sikt_white)
     }
 }
 
 @Composable
-fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : Float, weatherMid : Float, weatherLow : Float){
+fun Illustrasjon(height: Int?, temp: Int, vind: Float, weatherHigh: Float, weatherMid: Float, weatherLow: Float){
 
     fun getHeightVisuals(height: Int?) : Int {
-        return if (height != null) {
-            if (height < 500) {
-                R.drawable.topp_under500
-            } else if (height < 1000) {
-                R.drawable.topp1000to500
-            } else if (height < 1500) {
-                R.drawable.topp1500to1000
-            } else if (height < 2000) {
-                R.drawable.topp2000to1500
-            } else {
-                R.drawable.topp_over2000
-            }
-        } else {
-            R.drawable.topp_under500
-        }
-    }
-
-    // Klart vær = God sikt = Sikt på mer enn 10 km (INGEN SKYER)
-    // Lettskyet = Moderat sikt = Sikt på 4-10 km (LITEN SKY)
-    // Delvis skyet = Dårlig sikt = Sikt på 1-4 km (STOR SKY)
-    // Skyet = Tåke = Sikt på mindre enn 1 km (STOR + LITEN SKY)
-
-    fun getHighClouds(highclouds: Float): Int {
-        return if (highclouds >= 75) {
-            R.drawable.clouds_high_both
-        } else if (highclouds >= 50) {
-            R.drawable.clouds_high_big
-        } else if (highclouds >= 25 ) {
-            R.drawable.clouds_high_small
-        } else {
-            R.drawable.klart
-        }
-    }
-
-    fun getMidClouds(midclouds: Float): Int {
-        return if (midclouds >= 75) {
-            R.drawable.clouds_mid_both
-        } else if (midclouds >= 50) {
-            R.drawable.clouds_mid_big
-        } else if (midclouds>= 25) {
-            R.drawable.clouds_mid_small
-        } else {
-            R.drawable.klart
-        }
-    }
-
-    fun getLowClouds(lowclouds: Float): Int {
-        return if (lowclouds >= 75) {
-            R.drawable.clouds_low_both
-        } else if (lowclouds >= 50) {
-            R.drawable.clouds_low_big
-        } else if (lowclouds >= 25) {
-            R.drawable.clouds_low_small
-        } else {
-            R.drawable.klart
-        }
-    }
-
-    fun getRightWeather(weather: Float): String {
-        return if (weather >= 75) {
-            "Meget dårlig sikt"
-        } else if (weather >= 50) {
-            "Dårlig sikt"
-        } else if (weather >= 25) {
-            "Lettskyet"
-        } else {
-            "Klart vær"
-        }
-    }
-
-    fun getRightKm(km: Float): String {
-        return if (km >= 75) {
-            "> 1 km sikt"
-        } else if (km >= 50) {
-            "1-4 km sikt"
-        } else if (km >= 25) {
-            "4-10 km sikt"
-        } else {
-            "< 10 km sikt"
+        return when (height) {
+            in 0 .. 500 -> R.drawable.topp_under500
+            in 501 .. 1000 -> R.drawable.topp1000to500
+            in 1001 .. 1500 -> R.drawable.topp1500to1000
+            in 1501 .. 2000 -> R.drawable.topp2000to1500
+            else -> R.drawable.topp_over2000
         }
     }
 
@@ -506,27 +515,27 @@ fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : Float, 
     ){
         Image(
             painter = painterResource(id = R.drawable.new_background),
-            contentDescription = "",
+            contentDescription = "Bakgrunn",
             modifier = Modifier.fillMaxSize()
         )
         Image(
             painter = painterResource(id = getHeightVisuals(height)),
-            contentDescription = "",
+            contentDescription = "Høyde visulisering",
             modifier = Modifier.fillMaxSize()
         )
         Image(
             painter = painterResource(id = getHighClouds(weatherHigh)),
-            contentDescription = "",
+            contentDescription = "Høyt skylag",
             modifier = Modifier.fillMaxSize()
         )
         Image(
             painter = painterResource(id = getMidClouds(weatherMid)),
-            contentDescription = "",
+            contentDescription = "Middels skylag",
             modifier = Modifier.fillMaxSize()
         )
         Image(
             painter = painterResource(id = getLowClouds(weatherLow)),
-            contentDescription = "",
+            contentDescription = "Lavt skylag",
             modifier = Modifier.fillMaxSize()
         )
         Column(
@@ -539,7 +548,7 @@ fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : Float, 
         ){
             Image(
                 painter = painterResource(id = R.drawable.vind_icon),
-                contentDescription = "",
+                contentDescription = "Vind ikon",
                 modifier = Modifier.size(24.dp)
             )
             Text(text = "$vind m/s", fontSize = 12.sp, color = Sikt_sort)
@@ -566,7 +575,7 @@ fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : Float, 
             ) {
                 Text(text = "2000 - 5000 m.o.h.", fontSize = 12.sp, color = Sikt_sort)
                 Text(text = getRightKm(weatherHigh), fontSize = 16.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
-                Text(text = getRightWeather(weatherHigh), fontSize = 12.sp, color = Sikt_sort)
+                Text(text = getRightSikt(weatherHigh), fontSize = 12.sp, color = Sikt_sort)
             }
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.width(100.dp))
             Column(
@@ -575,7 +584,7 @@ fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : Float, 
             ) {
                 Text(text = "1000 - 2000 m.o.h.", fontSize = 12.sp, color = Sikt_sort)
                 Text(text = getRightKm(weatherMid), fontSize = 16.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
-                Text(text = getRightWeather(weatherMid), fontSize = 12.sp, color = Sikt_sort)
+                Text(text = getRightSikt(weatherMid), fontSize = 12.sp, color = Sikt_sort)
             }
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.width(100.dp))
             Column(
@@ -584,33 +593,358 @@ fun illustrasjon(height : Int, temp : Float, vind : Float, weatherHigh : Float, 
             ) {
                 Text(text = "0 - 1000 m.o.h.", fontSize = 12.sp, color = Sikt_sort)
                 Text(text = getRightKm(weatherLow), fontSize = 16.sp, color = Sikt_sort, fontWeight = FontWeight.Bold)
-                Text(text = getRightWeather(weatherLow), fontSize = 12.sp, color = Sikt_sort)
+                Text(text = getRightSikt(weatherLow), fontSize = 12.sp, color = Sikt_sort)
             }
         }
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-fun TestComponent() {
-
-    //Sikt_FinnTurer_card("test",550, 3,false, true, false)
-
-    Card(
-        colors = CardDefaults.cardColors(Sikt_lyseblå),
-        modifier = Modifier.padding(20.dp),
-    ) {
-
-        Column(
+fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
+    items(1) {
+        Card(
+            modifier = Modifier
+                .padding(20.dp),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(Sikt_lightblue)
         ) {
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
+            Column(
+                modifier = Modifier.padding(20.dp)
             ) {
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+                Icon(
+                    painter = painterResource(id = R.drawable.outline_contact_phone),
+                    contentDescription = "Telefon illustrasjon",
+                    tint = Sikt_darkblue,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .size(100.dp),
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    text = "Informasjon",
+                    textAlign = TextAlign.Center,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.size(50.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Nødnummer:",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = "Medisinsk Nødtelefon:",
+                        textAlign = TextAlign.Start,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        text = "113",
+                        textAlign = TextAlign.End,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = "Brann:",
+                        textAlign = TextAlign.Start,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        text = "110",
+                        textAlign = TextAlign.End,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = "Politi:",
+                        textAlign = TextAlign.Start,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        text = "112",
+                        textAlign = TextAlign.End,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = "Politiets sentralbord:",
+                        textAlign = TextAlign.Start,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        text = "02800",
+                        textAlign = TextAlign.End,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = "Legevakten:",
+                        textAlign = TextAlign.Start,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        text = "116117",
+                        textAlign = TextAlign.End,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+                Spacer(modifier = Modifier.size(30.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Fjellvettreglene:",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.size(10.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    var counter = 1
+                    rules.forEach {
+                        Row(
+                            modifier = Modifier
+                                .padding(vertical = 2.dp)
+                        ) {
+                            Text(
+                                text = "$counter. ",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(end = 20.dp),
+                                text = it,
+                                fontSize = 18.sp,
+                                fontFamily = FontFamily.SansSerif
+                            )
+                            Spacer(Modifier.height(30.dp))
+                            counter++
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
+    items(1) {
+        Card(
+            modifier = Modifier
+                .padding(20.dp),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(Sikt_lightblue)
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp)
+            ) {
+                Sikt_skyillustasjon()
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    text = "Innstillinger",
+                    textAlign = TextAlign.Center,
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.size(50.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Slett alle favoritter:",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                //Legg inn "slett alle favoritter"-knapp
+                DeleteAllButton(viewModel)
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Kommer snart:",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp),
+                    text = "Darkmode",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp),
+                    text = "Historisk data",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp),
+                    text = "Topper i nærheten",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal
+                )
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Utviklet av:",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Ebba Maja Olsson",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Elisabeth Bårdstu",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Nabil Hassen",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Ola Juul Holm",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Synne Markmanrud",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Thea Hermansen Bakke",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "APIer:",
+                    textAlign = TextAlign.Start,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Vi har implementert følgende APIer via meteorologisk insitutt:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                        text = "Locationforecast",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                        text = "Nowcast",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                        text = "MetAlerts",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "I tillegg er kartet hentet fra:",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                        text = "Mapbox",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
             }
         }
     }

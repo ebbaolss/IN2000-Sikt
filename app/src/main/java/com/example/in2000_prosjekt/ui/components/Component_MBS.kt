@@ -1,12 +1,12 @@
 package com.example.in2000_prosjekt.ui.components
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.material3.Button
@@ -21,17 +21,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_mellomblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
+import com.example.in2000_prosjekt.ui.theme.Sikt_blue
+import com.example.in2000_prosjekt.ui.theme.Sikt_red
 import com.example.in2000_prosjekt.ui.theme.Sikt_sort
+import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_BottomSheet() {
 
@@ -45,44 +49,55 @@ fun Sikt_BottomSheet() {
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
-        sheetContent = { BottomSheetContent() }
+        sheetContent = { BottomSheetContent() },
+        sheetBackgroundColor = Color.Transparent,
+
     ) {
         ModalSheetWithAnchor(sheetState, showModalSheet)
+
     }
+
 }
 
 @Composable
 fun BottomSheetContent(){
+
+    val mountains = mutableListOf<MapUiState.Mountain>()
+
     Surface(
-        color = Sikt_lyseblå,
-        modifier = Modifier.height(200.dp),
-        // shape = RoundedCornerShape(20.dp) får ikke denne til å se bra ut :((
+        color = Sikt_lightblue,
+        modifier = Modifier.height(300.dp),
+        shape = RoundedCornerShape(20.dp)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowDown,
+                tint = Sikt_blue,
+                contentDescription = "",
+                modifier = Modifier.padding(top = 20.dp)
+            )
             Text(
                 text = "Finn turer i nærheten",
                 fontSize = 20.sp,
-                modifier = Modifier.padding(top = 20.dp),
                 color = Sikt_sort,
                 fontWeight = FontWeight.Bold
             )
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp)
-                    .background(Sikt_lyseblå),
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
-                // Her skal listen over topper i nærheten:
-            ) {
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
-                item { Sikt_Turer_I_Naerheten("fjelltopp", 1899, 8) }
+            if (mountains.size != 0) {
+                LazyRow(
+                    modifier = Modifier.padding(
+                        start = 20.dp,
+                        end = 20.dp
+                    )
+                ) {
+                    // Må ta inn turer i nærheten liste og nowcastinfo:
+                    //Sikt_Turer_I_Naerheten(mountains, nowCastInfo) }
+                }
+            } else {
+                Text(text = "Ingen topper i nærheten...", modifier = Modifier.padding(start = 20.dp))
             }
         }
     }
@@ -94,14 +109,18 @@ fun BottomSheetContent(){
 fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: MutableState<Boolean>) {
     val scope = rememberCoroutineScope()
 
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Button(
             modifier = Modifier
                 .height(165.dp)
                 .fillMaxWidth()
                 .padding(30.dp),
             shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
-            colors = ButtonDefaults.buttonColors(Sikt_lyseblå),
+            colors = ButtonDefaults.buttonColors(Sikt_lightblue),
             onClick = {
                 showModalSheet.value = !showModalSheet.value
                 scope.launch {
@@ -116,7 +135,7 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowUp,
-                    tint = Sikt_mellomblå,
+                    tint = Sikt_blue,
                     contentDescription = "",
                     modifier = Modifier
                 )
@@ -131,7 +150,7 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
 @Preview(showSystemUi = true)
 @Composable
 fun MBSTest() {
+    Scaffold(bottomBar = { Sikt_BottomBar2() }, containerColor = Sikt_red) {
 
-    BottomSheetContent()
-
+    }
 }

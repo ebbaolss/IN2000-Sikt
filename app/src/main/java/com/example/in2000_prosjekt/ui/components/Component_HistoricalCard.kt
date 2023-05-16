@@ -3,23 +3,12 @@ package com.example.in2000_prosjekt.ui.components
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.theme.Sikt_hvit
-import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
-import com.example.in2000_prosjekt.ui.theme.Sikt_mørkeblå
+import com.example.in2000_prosjekt.ui.theme.Sikt_white
 
 @Composable
 fun Sikt_Historisk_Kalender() {
@@ -27,7 +16,7 @@ fun Sikt_Historisk_Kalender() {
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .background(Sikt_hvit),
+            .background(Sikt_white),
     ) {
         Text(text = "Kalender")
     }
@@ -159,6 +148,7 @@ fun Sikt_Historisk_Kalender(  APIViewModel : APIViewModel = viewModel() /* frost
 }
 */
 
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Sikt_HistoriskCard(){
@@ -194,12 +184,13 @@ fun Sikt_HistoriskCard(){
         }
     }
 }
+ */
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Preview(showSystemUi = true)
 @Composable
 fun HistoricalTest() {
 
-    Sikt_HistoriskCard()
+    //Sikt_HistoriskCard()
 
 }

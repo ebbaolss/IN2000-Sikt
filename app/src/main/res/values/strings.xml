@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IN2000_Prosjekt</string>
+    <string name="app_name">SIKT</string>
     <string name="mapbox_access_token">pk.eyJ1IjoiZWxpc2FiZXRoYiIsImEiOiJjbGY2c3N3dDAxYWxsM3ludHY5em5wMnJxIn0.YVrKFoHYA1sCJhgBCbhudw</string>
 
     <string-array name="rules">
