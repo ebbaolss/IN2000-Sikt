@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.material3.Icon
@@ -28,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
@@ -49,7 +47,6 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
             Column (horizontalAlignment = Alignment.CenterHorizontally,
-                //modifier = Modifier.width(120.dp)
             ){
                 IconButton(onClick = { onNavigateToMap() }) {
                     val iconfarge = Sikt_darkblue
@@ -59,7 +56,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     }
                     Icon(
                         painter = painterResource(iconChosen),
-                        contentDescription = "Localized description",
+                        contentDescription = "Utforsk knapp",
                         tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
@@ -69,7 +66,6 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                //modifier = Modifier.width(75.dp)
             ) {
 
                 IconButton(onClick = { onNavigateToFav() }) {
@@ -80,7 +76,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     }
                     Icon(
                         painter = painterResource(iconChosen),
-                        contentDescription = "Localized description",
+                        contentDescription = "Favoritter knapp",
                         tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
@@ -91,7 +87,6 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                //modifier = Modifier.width(98.dp)
             ) {
                 IconButton(onClick = { onNavigateToInfo() }) {
                     val iconfarge = Sikt_darkblue
@@ -101,7 +96,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     }
                     Icon(
                         painter = painterResource(iconChosen),
-                        "",
+                        "Info knapp",
                         tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
@@ -112,7 +107,6 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                //modifier = Modifier.width(75.dp)
             ) {
                 IconButton(onClick = { onNavigateToSettings() }) {
                     val iconfarge = Sikt_darkblue
@@ -122,78 +116,14 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     }
                     Icon(
                         painterResource(iconChosen),
-                        "",
+                        "Instillinger knapp",
                         tint = iconfarge,
                         modifier = Modifier
                             .clip(CircleShape)
                             .padding(5.dp)
                     )
                 }
-                Text(text = "Innstillinger", fontSize = 13.sp) //13
-            }
-        }
-    }
-}
-
-@Composable
-fun Sikt_BottomBar2( ) {
-    //Denne brukes for for testing av design i preview
-    BottomAppBar(
-        modifier = Modifier.clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)),
-        containerColor = Sikt_white,
-
-        ) {
-        Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-            Column (horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(75.dp)
-            ){
-                IconButton(onClick = {  }) {
-                    Icon(
-                        Icons.Filled.LocationOn,
-                        contentDescription = "Localized description",
-                        tint = Sikt_darkblue,
-                    )
-                }
-                Text(text = "Utforsk")
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(75.dp)
-            ) {
-                IconButton(onClick = {  }) {
-                    Icon(
-                        Icons.Outlined.Favorite,
-                        contentDescription = "Localized description",
-                        tint = Sikt_darkblue,
-                    )
-                }
-                Text(text = "Favoritter")
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(93.dp)
-            ) {
-                IconButton(onClick = {  }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.outline_info),
-                        "",
-                        tint = Sikt_darkblue,
-                    )
-                }
-                Text(text = "Fjellvettreglene")
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.width(75.dp)
-            ) {
-                IconButton(onClick = {  }) {
-                    Icon(
-                        Icons.Outlined.Settings,
-                        "",
-                        tint = Sikt_darkblue,
-                    )
-                }
-                Text(text = "Innstillinger")
+                Text(text = "Innstillinger", fontSize = 13.sp)
             }
         }
     }
@@ -223,7 +153,7 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
             ) {
                 Icon(
                     Icons.Filled.Favorite,
-                    contentDescription = "Localized description",
+                    contentDescription = "Marker favoritt knapp",
                     tint = Sikt_lightblue
                 )
             }
@@ -285,27 +215,27 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
             if (alreadyFav){
                 Icon(
                     Icons.Filled.Favorite,
-                    contentDescription = "Localized description",
+                    contentDescription = "Favoritt",
                     tint = Sikt_darkblue
                 )
             } else if(!checked && alreadyFav) {
                 Icon(
                     painterResource(id = R.drawable.outline_favorite),
-                    contentDescription = "Localized description",
+                    contentDescription = "Ikke en favoritt",
                     tint = Sikt_darkblue
                 )
                 viewModel.deleteUpdate(lon,lat)
             } else if (checked) {
                 Icon(
                     Icons.Filled.Favorite,
-                    contentDescription = "Localized description",
+                    contentDescription = "Favoritt",
                     tint = Sikt_darkblue
                 )
                 viewModel.addFavorite(Favorite(lon,lat,location,height))
             } else {
                 Icon(
                     painterResource(id = R.drawable.outline_favorite),
-                    contentDescription = "Localized description",
+                    contentDescription = "Ikke en favoritt",
                     tint = Sikt_darkblue
                 )
             }
@@ -336,7 +266,7 @@ fun Sikt_Favorite_Header(location : String , height: Int, lat: Double, lon: Doub
             ) {
                 Icon(
                     Icons.Filled.Favorite,
-                    contentDescription = "Localized description",
+                    contentDescription = "Marker favoritt knapp",
                     tint = Sikt_lightblue
                 )
             }
@@ -383,13 +313,13 @@ fun Sikt_Favorite_Header(location : String , height: Int, lat: Double, lon: Doub
             if (checked) {
                 Icon(
                     Icons.Filled.Favorite,
-                    contentDescription = "Localized description",
+                    contentDescription = "Favoritt",
                     tint = Sikt_darkblue
                 )
             } else {
                 Icon(
                     painterResource(id = R.drawable.outline_favorite),
-                    contentDescription = "Localized description",
+                    contentDescription = "Ikke en favoritt",
                     tint = Sikt_darkblue
                 )
                 viewModel.deleteUpdate(lon,lat)
@@ -412,7 +342,7 @@ fun Sikt_MountainHight(mountainheight : String) {
 fun Sikt_skyillustasjon() {
     Image(
         painter = painterResource(id = R.drawable.clounds_image),
-        contentDescription = "sol",
+        contentDescription = "Sky illustrasjon",
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
             .fillMaxWidth()
@@ -585,27 +515,27 @@ fun Illustrasjon(height: Int?, temp: Int, vind: Float, weatherHigh: Float, weath
     ){
         Image(
             painter = painterResource(id = R.drawable.new_background),
-            contentDescription = "",
+            contentDescription = "Bakgrunn",
             modifier = Modifier.fillMaxSize()
         )
         Image(
             painter = painterResource(id = getHeightVisuals(height)),
-            contentDescription = "",
+            contentDescription = "Høyde visulisering",
             modifier = Modifier.fillMaxSize()
         )
         Image(
             painter = painterResource(id = getHighClouds(weatherHigh)),
-            contentDescription = "",
+            contentDescription = "Høyt skylag",
             modifier = Modifier.fillMaxSize()
         )
         Image(
             painter = painterResource(id = getMidClouds(weatherMid)),
-            contentDescription = "",
+            contentDescription = "Middels skylag",
             modifier = Modifier.fillMaxSize()
         )
         Image(
             painter = painterResource(id = getLowClouds(weatherLow)),
-            contentDescription = "",
+            contentDescription = "Lavt skylag",
             modifier = Modifier.fillMaxSize()
         )
         Column(
@@ -618,7 +548,7 @@ fun Illustrasjon(height: Int?, temp: Int, vind: Float, weatherHigh: Float, weath
         ){
             Image(
                 painter = painterResource(id = R.drawable.vind_icon),
-                contentDescription = "",
+                contentDescription = "Vind ikon",
                 modifier = Modifier.size(24.dp)
             )
             Text(text = "$vind m/s", fontSize = 12.sp, color = Sikt_sort)
@@ -682,7 +612,7 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.outline_contact_phone),
-                    contentDescription = "Phone illustration",
+                    contentDescription = "Telefon illustrasjon",
                     tint = Sikt_darkblue,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -698,24 +628,6 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.size(50.dp))
-                /*Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Din posisjon:",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp),
-                    //Placeholder for ditt koordinat:
-                    text = "59.99436° N, 10,71848° Ø",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Normal
-                )
-                Spacer(modifier = Modifier.size(20.dp))
-
-                 */
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Nødnummer:",
@@ -842,7 +754,6 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
                                 text = "$counter. ",
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
-                                //modifier = Modifier.padding(start = 20.dp)
                             )
                             Text(
                                 modifier = Modifier
@@ -1020,22 +931,6 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
                         fontWeight = FontWeight.Normal
                     )
                     Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp),
-                        text = "Sunrise",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp),
-                        text = "Frost",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-                    Text(
                         modifier = Modifier.fillMaxWidth(),
                         text = "I tillegg er kartet hentet fra:",
                         fontSize = 18.sp,
@@ -1053,10 +948,4 @@ fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
             }
         }
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun TestComponent() {
-
 }
