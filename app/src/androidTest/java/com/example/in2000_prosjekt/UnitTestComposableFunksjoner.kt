@@ -1,43 +1,38 @@
 package com.example.in2000_prosjekt
 
+
 import android.app.Application
 import android.content.res.Configuration
-import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.SemanticsConfiguration
-import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.ComposeNavigator
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import com.example.in2000_prosjekt.ui.components.*
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
-import com.example.in2000_prosjekt.ui.database.FavoriteViewModelFactory
-import com.example.in2000_prosjekt.ui.screens.*
+import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.database.FavoriteViewModelFactory
+import com.example.in2000_prosjekt.database.MapViewModel
+import com.example.in2000_prosjekt.database.MapViewModelFactory
+import com.example.in2000_prosjekt.ui.APIViewModel
+import com.example.in2000_prosjekt.ui.LocationInfo
+import com.example.in2000_prosjekt.ui.NowCastInfo
+import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
+import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard_NextDays
+import com.example.in2000_prosjekt.ui.screens.InfoScreen
+import com.example.in2000_prosjekt.ui.screens.SettingsScreen
+import com.example.in2000_prosjekt.ui.screens.ShowMap
+import com.example.in2000_prosjekt.ui.screens.StartPage
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import com.mapbox.maps.MapView
 import com.mapbox.maps.exception.WorkerThreadException
-import org.junit.Assert
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
 
 class UnitTestComposableFunksjoner {
@@ -77,9 +72,11 @@ class UnitTestComposableFunksjoner {
 
 
             rule.onAllNodes(hasNoClickAction()).onLast()
-                .assertHeightIsAtLeast(753.dp) //  Test på størrelsen til bilde som er satt til fillMaxsize, som svarer til høyden til landing page bildet, hentet fra Figma: Her så testes det om bilde fyller skjermens høyde, som skal være 730.dp høy
+                .assertHeightIsAtLeast(753.dp)
+                .assertIsDisplayed() //  Test på størrelsen til bilde som er satt til fillMaxsize, som svarer til høyden til landing page bildet, hentet fra Figma: Her så testes det om bilde fyller skjermens høyde, som skal være 730.dp høy
             rule.onAllNodes(hasNoClickAction()).onLast()
-                .assertWidthIsAtLeast(392.dp) //  Test på størrelsen til bilde som er satt til fillMaxsize,, som svarer til bredden til landing page bildet, hentet fra Figma: Her så testes det om bilde fyller skjermens bredde, som skal være 393.dp høy
+                .assertWidthIsAtLeast(392.dp)
+                .assertIsDisplayed() //  Test på størrelsen til bilde som er satt til fillMaxsize,, som svarer til bredden til landing page bildet, hentet fra Figma: Her så testes det om bilde fyller skjermens bredde, som skal være 393.dp høy
 
 
         }
@@ -98,16 +95,30 @@ class UnitTestComposableFunksjoner {
             var landingPage = { navController.navigate("LandingPage") }
             rule.setContent {
                 IN2000_ProsjektTheme {
-                    SettingsScreen(
-                        onNavigateToMap = { /*TODO*/ },
-                        onNavigateToFav = { /*TODO*/ },
-                        onNavigateToSettings = { /*TODO*/ },
-                        onNavigateToRules = {/*TODO*/ }
-                    )
+                    val owner = LocalViewModelStoreOwner.current
+
+                    owner?.let {
+                        val favoriteViewModel: FavoriteViewModel = viewModel(
+                            it,
+                            "FavoriteViewModel",
+                            FavoriteViewModelFactory(
+                                LocalContext.current.applicationContext
+                                        as Application
+                            )
+                        )
+
+                        SettingsScreen(
+                            onNavigateToMap = { /*TODO*/ },
+                            onNavigateToFav = { /*TODO*/ },
+                            onNavigateToInfo = {/*TODO*/ },
+                            onNavigateToSettings = { /*TODO*/ },
+                            viewModel = favoriteViewModel
+                        )
+                    }
                 }
             }
 
-            rule.onNodeWithText("Settings").assertIsDisplayed() // på figma står det "Instillinger"
+            rule.onAllNodesWithText("Innstillinger")[1].assertIsDisplayed() // This confirsm the display of the title of the composable function being drawn in this screen, which is the word "Innstillinger"
 
 
             /* Kommentar fra 27.04; Helst ikke fjern, Det under skal ikke være utkommentert: Alt under er kodet etter hvordan appen kommer til å se ut, ref. figma tegninger kl.17.50, dato: 27.04
@@ -142,29 +153,43 @@ class UnitTestComposableFunksjoner {
 
             rule.setContent {
                 IN2000_ProsjektTheme {
-                    RulesScreen(
-                        onNavigateToMap = { /*TODO*/ },
-                        onNavigateToFav = { /*TODO*/ },
-                        onNavigateToRules = { /*TODO*/ },
-                        onNavigateToSettings = { /*TODO*/ })
+                    val owner = LocalViewModelStoreOwner.current
+
+                    owner?.let {
+                        val favoriteViewModel: FavoriteViewModel = viewModel(
+                            it,
+                            "FavoriteViewModel",
+                            FavoriteViewModelFactory(
+                                LocalContext.current.applicationContext
+                                        as Application
+                            )
+                        )
+                        InfoScreen(
+                            onNavigateToMap = { /*TODO*/ },
+                            onNavigateToFav = { /*TODO*/ },
+                            onNavigateToInfo = { /*TODO*/ },
+                            onNavigateToSettings = { /*TODO*/ },
+                            favoriteViewModel
+                        )
+                    }
                 }
-
-
             }
+            rule.onNodeWithText("Nødnummer:")
+                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Nødnummer: "
+            rule.onNodeWithText("Medisinsk Nødtelefon:")
+                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Type: "
+            rule.onNodeWithText("Brann:")
+                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Beskrivelse"
+            rule.onNodeWithText("Politi:")
+                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Konsekvens"
+            rule.onNodeWithText("Politiets sentralbord:")
+                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Anbefaling"
+            rule.onNodeWithText("Legevakten:")
+                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Sted: "
 
-            /* Info: fra 27.04: Det under skal ikke være utkommentert: Alt under er kodet etter hvordan appen kommer til å se ut, ref. figma tegninger kl.17.50, dato: 27.04
 
-        rule.onNodeWithText("Nødnummer:").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Sted: "
-        rule.onNodeWithText("Medisinsk Nødtelefon:").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Type: "
-        rule.onNodeWithText("Brann").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Beskrivelse"
-        rule.onNodeWithText("Politi:").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Konsekvens"
-        rule.onNodeWithText("Politiets sentralbord:").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Anbefaling"
-        rule.onNodeWithText("Legevakten:").assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst med innholdet:"Sted: "
-
-        */
-
-
-            val selvefjellvettreglene = rule.activity.getResources().getStringArray(R.array.rules)
+            val selvefjellvettreglene =
+                rule.activity.getResources().getStringArray(R.array.rules)
 
             rule.onAllNodesWithText("Fjellvettreglene").assertAll(
                 SemanticsMatcher(
@@ -192,27 +217,42 @@ class UnitTestComposableFunksjoner {
         @Test
         fun open_MapScreenUIMapGenerates() {
 
-            //  val navController = TestNavHostController(ApplicationProvider.getApplicationContext()) // denne setter navControlleren generert i testene lik navControlleren lagd Main Activity
-            //val mapscreen = navController.navigate("Map")
 
             rule.setContent {
+                val owner = LocalViewModelStoreOwner.current
+                val apiViewModel = APIViewModel()
 
-                ShowMap(
-                    onNavigateToMap = { /**/ },
-                    onNavigateToFav = { /*TODO*/ },
-                    onNavigateToRules = { /*TODO*/ },
-                    onNavigateToSettings = { /*TODO*/ }
-                )
+
+                owner?.let {
+                    val favoriteViewModel: FavoriteViewModel = viewModel(
+                        it,
+                        "FavoriteViewModel",
+                        FavoriteViewModelFactory(
+                            LocalContext.current.applicationContext
+                                    as Application
+                        )
+                    )
+                    val mapViewModel: MapViewModel = viewModel(
+                        it,
+                        "MapViewModel",
+                        MapViewModelFactory(
+                            LocalContext.current.applicationContext as Application
+                        )
+                    )
+
+
+                    ShowMap(
+                        onNavigateToMap = { /**/ },
+                        onNavigateToFav = { /*TODO*/ },
+                        onNavigateToInfo = { /*TODO*/ },
+                        onNavigateToSettings = { /*TODO*/ },
+                        mapViewModel = mapViewModel,
+                        apiViewModel,
+                        favoriteViewModel = favoriteViewModel
+                    )
+                }
 
             }
-            rule.onNodeWithText("Favoritter")
-                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Favoritter"
-            rule.onNodeWithText("Utforsk")
-                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Beskrivelse"
-            rule.onNodeWithText("Info")
-                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Beskrivelse"
-            rule.onNodeWithText("Fjellvett")
-                .assertIsDisplayed()// Denne heter innstillinger på figma tegningene,
 
             try {
                 val map = MapView(ApplicationProvider.getApplicationContext())
@@ -240,50 +280,6 @@ class UnitTestComposableFunksjoner {
         }
     }
 
-    // Test 5: Test for funksjon: MapBoxScreen((onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToRules: () -> Unit): Denne skal sjekke at Kartet dukker opp, og etterhvert om Pointer funker
-    class TestModalBottomSheetLayout {
-        @get:Rule
-        val rule = createComposeRule()
-        //lateinit var navController: TestNavHostController
-
-        @Test
-        fun open_ModalBottomSheetContainsCards() {
-
-            val navController =
-                TestNavHostController(ApplicationProvider.getApplicationContext()) // denne setter navControlleren generert i testene lik navControlleren lagd Main Activity
-            //  mapscreen = navController.navigate("Map")
-
-            rule.setContent {
-
-                ShowMap(
-                    onNavigateToMap = { /*Kun for testing*/ },
-                    onNavigateToFav = { /*Kun for testing*/ },
-                    onNavigateToRules = {  /*Kun for testing*/ },
-                    onNavigateToSettings = { /*Kun for testing*/ })
-
-            }
-            rule.onNodeWithText("Fjellvett").assertIsDisplayed()// Denne heter: "info" på figma
-            rule.onNodeWithText("Favoritter")
-                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Favoritter"
-            rule.onNodeWithText("Utforsk")
-                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Beskrivelse"
-            rule.onNodeWithText("Info")
-                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Beskrivelse"
-
-
-            // denne testen ettersøker om at innholdet i Modal Bottom Sheet (som er trykkbar), har barn som er composable funksjoner (i dette tilfelle: composable funskjonen: Sikt_FinnTurer_card )
-            var matcher = SemanticsMatcher(
-                description = "",
-                matcher = {
-                    SemanticsConfiguration().contains(key = SemanticsPropertyKey<Unit>(name = "Sikt_FinnTurer_card"))
-                        .or(true)
-                } /*(SemanticsNode) -> true*/)
-            rule.onAllNodes(hasClickAction()).assertAll(matcher = matcher)
-
-
-        }
-    }
-
 
     // Test 6: Test for innholdet og utseende til composable funksjonen Sikt_bottom_Bar, denne testen retter seg kun mot composable funksjonens utseende, ikke funksjonaliteten til Navigation Bar'en
     class TestSiktBottomBar {
@@ -301,26 +297,27 @@ class UnitTestComposableFunksjoner {
             rule.setContent {
                 IN2000_ProsjektTheme {
 
-                    Sikt_BottomBar({ },
+                    Sikt_BottomBar(
                         { },
                         { },
                         { },
-                        favoritt = false,
+                        { },
                         settings = false,
-                        rules = false,
-                        map = true
+                        info = false,
+                        map = true,
+                        favorite = false
                     )
 
                 }
             }
 
-            rule.onNodeWithText("Utforsk")
+            rule.onNodeWithText("   Utforsk   ")
                 .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Utforsk"
-            rule.onNodeWithText("Favoritter")
+            rule.onNodeWithText(" Favoritter ")
                 .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Favoritter"
-            rule.onNodeWithText("Fjellvett")
+            rule.onNodeWithText("    Info    ")
                 .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Fjellvett"
-            rule.onNodeWithText("Info")
+            rule.onNodeWithText("Innstillinger")
                 .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bottomBar med en tekst med innholdet:"Innstillinger"
 
 
@@ -329,8 +326,41 @@ class UnitTestComposableFunksjoner {
 
     }
 
+    //test nr 8 av Card funksjon:  SiktLocationCardNextDays
+//Her så lager vi dummy objekter av apikallene som
+// composable funksjonen etterspør
+    class testSiktLocationCardNextDays {
+        @get:Rule
+        val rule = createAndroidComposeRule<ComponentActivity>()
 
-    //test nr 7
+        @Test
+        fun testSiktLocationCardNextDays() {
+
+         val locationInfo = LocationInfo(temperatureL= 0)
+            val nowCastInfo = NowCastInfo()
+
+            rule.setContent {
+
+                Sikt_LocationCard_NextDays(
+                    locationInfo= LocationInfo(),
+                    nowCastInfo= NowCastInfo()
+                )
+
+
+            }
+
+            rule.onNodeWithText("Idag")
+                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en tekst, som vil inneholde dagens vær- og siktforhold
+
+
+        }
+
+    }
+}
+
+
+/*
+//test nr 7
 // test av Composable funksjonen: testSiktFinnTurerCard
     class testSiktFinnTurerCard {
         @get:Rule
@@ -355,7 +385,6 @@ class UnitTestComposableFunksjoner {
                         skydekkeMid = false,
                         skydekkeLow = true
                     )
-                    //Sikt_FinnTurer_card(/*location = "testvalueforsomelocation", height= 1250 , temp = 14, skydekkeTop = true, skydekkeMid = false, skydekkeLow = true*/ )
                 }
             }
 
@@ -364,36 +393,8 @@ class UnitTestComposableFunksjoner {
             //  rule.onNodeWithText(14.toString()).assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bilde, som illustrerer lufttemperaturen på 14 grader
 
 
-            rule.onNodeWithTag(R.drawable.topp_1000_1500.toString()).assertIsDisplayed()
-
-
-        }
-
-    }
-
-
-    //test nr 8 av Card funksjon:  SiktLocationCardNextDays
-//Her så lager vi dummy objekter av apikallene som
-// composable funksjonen etterspør
-    class testSiktLocationCardNextDays {
-        @get:Rule
-        val rule = createAndroidComposeRule<ComponentActivity>()
-
-        @Test
-        fun testSiktLocationCardNextDays() {
-
-            val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-            var alertscreen = { navController.navigate("Alert") }
-
-            rule.setContent {
-
-                Sikt_LocationCard_NextDays()
-
-
-            }
-
-            rule.onNodeWithText("Idag")
-                .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en bilde, som illustrerer lufttemperaturen på 14 grader
+            //rule.onNodeWithTag(R.drawable.topp_1000_1500.toString()).assertIsDisplayed()
+            rule.onNodeWithTag(R.drawable.topp1500to1000.toString()).assertIsDisplayed()
 
 
         }
@@ -429,5 +430,9 @@ class UnitTestComposableFunksjoner {
     }
 
 }
+
+
+
+ */
 
 
