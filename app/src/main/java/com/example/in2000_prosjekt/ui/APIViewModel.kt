@@ -41,18 +41,10 @@ class APIViewModel () : ViewModel()
                 Log.d("getAll", "Pre-deferred")
                 val nowCastP = nowCastDeferred.await()
                 Log.d("nowCastDeferred", "Success")
-                val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
-                    repository.getSunrise(latitude, longitude)
-                }
-                val sunsetP = sunsetDeferred.await()
-                Log.d("sunriseDeferred", "Success")
+
                 val alertDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getAlert(latitude, longitude)
                 }
-
-                /*val frostDeferred = viewModelScope.async (Dispatchers.IO){
-                    repository.getFrost(latitude, longitude)
-                }*/
 
                 val alertP = alertDeferred.await()
                 Log.d("alertDeferred", "Success")
@@ -64,9 +56,7 @@ class APIViewModel () : ViewModel()
                     AppUiState.Success(
                         locationF = locationP,
                         nowCastF = nowCastP,
-                        sunriseF = sunsetP,
                         alertListF = alertP,
-                        //frostF = frostP
                     )
                 }
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd

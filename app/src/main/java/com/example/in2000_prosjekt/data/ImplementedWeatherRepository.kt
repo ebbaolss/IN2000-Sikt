@@ -9,7 +9,6 @@ class ImplementedWeatherRepository : WeatherRepository {
     private val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") //dette er både forecast og nowcast
     private val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     private val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    private val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
     private val dataMap = DataSourceMap()
 
     //----------------------
@@ -143,18 +142,6 @@ class ImplementedWeatherRepository : WeatherRepository {
         )
     }
 
-    override suspend fun getSunrise(latitude: String, longitude: String): SunriseInfo {
-        val sunrise = dataSunrise.fetchSunrise(latitude, longitude)
-
-        val sunriseToday = sunrise.properties?.sunrise?.time
-        val sunsetToday = sunrise.properties?.sunset?.time
-
-        return SunriseInfo(
-            sunriseS = sunriseToday!!,
-            sunsetS = sunsetToday!!
-        )
-    }
-
     override suspend fun getAlert(latitude: String, longitude: String): MutableList<AlertInfo> {
         val alert = dataMet.fetchMetAlert(latitude, longitude)
 
@@ -196,17 +183,6 @@ class ImplementedWeatherRepository : WeatherRepository {
         }
         //Log.d("area", area.toString())
         return alertList
-    }
-
-    override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
-
-        val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)  //hardkoded parameterne, fiks dette
-
-        val typeFrost = frost.type
-
-        return FrostInfo(
-            sightcondition = typeFrost!!.toInt()
-        )
     }
 
     override suspend fun getMap(path: String) : MapInfo {
