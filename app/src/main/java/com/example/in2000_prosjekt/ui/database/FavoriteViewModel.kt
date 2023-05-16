@@ -47,9 +47,13 @@ class FavoriteViewModel(application: Application) : ViewModel() {
         repository.deleteFavorite(longtitude, latitude)
     }
 
-    fun update() {
+    fun deleteUpdate(longtitude: Double, latitude: Double) {
         viewModelScope.launch() {
             try {
+                val deleted = viewModelScope.async {
+                    repository.deleteFavorite(longtitude, latitude)
+                }
+                val deletedP = deleted.await()
                 val locationInfo = viewModelScope.async {
                     repository.getLocationList()
                 }
@@ -63,6 +67,42 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                 }
                 val alertP = alertInfo.await()
 
+                //if(deletedP){
+                    _Uistate.update {
+                        FavoriteUiState.Success(
+                            locationP,
+                            nowCastP,
+                            alertP
+                        )
+                    }
+                //}
+            } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
+                _Uistate.update {
+                    FavoriteUiState.Error
+                }
+            }
+        }
+    }
+
+    fun update() {
+        viewModelScope.launch() {
+            try {
+                val locationInfo = viewModelScope.async {
+                    repository.getLocationList()
+                }
+                val locationP = locationInfo.await()
+                Log.d("UPDATE", "locationinfo updated size: ${locationP.size}")
+                val nowCastInfo = viewModelScope.async {
+                    repository.getNowList()
+                }
+                val nowCastP = nowCastInfo.await()
+                Log.d("UPDATE", "nowcast updated size: ${nowCastP.size}")
+                val alertInfo = viewModelScope.async {
+                    repository.getAlertInfo()
+                }
+                val alertP = alertInfo.await()
+                Log.d("UPDATE", "alert updated size: ${alertP.size}")
+
                 _Uistate.update {
                     FavoriteUiState.Success(
                         locationP,
@@ -70,7 +110,8 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                         alertP
                     )
                 }
-            } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
+            } catch (e: IOException) {
+                Log.d("ERROR", "error i update")
                 _Uistate.update {
                     FavoriteUiState.Error
                 }

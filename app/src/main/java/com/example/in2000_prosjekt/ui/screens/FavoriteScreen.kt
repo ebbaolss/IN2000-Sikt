@@ -48,6 +48,7 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
     Log.d("FAVS", "${allFavorites.size}")
     //viewModel.deleteAll()
     if(allFavorites.isNotEmpty()){
+        Log.d("UPDATING", "oppdaterer")
         viewModel.update()
     } else {
         viewModel.updateEmpty()
@@ -100,7 +101,7 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
         is FavoriteUiState.Error -> {
             FavoriteScreenError( onNavigateToMap,
                 onNavigateToFav,onNavigateToInfo,
-                onNavigateToSettings)
+                onNavigateToSettings, viewModel)
         }
         is FavoriteUiState.Success -> {
             if(allFavorites.isNotEmpty()){
@@ -129,16 +130,15 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
 @Composable
 fun FavoriteScreenSuccess(
     onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel, allFavorites : List<Favorite>
-
-
 ) {
     val favoriteUiState by viewModel.favUiState.collectAsState()
 
-
+    val loc = (favoriteUiState as FavoriteUiState.Success).locationF
+    val now = (favoriteUiState as FavoriteUiState.Success).nowCastF
+    val al = (favoriteUiState as FavoriteUiState.Success).alertListF
 
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, favorite = true, info = false, map = false, settings = false)}
     ) {
-        Log.d("SIZELOC", " ${(favoriteUiState as FavoriteUiState.Success).locationF.size}")
 
         Box(modifier = Modifier
             .paint(
@@ -150,18 +150,21 @@ fun FavoriteScreenSuccess(
                 contentPadding = PaddingValues(20.dp), modifier = Modifier.padding(top = 0.dp, bottom = 70.dp)
             ) {
                 if (allFavorites.isNotEmpty()) {
-                    Sikt_Favorite_card(
-                        (favoriteUiState as FavoriteUiState.Success).locationF,
-                        (favoriteUiState as FavoriteUiState.Success).nowCastF,
-                        (favoriteUiState as FavoriteUiState.Success).alertListF,
-                        allFavorites,
-                        viewModel,
-                        onNavigateToMap,
-                        onNavigateToFav,
-                        onNavigateToInfo,
-                        onNavigateToSettings
-
-                    )
+                    if ( loc.size == allFavorites.size && now.size == allFavorites.size && al.size == allFavorites.size){
+                        Sikt_Favorite_card(
+                            loc,
+                            now,
+                            al,
+                            allFavorites,
+                            viewModel,
+                            onNavigateToMap,
+                            onNavigateToFav,
+                            onNavigateToInfo,
+                            onNavigateToSettings
+                        )
+                    } else {
+                        viewModel.update()
+                    }
                 }
             }
         }

@@ -384,7 +384,7 @@ fun Sikt_Favorite_Header(location : String , height: Int, lat: Double, lon: Doub
                     contentDescription = "Localized description",
                     tint = Sikt_mørkeblå
                 )
-                viewModel.deleteFavorite(lon,lat)
+                viewModel.deleteUpdate(lon,lat)
             }
         }
     }
