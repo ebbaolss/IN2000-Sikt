@@ -3,7 +3,6 @@ package com.example.in2000_prosjekt.ui.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,7 +21,6 @@ import com.example.in2000_prosjekt.database.FavoriteViewModel
 fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo:() -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel){
 
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, map = false, favorite = false, info = false, settings = true) }) {
-        val scrollState = rememberScrollState()
 
         Box(modifier = Modifier.paint(painterResource(id = R.drawable.map_backround), contentScale = ContentScale.FillBounds)) {
             LazyColumn(

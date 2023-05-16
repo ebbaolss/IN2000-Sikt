@@ -36,17 +36,19 @@ import com.example.in2000_prosjekt.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel, apiViewModel: APIViewModel){
-
-    //Used for testing:
-    //viewModel.deleteAll()
-    //addFavTest(viewModel)
+fun FavoriteScreen(
+    onNavigateToMap: () -> Unit,
+    onNavigateToFav: () -> Unit,
+    onNavigateToInfo: () -> Unit,
+    onNavigateToSettings: () -> Unit,
+    viewModel: FavoriteViewModel
+){
 
     val favoriteUiState by viewModel.favUiState.collectAsState()
     val allFavorites by viewModel.allFavorites.observeAsState(listOf())
 
     Log.d("FAVS", "${allFavorites.size}")
-    //viewModel.deleteAll()
+
     if(allFavorites.isNotEmpty()){
         Log.d("UPDATING", "oppdaterer")
         viewModel.update()

@@ -11,13 +11,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-import com.example.in2000_prosjekt.data.*
 import io.ktor.utils.io.errors.*
-
 import kotlinx.coroutines.async
 
-class APIViewModel () : ViewModel()
+class APIViewModel : ViewModel()
     {
 
     //manual dependency injection, se codelab
@@ -27,7 +24,7 @@ class APIViewModel () : ViewModel()
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
     fun getAll(latitude: String, longitude: String, altitude: String) {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             try {
                 val locationDeferred = viewModelScope.async (Dispatchers.IO) {
                     repository.getLocation(latitude, longitude, altitude)
