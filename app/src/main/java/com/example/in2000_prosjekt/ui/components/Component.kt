@@ -351,7 +351,7 @@ fun Sikt_skyillustasjon() {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
-fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>, favorites: List<Favorite>, viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit) {
+fun LazyListScope.siktFavoriteCard(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>, favorites: List<Favorite>, viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit) {
     //favorites er en mutableList med LocationInfo kan derfor kalle
     // favorite.temperatureL etc.
 
@@ -399,7 +399,7 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
 
                         ) {
                             // Må legge inn listen over fjelltopper i nærheten:
-                            Sikt_LocationCard(
+                            siktLocationcard(
                                 mount, location, nowcast, alertInfo, viewModel
                             )
                         }
@@ -438,7 +438,7 @@ fun LazyListScope.Sikt_Favorite_card(weatherinfo: MutableList<LocationInfo>, now
     }
 }
 
-fun LazyListScope.Sikt_Turer_I_Naerheten(mountains: MutableList<MapUiState.Mountain>, nowCastInfo: NowCastInfo) {
+fun LazyListScope.siktTurerINaerheten(mountains: MutableList<MapUiState.Mountain>, nowCastInfo: NowCastInfo) {
 
     items(1) {
         mountains.forEach { mountain ->
@@ -599,7 +599,7 @@ fun Illustrasjon(height: Int?, temp: Int, vind: Float, weatherHigh: Float, weath
     }
 }
 
-fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
+fun LazyListScope.siktInformationCard(rules : Array<String>) {
     items(1) {
         Card(
             modifier = Modifier
@@ -773,7 +773,7 @@ fun LazyListScope.Sikt_InformationCard(rules : Array<String>) {
     }
 }
 
-fun LazyListScope.Sikt_SettingsCard(viewModel: FavoriteViewModel) {
+fun LazyListScope.siktSettingsCard(viewModel: FavoriteViewModel) {
     items(1) {
         Card(
             modifier = Modifier

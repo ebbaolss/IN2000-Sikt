@@ -13,7 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
-import com.example.in2000_prosjekt.ui.components.Sikt_SettingsCard
+import com.example.in2000_prosjekt.ui.components.siktSettingsCard
 import com.example.in2000_prosjekt.database.FavoriteViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -30,7 +30,7 @@ fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                     .fillMaxSize()
                     .padding(bottom = 70.dp)
             ){
-                Sikt_SettingsCard(viewModel)
+                siktSettingsCard(viewModel)
             }
         }
     }

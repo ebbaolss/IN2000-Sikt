@@ -6,18 +6,18 @@ import java.util.Date
 
 class ImplementedWeatherRepository : WeatherRepository {
 
-    val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") //dette er både forecast og nowcast
-    val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
-    val dataMap = DataSourceMap()
+    private val dataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") //dette er både forecast og nowcast
+    private val dataMet = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
+    private val dataSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
+    private val dataFrost = DataSourceFrost(basePath = "https://frost.met.no/observations/v0.jsonld?")
+    private val dataMap = DataSourceMap()
 
     //----------------------
     //Frost:
-    var elements = "air_temperature"// Dette er værmålingen vi ønsker: For enkelthetsskyld så velges bare: air temperature
-    var referencetime ="2021-05-17%2F2021-05-17" // Frost API, bruker UTC-tidsformat, denne ønskes senere å kunne bestemmes av en bruker ved hjelp av en Date picker (en bibloteksfunskjon i jetpack compose)
+    private var elements = "air_temperature"// Dette er værmålingen vi ønsker: For enkelthetsskyld så velges bare: air temperature
+    private var referencetime ="2021-05-17%2F2021-05-17" // Frost API, bruker UTC-tidsformat, denne ønskes senere å kunne bestemmes av en bruker ved hjelp av en Date picker (en bibloteksfunskjon i jetpack compose)
     //var url_med_Polygon ="https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=air_temperature&geometry=POLYGON((7.9982%2058.1447%20%2C%208.0982%2058.1447%20%2C7.9982%2058.2447%20%2C%208.0982%2058.2447%20))"
-    val source = "SN18700" //skjønner ikke denne, hvor får vi dette fra? Hva er det? Spørr Nebil
+    private val source = "SN18700" //skjønner ikke denne, hvor får vi dette fra? Hva er det? Spørr Nebil
     //----------------------
 
     override suspend fun getLocation(
@@ -35,14 +35,13 @@ class ImplementedWeatherRepository : WeatherRepository {
         val timeDay1 = 24-tidspunkt.toInt()+12
         val timeDay2 = 24-tidspunkt.toInt()+12+24
         val timeDay3 = 24-tidspunkt.toInt()+12+48
-        val timeDay4 = 24-tidspunkt.toInt()+12+72
 
         val temp = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.air_temperature?.toInt()
         val airfog = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.fog_area_fraction
         val rain = forecast.properties?.timeseries?.get(0)?.data?.next_1_hours?.details?.precipitation_amount
-        val cloud_high = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_high
-        val cloud_mid = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_medium
-        val cloud_low = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_low
+        val cloudHigh = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_high
+        val cloudMid = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_medium
+        val cloudLow = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction_low
         val cloudiness = forecast.properties?.timeseries?.get(0)?.data?.instant?.details?.cloud_area_fraction
 
         val tempNext1 = forecast.properties?.timeseries?.get(1)?.data?.instant?.details?.air_temperature?.toInt()
@@ -71,23 +70,23 @@ class ImplementedWeatherRepository : WeatherRepository {
         val cloudinessNext11 = forecast.properties?.timeseries?.get(11)?.data?.instant?.details?.cloud_area_fraction
         val cloudinessNext12 = forecast.properties?.timeseries?.get(12)?.data?.instant?.details?.cloud_area_fraction
 
-        val temp_day1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.air_temperature?.toInt()
-        val temp_day2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.air_temperature?.toInt()
-        val temp_day3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature?.toInt()
-        val temp_day4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempDay1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempDay2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempDay3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature?.toInt()
+        val tempDay4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.air_temperature?.toInt()
 
-        val cloud_day1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.cloud_area_fraction
-        val cloud_day2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.cloud_area_fraction
-        val cloud_day3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
-        val cloud_day4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
+        val cloudDay1 = forecast.properties?.timeseries?.get(timeDay1)?.data?.instant?.details?.cloud_area_fraction
+        val cloudDay2 = forecast.properties?.timeseries?.get(timeDay2)?.data?.instant?.details?.cloud_area_fraction
+        val cloudDay3 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
+        val cloudDay4 = forecast.properties?.timeseries?.get(timeDay3)?.data?.instant?.details?.cloud_area_fraction
 
         return LocationInfo(
             temperatureL = temp!!,
             fog_area_fractionL = airfog!!,
             rainL = rain!!,
-            cloud_area_fraction_high = cloud_high!!,
-            cloud_area_fraction_medium = cloud_mid!!,
-            cloud_area_fraction_low = cloud_low!!,
+            cloud_area_fraction_high = cloudHigh!!,
+            cloud_area_fraction_medium = cloudMid!!,
+            cloud_area_fraction_low = cloudLow!!,
             cloud_area_fraction = cloudiness!!,
 
             tempNext1 = tempNext1!!,
@@ -116,14 +115,14 @@ class ImplementedWeatherRepository : WeatherRepository {
             cloudinessNext11 = cloudinessNext11!!,
             cloudinessNext12 = cloudinessNext12!!,
             
-            temp_day1 = temp_day1!!,
-            temp_day2 = temp_day2!!,
-            temp_day3 = temp_day3!!,
-            temp_day4 = temp_day4!!,
-            cloud_day1 = cloud_day1!!,
-            cloud_day2 = cloud_day2!!,
-            cloud_day3 = cloud_day3!!,
-            cloud_day4 = cloud_day4!!,
+            temp_day1 = tempDay1!!,
+            temp_day2 = tempDay2!!,
+            temp_day3 = tempDay3!!,
+            temp_day4 = tempDay4!!,
+            cloud_day1 = cloudDay1!!,
+            cloud_day2 = cloudDay2!!,
+            cloud_day3 = cloudDay3!!,
+            cloud_day4 = cloudDay4!!,
         )
     }
 
@@ -202,11 +201,8 @@ class ImplementedWeatherRepository : WeatherRepository {
     override suspend fun getFrost(latitude: String, longitude: String): FrostInfo {
 
         val frost = dataFrost.fetchFrostTemp(elements, referencetime, source)  //hardkoded parameterne, fiks dette
-        val frostPolygon = dataFrost.fetchApiSvarkoordinater(latitude, longitude)
 
         val typeFrost = frost.type
-        val long = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(0)
-        val lat = frostPolygon.data?.get(0)?.geometry?.coordinates?.get(1)
 
         return FrostInfo(
             sightcondition = typeFrost!!.toInt()

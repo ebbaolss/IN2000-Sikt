@@ -27,7 +27,7 @@ import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
-import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
+import com.example.in2000_prosjekt.ui.components.siktFavoriteCard
 import com.example.in2000_prosjekt.database.Favorite
 import com.example.in2000_prosjekt.database.FavoriteUiState
 import com.example.in2000_prosjekt.database.FavoriteViewModel
@@ -151,7 +151,7 @@ fun FavoriteScreenSuccess(
             ) {
                 if (allFavorites.isNotEmpty()) {
                     if ( loc.size == allFavorites.size && now.size == allFavorites.size && al.size == allFavorites.size){
-                        Sikt_Favorite_card(
+                        siktFavoriteCard(
                             loc,
                             now,
                             al,

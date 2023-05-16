@@ -29,7 +29,7 @@ fun InfoScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavig
                     .fillMaxSize()
                     .padding(bottom = 70.dp)
             ){
-                Sikt_InformationCard(rules)
+                siktInformationCard(rules)
             }
         }
     }

@@ -61,14 +61,15 @@ fun AlertDialog(alertinfo: MutableList<AlertInfo>, onDismiss: () -> Unit){
             modifier = Modifier
                 .fillMaxSize().padding(top = 1.dp, bottom = 1.dp)
         ) {
-            Alert_Card(alertinfo)
+            alertCard(alertinfo)
         }
 
     }
 }
 
 
-fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
+@SuppressLint("DiscouragedApi")
+fun LazyListScope.alertCard(alertinfo: MutableList<AlertInfo>){
 
     items(alertinfo.size) {
         val alert = alertinfo[it]
@@ -136,17 +137,17 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
 
                     val beskrivelselist = alert.descriptionA.split(": ")
 
-                    Column() {
+                    Column {
                         Text(text = "Beskrivelse:", fontWeight = FontWeight.Bold)
                         Text(text = beskrivelselist[1])
                     }
 
-                    Column() {
+                    Column {
                         Text(text = "Konsekvens:", fontWeight = FontWeight.Bold)
                         Text(text = alert.consequenseA)
                     }
 
-                    Column() {
+                    Column {
                         Text(text = "Anbefaling:", fontWeight = FontWeight.Bold)
                         Text(text = alert.recomendationA)
                     }
@@ -160,7 +161,7 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                         val endtid = endtime?.get(1)?.split(":")
                         val end = "${endtid?.get(0)}:${endtid?.get(1)}"
 
-                        Column() {
+                        Column {
                             Text(text = "Tidsperiode:", fontWeight = FontWeight.Bold)
                             Text(text = "Fra: ${starttime?.get(0)} - kl: $start")
                             Text(text = "Til: ${endtime?.get(0)} - kl: $end")
@@ -179,26 +180,32 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                     var fontweight4 = FontWeight.Normal
                     var fontweight5 = FontWeight.Normal
 
-                    if (alertLevel == "1") {
-                        highlight1 = Color.Black
-                        fontweight1 = FontWeight.Bold
-                    } else if (alertLevel == "2") {
-                        highlight2 = Color.Black
-                        fontweight2 = FontWeight.Bold
-                    } else if (alertLevel == "3") {
-                        highlight3 = Color.Black
-                        fontweight3 = FontWeight.Bold
-                    } else if (alertLevel == "4") {
-                        highlight4 = Color.Black
-                        fontweight4 = FontWeight.Bold
-                    } else if (alertLevel == "5") {
-                        highlight5 = Color.Black
-                        fontweight5 = FontWeight.Bold
+                    when (alertLevel) {
+                        "1" -> {
+                            highlight1 = Color.Black
+                            fontweight1 = FontWeight.Bold
+                        }
+                        "2" -> {
+                            highlight2 = Color.Black
+                            fontweight2 = FontWeight.Bold
+                        }
+                        "3" -> {
+                            highlight3 = Color.Black
+                            fontweight3 = FontWeight.Bold
+                        }
+                        "4" -> {
+                            highlight4 = Color.Black
+                            fontweight4 = FontWeight.Bold
+                        }
+                        "5" -> {
+                            highlight5 = Color.Black
+                            fontweight5 = FontWeight.Bold
+                        }
                     }
 
-                    Column() {
+                    Column {
                         Text(text = "Faregrader:", fontWeight = FontWeight.Bold)
-                        Row() {
+                        Row {
                             Image(
                                 painter = painterResource(R.drawable.green),
                                 contentDescription = "green",
@@ -213,7 +220,7 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                                 fontWeight = fontweight1
                             )
                         }
-                        Row() {
+                        Row {
                             Image(
                                 painter = painterResource(R.drawable.yellow),
                                 contentDescription = "yellow",
@@ -228,7 +235,7 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                                 fontWeight = fontweight2
                             )
                         }
-                        Row() {
+                        Row {
                             Image(
                                 painter = painterResource(R.drawable.orange),
                                 contentDescription = "orange",
@@ -243,7 +250,7 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                                 fontWeight = fontweight3
                             )
                         }
-                        Row() {
+                        Row {
                             Image(
                                 painter = painterResource(R.drawable.red),
                                 contentDescription = "green",
@@ -258,7 +265,7 @@ fun LazyListScope.Alert_Card(alertinfo: MutableList<AlertInfo>){
                                 fontWeight = fontweight4
                             )
                         }
-                        Row() {
+                        Row {
                             Image(
                                 painter = painterResource(R.drawable.dark_red),
                                 contentDescription = "green",

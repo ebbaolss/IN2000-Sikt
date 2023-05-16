@@ -33,7 +33,7 @@ class DataSourceFrost (val basePath: String) {
 
     }
 
-    suspend fun authURL(URL: String) : HttpResponse {
+    private suspend fun authURL(URL: String) : HttpResponse {
 
         return client.get(URL) {
             headers {append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")}}
@@ -67,16 +67,15 @@ class DataSourceFrost (val basePath: String) {
     //DENNE MÅ SEES PÅ SAMMEN PÅ ONSDAG 12.04
     suspend fun fetchApiSvarkoordinater(lat: String, long: String): Frost_API_Respons_for_koordinater {
 
-        val increasePolygon: Boolean = true //?? denne blir alltid true...
-        val increase: Double
+        val increasePolygon = true //?? denne blir alltid true...
         // Foresporsel_om_Oke_str_polygon er True eller False nå, men kan endres til en String (som angir en gradvis økning, eller ja eller nei.
         // Det er When-setningen eller if-setningen nå som bestemmer hvor stor økningen skal være)
 
-        if (increasePolygon) {
+        val increase: Double = if (increasePolygon) {
 
-            increase = 0.1 // når true Så er polygonet  11.1km * 11.1km
+            0.1 // når true Så er polygonet  11.1km * 11.1km
 
-        } else increase = 0.01// når false Så er polygonet  1.11km * 1.11km
+        } else 0.01// når false Så er polygonet  1.11km * 1.11km
 
 
         fun coordinatesToPolygonConverter(longitutde: Double, latitude: Double): String {
@@ -88,22 +87,22 @@ class DataSourceFrost (val basePath: String) {
 
              */
 
-            val long_Point1 = longitutde
-            val lat_Point1 = latitude
+            val longPoint1 = longitutde
+            val latPoint1 = latitude
 
-            val long_Point2 = longitutde + increase
-            val lat_Point2 = latitude
+            val longPoint2 = longitutde + increase
+            val latPoint2 = latitude
 
-            val long_Point3 = longitutde
-            val lat_Point3 = latitude + increase
+            val longPoint3 = longitutde
+            val latPoint3 = latitude + increase
 
-            val long_Point4 = longitutde + increase
-            val lat_Point4 = latitude + increase
+            val longPoint4 = longitutde + increase
+            val latPoint4 = latitude + increase
 
 
             // Dette er en firkant: kan endres til en seks- eller åttekant
             val polygon =
-                "POLYGON((${long_Point1} $lat_Point1 , $long_Point2 $lat_Point2 ,${long_Point3} $lat_Point3 , $long_Point4 $lat_Point4 ))"
+                "POLYGON((${longPoint1} $latPoint1 , $longPoint2 $latPoint2 ,${longPoint3} $latPoint3 , $longPoint4 $latPoint4 ))"
 
             return polygon
         }

@@ -144,13 +144,3 @@ fun ModalSheetWithAnchor(sheetState: ModalBottomSheetState, showModalSheet: Muta
         }
     }
 }
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showSystemUi = true)
-@Composable
-fun MBSTest() {
-    Scaffold(bottomBar = { Sikt_BottomBar2() }, containerColor = Sikt_red) {
-
-    }
-}

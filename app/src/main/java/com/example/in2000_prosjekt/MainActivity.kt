@@ -81,7 +81,7 @@ fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapVi
         // Re-selecting the same item
         launchSingleTop = true
         // Restore state when re-selecting a previously selected item
-        restoreState = true} }
+        restoreState = false} }
     val favorite = { navController.navigate("Favorite") {
 
         popUpTo(navController.graph.findStartDestination().id) {
@@ -95,14 +95,14 @@ fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapVi
             saveState = true
         }
         launchSingleTop = true
-        restoreState = true
+        restoreState = false
     } }
     val settings = {navController.navigate("Settings") {
         popUpTo(navController.graph.findStartDestination().id) {
             saveState = true
         }
         launchSingleTop = true
-        restoreState = true
+        restoreState = false
     } }
     
     NavHost(

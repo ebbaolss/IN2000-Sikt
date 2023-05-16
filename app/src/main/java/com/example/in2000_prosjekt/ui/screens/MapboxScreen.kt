@@ -22,7 +22,7 @@ import com.example.in2000_prosjekt.ui.AppUiState
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.*
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomSheet
-import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard
+import com.example.in2000_prosjekt.ui.components.siktLocationcard
 import com.example.in2000_prosjekt.database.MapViewModel
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.bindgen.Expected
@@ -223,7 +223,7 @@ fun ShowMap(
                                 .padding(top = 70.dp, bottom = 70.dp, start = 20.dp, end = 20.dp)
                         ) {
                             // Må legge inn listen over fjelltopper i nærheten:
-                            Sikt_LocationCard(
+                            siktLocationcard(
                                 mountainUiState,
                                 (appUiState as AppUiState.Success).locationF,
                                 (appUiState as AppUiState.Success).nowCastF,
