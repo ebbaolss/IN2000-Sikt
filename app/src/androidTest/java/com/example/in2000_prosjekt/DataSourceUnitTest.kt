@@ -1,8 +1,6 @@
 package com.example.in2000_prosjekt
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import com.example.in2000_prosjekt.data.*
 import junit.framework.TestCase.*
@@ -15,7 +13,7 @@ import junit.framework.TestCase.*
 class DataSourceUnitTest {
 
 
-    // Unit test Nr 11: Test av LocationNow apiet
+    // Unit test Nr 8: Test av LocationNow apiet
     //Arrange
     private val locationapirespons = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi") // Forecast og nowcast bruker samme api
     @Test
@@ -32,7 +30,7 @@ class DataSourceUnitTest {
     }
 
 
-    // Unit test Nr 12: Test av NowCast apiet
+    // Unit test Nr 9: Test av NowCast apiet
     //Arrange
     private val nowcastapirespons :  DataSource = DataSource(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     @Test
@@ -49,7 +47,7 @@ class DataSourceUnitTest {
         assertNotNull(nowcastapirespons.properties?.timeseries?.size)
     }
 
-    // Unit test Nr 13: Test av Met alert apoet
+    // Unit test Nr 10: Test av Met alert apoet
     //Arrange
     private val alertapirespons :  DataSourceAlerts = DataSourceAlerts(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     @Test
@@ -67,7 +65,7 @@ class DataSourceUnitTest {
     }
 
 
-    // Unit test Nr 14: Test av sunrise apiet
+    // Unit test Nr 11: Test av sunrise apiet
     //Arrange
     private val sunriserespons :  DataSourceSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
     @Test
