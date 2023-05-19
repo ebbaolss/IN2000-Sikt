@@ -87,7 +87,7 @@ fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapVi
             saveState = true
         }
         launchSingleTop = true
-        restoreState = true
+        restoreState = false
     } }
     val info = { navController.navigate("Info") {
         popUpTo(navController.graph.findStartDestination().id) {
