@@ -139,11 +139,6 @@ class MapViewModel(application: Application) : ViewModel() {
                 }
                 val nowCastP = nowCastDeferred.await()
 
-                val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
-                    repository.getSunrise(latitude, longitude)
-                }
-                val sunsetP = sunsetDeferred.await()
-
                 val alertDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getAlert(latitude, longitude)
                 }
@@ -160,9 +155,7 @@ class MapViewModel(application: Application) : ViewModel() {
                     AppUiState.Success(
                         locationF = locationP,
                         nowCastF = nowCastP,
-                        sunriseF = sunsetP,
                         alertListF = alertP,
-                        //frostF = frostP
                     )
                 }
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd

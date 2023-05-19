@@ -23,9 +23,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 
-fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>,favoriteViewModel: FavoriteViewModel){
+fun LazyListScope.siktLocationcard(mountain: MapUiState.Mountain, locationInfo: LocationInfo, nowCastInfo: NowCastInfo, alertInfoList: MutableList<AlertInfo>, favoriteViewModel: FavoriteViewModel){
 
     items(1) {
+
 
         val name = mountain.name
         val elevation = mountain.elevation
@@ -77,7 +78,7 @@ fun LazyListScope.Sikt_LocationCard(mountain: MapUiState.Mountain, locationInfo:
                         start = 20.dp,
                         end = 20.dp
                     )
-                ) { Sikt_Turer_I_Naerheten(testliste, nowCastInfo) }
+                ) { siktTurerINaerheten(testliste, nowCastInfo) }
             } else {
                 Text(text = "Ingen topper i nærheten...", modifier = Modifier.padding(start = 20.dp))
             }
@@ -110,10 +111,10 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
 
     fun getMelding(index : Int) : String {
         val hour = (tidspunkt.toInt() + index) % 24
-        val melding = when {
-            index == 0 -> return "Sikt nå:"
-            hour in 0..9 -> return "0$hour:00"
-            else -> return "$hour:00"
+        return when {
+            index == 0 -> "Sikt nå:"
+            hour in 0..9 -> "0$hour:00"
+            else -> "$hour:00"
         }
     }
 
@@ -181,16 +182,16 @@ fun Sikt_LocationCard_Hour_Card(tid: String, temp: Int, cloudiness: Float) {
 fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo, nowCastInfo: NowCastInfo) {
 
     val tempToday = nowCastInfo.temperatureNow
-    val temp_day1 = locationInfo.temp_day1
-    val temp_day2 = locationInfo.temp_day2
-    val temp_day3 = locationInfo.temp_day3
-    val temp_day4 = locationInfo.temp_day4
+    val tempDay1 = locationInfo.temp_day1
+    val tempDay2 = locationInfo.temp_day2
+    val tempDay3 = locationInfo.temp_day3
+    val tempDay4 = locationInfo.temp_day4
 
     val cloudsToday = locationInfo.cloud_area_fraction
-    val cloud_day1 = locationInfo.cloud_day1
-    val cloud_day2 = locationInfo.cloud_day2
-    val cloud_day3 = locationInfo.cloud_day3
-    val cloud_day4 = locationInfo.cloud_day4
+    val cloudDay1 = locationInfo.cloud_day1
+    val cloudDay2 = locationInfo.cloud_day2
+    val cloudDay3 = locationInfo.cloud_day3
+    val cloudDay4 = locationInfo.cloud_day4
 
     Card(
         modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp),
@@ -205,14 +206,14 @@ fun Sikt_LocationCard_NextDays(locationInfo: LocationInfo, nowCastInfo: NowCastI
 
             Sikt_LocationCard_NextDaysContent("I dag", tempToday, cloudsToday)
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
-            Sikt_LocationCard_NextDaysContent("I morgen", temp_day1, cloud_day1)
+            Sikt_LocationCard_NextDaysContent("I morgen", tempDay1, cloudDay1)
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
-            Sikt_LocationCard_NextDaysContent("Om 2 dager", temp_day2, cloud_day2)
+            Sikt_LocationCard_NextDaysContent("Om 2 dager", tempDay2, cloudDay2)
 
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
-            Sikt_LocationCard_NextDaysContent("Om 3 dager", temp_day3, cloud_day3)
+            Sikt_LocationCard_NextDaysContent("Om 3 dager", tempDay3, cloudDay3)
             Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
-            Sikt_LocationCard_NextDaysContent("Om 4 dager", temp_day4, cloud_day4)
+            Sikt_LocationCard_NextDaysContent("Om 4 dager", tempDay4, cloudDay4)
         }
     }
 }

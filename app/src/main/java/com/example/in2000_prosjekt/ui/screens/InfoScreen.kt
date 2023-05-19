@@ -12,14 +12,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 import com.example.in2000_prosjekt.ui.components.*
-import com.example.in2000_prosjekt.database.FavoriteViewModel
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InfoScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel){
+fun InfoScreen(
+    onNavigateToMap: () -> Unit,
+    onNavigateToFav: () -> Unit,
+    onNavigateToInfo: () -> Unit,
+    onNavigateToSettings: () -> Unit
+){
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, favorite = false, settings = false, info = true, map = false) }) {
         val rules: Array<String> = stringArrayResource(id = R.array.rules)
 
@@ -29,7 +33,7 @@ fun InfoScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavig
                     .fillMaxSize()
                     .padding(bottom = 70.dp)
             ){
-                Sikt_InformationCard(rules)
+                siktInformationCard(rules)
             }
         }
     }

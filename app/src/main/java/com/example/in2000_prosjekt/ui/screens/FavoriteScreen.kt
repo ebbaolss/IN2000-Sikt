@@ -27,7 +27,7 @@ import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
-import com.example.in2000_prosjekt.ui.components.Sikt_Favorite_card
+import com.example.in2000_prosjekt.ui.components.siktFavoriteCard
 import com.example.in2000_prosjekt.database.Favorite
 import com.example.in2000_prosjekt.database.FavoriteUiState
 import com.example.in2000_prosjekt.database.FavoriteViewModel
@@ -36,17 +36,19 @@ import com.example.in2000_prosjekt.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel, apiViewModel: APIViewModel){
-
-    //Used for testing:
-    //viewModel.deleteAll()
-    //addFavTest(viewModel)
+fun FavoriteScreen(
+    onNavigateToMap: () -> Unit,
+    onNavigateToFav: () -> Unit,
+    onNavigateToInfo: () -> Unit,
+    onNavigateToSettings: () -> Unit,
+    viewModel: FavoriteViewModel
+){
 
     val favoriteUiState by viewModel.favUiState.collectAsState()
     val allFavorites by viewModel.allFavorites.observeAsState(listOf())
 
     Log.d("FAVS", "${allFavorites.size}")
-    //viewModel.deleteAll()
+
     if(allFavorites.isNotEmpty()){
         Log.d("UPDATING", "oppdaterer")
         viewModel.update()
@@ -99,9 +101,11 @@ fun FavoriteScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                 }
             }
         is FavoriteUiState.Error -> {
-            FavoriteScreenError( onNavigateToMap,
-                onNavigateToFav,onNavigateToInfo,
-                onNavigateToSettings, viewModel)
+            FavoriteScreenError(
+                onNavigateToMap,
+                onNavigateToFav, onNavigateToInfo,
+                onNavigateToSettings
+            )
         }
         is FavoriteUiState.Success -> {
             if(allFavorites.isNotEmpty()){
@@ -151,7 +155,7 @@ fun FavoriteScreenSuccess(
             ) {
                 if (allFavorites.isNotEmpty()) {
                     if ( loc.size == allFavorites.size && now.size == allFavorites.size && al.size == allFavorites.size){
-                        Sikt_Favorite_card(
+                        siktFavoriteCard(
                             loc,
                             now,
                             al,

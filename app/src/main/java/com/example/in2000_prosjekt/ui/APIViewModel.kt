@@ -11,13 +11,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-import com.example.in2000_prosjekt.data.*
 import io.ktor.utils.io.errors.*
-
 import kotlinx.coroutines.async
 
-class APIViewModel () : ViewModel()
+class APIViewModel : ViewModel()
     {
 
     //manual dependency injection, se codelab
@@ -27,7 +24,7 @@ class APIViewModel () : ViewModel()
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
     fun getAll(latitude: String, longitude: String, altitude: String) {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             try {
                 val locationDeferred = viewModelScope.async (Dispatchers.IO) {
                     repository.getLocation(latitude, longitude, altitude)
@@ -41,18 +38,10 @@ class APIViewModel () : ViewModel()
                 Log.d("getAll", "Pre-deferred")
                 val nowCastP = nowCastDeferred.await()
                 Log.d("nowCastDeferred", "Success")
-                val sunsetDeferred = viewModelScope.async (Dispatchers.IO){
-                    repository.getSunrise(latitude, longitude)
-                }
-                val sunsetP = sunsetDeferred.await()
-                Log.d("sunriseDeferred", "Success")
+
                 val alertDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getAlert(latitude, longitude)
                 }
-
-                /*val frostDeferred = viewModelScope.async (Dispatchers.IO){
-                    repository.getFrost(latitude, longitude)
-                }*/
 
                 val alertP = alertDeferred.await()
                 Log.d("alertDeferred", "Success")
@@ -64,9 +53,7 @@ class APIViewModel () : ViewModel()
                     AppUiState.Success(
                         locationF = locationP,
                         nowCastF = nowCastP,
-                        sunriseF = sunsetP,
                         alertListF = alertP,
-                        //frostF = frostP
                     )
                 }
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd

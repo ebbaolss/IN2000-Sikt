@@ -10,7 +10,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.in2000_prosjekt.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
 import com.example.in2000_prosjekt.ui.theme.Sikt_red
 
@@ -18,7 +17,12 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_red
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoriteScreenError ( onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, viewModel : FavoriteViewModel) {
+fun FavoriteScreenError (
+    onNavigateToMap: () -> Unit,
+    onNavigateToFav: () -> Unit,
+    onNavigateToInfo: () -> Unit,
+    onNavigateToSettings: () -> Unit
+) {
 
     Scaffold(bottomBar = { Sikt_BottomBar(onNavigateToMap, onNavigateToFav, onNavigateToInfo, onNavigateToSettings, favorite = true, info = false, map = false, settings = false)
     })

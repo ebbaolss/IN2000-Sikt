@@ -64,27 +64,4 @@ class DataSourceUnitTest {
         assertNotNull(alertapirespons.features)
     }
 
-
-    // Unit test Nr 11: Test av sunrise apiet
-    //Arrange
-    private val sunriserespons :  DataSourceSunrise = DataSourceSunrise(basePath = "https://gw-uio.intark.uh-it.no/in2000/weatherapi")
-    @Test
-    fun testfetchSunrise() = runBlocking {
-
-        //Act
-        val sunriseapirespons = sunriserespons.fetchSunrise("65", "9")
-
-        //Assert
-        assertEquals("https://api.met.no/license_data.html", sunriseapirespons.licenseURL)
-
-        assertEquals("MET Norway", sunriseapirespons.copyright)
-
-        assertNotNull(sunriseapirespons.geometry)
-        assertNotNull(sunriseapirespons.properties?.sunrise)
-        assertNotNull(sunriseapirespons.properties?.sunset)
-    }
-
-
-
-
 }

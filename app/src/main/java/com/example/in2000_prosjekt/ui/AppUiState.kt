@@ -45,10 +45,6 @@ data class NowCastInfo( //sette N eller Now på slutten
     val temperatureNow: Int,
     val windN : Float
 )
-data class SunriseInfo( //sett S på slutten
-    val sunriseS: String,
-    val sunsetS: String
-)
 data class AlertInfo( //sett A på slutten
     val areaA: String,
     val typeA: String,
@@ -78,9 +74,7 @@ sealed interface AppUiState {
     data class Success(
         val locationF: LocationInfo,
         val nowCastF: NowCastInfo,
-        val sunriseF: SunriseInfo,
         val alertListF: MutableList<AlertInfo>,
-        // val frostF: FrostInfo
     ) : AppUiState
     object Error : AppUiState
     object Loading : AppUiState

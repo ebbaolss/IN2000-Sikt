@@ -23,7 +23,6 @@ import com.example.in2000_prosjekt.database.FavoriteViewModelFactory
 import com.example.in2000_prosjekt.database.MapViewModel
 import com.example.in2000_prosjekt.database.MapViewModelFactory
 import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.database.*
 import com.example.in2000_prosjekt.ui.screens.*
 
 class MainActivity : ComponentActivity() {
@@ -83,28 +82,28 @@ fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapVi
         // Re-selecting the same item
         launchSingleTop = true
         // Restore state when re-selecting a previously selected item
-        restoreState = true} }
+        restoreState = false} }
     val favorite = { navController.navigate("Favorite") {
 
         popUpTo(navController.graph.findStartDestination().id) {
             saveState = true
         }
         launchSingleTop = true
-        restoreState = true
+        restoreState = false
     } }
     val info = { navController.navigate("Info") {
         popUpTo(navController.graph.findStartDestination().id) {
             saveState = true
         }
         launchSingleTop = true
-        restoreState = true
+        restoreState = false
     } }
     val settings = {navController.navigate("Settings") {
         popUpTo(navController.graph.findStartDestination().id) {
             saveState = true
         }
         launchSingleTop = true
-        restoreState = true
+        restoreState = false
     } }
     
     NavHost(
@@ -114,8 +113,8 @@ fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapVi
 
         composable("StartPage") { StartPage( onNavigateToNext = { navController.navigate("Map") })  }
         composable("Map") { ShowMap(map, favorite, info, settings, mapviewmodel, apiViewModel, favoriteViewModel)  }
-        composable("Favorite") { FavoriteScreen(map, favorite, info, settings, favoriteViewModel, apiViewModel) }
-        composable("Info") { InfoScreen(map, favorite, info, settings, favoriteViewModel) }
+        composable("Favorite") { FavoriteScreen(map, favorite, info, settings, favoriteViewModel) }
+        composable("Info") { InfoScreen(map, favorite, info, settings) }
         composable("Settings") { SettingsScreen(map, favorite, info, settings, favoriteViewModel) }
     }
 }

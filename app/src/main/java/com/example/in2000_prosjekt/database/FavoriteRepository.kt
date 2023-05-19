@@ -12,7 +12,7 @@ import kotlinx.coroutines.*
 
 class FavoriteRepository(private val favoriteDao: FavoriteDao) {
 
-    val weatherRepository = ImplementedWeatherRepository()
+    private val weatherRepository = ImplementedWeatherRepository()
     val allFavorites: LiveData<List<Favorite>> = favoriteDao.getAllFavorites()
     val searchFavorites = MutableLiveData<List<Favorite>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
@@ -23,18 +23,18 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         }
     }
 
-    fun deleteFavorite(longtitude: Double, latitude: Double) : Boolean{
+    fun deleteFavorite(longitude: Double, latitude: Double) : Boolean{
         var deleted = false
         coroutineScope.launch(Dispatchers.IO) {
-            favoriteDao.deleteFav(longtitude, latitude)
+            favoriteDao.deleteFav(longitude, latitude)
             deleted = true
         }
         return deleted
     }
 
-    fun findFavorite(longtitude: Double, latitude: Double) {
+    fun findFavorite(longitude: Double, latitude: Double) {
         coroutineScope.launch(Dispatchers.Main) {
-            searchFavorites.value = asyncFind(longtitude, latitude).await()
+            searchFavorites.value = asyncFindAsync(longitude, latitude).await()
             Log.d("SF.VAL", "${searchFavorites.value?.size}")
         }
     }
@@ -45,9 +45,9 @@ class FavoriteRepository(private val favoriteDao: FavoriteDao) {
         }
     }
 
-    private fun asyncFind(longtitude: Double, latitude: Double): Deferred<List<Favorite>?> =
+    private fun asyncFindAsync(longitude: Double, latitude: Double): Deferred<List<Favorite>?> =
         coroutineScope.async(Dispatchers.IO) {
-            return@async favoriteDao.findFavorite(longtitude, latitude)
+            return@async favoriteDao.findFavorite(longitude, latitude)
         }
 
     suspend fun getLocationList() : MutableList<LocationInfo> {
