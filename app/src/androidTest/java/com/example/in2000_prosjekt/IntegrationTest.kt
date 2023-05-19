@@ -12,6 +12,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
+import com.example.in2000_prosjekt.data.Geometry
+import com.example.in2000_prosjekt.data.Properties
 import com.example.in2000_prosjekt.database.FavoriteViewModel
 import com.example.in2000_prosjekt.database.FavoriteViewModelFactory
 import com.example.in2000_prosjekt.database.MapViewModel
@@ -28,6 +30,7 @@ import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
 import io.ktor.utils.io.*
@@ -51,52 +54,56 @@ class IntegrationTest {
         val rule = createComposeRule()
 
         @Test
-        fun apiCallForFrost () {
+        fun testApiCallForLocationForecast () {
 
-            data class FrostApiResponse( //This class is what we compare our HTTP request test with. We know that the HTTP request will contain a parameter named "@type". The variable in this class should be what we expect the HTTP request to respond with.
-
-                @SerializedName("@type") val respons: String
-
+            //This class is what we compare our HTTP request test with. We know that the HTTP request will contain a parameter named "@type". The variable in this class should be what we expect the HTTP request to respond with.
+            data class Model(
+                val type : String?,
+                val geometry: Geometry?,
+                val properties: Properties?
             )
-
-
             class ApiClient(engine: HttpClientEngine) {
-                private val httpClient = HttpClient(engine) {
-                    install(Auth) {
-                        basic {
-                            credentials {
-                                BasicAuthCredentials(
-                                    username = "1cf3b8eb-0fbd-46c9-803d-32206f191ccf",
-                                    password = ""
-                                )
-                            }
-                        }
-                    }
+                private val client = HttpClient {
                     install(ContentNegotiation) {
                         gson()
                     }
                 }
 
 
-                suspend fun testGetFrostApiRespons(): FrostApiResponse = httpClient.get("https://frost.met.no/sources/v0.jsonld?types=SensorSystem&elements=mean(cloud_area_fraction P1D)&country=norge").body()
+                private suspend fun clientProxyServerCall(client: HttpClient, URL: String) : HttpResponse {
+                    return client.get(URL) {
+                        headers {
+                            append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")
+                        }
+                    }
+                }
+                suspend fun testfetchLocationForecast(): Model {
+
+
+                    val url= "https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60.10&lon=9.58"
+                    val apicall  = clientProxyServerCall(client, url)
+                    return apicall.body()
+
+                }
 
                 @Test
-                fun frostApiTest() {
+                fun apiTest() {
                     runBlocking {
 
                         val mockEngine = MockEngine {
                             respond(
-                                content = ByteReadChannel(""""@type" : "SourceResponse","""),
+                                content = ByteReadChannel(""""type" : "Feature"""),
                                 status = HttpStatusCode.OK,
                             )
                         }
                         val apiClient = ApiClient(mockEngine)
 
-                        Assert.assertEquals("SourceResponse", apiClient.testGetFrostApiRespons().respons) // The assertion is to compare what  we know the json object will be, with what we actually get from the mockEngine (MockEngine: is a library for mocking API calls)
+                        Assert.assertEquals("Feature", apiClient.testfetchLocationForecast().type) // The assertion is to compare what  we know the json object will be, with what we actually get from the mockEngine (MockEngine: is a library for mocking API calls)
                     }
                 }
 
             }
+
 
         }
 
@@ -160,7 +167,7 @@ class testNavigationBar {
                         )
                     )
 
-                    MultipleScreenApp(favoriteViewModel, mapViewModel, apiViewModel)
+                    MultipleScreenApp(favoriteViewModel, mapViewModel, apiViewModel, navController)
                     InfoScreen(map, favorite, settings, info)
 
 
