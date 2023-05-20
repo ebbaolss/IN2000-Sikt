@@ -44,8 +44,6 @@ import org.junit.Test
 class IntegrationTest {
 
 
-
-
     // The first integration test:
 // This tests the Metrological instutes API's has expected results when we make a request that we know the results of.
 // This way we ensure the consistency and quality of our api responses
@@ -108,11 +106,6 @@ class IntegrationTest {
         }
 
     }
-
-
-
-
-
 }
 
 
