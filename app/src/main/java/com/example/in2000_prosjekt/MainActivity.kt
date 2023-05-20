@@ -11,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -55,8 +57,8 @@ class MainActivity : ComponentActivity() {
                                 LocalContext.current.applicationContext as Application
                             )
                         )
-
-                        MultipleScreenApp(favoriteViewModel, mapViewModel, apiViewModel)
+                        val navController = rememberNavController()
+                        MultipleScreenApp(favoriteViewModel, mapViewModel, apiViewModel,navController)
                     }
                 }
             }
@@ -65,9 +67,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapViewModel, apiViewModel: APIViewModel) {
+fun MultipleScreenApp(favoriteViewModel: FavoriteViewModel, mapviewmodel : MapViewModel, apiViewModel: APIViewModel, navController: NavHostController) {
 
-    val navController = rememberNavController()
+
 
     val map = { navController.navigate("Map") {
         // Pop up to the start destination of the graph to
