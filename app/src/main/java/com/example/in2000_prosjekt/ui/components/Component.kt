@@ -438,52 +438,6 @@ fun LazyListScope.siktFavoriteCard(weatherinfo: MutableList<LocationInfo>, nowca
     }
 }
 
-fun LazyListScope.siktTurerINaerheten(mountains: MutableList<MapUiState.Mountain>, nowCastInfo: NowCastInfo) {
-
-    items(1) {
-        mountains.forEach { mountain ->
-
-            val temp = nowCastInfo.temperatureNow
-
-            Card(
-                colors = CardDefaults.cardColors(Sikt_backroundBlue),
-                modifier = Modifier.padding(end = 10.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier.size(100.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.turer_i_naerheten),
-                            contentDescription = "",
-                            modifier = Modifier.fillMaxSize()
-                        )
-                        Text(
-                            text = "${temp}°",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 28.sp,
-                            color = Sikt_sort,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-                    Spacer(modifier = Modifier.size(10.dp))
-                    Text(
-                        text = "${mountain.name}",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp,
-                        color = Sikt_sort,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            }
-        }
-    }
-}
-
 @Composable
 fun DeleteAllButton(viewModel: FavoriteViewModel){
     //Knapp til Instillinger for å slette alle favoritter.

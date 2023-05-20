@@ -4,36 +4,37 @@ package com.example.in2000_prosjekt
 import android.app.Application
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onLast
+import androidx.compose.ui.test.performClick
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ApplicationProvider
 import com.example.in2000_prosjekt.data.Geometry
 import com.example.in2000_prosjekt.data.Properties
 import com.example.in2000_prosjekt.database.FavoriteViewModel
 import com.example.in2000_prosjekt.database.FavoriteViewModelFactory
 import com.example.in2000_prosjekt.database.MapViewModel
 import com.example.in2000_prosjekt.database.MapViewModelFactory
-import com.example.in2000_prosjekt.ui.*
-import com.example.in2000_prosjekt.ui.screens.*
+import com.example.in2000_prosjekt.ui.APIViewModel
+import com.example.in2000_prosjekt.ui.screens.InfoScreen
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
-import com.google.gson.annotations.SerializedName
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.*
-import io.ktor.client.engine.mock.*
-import io.ktor.client.plugins.auth.*
-import io.ktor.client.plugins.auth.providers.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.serialization.gson.*
-import io.ktor.utils.io.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpStatusCode
+import io.ktor.serialization.gson.gson
+import io.ktor.utils.io.ByteReadChannel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
@@ -116,7 +117,7 @@ class IntegrationTest {
 class testNavigationBar {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
-    lateinit var navController: TestNavHostController
+    private lateinit var navController: TestNavHostController
 
     //@Test
     @Before

@@ -5,16 +5,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -23,7 +22,12 @@ import com.example.in2000_prosjekt.database.FavoriteViewModelFactory
 import com.example.in2000_prosjekt.database.MapViewModel
 import com.example.in2000_prosjekt.database.MapViewModelFactory
 import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.screens.*
+import com.example.in2000_prosjekt.ui.screens.FavoriteScreen
+import com.example.in2000_prosjekt.ui.screens.InfoScreen
+import com.example.in2000_prosjekt.ui.screens.SettingsScreen
+import com.example.in2000_prosjekt.ui.screens.ShowMap
+import com.example.in2000_prosjekt.ui.screens.StartPage
+import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
 
 class MainActivity : ComponentActivity() {
 

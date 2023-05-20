@@ -42,7 +42,7 @@ class MapViewModel(application: Application) : ViewModel() {
                 "session_token=[GENERATED-UUID]&country=NO&poi_category=mountain&poi_category_exclusions=street&" +
                 "access_token=pk.eyJ1IjoiZWxpc2FiZXRoYiIsImEiOiJjbGY2c3N3dDAxYWxsM3ludHY5em5wMnJxIn0.YVrKFoHYA1sCJhgBCbhudw"
 
-        viewModelScope.launch() {
+        viewModelScope.launch {
             val mapSearchDeferred = viewModelScope.async(Dispatchers.IO){
                 repository.getMap(path)
             }
@@ -53,7 +53,7 @@ class MapViewModel(application: Application) : ViewModel() {
         return true
     }
     fun showSelectedMountain( mapboxId : String, name: String, altitude : Int) {
-        viewModelScope.launch() {
+        viewModelScope.launch {
 
             val path2 = "https://api.mapbox.com/search/searchbox/v1/retrieve/$mapboxId?" +
                     "session_token=[GENERATED-UUID]&" +
@@ -126,8 +126,8 @@ class MapViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun getAllSearch(latitude: String, longitude: String, altitude: String) {
-        viewModelScope.launch() {
+    private fun getAllSearch(latitude: String, longitude: String, altitude: String) {
+        viewModelScope.launch {
             try {
                 val locationDeferred = viewModelScope.async (Dispatchers.IO) {
                     repository.getLocation(latitude, longitude, altitude)

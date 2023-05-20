@@ -56,10 +56,6 @@ data class AlertInfo( //sett A på slutten
     val timeIntervalA: List<String?>?
 )
 
-data class FrostInfo( //sett Frost på slutten, F brukes allerede
-    val sightcondition: Int,
-)
-
 data class MapInfo(
     //hashmap med forslag
     val optionMountains : HashMap<String, String> = hashMapOf(),

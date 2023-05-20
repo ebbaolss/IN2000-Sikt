@@ -50,7 +50,7 @@ class UnitTest_ComposableFunctions {
 
             //Act
             rule.setContent { // This sets the content of the screen to be that of the screen: StartPage()
-                StartPage({})
+                StartPage {}
             }
 
             //Assert
@@ -180,7 +180,7 @@ class UnitTest_ComposableFunctions {
 
 
             val selvefjellvettreglene =
-                rule.activity.getResources().getStringArray(R.array.rules)
+                rule.activity.resources.getStringArray(R.array.rules)
 
 
 

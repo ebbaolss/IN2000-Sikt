@@ -48,7 +48,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
     }*/
 
     fun deleteUpdate(longtitude: Double, latitude: Double) {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             try {
                 /*val deleted = viewModelScope.async {
                     repository.deleteFavorite(longtitude, latitude)
@@ -85,7 +85,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
     }
 
     fun update() {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             try {
                 val locationInfo = viewModelScope.async {
                     repository.getLocationList()
@@ -119,7 +119,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
         }
     }
     fun updateEmpty(){
-        viewModelScope.launch() {
+        viewModelScope.launch {
             try {
                 uistate.update {
                     FavoriteUiState.Success(

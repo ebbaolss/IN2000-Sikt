@@ -244,7 +244,6 @@ fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraO
 
     val mapView = MapView(xt).apply {
         val mapboxMap = getMapboxMap()
-        val cameraOptionsUiState = CameraOptionsUiState
 
         mapboxMap.loadStyle(
             // Declares map style
@@ -276,9 +275,12 @@ fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraO
         // Camera settings
         mapboxMap.setCamera(
             cameraOptions {
-                zoom(cameraOptionsUiState.currentScreenZoom)
+                zoom(CameraOptionsUiState.currentScreenZoom)
                 // Koordinatene til Glittertind
-                center(Point.fromLngLat(cameraOptionsUiState.currentScreenLongitude,cameraOptionsUiState.currentScreenLatitude))
+                center(Point.fromLngLat(
+                    CameraOptionsUiState.currentScreenLongitude,
+                    CameraOptionsUiState.currentScreenLatitude
+                ))
             }
         )
     }
@@ -313,7 +315,7 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
             )
         )),
         RenderedQueryOptions(listOf("MOUNTAINS_DATALAYER"), null)
-    ) { it ->
+    ) {
         onFeatureClicked(it) { feature ->
             if (feature.id() != null) {
                 val name = feature.getStringProperty("name")

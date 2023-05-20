@@ -49,20 +49,24 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'androidx.activity:activity-compose:1.7.1'
+    //noinspection GradleDependency
     implementation "androidx.compose.ui:ui:$compose_version"
+    //noinspection GradleDependency,GradleDependency
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
 
-    implementation 'androidx.compose.material3:material3:1.0.0-alpha11'
+    implementation 'androidx.compose.material3:material3:1.2.0-alpha01'
 
     //implementation 'androidx.room:room-common:2.5.1'
 
 
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    //noinspection GradleDependency
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    //noinspection GradleDependency
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
     // Mapbox
@@ -90,9 +94,10 @@ dependencies {
 
     // Frost dependencies:
     implementation "io.ktor:ktor-client-auth:$ktor_version"
+    //noinspection GradleDependency
     implementation("androidx.compose.runtime:runtime-livedata:$compose_version")
     // test frost
-    implementation "androidx.compose.material3:material3:1.0.0-beta03"
+    implementation "androidx.compose.material3:material3:1.2.0-alpha01"
 
     implementation("io.ktor:ktor-client-cio-jvm:2.2.4")
 
@@ -101,8 +106,8 @@ dependencies {
 
 
     //modal bottom bar
-    implementation "androidx.compose.ui:ui:1.2.0-beta02"
-    implementation "androidx.compose.material:material:1.2.0-beta02"
+    implementation "androidx.compose.ui:ui:1.5.0-alpha04"
+    implementation "androidx.compose.material:material:1.5.0-alpha04"
 
 
     implementation "io.ktor:ktor-client-android:$ktor_version"
@@ -119,9 +124,11 @@ dependencies {
 
     apply plugin: 'kotlin-kapt'
 
+    //noinspection GradleDependency,GradleDependency
     implementation "androidx.room:room-runtime:$room_version"
+    //noinspection GradleDependency
     implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.compose.runtime:runtime-livedata:1.2.1"
+    implementation "androidx.compose.runtime:runtime-livedata:1.4.3"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
@@ -145,13 +152,14 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     androidTestImplementation("androidx.navigation:navigation-testing:2.5.3")
+    //noinspection GradleDependency
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version" // Dette er siste offisielt støttede måte å teste composable funksjoner på: Ref. https://github.com/android/android-test/issues/224
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
     testImplementation "io.ktor:ktor-client-mock-jvm:$ktor_version"
 
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
 
 
 // Test av datepicker
