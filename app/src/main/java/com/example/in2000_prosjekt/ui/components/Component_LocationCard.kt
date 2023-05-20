@@ -27,7 +27,6 @@ fun LazyListScope.siktLocationcard(mountain: MapUiState.Mountain, locationInfo: 
 
     items(1) {
 
-
         val name = mountain.name
         val elevation = mountain.elevation
 
@@ -40,14 +39,6 @@ fun LazyListScope.siktLocationcard(mountain: MapUiState.Mountain, locationInfo: 
 
         val temp = nowCastInfo.temperatureNow
         val wind = nowCastInfo.windN
-
-        // SKAL SLETTES NÅR VI FÅR LISTE OVER FJELL I NÆRHETEN:
-        val testliste = mutableListOf<MapUiState.Mountain>()
-        /*
-            testliste.add(mountain)
-            testliste.add(mountain)
-            testliste.add(mountain)
-            testliste.add(mountain)*/
 
         Card(
             colors = CardDefaults.cardColors(Sikt_lightblue),
@@ -69,20 +60,6 @@ fun LazyListScope.siktLocationcard(mountain: MapUiState.Mountain, locationInfo: 
             Spacer(modifier = Modifier.size(10.dp))
             Sikt_LocationCard_NextDays(locationInfo, nowCastInfo)
             Spacer(modifier = Modifier.size(20.dp))
-            Text(text = "Topper i nærheten: ", fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 20.dp))
-            Spacer(modifier = Modifier.size(10.dp))
-            // Bytt ut testliste med fjelltopper i nærheten:
-            if (testliste.size != 0) {
-                LazyRow(
-                    modifier = Modifier.padding(
-                        start = 20.dp,
-                        end = 20.dp
-                    )
-                ) { siktTurerINaerheten(testliste, nowCastInfo) }
-            } else {
-                Text(text = "Ingen topper i nærheten...", modifier = Modifier.padding(start = 20.dp))
-            }
-            Spacer(modifier = Modifier.size(100.dp))
         }
     }
 }
@@ -95,19 +72,6 @@ fun Sikt_LocationCard_Hour(locationInfo: LocationInfo) {
     val date = Date(currentTimeMillis)
     val dateFormat = SimpleDateFormat("HH")
     val tidspunkt = dateFormat.format(date)
-
-    /*
-    LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        for (i in 0..11) {
-            val hour = (tidspunkt.toInt() + i) % 24
-            val melding = when {
-                i == 0 -> "Sikt nå:"
-                hour in 0..9 -> "0$hour:00"
-                else -> "$hour:00"
-            }
-            item { Sikt_LocationCard_Hour_Card(melding, locationInfo.tempNext1, locationInfo.cloudinessNext1) }
-        }
-    }*/
 
     fun getMelding(index : Int) : String {
         val hour = (tidspunkt.toInt() + index) % 24
