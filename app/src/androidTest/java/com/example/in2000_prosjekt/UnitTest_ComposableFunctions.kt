@@ -63,7 +63,6 @@ class UnitTest_ComposableFunctions {
                 .assertWidthIsAtLeast(392.dp)
                 .assertIsDisplayed() //   Test the size of the image that is set to fillMaxsize, which corresponds to the width of the landing page image.: Here we are verifying/testing whether the image shows up and fills the width of the screen, which should be 393.dp width
 
-
         }
     }
 

@@ -60,7 +60,7 @@ dependencies {
     implementation 'androidx.compose.material3:material3:1.2.0-alpha01'
 
     //implementation 'androidx.room:room-common:2.5.1'
-
+    implementation 'androidx.tracing:tracing:1.1.0'
 
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
