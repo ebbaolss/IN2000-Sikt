@@ -46,7 +46,9 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
 
         ) {
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-            Column (horizontalAlignment = Alignment.CenterHorizontally,
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.clickable { onNavigateToMap() }
             ){
                 IconButton(onClick = { onNavigateToMap() }) {
                     val iconfarge = Sikt_darkblue
@@ -66,6 +68,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.clickable { onNavigateToFav() }
             ) {
 
                 IconButton(onClick = { onNavigateToFav() }) {
@@ -87,6 +90,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.clickable { onNavigateToInfo() }
             ) {
                 IconButton(onClick = { onNavigateToInfo() }) {
                     val iconfarge = Sikt_darkblue
@@ -107,6 +111,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.clickable { onNavigateToSettings() }
             ) {
                 IconButton(onClick = { onNavigateToSettings() }) {
                     val iconfarge = Sikt_darkblue
