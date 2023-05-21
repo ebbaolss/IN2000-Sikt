@@ -170,10 +170,4 @@ dependencies {
     // separate artifact with utilities for working with kotlinx-datetime
     implementation "io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.1.0"// 1.1.0, 0.3.0 funka ikke,1.1.0 funka ikke, 0.6.0
 
-
-
-
-
-
-
 }
