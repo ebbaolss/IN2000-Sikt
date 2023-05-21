@@ -103,7 +103,12 @@ fun dayContent(dayState: NonSelectableDayState , frostinfo: FrostInfo, monthStat
 
             if (dayState.date.month == monthState.currentMonth.month  ) {
 
+/*
+                try {
 
+                } catch (e:IndexOutOfBoundsException) {   }
+
+ */
                 val sightconditions = frostinfo.sightconditionListofDataforMonth?.get(dayState.date.dayOfMonth.minus(1))?.observations?.get(0)?.value // tallet skal jo starte med den 28
 
                 //Log.d("BareDAtoff", makslengde[i].toString()) // prøv å finne et array av alle dagene i monthState
@@ -218,12 +223,9 @@ fun Sikt_Historisk_Kalender(   frostinfo: FrostInfo, monthState: MonthState) { /
 
         Text(text= "Historisk væroversikt", modifier=Modifier.fillMaxWidth(), fontSize = 23.sp,  textAlign = TextAlign.Center,fontWeight = FontWeight.Bold) // alltid ha wrapcontentWidth som siste funksjono på modifier, atlså før size()
 
-        Box (/*modifier=Modifier.offset(x = -columnPadding)*/) {
-            StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.fillMaxWidth().wrapContentWidth( Alignment.CenterHorizontally,).background(Color.Green), showAdjacentMonths = false, calendarState =calenderstate, dayContent =  { it -> dayContent(
-                dayState =  it , frostinfo = frostinfo, monthState  ) })
 
-        }
-
+        StaticCalendar( firstDayOfWeek = DayOfWeek.MONDAY, modifier=Modifier.fillMaxWidth().wrapContentWidth( Alignment.CenterHorizontally,).background(Sikt_lyseblå), showAdjacentMonths = false, calendarState =calenderstate, dayContent =  { it -> dayContent(
+            dayState =  it , frostinfo = frostinfo, monthState  ) })
         // monthState er en funksjon av MonthState fra bogus, som sin .currentMonth er av typen YearMonth fra java biblioteket
 
 
