@@ -28,7 +28,6 @@ class MapViewModel(application: Application) : ViewModel() {
     private val repository: WeatherRepository = ImplementedWeatherRepository() //lettvinte måten
 
     private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
-    val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
     private val _mapInfoUistate = MutableStateFlow(MapInfo())
     val mapInfoUiState = _mapInfoUistate.asStateFlow()
@@ -110,7 +109,12 @@ class MapViewModel(application: Application) : ViewModel() {
 
     fun updateMountain(mountain: MapUiState.Mountain) {
         _mountainUiState.update {
-            it.copy(mountain.name, mountain.latitude, mountain.longitude, mountain.elevation)
+            it.copy(
+                name = mountain.name,
+                latitude = mountain.latitude,
+                longitude = mountain.longitude,
+                elevation = mountain.elevation
+            )
         }
     }
 

@@ -83,4 +83,7 @@
         <ignore path="/Users/ebbaolss/StudioProjects/IN2000_Prosjekt/app/src/main/res/drawable/wind_yellow.png" />
         <ignore path="/Users/ebbaolss/StudioProjects/IN2000_Prosjekt/app/src/main/res/drawable/yellow.png" />
     </issue>
+    <issue id="IconXmlAndPng">
+        <ignore path="/Users/ebbaolss/StudioProjects/IN2000_Prosjekt/app/src/main/res/mipmap-xxxhdpi/ic_launcher_background.png" />
+    </issue>
 </lint>

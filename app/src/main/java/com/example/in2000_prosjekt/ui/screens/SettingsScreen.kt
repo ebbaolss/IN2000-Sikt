@@ -16,7 +16,6 @@ import com.example.in2000_prosjekt.ui.components.siktSettingsCard
 import com.example.in2000_prosjekt.database.FavoriteViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo:() -> Unit, onNavigateToSettings: () -> Unit, viewModel: FavoriteViewModel){
 

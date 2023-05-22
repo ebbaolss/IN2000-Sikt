@@ -7,19 +7,8 @@ data class MapBuild(
 
 data class Contents(
     val name : String?,
-    val name_preferred : String?,
     val mapbox_id : String?,
-    val feature_type : String?,
-    val address : String?,
-    val full_address : String?,
-    val place_formatted : String?,
-    val context : Info?,
-    val language : String?,
-    val maki : String?,
-    val poi_category : List<String>?,
-    val poi_category_ids : List<String>?,
-    val external_ids : ExternalIds,
-    val metadata : MutableMap<Any, Any>? //?? riktig
+    val feature_type : String?
 
 )
 

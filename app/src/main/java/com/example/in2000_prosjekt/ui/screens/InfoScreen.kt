@@ -16,7 +16,6 @@ import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InfoScreen(
     onNavigateToMap: () -> Unit,

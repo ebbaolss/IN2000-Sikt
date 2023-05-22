@@ -67,7 +67,6 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowMap(
     onNavigateToMap: () -> Unit,

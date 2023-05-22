@@ -15,7 +15,6 @@ import com.example.in2000_prosjekt.ui.theme.Sikt_red
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteScreenError (
     onNavigateToMap: () -> Unit,
@@ -49,7 +48,6 @@ fun FavoriteScreenError (
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppScreenError ( onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit) {
 
