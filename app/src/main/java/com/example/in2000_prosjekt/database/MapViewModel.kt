@@ -3,11 +3,11 @@ package com.example.in2000_prosjekt.database
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.data.ImplementedWeatherRepository
 import com.example.in2000_prosjekt.data.WeatherRepository
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.geojson.Point
+import com.mapbox.maps.MapboxMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 class MapViewModel(application: Application) : ViewModel() {
 
@@ -25,15 +24,13 @@ class MapViewModel(application: Application) : ViewModel() {
     private val _mountainUiState = MutableStateFlow(MapUiState.Mountain())
     val mountainUiState: StateFlow<MapUiState.Mountain> = _mountainUiState.asStateFlow()
 
-    private val repository: WeatherRepository = ImplementedWeatherRepository() //lettvinte måten
-
-    private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
-
-    private val _mapInfoUistate = MutableStateFlow(MapInfo())
+    private val _mapInfoUistate = MutableStateFlow(MapUiState.MapInfo())
     val mapInfoUiState = _mapInfoUistate.asStateFlow()
 
-    private val mapCooUistate = MutableStateFlow(MapCoordinatesInfo())
+    private val mapCooUistate = MutableStateFlow(MapUiState.MapCoordinatesInfo())
     val coordinatesUiState = mapCooUistate.asStateFlow()
+
+    private val repository: WeatherRepository = ImplementedWeatherRepository() //lettvinte måten
 
     fun getDataSearch(query: String) : Boolean {
 
@@ -47,11 +44,11 @@ class MapViewModel(application: Application) : ViewModel() {
             }
             val mapSearchP = mapSearchDeferred.await()
 
-            _mapInfoUistate.value = MapInfo(mapSearchP.optionMountains, _mapInfoUistate.value.recentSearch)
+            _mapInfoUistate.value = MapUiState.MapInfo(mapSearchP.optionMountains, _mapInfoUistate.value.recentSearch)
         }
         return true
     }
-    fun showSelectedMountain( mapboxId : String, name: String, altitude : Int) {
+    fun showSelectedMountain( mapboxId : String, name: String) {
         viewModelScope.launch {
 
             val path2 = "https://api.mapbox.com/search/searchbox/v1/retrieve/$mapboxId?" +
@@ -61,15 +58,10 @@ class MapViewModel(application: Application) : ViewModel() {
 
             val mapSearchCoordinates = repository.getMapCoordinates(path2)
 
-            //åpne card eller oppdatere det som får cardet til å vises
-            println(mapSearchCoordinates.latitude)
-            println(mapSearchCoordinates.longitude)
-
-            updateMountain(MapUiState.Mountain(name, mapSearchCoordinates.latitude.toString(), mapSearchCoordinates.longitude.toString(), altitude))
-            getAllSearch(mapSearchCoordinates.latitude.toString(),mapSearchCoordinates.longitude.toString(), altitude.toString())
+            //updateMountain(MapUiState.Mountain(name, mapSearchCoordinates.latitude.toString(), mapSearchCoordinates.longitude.toString(), altitude))
 
             mapCooUistate.update {
-                MapCoordinatesInfo(
+                MapUiState.MapCoordinatesInfo(
                     latitude = mapSearchCoordinates.latitude,
                     longitude = mapSearchCoordinates.longitude
                 )
@@ -118,55 +110,23 @@ class MapViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun updateCameraPosition(point: Point) {
+    fun onCameraChange(mapboxMap: MapboxMap) {
+        val screenCenter = mapboxMap.cameraState.center
+        val zoom = mapboxMap.cameraState.zoom
+        updateCameraPosition(screenCenter)
+        updateCameraZoomState(zoom)
+    }
+
+    private fun updateCameraPosition(point: Point) {
         _cameraOptionsUiState.update {
             it.copy(currentScreenLatitude = point.latitude(), currentScreenLongitude = point.longitude())
         }
     }
 
-    fun updateCameraZoomState(zoom: Double) {
+    private fun updateCameraZoomState(zoom: Double) {
         _cameraOptionsUiState.update {
             it.copy(currentScreenZoom = zoom)
         }
     }
 
-    private fun getAllSearch(latitude: String, longitude: String, altitude: String) {
-        viewModelScope.launch {
-            try {
-                val locationDeferred = viewModelScope.async (Dispatchers.IO) {
-                    repository.getLocation(latitude, longitude, altitude)
-                }
-                val locationP = locationDeferred.await()
-
-                val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
-                    repository.getNowCast(latitude, longitude, altitude)
-                }
-                val nowCastP = nowCastDeferred.await()
-
-                val alertDeferred = viewModelScope.async (Dispatchers.IO){
-                    repository.getAlert(latitude, longitude)
-                }
-                val alertP = alertDeferred.await()
-
-                /*val frostDeferred = viewModelScope.async (Dispatchers.IO){
-                    repository.getFrost(latitude, longitude)
-                }*/
-
-                //val frostP = frostDeferred.await()
-
-
-                _appUistate.update {
-                    AppUiState.Success(
-                        locationF = locationP,
-                        nowCastF = nowCastP,
-                        alertListF = alertP,
-                    )
-                }
-            } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
-                _appUistate.update {
-                    AppUiState.Error
-                }
-            }
-        }
-    }
 }

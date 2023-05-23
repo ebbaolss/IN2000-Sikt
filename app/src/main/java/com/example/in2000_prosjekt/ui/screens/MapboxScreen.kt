@@ -48,14 +48,12 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import com.mapbox.maps.MapView
@@ -66,7 +64,6 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ShowMap(
@@ -82,14 +79,12 @@ fun ShowMap(
     val cameraOptionsUiState by mapViewModel.cameraOptionsUiState.collectAsState()
     val mountainUiState by mapViewModel.mountainUiState.collectAsState()
     val appUiState by apiViewModel.appUiState.collectAsState()
-
     var locationCardState by remember { mutableStateOf(false) }
-
     val focusManager = LocalFocusManager.current
 
     Scaffold(
         topBar = {
-            SearchBar(mapViewModel, apiViewModel, {focusManager.clearFocus()}, {locationCardState = true}) { /* locationCardState = true */ }
+            SearchBar(mapViewModel, {focusManager.clearFocus()}, {locationCardState = false}) {  }
         },
         bottomBar = {
             Sikt_BottomBar(
@@ -127,13 +122,12 @@ fun ShowMap(
 
                         onMapClick(point, mapboxMap, mapViewModel, apiViewModel) {
                             locationCardState = true
-                            Log.d("Location Card State", "$locationCardState")
                         }
 
                     })
                     mapboxMap.addOnCameraChangeListener(onCameraChangeListener = {
                         Log.d("CameraChangeListener", "invoked")
-                        onCameraChange(mapboxMap, mapViewModel)
+                        mapViewModel.onCameraChange(mapboxMap)
                     })
 
                     map
@@ -232,14 +226,6 @@ fun ShowMap(
     }
 }
 
-fun onCameraChange(mapboxMap: MapboxMap, viewModel: MapViewModel) {
-    val screenCenter = mapboxMap.cameraState.center
-    val zoom = mapboxMap.cameraState.zoom
-    viewModel.updateCameraPosition(screenCenter)
-    viewModel.updateCameraZoomState(zoom)
-    Log.d("onCameraChange", "Coordinates $screenCenter, Zoom level: $zoom")
-}
-
 fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraOptions) : MapView {
 
     val mapView = MapView(xt).apply {
@@ -247,7 +233,7 @@ fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraO
 
         mapboxMap.loadStyle(
             // Declares map style
-            style(styleUri = Style.OUTDOORS) {
+            style(styleUri = "mapbox://styles/elisabethb/clf6t1z9z00b101pen0rvc1fu/draft") {
 
                 // Adding data layer source to rendered map
                 +vectorSource(id = "STREETS_V8") {
@@ -320,9 +306,9 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
             if (feature.id() != null) {
                 val name = feature.getStringProperty("name")
                 val elevation = feature.getStringProperty("elevation_m").toInt()
-                val point = feature.geometry() as Point
-                val latitude =  point.latitude().toString()
-                val longitude = point.longitude().toString()
+                val pointMap = feature.geometry() as Point
+                val latitude =  pointMap.latitude().toString()
+                val longitude = pointMap.longitude().toString()
 
                 // Saving a clicked mountain to the UiState through the view model
                 mapViewModel.updateMountain(MapUiState.Mountain(name, latitude, longitude, elevation))
@@ -357,21 +343,15 @@ fun onFeatureClicked(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : () -> Unit, clearFocus : () -> Unit, onClick : () -> Unit){
+fun SearchBar(viewModel: MapViewModel, onSearch : () -> Unit, clearFocus : () -> Unit, onClick : () -> Unit){
 
     val mapUiState = viewModel.mapInfoUiState.collectAsState()
-    val mapCooUiState = viewModel.coordinatesUiState.collectAsState()
-
     var input by remember { mutableStateOf("") }
     var isTextFieldFocused by remember { mutableStateOf(false) }
     val recentSearchHashmap : HashMap<String, String> = hashMapOf()
-    val keyboardController = LocalSoftwareKeyboardController.current
     var showRecent = true
-
-    //bare midlertidlig
-    val elevetion = 2469
 
     LazyColumn(
         modifier = Modifier
@@ -477,24 +457,12 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
 
                             viewModel.showSelectedMountain(
                                 recentSearchHashmap[mountain]!!,
-                                mountain,
-                                elevetion
+                                mountain
                             )
 
                             clearFocus()
                             showRecent = true
-
                             onSearch()
-
-                            //------------------For å få opp card---------------
-
-                            println("se")
-                            println(mapCooUiState.value.latitude.toString())
-                            println(mapCooUiState.value.longitude.toString())
-
-                            //endre altitude på linja nedenfor!!
-                            ///viewModel.getAllSearch(mapCooUiState.value.latitude.toString(), mapCooUiState.value.longitude.toString(), elevetion.toString())
-                            //bruke koordinatene over til å få opp card
                             onClick()
                         }),
 
@@ -564,28 +532,12 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
 
                                 viewModel.showSelectedMountain(
                                     recentSearchHashmap[mountain]!!,
-                                    mountain,
-                                    elevetion
+                                    mountain
                                 )
 
-                                //focusManager.clearFocus()
                                 clearFocus()
                                 showRecent = true
-
-                                //skal gjøre den true så carded vises i ShowMap():
                                 onSearch()
-
-                                //------------------For å få opp card---------------
-
-                                println("se2")
-                                println(mapCooUiState.value.latitude.toString())
-                                println(mapCooUiState.value.longitude.toString())
-
-                                //endre altitude på linja nedenfor!!
-                                //denne funker ikke fordi variablene rekker ikke å bli oppdatert før getAll kjøres.
-                                //så heller kalle på den i mapViewModel? men teit å kalle på et annet viewmodel fra et viewmodel
-                                //viewModel.getAllSearch(mapCooUiState.value.latitude.toString(), mapCooUiState.value.longitude.toString(), elevetion.toString())
-                                //bruke koordinatene over til å få opp card
                                 onClick()
 
                             }),
