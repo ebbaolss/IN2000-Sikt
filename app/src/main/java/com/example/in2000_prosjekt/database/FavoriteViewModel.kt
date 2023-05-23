@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 
 class FavoriteViewModel(application: Application) : ViewModel() {
 
-    private val uistate: MutableStateFlow<FavoriteUiState> = MutableStateFlow(FavoriteUiState.Loading)
-    val favUiState: StateFlow<FavoriteUiState> = uistate.asStateFlow()
+    private val _Uistate: MutableStateFlow<FavoriteUiState> = MutableStateFlow(FavoriteUiState.Loading)
+    val favUiState: StateFlow<FavoriteUiState> = _Uistate.asStateFlow()
 
     val allFavorites: LiveData<List<Favorite>>
     private val repository: FavoriteRepository
@@ -43,17 +43,13 @@ class FavoriteViewModel(application: Application) : ViewModel() {
         repository.findFavorite(longtitude, latitude)
     }
 
-    /*fun deleteFavorite(longtitude: Double, latitude: Double) {
-        repository.deleteFavorite(longtitude, latitude)
-    }*/
-
     fun deleteUpdate(longtitude: Double, latitude: Double) {
-        viewModelScope.launch {
+        viewModelScope.launch() {
             try {
-                /*val deleted = viewModelScope.async {
+                val deleted = viewModelScope.async {
                     repository.deleteFavorite(longtitude, latitude)
-                }*/
-                //val deletedP = deleted.await()
+                }
+                val deletedP = deleted.await()
                 val locationInfo = viewModelScope.async {
                     repository.getLocationList()
                 }
@@ -68,16 +64,16 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                 val alertP = alertInfo.await()
 
                 //if(deletedP){
-                    uistate.update {
-                        FavoriteUiState.Success(
-                            locationP,
-                            nowCastP,
-                            alertP
-                        )
-                    }
+                _Uistate.update {
+                    FavoriteUiState.Success(
+                        locationP,
+                        nowCastP,
+                        alertP
+                    )
+                }
                 //}
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
-                uistate.update {
+                _Uistate.update {
                     FavoriteUiState.Error
                 }
             }
@@ -85,7 +81,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
     }
 
     fun update() {
-        viewModelScope.launch {
+        viewModelScope.launch() {
             try {
                 val locationInfo = viewModelScope.async {
                     repository.getLocationList()
@@ -103,7 +99,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                 val alertP = alertInfo.await()
                 Log.d("UPDATE", "alert updated size: ${alertP.size}")
 
-                uistate.update {
+                _Uistate.update {
                     FavoriteUiState.Success(
                         locationP,
                         nowCastP,
@@ -112,16 +108,16 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                 }
             } catch (e: IOException) {
                 Log.d("ERROR", "error i update")
-                uistate.update {
+                _Uistate.update {
                     FavoriteUiState.Error
                 }
             }
         }
     }
     fun updateEmpty(){
-        viewModelScope.launch {
+        viewModelScope.launch() {
             try {
-                uistate.update {
+                _Uistate.update {
                     FavoriteUiState.Success(
                         mutableListOf(),
                         mutableListOf(),
@@ -129,7 +125,7 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                     )
                 }
             } catch (e: IOException) {// Inntreffer ved nettverksavbrudd
-                uistate.update {
+                _Uistate.update {
                     FavoriteUiState.Error
                 }
             }
@@ -140,4 +136,3 @@ class FavoriteViewModel(application: Application) : ViewModel() {
         repository.deleteAll()
     }
 }
-

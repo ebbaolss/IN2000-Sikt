@@ -346,7 +346,7 @@ fun Sikt_MountainHight(mountainheight : String) {
 @Composable
 fun Sikt_skyillustasjon() {
     Image(
-        painter = painterResource(id = R.drawable.clounds_image),
+        painter = painterResource(id = R.mipmap.clounds_image),
         contentDescription = "Sky illustrasjon",
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
@@ -460,11 +460,11 @@ fun Illustrasjon(height: Int?, temp: Int, vind: Float, weatherHigh: Float, weath
 
     fun getHeightVisuals(height: Int?) : Int {
         return when (height) {
-            in 0 .. 500 -> R.drawable.topp_under500
-            in 501 .. 1000 -> R.drawable.topp1000to500
-            in 1001 .. 1500 -> R.drawable.topp1500to1000
-            in 1501 .. 2000 -> R.drawable.topp2000to1500
-            else -> R.drawable.topp_over2000
+            in 0 .. 500 -> R.mipmap.topp_under500
+            in 501 .. 1000 -> R.mipmap.topp1000to500
+            in 1001 .. 1500 -> R.mipmap.topp1500to1000
+            in 1501 .. 2000 -> R.mipmap.topp2000to1500
+            else -> R.mipmap.topp_over2000
         }
     }
 
@@ -472,7 +472,7 @@ fun Illustrasjon(height: Int?, temp: Int, vind: Float, weatherHigh: Float, weath
         modifier = Modifier.aspectRatio(1f)
     ){
         Image(
-            painter = painterResource(id = R.drawable.new_background),
+            painter = painterResource(id = R.mipmap.new_background),
             contentDescription = "Bakgrunn",
             modifier = Modifier.fillMaxSize()
         )
@@ -505,7 +505,7 @@ fun Illustrasjon(height: Int?, temp: Int, vind: Float, weatherHigh: Float, weath
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ){
             Image(
-                painter = painterResource(id = R.drawable.vind_icon),
+                painter = painterResource(id = R.mipmap.vind_icon),
                 contentDescription = "Vind ikon",
                 modifier = Modifier.size(24.dp)
             )
