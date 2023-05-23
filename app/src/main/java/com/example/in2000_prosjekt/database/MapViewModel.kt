@@ -66,6 +66,7 @@ class MapViewModel(application: Application) : ViewModel() {
                     longitude = mapSearchCoordinates.longitude
                 )
             }
+
         }
     }
     fun updateRecentSearch(input : String, delete : Boolean) : Boolean {

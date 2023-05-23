@@ -62,6 +62,7 @@ import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
+import com.mapbox.maps.plugin.animation.flyTo
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -79,6 +80,7 @@ fun ShowMap(
     val cameraOptionsUiState by mapViewModel.cameraOptionsUiState.collectAsState()
     val mountainUiState by mapViewModel.mountainUiState.collectAsState()
     val appUiState by apiViewModel.appUiState.collectAsState()
+    val coordinatesUiState = mapViewModel.coordinatesUiState.collectAsState()
     var locationCardState by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
 
@@ -107,7 +109,7 @@ fun ShowMap(
             AndroidView(
                 modifier = Modifier,
                 factory = {
-                    val map = createFactoryMap(it, cameraOptionsUiState)
+                    val map = createFactoryMap(it, cameraOptionsUiState, coordinatesUiState)
                     val mapboxMap = map.getMapboxMap()
 
                     mapboxMap.addOnCameraChangeListener(onCameraChangeListener = {
@@ -226,7 +228,7 @@ fun ShowMap(
     }
 }
 
-fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraOptions) : MapView {
+fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraOptions, MapCooUiState: State<MapUiState.MapCoordinatesInfo>) : MapView {
 
     val mapView = MapView(xt).apply {
         val mapboxMap = getMapboxMap()
@@ -271,7 +273,6 @@ fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraO
         )
     }
 
-
     // Editing compass settings, so that searchbar does not block compass
     mapView.compass.updateSettings {
         marginTop = 250F
@@ -281,6 +282,21 @@ fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraO
     mapView.scalebar.updateSettings {
         marginTop = 250F
     }
+
+//    mapView.getMapboxMap().flyTo(
+//        cameraOptions {
+//            center(
+//                Point.fromLngLat(
+//                    MapCooUiState.value.longitude,
+//                    MapCooUiState.value.latitude
+//                )
+//            )
+//            zoom (11.0)
+//        }
+//        animationOption = MapAnimationOptions.mapAnimationOptions {
+//            duration(2500)
+//       }
+//    )
 
     return mapView
 }
@@ -331,7 +347,6 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
 
 // When panning and zooming the map view the center screen coordinates and camera settings are updated to the cameraUiState.
 // funOnScreenGesture(cameraOptions: MapboxCameraOptions)
-
 fun onFeatureClicked(
     expected: Expected<String, List<QueriedFeature>>,
     onFeatureClicked: (Feature) -> Unit
@@ -402,7 +417,6 @@ fun SearchBar(viewModel: MapViewModel, onSearch : () -> Unit, clearFocus : () ->
                 value = input,
                 colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
                 onValueChange = {
-                    //if (it == "ø")
 
                     input = it
                 },
@@ -423,7 +437,6 @@ fun SearchBar(viewModel: MapViewModel, onSearch : () -> Unit, clearFocus : () ->
                                 input = input.replace("æ", "ae")
                                 input = input.replace("å", "aa")
                                 viewModel.getDataSearch(input)
-
                             }
 
                             input = ""
