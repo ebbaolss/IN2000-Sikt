@@ -66,6 +66,7 @@ import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ShowMap(
@@ -417,19 +418,12 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
                             showRecent = false
                         }
                         input = ""
-                        //keyboardController?.hide()
-                        //isTextFieldFocused = false
-                        //focusManager.clearFocus()
                     }),
                 value = input,
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    disabledContainerColor = Color.White,
-                ),
+                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
                 onValueChange = {
                     //if (it == "ø")
-                    println(it)
+
                     input = it
                 },
                 placeholder = { Text(text = "Søk her") },
