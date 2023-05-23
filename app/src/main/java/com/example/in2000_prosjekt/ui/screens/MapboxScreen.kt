@@ -361,7 +361,7 @@ fun onFeatureClicked(
 fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : () -> Unit, clearFocus : () -> Unit, onClick : () -> Unit){
 
     val mapUiState = viewModel.mapInfoUiState.collectAsState()
-    val mapCooUiState = viewModel.CoordinatesUiState.collectAsState()
+    val mapCooUiState = viewModel.coordinatesUiState.collectAsState()
 
     var input by remember { mutableStateOf("") }
     var isTextFieldFocused by remember { mutableStateOf(false) }
@@ -422,7 +422,11 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
                         //focusManager.clearFocus()
                     }),
                 value = input,
-                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
+                ),
                 onValueChange = {
                     //if (it == "ø")
                     println(it)

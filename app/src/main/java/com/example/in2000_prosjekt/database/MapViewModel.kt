@@ -32,8 +32,8 @@ class MapViewModel(application: Application) : ViewModel() {
     private val _mapInfoUistate = MutableStateFlow(MapInfo())
     val mapInfoUiState = _mapInfoUistate.asStateFlow()
 
-    private val _MapCooUistate = MutableStateFlow(MapCoordinatesInfo())
-    val CoordinatesUiState = _MapCooUistate.asStateFlow()
+    private val mapCooUistate = MutableStateFlow(MapCoordinatesInfo())
+    val coordinatesUiState = mapCooUistate.asStateFlow()
 
     fun getDataSearch(query: String) : Boolean {
 
@@ -68,7 +68,7 @@ class MapViewModel(application: Application) : ViewModel() {
             updateMountain(MapUiState.Mountain(name, mapSearchCoordinates.latitude.toString(), mapSearchCoordinates.longitude.toString(), altitude))
             getAllSearch(mapSearchCoordinates.latitude.toString(),mapSearchCoordinates.longitude.toString(), altitude.toString())
 
-            _MapCooUistate.update {
+            mapCooUistate.update {
                 MapCoordinatesInfo(
                     latitude = mapSearchCoordinates.latitude,
                     longitude = mapSearchCoordinates.longitude

@@ -281,7 +281,6 @@ fun LazyListScope.alertCard(alertinfo: MutableList<AlertInfo>){
                             )
                         }
                     }
-                    //level, type, area, consequenses, instruction
                 }
             }
         }
