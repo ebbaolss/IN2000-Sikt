@@ -20,7 +20,7 @@ import kotlin.time.Duration.Companion.seconds
 fun StartPage(onNavigateToNext: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = R.mipmap.landingpage),
+            painter = painterResource(id = R.drawable.landingpage),
             contentDescription = "",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier.fillMaxSize(),

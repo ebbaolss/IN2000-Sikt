@@ -4,10 +4,10 @@ import com.example.in2000_prosjekt.R
 
 fun getRightCloudiness(clouds: Float): Int {
     return when (clouds.toInt()) {
-        in 75..100 -> R.mipmap.small_clouds_both
-        in 50..74 -> R.mipmap.small_clouds_big
-        in 25..49 -> R.mipmap.small_clouds_small
-        else -> R.mipmap.small_clouds_clear
+        in 75..100 -> R.drawable.small_clouds_both
+        in 50..74 -> R.drawable.small_clouds_big
+        in 25..49 -> R.drawable.small_clouds_small
+        else -> R.drawable.small_clouds_clear
     }
 }
 
@@ -31,27 +31,27 @@ fun getRightKm(km: Float): String {
 
 fun getHighClouds(highclouds: Float): Int {
     return when (highclouds.toInt()) {
-        in 75..100 -> R.mipmap.clouds_high_both
-        in 50..74 -> R.mipmap.clouds_high_big
-        in 25..49 -> R.mipmap.clouds_high_small
-        else -> R.mipmap.klart
+        in 75..100 -> R.drawable.clouds_high_both
+        in 50..74 -> R.drawable.clouds_high_big
+        in 25..49 -> R.drawable.clouds_high_small
+        else -> R.drawable.klart
     }
 }
 
 fun getMidClouds(midclouds: Float): Int {
     return when (midclouds.toInt()) {
-        in 75..100 -> R.mipmap.clouds_mid_both
-        in 50..74 -> R.mipmap.clouds_mid_big
-        in 25..49 -> R.mipmap.clouds_mid_small
-        else -> R.mipmap.klart
+        in 75..100 -> R.drawable.clouds_mid_both
+        in 50..74 -> R.drawable.clouds_mid_big
+        in 25..49 -> R.drawable.clouds_mid_small
+        else -> R.drawable.klart
     }
 }
 
 fun getLowClouds(lowclouds: Float): Int {
     return when (lowclouds.toInt()) {
-        in 75..100 -> R.mipmap.clouds_low_both
-        in 50..74 -> R.mipmap.clouds_low_big
-        in 25..49 -> R.mipmap.clouds_low_small
-        else -> R.mipmap.klart
+        in 75..100 -> R.drawable.clouds_low_both
+        in 50..74 -> R.drawable.clouds_low_big
+        in 25..49 -> R.drawable.clouds_low_small
+        else -> R.drawable.klart
     }
 }

@@ -207,7 +207,7 @@ fun LazyListScope.alertCard(alertinfo: MutableList<AlertInfo>){
                         Text(text = "Faregrader:", fontWeight = FontWeight.Bold)
                         Row {
                             Image(
-                                painter = painterResource(R.mipmap.green),
+                                painter = painterResource(R.drawable.green),
                                 contentDescription = "green",
                                 modifier = Modifier
                                     .size(25.dp)
@@ -222,7 +222,7 @@ fun LazyListScope.alertCard(alertinfo: MutableList<AlertInfo>){
                         }
                         Row {
                             Image(
-                                painter = painterResource(R.mipmap.yellow),
+                                painter = painterResource(R.drawable.yellow),
                                 contentDescription = "yellow",
                                 modifier = Modifier
                                     .size(25.dp)
@@ -237,7 +237,7 @@ fun LazyListScope.alertCard(alertinfo: MutableList<AlertInfo>){
                         }
                         Row {
                             Image(
-                                painter = painterResource(R.mipmap.orange),
+                                painter = painterResource(R.drawable.orange),
                                 contentDescription = "orange",
                                 modifier = Modifier
                                     .size(25.dp)
@@ -252,7 +252,7 @@ fun LazyListScope.alertCard(alertinfo: MutableList<AlertInfo>){
                         }
                         Row {
                             Image(
-                                painter = painterResource(R.mipmap.red),
+                                painter = painterResource(R.drawable.red),
                                 contentDescription = "green",
                                 modifier = Modifier
                                     .size(25.dp)
@@ -267,7 +267,7 @@ fun LazyListScope.alertCard(alertinfo: MutableList<AlertInfo>){
                         }
                         Row {
                             Image(
-                                painter = painterResource(R.mipmap.dark_red),
+                                painter = painterResource(R.drawable.dark_red),
                                 contentDescription = "green",
                                 modifier = Modifier
                                     .size(25.dp)
