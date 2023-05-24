@@ -1,6 +1,7 @@
 package com.example.in2000_prosjekt.data
 
 import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -176,7 +177,7 @@ class ImplementedWeatherRepository : WeatherRepository {
         return alertList
     }
 
-    override suspend fun getMap(path: String) : MapInfo {
+    override suspend fun getMap(path: String) : MapUiState.MapInfo {
         val mapJson = dataMap.fetchMapSearch(path)
 
         val mountains = HashMap<String, String>()
@@ -188,17 +189,17 @@ class ImplementedWeatherRepository : WeatherRepository {
             }
         }
 
-        return MapInfo(
+        return MapUiState.MapInfo(
             optionMountains = mountains
         )
     }
-    override suspend fun getMapCoordinates(path: String) : MapCoordinatesInfo {
+    override suspend fun getMapCoordinates(path: String) : MapUiState.MapCoordinatesInfo {
         val mapCoordinatesJson = dataMap.fetchMapCoordinates(path)
 
         val longitudeMap = mapCoordinatesJson.features?.get(0)?.geometry?.coordinates?.get(0)
         val latitudeMap = mapCoordinatesJson.features?.get(0)?.geometry?.coordinates?.get(1)
 
-        return MapCoordinatesInfo(
+        return MapUiState.MapCoordinatesInfo(
             latitude = latitudeMap!!,
             longitude = longitudeMap!!
         )
