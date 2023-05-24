@@ -56,16 +56,6 @@ data class AlertInfo( //sett A på slutten
     val timeIntervalA: List<String?>?
 )
 
-data class MapInfo(
-    //hashmap med forslag
-    val optionMountains : HashMap<String, String> = hashMapOf(),
-    val recentSearch : MutableList<String> = mutableListOf()
-)
-data class MapCoordinatesInfo(
-    val latitude : Double = 0.0, //double??
-    val longitude : Double = 0.0
-)
-
 sealed interface AppUiState {
     data class Success(
         val locationF: LocationInfo,
