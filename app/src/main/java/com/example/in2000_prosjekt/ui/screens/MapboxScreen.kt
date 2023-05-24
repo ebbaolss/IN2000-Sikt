@@ -66,6 +66,8 @@ import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.database.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.Sikt_lyseblå
+import com.mapbox.maps.plugin.animation.MapAnimationOptions
+import com.mapbox.maps.plugin.animation.flyTo
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -85,13 +87,12 @@ fun ShowMap(
     val mountainUiState by mapViewModel.mountainUiState.collectAsState()
     val appUiState by apiViewModel.appUiState.collectAsState()
 
-    var locationCardState by remember { mutableStateOf(false) }
-
     val focusManager = LocalFocusManager.current
+
 
     Scaffold(
         topBar = {
-            SearchBar(mapViewModel, apiViewModel, {focusManager.clearFocus()}, {locationCardState = true}) { /* locationCardState = true */ }
+            SearchBar(mapViewModel, apiViewModel, {focusManager.clearFocus()}, {mapViewModel.locationCardState.value = true}) {/* locationCardState = true */ }
         },
         bottomBar = {
             Sikt_BottomBar(
@@ -114,31 +115,31 @@ fun ShowMap(
             AndroidView(
                 modifier = Modifier,
                 factory = {
-                    val map = createFactoryMap(it, cameraOptionsUiState)
-                    val mapboxMap = map.getMapboxMap()
+                    mapViewModel.createFactoryMap(it, cameraOptionsUiState)
+                    val mapboxMap = mapViewModel.mapView.getMapboxMap()
 
                     mapboxMap.addOnCameraChangeListener(onCameraChangeListener = {
                         focusManager.clearFocus()
-                        locationCardState = false
+                        mapViewModel.locationCardState.value = false
                     })
 
                     mapboxMap.addOnMapClickListener(onMapClickListener = { point ->
-                        Log.d("LocationCardState", "$locationCardState")
+                        Log.d("LocationCardState", "${mapViewModel.locationCardState.value}")
                         focusManager.clearFocus()
-                        locationCardState = false
+                        mapViewModel.locationCardState.value = false
 
-                        onMapClick(point, mapboxMap, mapViewModel, apiViewModel) {
-                            locationCardState = true
-                            Log.d("Location Card State", "$locationCardState")
+                        mapViewModel.onMapClick(point, mapboxMap, mapViewModel, apiViewModel) {
+                            mapViewModel.locationCardState.value = true
+                            Log.d("Location Card State", "${mapViewModel.locationCardState.value}")
                         }
-
                     })
+
                     mapboxMap.addOnCameraChangeListener(onCameraChangeListener = {
                         Log.d("CameraChangeListener", "invoked")
                         onCameraChange(mapboxMap, mapViewModel)
                     })
 
-                    map
+                    mapViewModel.mapView
                 },
                 update = {
                     // pull cameraSettings from the UiState
@@ -148,22 +149,23 @@ fun ShowMap(
                             // Henter kamerakoordinater fra UiState
                             val lng = cameraOptionsUiState.currentScreenLongitude
                             val lat = cameraOptionsUiState.currentScreenLatitude
-                            //val zoom = cameraOptionsUiState.currentScreenZoom
+                            val zoom = cameraOptionsUiState.currentScreenZoom
 
                             Log.d("Update Camera Coordinates", "Lng: $lng, Lat: $lat")
 
                             center(Point.fromLngLat(lng, lat))
+                            zoom(zoom)
                         }
                     )
                 }
             )
 
-            if (!locationCardState) {
+            if (!mapViewModel.locationCardState.value) {
                 // Skal ta inn liste over topper i nærheten og nowcast:
                 Sikt_BottomSheet()
             }
 
-            if (locationCardState){
+            if (mapViewModel.locationCardState.value){
                 when (appUiState) {
                     is AppUiState.Loading -> {
                         Scaffold(bottomBar = {
@@ -245,107 +247,6 @@ fun onCameraChange(mapboxMap: MapboxMap, viewModel: MapViewModel) {
     viewModel.updateCameraPosition(screenCenter)
     viewModel.updateCameraZoomState(zoom)
     Log.d("onCameraChange", "Coordinates $screenCenter, Zoom level: $zoom")
-}
-
-fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraOptions) : MapView {
-
-    val mapView = MapView(xt).apply {
-        val mapboxMap = getMapboxMap()
-        val cameraOptionsUiState = CameraOptionsUiState
-
-        mapboxMap.loadStyle(
-            // Declares map style
-            style(styleUri = Style.OUTDOORS) {
-
-                // Adding data layer source to rendered map
-                +vectorSource(id = "STREETS_V8") {
-                    url("mapbox://mapbox.mapbox-streets-v8")
-                }
-
-                // Creates an interactable point layer on top of style layer
-                +circleLayer(layerId = "MOUNTAINS_DATALAYER", sourceId = "STREETS_V8") {
-                    // natural label er et lag i STREETS_V8 datasettet til Mapbox og inneholder naturobjekter som fjell, innsjøer etc.
-                    sourceLayer("natural_label")
-
-                    // Filtering out all natural labels points that are not marked with the mountains icon
-                    filter(
-                        eq {
-                            get { literal("maki") }
-                            literal("mountain")
-                        }
-                    )
-
-                    circleOpacity(0.0)
-                }
-            }
-        )
-
-        // Camera settings
-        mapboxMap.setCamera(
-            cameraOptions {
-                zoom(cameraOptionsUiState.currentScreenZoom)
-                // Koordinatene til Glittertind
-                center(Point.fromLngLat(cameraOptionsUiState.currentScreenLongitude,cameraOptionsUiState.currentScreenLatitude))
-            }
-        )
-    }
-
-
-    // Editing compass settings, so that searchbar does not block compass
-    mapView.compass.updateSettings {
-        marginTop = 250F
-    }
-
-    // Editing scalebar, so that searchbar does not block scalebar
-    mapView.scalebar.updateSettings {
-        marginTop = 250F
-    }
-
-    return mapView
-}
-
-// Definerer hva som skal skje når brukeren trykker på kartet
-fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, onClick : () -> Unit) : Boolean {
-    Log.d("Coordinate", point.toString())
-
-    mapboxMap.queryRenderedFeatures(
-        RenderedQueryGeometry(ScreenBox(
-            ScreenCoordinate(
-                mapboxMap.pixelForCoordinate(point).x - 10.0,
-                mapboxMap.pixelForCoordinate(point).y - 10.0
-            ),
-            ScreenCoordinate(
-                mapboxMap.pixelForCoordinate(point).x + 10.0,
-                mapboxMap.pixelForCoordinate(point).y + 10.0
-            )
-        )),
-        RenderedQueryOptions(listOf("MOUNTAINS_DATALAYER"), null)
-    ) { it ->
-        onFeatureClicked(it) { feature ->
-            if (feature.id() != null) {
-                val name = feature.getStringProperty("name")
-                val elevation = feature.getStringProperty("elevation_m").toInt()
-                val point = feature.geometry() as Point
-                val latitude =  point.latitude().toString()
-                val longitude = point.longitude().toString()
-
-                // Saving a clicked mountain to the UiState through the view model
-                mapViewModel.updateMountain(MapUiState.Mountain(name, latitude, longitude, elevation))
-
-                apiViewModel.getAll(latitude, longitude, "$elevation")
-
-                onClick()
-
-                // DEBUGGING
-                Log.d("Map Feature Clicked", feature.toString())
-                Log.d("Feature Contents:", " \nMountain Name:" + feature.getStringProperty("name").toString() +
-                        "\nElevation: " + feature.getStringProperty("elevation_m").toString() + " m.o.h.\n" +
-                        "Point: " + feature.geometry().toString()
-                )
-            }
-        }
-    }
-    return true
 }
 
 // When panning and zooming the map view the center screen coordinates and camera settings are updated to the cameraUiState.
@@ -489,6 +390,19 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
                                 elevetion
                             )
 
+                            viewModel.onMapClick(
+                                Point.fromLngLat(
+                                    mapCooUiState.value.latitude,
+                                    mapCooUiState.value.longitude
+                                ),
+                                viewModel.mapView.getMapboxMap(),
+                                viewModel,
+                                apiViewModel,
+                            ) {
+                                viewModel.locationCardState.value = true
+                                Log.d("Location Card State", "${viewModel.locationCardState.value}")
+                            }
+
                             clearFocus()
                             showRecent = true
 
@@ -575,6 +489,34 @@ fun SearchBar(viewModel: MapViewModel, apiViewModel: APIViewModel, onSearch : ()
                                     mountain,
                                     elevetion
                                 )
+
+                                // Animasjon av kameraet til søke-lokasjon
+                                viewModel.mapView.getMapboxMap().flyTo(
+                                    cameraOptions {
+                                        center(
+                                            Point.fromLngLat(
+                                                mapCooUiState.value.longitude,
+                                                mapCooUiState.value.latitude
+                                            ))
+                                        zoom(11.0)
+                                    },
+                                    animationOptions = MapAnimationOptions.mapAnimationOptions {
+                                        duration(2500)
+                                    }
+                                )
+
+                                viewModel.onMapClick(
+                                    Point.fromLngLat(
+                                        mapCooUiState.value.latitude,
+                                        mapCooUiState.value.longitude
+                                    ),
+                                    viewModel.mapView.getMapboxMap(),
+                                    viewModel,
+                                    apiViewModel,
+                                ) {
+                                    viewModel.locationCardState.value = true
+                                    Log.d("Location Card State", "${viewModel.locationCardState.value}")
+                                }
 
                                 //focusManager.clearFocus()
                                 clearFocus()

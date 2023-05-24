@@ -2,6 +2,8 @@ package com.example.in2000_prosjekt.ui.database
 
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.Polygon
+import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxMap
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -26,4 +28,6 @@ class MapboxRepository {
 
         return Polygon.fromLngLats(listOf(polygonPoints))
     }
+
+
 }

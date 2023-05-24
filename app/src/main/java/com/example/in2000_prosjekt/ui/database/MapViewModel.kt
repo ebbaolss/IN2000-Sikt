@@ -1,13 +1,34 @@
 package com.example.in2000_prosjekt.ui.database
 
 import android.app.Application
+import android.content.Context
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.data.ImplementedWeatherRepository
 import com.example.in2000_prosjekt.ui.data.WeatherRepository
+import com.example.in2000_prosjekt.ui.screens.onFeatureClicked
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.geojson.Point
+import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.RenderedQueryGeometry
+import com.mapbox.maps.RenderedQueryOptions
+import com.mapbox.maps.ScreenBox
+import com.mapbox.maps.ScreenCoordinate
+import com.mapbox.maps.Style
+import com.mapbox.maps.dsl.cameraOptions
+import com.mapbox.maps.extension.style.expressions.dsl.generated.eq
+import com.mapbox.maps.extension.style.layers.generated.circleLayer
+import com.mapbox.maps.extension.style.sources.generated.vectorSource
+import com.mapbox.maps.extension.style.style
+import com.mapbox.maps.plugin.compass.compass
+import com.mapbox.maps.plugin.scalebar.scalebar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +57,10 @@ class MapViewModel(application: Application) : ViewModel() {
     private val _MapCooUistate = MutableStateFlow(MapCoordinatesInfo())
     val CoordinatesUiState = _MapCooUistate.asStateFlow()
 
+    lateinit var mapView: MapView
+
+    val locationCardState  = mutableStateOf(false)
+
     fun getDataSearch(query: String) : Boolean {
 
         val path = "https://api.mapbox.com/search/searchbox/v1/suggest?q=$query&limit=10&" +
@@ -52,6 +77,7 @@ class MapViewModel(application: Application) : ViewModel() {
         }
         return true
     }
+
     fun showSelectedMountain( mapboxId : String, name: String, altitude : Int) {
         viewModelScope.launch() {
 
@@ -66,8 +92,8 @@ class MapViewModel(application: Application) : ViewModel() {
             println(mapSearchCoordinates.latitude)
             println(mapSearchCoordinates.longitude)
 
-            updateMountain(MapUiState.Mountain(name, mapSearchCoordinates.latitude.toString(), mapSearchCoordinates.longitude.toString(), altitude))
-            getAllSearch(mapSearchCoordinates.latitude.toString(),mapSearchCoordinates.longitude.toString(), altitude.toString())
+            // updateMountain(MapUiState.Mountain(name, mapSearchCoordinates.latitude.toString(), mapSearchCoordinates.longitude.toString(), altitude))
+            // getAllSearch(mapSearchCoordinates.latitude.toString(),mapSearchCoordinates.longitude.toString(), altitude.toString())
 
             _MapCooUistate.update {
                 MapCoordinatesInfo(
@@ -171,5 +197,110 @@ class MapViewModel(application: Application) : ViewModel() {
                 }
             }
         }
+    }
+
+    fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraOptions) {
+        mapView = MapView(xt).apply {
+            val mapboxMap = getMapboxMap()
+            val cameraOptionsUiState = CameraOptionsUiState
+
+            mapboxMap.loadStyle(
+                // Declares map style
+                style(styleUri = Style.OUTDOORS) {
+
+                    // Adding data layer source to rendered map
+                    +vectorSource(id = "STREETS_V8") {
+                        url("mapbox://mapbox.mapbox-streets-v8")
+                    }
+
+                    // Creates an interactable point layer on top of style layer
+                    +circleLayer(layerId = "MOUNTAINS_DATALAYER", sourceId = "STREETS_V8") {
+                        // natural label er et lag i STREETS_V8 datasettet til Mapbox og inneholder naturobjekter som fjell, innsjøer etc.
+                        sourceLayer("natural_label")
+
+                        // Filtering out all natural labels points that are not marked with the mountains icon
+                        filter(
+                            eq {
+                                get { literal("maki") }
+                                literal("mountain")
+                            }
+                        )
+
+                        circleOpacity(0.0)
+                    }
+                }
+            )
+
+            // Camera settings
+            mapboxMap.setCamera(
+                cameraOptions {
+                    zoom(cameraOptionsUiState.currentScreenZoom)
+                    // Koordinatene til Glittertind
+                    center(
+                        Point.fromLngLat(
+                            cameraOptionsUiState.currentScreenLongitude,
+                            cameraOptionsUiState.currentScreenLatitude
+                        )
+                    )
+                }
+            )
+        }
+
+
+        // Editing compass settings, so that searchbar does not block compass
+        mapView.compass.updateSettings {
+            marginTop = 250F
+        }
+
+        // Editing scalebar, so that searchbar does not block scalebar
+        mapView.scalebar.updateSettings {
+            marginTop = 250F
+        }
+    }
+
+    // Definerer hva som skal skje når brukeren trykker på kartet
+    fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, onClick : () -> Unit) : Boolean {
+        Log.d("Coordinate", point.toString())
+
+        mapboxMap.queryRenderedFeatures(
+            RenderedQueryGeometry(
+                ScreenBox(
+                ScreenCoordinate(
+                    mapboxMap.pixelForCoordinate(point).x - 10.0,
+                    mapboxMap.pixelForCoordinate(point).y - 10.0
+                ),
+                ScreenCoordinate(
+                    mapboxMap.pixelForCoordinate(point).x + 10.0,
+                    mapboxMap.pixelForCoordinate(point).y + 10.0
+                )
+            )
+            ),
+            RenderedQueryOptions(listOf("MOUNTAINS_DATALAYER"), null)
+        ) { it ->
+            onFeatureClicked(it) { feature ->
+                if (feature.id() != null) {
+                    val name = feature.getStringProperty("name")
+                    val elevation = feature.getStringProperty("elevation_m").toInt()
+                    val point = feature.geometry() as Point
+                    val latitude =  point.latitude().toString()
+                    val longitude = point.longitude().toString()
+
+                    // Saving a clicked mountain to the UiState through the view model
+                    mapViewModel.updateMountain(MapUiState.Mountain(name, latitude, longitude, elevation))
+
+                    apiViewModel.getAll(latitude, longitude, "$elevation")
+
+                    onClick()
+
+                    // DEBUGGING
+                    Log.d("Map Feature Clicked", feature.toString())
+                    Log.d("Feature Contents:", " \nMountain Name:" + feature.getStringProperty("name").toString() +
+                            "\nElevation: " + feature.getStringProperty("elevation_m").toString() + " m.o.h.\n" +
+                            "Point: " + feature.geometry().toString()
+                    )
+                }
+            }
+        }
+        return true
     }
 }

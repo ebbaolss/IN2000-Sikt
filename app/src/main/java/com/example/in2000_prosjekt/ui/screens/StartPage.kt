@@ -42,5 +42,7 @@ fun StartPage(onNavigateToNext: () -> Unit) {
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewStartPage() {
+    StartPage {
 
+    }
 }
