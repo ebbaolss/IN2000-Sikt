@@ -32,7 +32,6 @@ import org.junit.Rule
 import org.junit.Test
 
 
-class UnitTest_ComposableFunctions {
     /*
      these are unit tests of the composable functions
     */
@@ -454,8 +453,6 @@ class UnitTest_ComposableFunctions {
 
     }
 
-
-}
 
 
 
