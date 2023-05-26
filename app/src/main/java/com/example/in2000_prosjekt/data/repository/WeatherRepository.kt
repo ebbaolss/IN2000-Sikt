@@ -1,7 +1,9 @@
-package com.example.in2000_prosjekt.data
+package com.example.in2000_prosjekt.data.repository
 
-import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.ui.uistate.AlertInfo
+import com.example.in2000_prosjekt.ui.uistate.LocationInfo
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
+import com.example.in2000_prosjekt.ui.uistate.NowCastInfo
 
 interface WeatherRepository {
     suspend fun getLocation(latitude: String, longitude: String, altitude: String): LocationInfo

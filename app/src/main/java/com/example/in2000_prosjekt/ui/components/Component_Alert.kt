@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.in2000_prosjekt.R
-import com.example.in2000_prosjekt.ui.AlertInfo
+import com.example.in2000_prosjekt.ui.uistate.AlertInfo
 import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
 
 @SuppressLint("DiscouragedApi")
@@ -35,15 +35,12 @@ fun AlertButton(alertType : String, alertLevel : String, onButtonClick: () -> Un
     val level = alertLevel.split("; ")
 
     val buttonimage = "${type[0]}_${level[1]}"
-    Log.d("ALERT: ", buttonimage)
 
     val context = LocalContext.current.applicationContext
     val id = context.resources.getIdentifier(buttonimage.lowercase(), "drawable", context.packageName)
 
-    Log.d("ID", "id: $id")
 
     Image(modifier = Modifier.clickable { onButtonClick() },
-        //hardkodet inn snow_yellow for test
         painter = painterResource(id = id),
         contentDescription = "alert",
         alignment = Alignment.TopEnd)
@@ -87,7 +84,6 @@ fun LazyListScope.alertCard(alertinfo: MutableList<AlertInfo>){
                 context.packageName
             )
 
-            //level er 1,2,3,4 eller 5. Definerer hvilket fare bilde vi skal ha, eller skal vi ta det på level[1] som gir farge?
             val alertLevel = level[0]
 
             Card(
@@ -124,9 +120,6 @@ fun LazyListScope.alertCard(alertinfo: MutableList<AlertInfo>){
                         )
                     }
 
-                    //Divider(thickness = 1.dp, color = Sikt_sort, modifier = Modifier.fillMaxWidth().padding(10.dp))
-
-                    //Alert Melding8
                     Text(
                         text = alert.typeA,
                         fontWeight = FontWeight.Bold,

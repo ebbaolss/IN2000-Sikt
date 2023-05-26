@@ -13,10 +13,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.in2000_prosjekt.ui.AlertInfo
-import com.example.in2000_prosjekt.ui.LocationInfo
-import com.example.in2000_prosjekt.ui.NowCastInfo
-import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.uistate.AlertInfo
+import com.example.in2000_prosjekt.ui.uistate.LocationInfo
+import com.example.in2000_prosjekt.ui.uistate.NowCastInfo
+import com.example.in2000_prosjekt.ui.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import java.text.SimpleDateFormat
@@ -47,7 +47,7 @@ fun LazyListScope.siktLocationcard(mountain: MapUiState.Mountain, locationInfo: 
             Column(
                 modifier = Modifier.padding(20.dp),
             ) {
-                Sikt_Header(location = "$name", elevation!!, latitude!!.toDouble(), longitude!!.toDouble(),alertInfoList, favoriteViewModel) // Husk å endre alertinfo
+                Sikt_Header(location = "$name", elevation!!, latitude!!.toDouble(), longitude!!.toDouble(),alertInfoList, favoriteViewModel)
                 Sikt_MountainHight(mountainheight = "$elevation")
                 Spacer(modifier = Modifier.size(20.dp))
                 Illustrasjon(elevation, temp, wind, weatherHigh, weatherMid, weatherLow)

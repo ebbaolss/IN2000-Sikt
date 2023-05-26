@@ -21,7 +21,7 @@ sealed interface MapUiState {
         val recentSearch : MutableList<String> = mutableListOf()
     )
     data class MapCoordinatesInfo(
-        val latitude : Double = 0.0, //double??
+        val latitude : Double = 0.0,
         val longitude : Double = 0.0
     )
 }

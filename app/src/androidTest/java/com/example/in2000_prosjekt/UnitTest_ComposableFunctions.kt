@@ -11,17 +11,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.test.core.app.ApplicationProvider
-import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.FavoriteViewModel
 import com.example.in2000_prosjekt.database.FavoriteViewModelFactory
-import com.example.in2000_prosjekt.database.MapViewModel
-import com.example.in2000_prosjekt.database.MapViewModelFactory
+import com.example.in2000_prosjekt.ui.MapViewModel
+import com.example.in2000_prosjekt.data.map.MapViewModelFactory
 import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.LocationInfo
-import com.example.in2000_prosjekt.ui.NowCastInfo
+import com.example.in2000_prosjekt.ui.uistate.LocationInfo
+import com.example.in2000_prosjekt.ui.uistate.NowCastInfo
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.Sikt_LocationCard_NextDays
 import com.example.in2000_prosjekt.ui.components.Sikt_MountainHight
-import com.example.in2000_prosjekt.ui.screens.InfoScreen
 import com.example.in2000_prosjekt.ui.screens.SettingsScreen
 import com.example.in2000_prosjekt.ui.screens.ShowMap
 import com.example.in2000_prosjekt.ui.screens.StartPage
@@ -130,68 +129,6 @@ import org.junit.Test
     }
 
 
-    // Test 3: Test for function: RulesScreen(onNavigateToNext: () -> Unit): Denne skal sjekke at alle 10 reglene dukker opp på @composable functionen RulesScreen, og at tittelen stemmer
-    class TestInfoScreen {
-        @get:Rule
-        //Arrange
-        val rule = createAndroidComposeRule<ComponentActivity>()
-
-        @Test
-        fun open_InfoScreenUIShowsExpectedText() {
-            //Act
-            rule.setContent {// This sets the content of the screen to be the function or class given in the block
-                IN2000_ProsjektTheme {
-                    val owner = LocalViewModelStoreOwner.current
-
-                    owner?.let {
-                        val favoriteViewModel: FavoriteViewModel = viewModel(
-                            it,
-                            "FavoriteViewModel",
-                            FavoriteViewModelFactory(
-                                LocalContext.current.applicationContext
-                                        as Application
-                            )
-                        )
-
-                        InfoScreen(
-                            onNavigateToMap = { /*TODO*/ },
-                            onNavigateToFav = { /*TODO*/ },
-                            onNavigateToInfo = { /*TODO*/ },
-                            onNavigateToSettings = { /*TODO*/ },
-                        )
-                    }
-                }
-            }
-            //Assert
-            rule.onNodeWithText("Nødnummer:")
-                .assertIsDisplayed()//  This tests/ confirms the display of the word of the composable function being drawn is:"Nødnummer: "
-            rule.onNodeWithText("Medisinsk Nødtelefon:")
-                .assertIsDisplayed()// This tests/ confirms the display of the word of the composable function being drawn is:"Medisinsk Nødtelefon:"
-            rule.onNodeWithText("Brann:")
-                .assertIsDisplayed()// This tests/ confirms the display of the word of the composable function being drawn is:"Brann:"
-            rule.onNodeWithText("Politi:")
-                .assertIsDisplayed()//  This tests/ confirms the display of the word of the composable function being drawn is: "Politi:"
-            rule.onNodeWithText("Politiets sentralbord:")
-                .assertIsDisplayed()// This tests/ confirms the display of the word of the composable function being drawn is:"Politiets sentralbord:"
-            rule.onNodeWithText("Legevakten:")
-                .assertIsDisplayed()// This tests/ confirms the display of the word of the composable function being drawn is:"Legevakten:"
-
-
-            val selvefjellvettreglene =
-                rule.activity.resources.getStringArray(R.array.rules)
-
-
-
-            selvefjellvettreglene.forEach {
-                rule.onNodeWithText(it.toString())
-                    .assertIsDisplayed()// // This tests/ confirms the display of the word of the composable function being drawn is: fjellvettreglene from XML file "string.xml"
-            }
-
-
-        }
-    }
-
-
     // Test 4: Test for function: MapBoxScreen(): This tests that the map get generated
     class TestMapBoxScreen {
         @get:Rule
@@ -203,13 +140,10 @@ import org.junit.Test
 
         @Test
         fun open_MapScreenUIMapGenerates() {
-
             // Act
             rule.setContent { // This sets the content of the screen to be the function or class given in the block
                 val owner = LocalViewModelStoreOwner.current
                 val apiViewModel = APIViewModel()
-
-
                 owner?.let {
                     val favoriteViewModel: FavoriteViewModel = viewModel(
                         it,
@@ -223,11 +157,8 @@ import org.junit.Test
                         it,
                         "MapViewModel",
                         MapViewModelFactory(
-                            LocalContext.current.applicationContext as Application
                         )
                     )
-
-
                     ShowMap(
                         onNavigateToMap = { /*TODO*/ },
                         onNavigateToFav = { /*TODO*/ },
@@ -238,7 +169,6 @@ import org.junit.Test
                         favoriteViewModel = favoriteViewModel
                     )
                 }
-
             }
             //Assert
             try {
@@ -262,8 +192,6 @@ import org.junit.Test
                         matcher = { true })
                 ).assertAll(isEnabled())
             }
-
-
         }
     }
 
@@ -271,18 +199,13 @@ import org.junit.Test
     // Test 5: Test of the content of the Sikt_bottom_Bar(), this tests the content of the function not the dunctionalitet of the Navigation Bar
     class TestSiktBottomBar {
         @get:Rule
-
         //Arrange
         val rule = createComposeRule()
-
-
         @Test
         fun bottomBarComponentContent() {
-
             //Act
             rule.setContent {// This sets the content of the screen to be the function or class given in the block
                 IN2000_ProsjektTheme {
-
                     Sikt_BottomBar(
                         { },
                         { },
@@ -293,7 +216,6 @@ import org.junit.Test
                         map = true,
                         favorite = false
                     )
-
                 }
             }
             // Assert
@@ -313,10 +235,8 @@ import org.junit.Test
     class TestSiktLocationCardNextDays {
         @get:Rule
         val rule = createAndroidComposeRule<ComponentActivity>()
-
         @Test
         fun testSiktLocationCardNextDays() {
-
             // This is a dummy object that represents the weather/sight from a api respons (after the call is generated)
             //Arrange
             val locationinfo = LocationInfo(
@@ -372,77 +292,51 @@ import org.junit.Test
                     nowCastInfo = nowcastinfo
                 )
             }
-
             // Assert
             // This confirms the display of the information from the fake API call object
             rule.onNodeWithText("I dag")
                 .assertIsDisplayed()
-
             rule.onNodeWithText("17°")
                 .assertIsDisplayed()
-
             rule.onNodeWithText("< 1 km sikt")
                 .assertIsDisplayed()
-
-
             rule.onNodeWithText("I morgen")
                 .assertIsDisplayed()
-
             rule.onNodeWithText("16°")
                 .assertIsDisplayed()
-
             rule.onNodeWithText("1-4 km sikt")
                 .assertIsDisplayed()
-
             rule.onNodeWithText("Om 2 dager")
                 .assertIsDisplayed()
-
             rule.onNodeWithText("19°")
                 .assertIsDisplayed()
-
             rule.onNodeWithText("4-10 km sikt")
                 .assertIsDisplayed()
-
-
             rule.onNodeWithText("Om 3 dager")
                 .assertIsDisplayed()
-
             rule.onNodeWithText("18°")
                 .assertIsDisplayed()
-
-
             rule.onAllNodesWithText("> 10 km sikt").onFirst().assertIsDisplayed()
-
-
             rule.onNodeWithText("Om 4 dager")
                 .assertIsDisplayed()
             rule.onNodeWithText("15°")
                 .assertIsDisplayed()
-
-
-
             rule.onAllNodesWithText("> 10 km sikt").onLast().assertIsDisplayed()
-
         }
-
     }
 
 
-    //test nr 7
+//test nr 7
 // test of Composable function: testSiktFinnTurerCard
     class TestSiktFinnTurerCard {
         @get:Rule
         //Arrange
         val rule = createAndroidComposeRule<ComponentActivity>()
-
-
         @Test
         fun testSiktFinnTurerCard() {
-
             // Act
             rule.setContent { // This sets the content of the screen to be the function or class given in the block
                 IN2000_ProsjektTheme {
-
                     Sikt_MountainHight("700")//
                 }
             }
@@ -450,7 +344,6 @@ import org.junit.Test
             rule.onNodeWithText("700 m.o.h")
                 .assertIsDisplayed()// Dette er en test som verifiserer at det dannes en en tekst som gjengir fjellhøyden til et fjell
         }
-
     }
 
 

@@ -1,10 +1,10 @@
 package com.example.in2000_prosjekt.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.in2000_prosjekt.data.ImplementedWeatherRepository
-import com.example.in2000_prosjekt.data.WeatherRepository
+import com.example.in2000_prosjekt.data.repository.ImplementedWeatherRepository
+import com.example.in2000_prosjekt.data.repository.WeatherRepository
+import com.example.in2000_prosjekt.ui.uistate.AppUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,9 +18,9 @@ class APIViewModel : ViewModel()
     {
 
     //manual dependency injection, se codelab
-    private val repository: WeatherRepository = ImplementedWeatherRepository() //lettvinte måten
+    private val repository: WeatherRepository = ImplementedWeatherRepository()
 
-    private val _appUistate: MutableStateFlow< AppUiState > = MutableStateFlow(AppUiState.Loading)
+    private val _appUistate: MutableStateFlow<AppUiState> = MutableStateFlow(AppUiState.Loading)
     val appUiState: StateFlow<AppUiState> = _appUistate.asStateFlow()
 
     fun getAll(latitude: String, longitude: String, altitude: String) {
@@ -30,24 +30,16 @@ class APIViewModel : ViewModel()
                     repository.getLocation(latitude, longitude, altitude)
                 }
                 val locationP = locationDeferred.await()
-                Log.d("locationDeffered", "Success")
 
                 val nowCastDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getNowCast(latitude, longitude, altitude)
                 }
-                Log.d("getAll", "Pre-deferred")
                 val nowCastP = nowCastDeferred.await()
-                Log.d("nowCastDeferred", "Success")
 
                 val alertDeferred = viewModelScope.async (Dispatchers.IO){
                     repository.getAlert(latitude, longitude)
                 }
-
                 val alertP = alertDeferred.await()
-                Log.d("alertDeferred", "Success")
-
-                //val frostP = frostDeferred.await()
-
 
                 _appUistate.update {
                     AppUiState.Success(

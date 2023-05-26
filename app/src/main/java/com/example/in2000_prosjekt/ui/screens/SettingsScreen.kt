@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.siktSettingsCard
-import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.FavoriteViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

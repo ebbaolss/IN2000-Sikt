@@ -1,5 +1,6 @@
-package com.example.in2000_prosjekt.data
+package com.example.in2000_prosjekt.data.datasource
 
+import com.example.in2000_prosjekt.data.Model
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*

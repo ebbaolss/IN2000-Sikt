@@ -1,12 +1,15 @@
-package com.example.in2000_prosjekt.database
+package com.example.in2000_prosjekt.ui
 
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.in2000_prosjekt.database.Favorite
+import com.example.in2000_prosjekt.database.FavoriteDatabase
+import com.example.in2000_prosjekt.database.FavoriteRepository
+import com.example.in2000_prosjekt.ui.uistate.FavoriteUiState
 import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,12 +37,10 @@ class FavoriteViewModel(application: Application) : ViewModel() {
     }
 
     fun addFavorite(favorite: Favorite) {
-        Log.d("ADDED", "with long: ${favorite.longtitude}, lat: ${favorite.latitude}, name: ${favorite.mountainName}, height: ${favorite.mountainHeight}")
         repository.addFavorite(favorite)
     }
 
     fun findFavorite(longtitude: Double, latitude: Double,  location : String , height : Int){
-        Log.d("FINDING", "with long: $longtitude, lat : $latitude, name: $location, height: $height")
         repository.findFavorite(longtitude, latitude)
     }
 
@@ -84,17 +85,14 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                     repository.getLocationList()
                 }
                 val locationP = locationInfo.await()
-                Log.d("UPDATE", "locationinfo updated size: ${locationP.size}")
                 val nowCastInfo = viewModelScope.async {
                     repository.getNowList()
                 }
                 val nowCastP = nowCastInfo.await()
-                Log.d("UPDATE", "nowcast updated size: ${nowCastP.size}")
                 val alertInfo = viewModelScope.async {
                     repository.getAlertInfo()
                 }
                 val alertP = alertInfo.await()
-                Log.d("UPDATE", "alert updated size: ${alertP.size}")
 
                 uiState.update {
                     FavoriteUiState.Success(
@@ -104,7 +102,6 @@ class FavoriteViewModel(application: Application) : ViewModel() {
                     )
                 }
             } catch (e: IOException) {
-                Log.d("ERROR", "error i update")
                 uiState.update {
                     FavoriteUiState.Error
                 }

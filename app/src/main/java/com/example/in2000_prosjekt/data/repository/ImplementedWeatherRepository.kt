@@ -1,7 +1,12 @@
-package com.example.in2000_prosjekt.data
+package com.example.in2000_prosjekt.data.repository
 
-import com.example.in2000_prosjekt.ui.*
+import com.example.in2000_prosjekt.data.datasource.DataSource
+import com.example.in2000_prosjekt.data.datasource.DataSourceAlerts
+import com.example.in2000_prosjekt.data.datasource.DataSourceMap
+import com.example.in2000_prosjekt.ui.uistate.AlertInfo
+import com.example.in2000_prosjekt.ui.uistate.LocationInfo
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
+import com.example.in2000_prosjekt.ui.uistate.NowCastInfo
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -129,8 +134,8 @@ class ImplementedWeatherRepository : WeatherRepository {
         val windN = forecastNow.properties?.timeseries?.get(0)?.data?.instant?.details?.wind_speed
 
         return NowCastInfo(
-            temperatureNow = tempNow!!, //dette må fikses bedre
-            windN = windN!! //funker dette eller må jeg gjøre som over?
+            temperatureNow = tempNow!!,
+            windN = windN!!
         )
     }
 
@@ -138,7 +143,6 @@ class ImplementedWeatherRepository : WeatherRepository {
         val alert = dataMet.fetchMetAlert(latitude, longitude)
 
         val alertList : MutableList<AlertInfo> = mutableListOf()
-        //Dette er klønete, men appen kræsjer ikke hvis det ikke er fare
         var area : String?
         var type : String?
         var cons : String?
@@ -173,7 +177,6 @@ class ImplementedWeatherRepository : WeatherRepository {
 
             alertList.add(alertF)
         }
-        //Log.d("area", area.toString())
         return alertList
     }
 

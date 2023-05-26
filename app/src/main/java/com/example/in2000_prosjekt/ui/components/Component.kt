@@ -33,9 +33,12 @@ import androidx.compose.ui.window.Popup
 import com.example.in2000_prosjekt.R
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.database.Favorite
-import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
+import com.example.in2000_prosjekt.ui.uistate.AlertInfo
+import com.example.in2000_prosjekt.ui.uistate.LocationInfo
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
+import com.example.in2000_prosjekt.ui.uistate.NowCastInfo
 
 @Composable
 fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit, map : Boolean, favorite : Boolean, info : Boolean, settings : Boolean) {
@@ -107,7 +110,7 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
                             .padding(5.dp)
                     )
                 }
-                Text(text = "    Info    ", fontSize = 13.sp) //12
+                Text(text = "    Info    ", fontSize = 13.sp)
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -134,9 +137,8 @@ fun Sikt_BottomBar(onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onN
     }
 }
 
-//ADD: boolean for når den kommer fra favorite screen.
 @Composable
-fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel) {
+fun Sikt_Header(location : String, height: Int, lat: Double, lon: Double, alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -205,7 +207,6 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
 
             viewModel.findFavorite(lon,lat,location,height)
 
-            Log.d("VIEWSIZE", "${viewModel.searchFavorites.value?.size}")
             alreadyFav = if (viewModel.searchFavorites.value != null) {
                 if (viewModel.searchFavorites.value!!.isNotEmpty()) {
                     viewModel.searchFavorites.value!![0].latitude == lat && viewModel.searchFavorites.value!![0].longtitude == lon
@@ -215,7 +216,6 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
             } else {
                 false
             }
-            Log.d("ALREADYFAV", "$alreadyFav")
 
             if (alreadyFav){
                 Icon(
@@ -249,7 +249,7 @@ fun Sikt_Header(location : String , height: Int, lat: Double, lon: Double, alert
 }
 
 @Composable
-fun Sikt_Favorite_Header(location : String , height: Int, lat: Double, lon: Double, alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel) {
+fun Sikt_Favorite_Header(location : String, lat: Double, lon: Double, alertinfo: MutableList<AlertInfo>, viewModel: FavoriteViewModel) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -356,18 +356,13 @@ fun Sikt_skyillustasjon() {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 fun LazyListScope.siktFavoriteCard(weatherinfo: MutableList<LocationInfo>, nowcastinfo: MutableList<NowCastInfo>, alertInfo: MutableList<MutableList<AlertInfo>>, favorites: List<Favorite>, viewModel: FavoriteViewModel, onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, onNavigateToInfo: () -> Unit, onNavigateToSettings: () -> Unit) {
-    //favorites er en mutableList med LocationInfo kan derfor kalle
-    // favorite.temperatureL etc.
-
-    Log.d("INFOSIZE", "${weatherinfo.size}")
-    Log.d("FAVS", "${favorites.size}")
-    Log.d("AlertSIZE", "${alertInfo.size}")
+    //favorites er en mutableList med LocationInfo
 
     items(weatherinfo.size) {
-        //Log.d("CARD", "STARTER CARD")
+
         val location = weatherinfo[it]
         val nowcast = nowcastinfo[it]
-        val alertInfo = alertInfo[it]
+        val alertinfo = alertInfo[it]
         val name = favorites[it].mountainName
         val height = favorites[it].mountainHeight
         val lon = favorites[it].longtitude
@@ -398,13 +393,11 @@ fun LazyListScope.siktFavoriteCard(weatherinfo: MutableList<LocationInfo>, nowca
                         ).clickable { popupControl = false }) {
                         LazyColumn(
                             modifier = Modifier
-                                //.fillMaxSize()
                                 .padding(top = 0.dp, bottom = 70.dp, start = 20.dp, end = 20.dp)
 
                         ) {
-                            // Må legge inn listen over fjelltopper i nærheten:
                             siktLocationcard(
-                                mount, location, nowcast, alertInfo, viewModel
+                                mount, location, nowcast, alertinfo, viewModel
                             )
                         }
                     }
@@ -427,7 +420,7 @@ fun LazyListScope.siktFavoriteCard(weatherinfo: MutableList<LocationInfo>, nowca
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Sikt_Favorite_Header(name,height, favorites[it].latitude, favorites[it].longtitude, alertInfo, viewModel)
+                Sikt_Favorite_Header(name, favorites[it].latitude, favorites[it].longtitude, alertinfo, viewModel)
                 Sikt_MountainHight(height.toString())
                 Illustrasjon(
                     height = height,
@@ -759,7 +752,6 @@ fun LazyListScope.siktSettingsCard(viewModel: FavoriteViewModel) {
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
-                //Legg inn "slett alle favoritter"-knapp
                 DeleteAllButton(viewModel)
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(

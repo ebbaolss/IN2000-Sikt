@@ -1,7 +1,6 @@
 package com.example.in2000_prosjekt.ui.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.*
@@ -28,8 +27,8 @@ import com.example.in2000_prosjekt.ui.components.FavoriteScreenError
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.siktFavoriteCard
 import com.example.in2000_prosjekt.database.Favorite
-import com.example.in2000_prosjekt.database.FavoriteUiState
-import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.uistate.FavoriteUiState
+import com.example.in2000_prosjekt.ui.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.theme.*
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -45,10 +44,7 @@ fun FavoriteScreen(
     val favoriteUiState by viewModel.favUiState.collectAsState()
     val allFavorites by viewModel.allFavorites.observeAsState(listOf())
 
-    Log.d("FAVS", "${allFavorites.size}")
-
     if(allFavorites.isNotEmpty()){
-        Log.d("UPDATING", "oppdaterer")
         viewModel.update()
     } else {
         viewModel.updateEmpty()
@@ -85,7 +81,6 @@ fun FavoriteScreen(
                                 .padding(20.dp)
                                 .fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            //verticalArrangement = Arrangement.Center,
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             Text(
@@ -196,7 +191,6 @@ fun FavoriteEmpty(
                         .padding(20.dp)
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    //verticalArrangement = Arrangement.Center,
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Text(

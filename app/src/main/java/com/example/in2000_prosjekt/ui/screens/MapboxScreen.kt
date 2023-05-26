@@ -1,7 +1,6 @@
 package com.example.in2000_prosjekt.ui.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,11 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.in2000_prosjekt.ui.APIViewModel
-import com.example.in2000_prosjekt.ui.AppUiState
+import com.example.in2000_prosjekt.ui.uistate.AppUiState
 import com.example.in2000_prosjekt.ui.components.Sikt_BottomBar
 import com.example.in2000_prosjekt.ui.components.*
 import com.example.in2000_prosjekt.ui.components.siktLocationcard
-import com.example.in2000_prosjekt.database.MapViewModel
+import com.example.in2000_prosjekt.ui.MapViewModel
 import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
@@ -50,7 +49,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.ImeAction
 import com.example.in2000_prosjekt.R
-import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.FavoriteViewModel
 import com.example.in2000_prosjekt.ui.*
 import com.example.in2000_prosjekt.ui.theme.Sikt_lightblue
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
@@ -123,11 +122,11 @@ fun ShowMap(
                     mapViewModel.mapView
                 },
                 update = {
-// pull cameraSettings from the UiState
+                    // pull cameraSettings from the UiState
                     // Camera settings
                     it.getMapboxMap().setCamera(
                         cameraOptions {
-// Henter kamerakoordinater fra UiState
+                            // Henter kamerakoordinater fra UiState
                             val lng = cameraOptionsUiState.currentScreenLongitude
                             val lat = cameraOptionsUiState.currentScreenLatitude
                             val zoom = cameraOptionsUiState.currentScreenZoom
@@ -172,7 +171,6 @@ fun ShowMap(
                                             .padding(20.dp)
                                             .fillMaxWidth(),
                                         horizontalAlignment = Alignment.CenterHorizontally,
-//verticalArrangement = Arrangement.Center,
                                         verticalArrangement = Arrangement.spacedBy(10.dp)
                                     ) {
                                         Text(
@@ -194,10 +192,8 @@ fun ShowMap(
                     is AppUiState.Success -> {
                         LazyColumn(
                             modifier = Modifier
-//.fillMaxSize()
                                 .padding(top = 70.dp, bottom = 70.dp, start = 20.dp, end = 20.dp)
                         ) {
-// Må legge inn listen over fjelltopper i nærheten:
                             siktLocationcard(
                                 mountainUiState,
                                 (appUiState as AppUiState.Success).locationF,
@@ -228,7 +224,6 @@ fun onFeatureClicked(
 
 // Definerer hva som skal skje når brukeren trykker på kartet
 fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, apiViewModel: APIViewModel, onClick : () -> Unit) : Boolean {
-    Log.d("Coordinate", point.toString())
 
     mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(ScreenBox(
@@ -251,7 +246,7 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
                         val latitude =  pointMap.latitude().toString()
                 val longitude = pointMap.longitude().toString()
 
-// Saving a clicked mountain to the UiState through the view model
+                // Saving a clicked mountain to the UiState through the view model
                 mapViewModel.updateMountain(MapUiState.Mountain(name, latitude, longitude, elevation))
 
                 apiViewModel.getAll(latitude, longitude, "$elevation")
@@ -263,63 +258,6 @@ fun onMapClick(point: Point, mapboxMap: MapboxMap, mapViewModel: MapViewModel, a
     }
     return true
 }
-
-//fun createFactoryMap(xt: Context, CameraOptionsUiState: MapUiState.MapboxCameraOptions) : MapView {
-//
-//    val mapView = MapView(xt).apply {
-//        val mapboxMap = getMapboxMap()
-//
-//        mapboxMap.loadStyle(
-//            // Declares map style
-//            style(styleUri = "mapbox://styles/elisabethb/clf6t1z9z00b101pen0rvc1fu/draft") {
-//
-//                // Adding data layer source to rendered map
-//                +vectorSource(id = "STREETS_V8") {
-//                    url("mapbox://mapbox.mapbox-streets-v8")
-//                }
-//
-//                // Creates an interactable point layer on top of style layer
-//                +circleLayer(layerId = "MOUNTAINS_DATALAYER", sourceId = "STREETS_V8") {
-//                    // natural label er et lag i STREETS_V8 datasettet til Mapbox og inneholder naturobjekter som fjell, innsjøer etc.
-//                    sourceLayer("natural_label")
-//
-//                    // Filtering out all natural labels points that are not marked with the mountains icon
-//                    filter(
-//                        eq {
-//                            get { literal("maki") }
-//                            literal("mountain")
-//                        }
-//                    )
-//
-//                    circleOpacity(0.0)
-//                }
-//            }
-//        )
-//
-//        // Camera settings
-//        mapboxMap.setCamera(
-//            cameraOptions {
-//                zoom(CameraOptionsUiState.currentScreenZoom)
-//                // Koordinatene til Glittertind
-//                center(Point.fromLngLat(
-//                    CameraOptionsUiState.currentScreenLongitude,
-//                    CameraOptionsUiState.currentScreenLatitude
-//                ))
-//            }
-//        )
-//    }
-//
-//    // Editing compass settings, so that searchbar does not block compass
-//    mapView.compass.updateSettings {
-//        marginTop = 250F
-//    }
-//
-//    // Editing scalebar, so that searchbar does not block scalebar
-//    mapView.scalebar.updateSettings {
-//        marginTop = 250F
-//    }
-//    return mapView
-//}
 
 
 @OptIn(ExperimentalMaterial3Api::class)

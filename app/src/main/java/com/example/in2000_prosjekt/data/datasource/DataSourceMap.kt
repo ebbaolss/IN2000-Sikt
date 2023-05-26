@@ -1,5 +1,7 @@
-package com.example.in2000_prosjekt.data
+package com.example.in2000_prosjekt.data.datasource
 
+import com.example.in2000_prosjekt.data.map.MapBuild
+import com.example.in2000_prosjekt.data.map.MapCoordinatesBuild
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*

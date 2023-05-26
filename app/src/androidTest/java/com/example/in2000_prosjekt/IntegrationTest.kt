@@ -16,10 +16,10 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.example.in2000_prosjekt.data.Geometry
 import com.example.in2000_prosjekt.data.Properties
-import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.FavoriteViewModel
 import com.example.in2000_prosjekt.database.FavoriteViewModelFactory
-import com.example.in2000_prosjekt.database.MapViewModel
-import com.example.in2000_prosjekt.database.MapViewModelFactory
+import com.example.in2000_prosjekt.ui.MapViewModel
+import com.example.in2000_prosjekt.data.map.MapViewModelFactory
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.screens.InfoScreen
 import com.example.in2000_prosjekt.ui.theme.IN2000_ProsjektTheme
@@ -64,7 +64,6 @@ class IntegrationstestAPICall {
                 }
             }
 
-
             private suspend fun clientProxyServerCall(client: HttpClient, URL: String) : HttpResponse {
                 return client.get(URL) {
                     headers {
@@ -73,18 +72,14 @@ class IntegrationstestAPICall {
                 }
             }
             suspend fun testfetchLocationForecast(): Model {
-
-
                 val url= "https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=60.10&lon=9.58"
                 val apicall  = clientProxyServerCall(client, url)
                 return apicall.body()
-
             }
 
             @Test
             fun apiTest() {
                 runBlocking {
-
                     val mockEngine = MockEngine {
                         respond(
                             content = ByteReadChannel(""""type" : "Feature"""),
@@ -92,24 +87,18 @@ class IntegrationstestAPICall {
                         )
                     }
                     val apiClient = ApiClient(mockEngine)
-
                     Assert.assertEquals("Feature", apiClient.testfetchLocationForecast().type) // The assertion is to compare what  we know the json object will be, with what we actually get from the mockEngine (MockEngine: is a library for mocking API calls)
                 }
             }
-
         }
-
-
     }
-
 }
-
 
 // The Second integration test:
 //This test has two parts:
 // First it confirms our Navigation bars initial destination: StartPage()
 // Then it tests the "route" variable's change to the screen InfoScreen()
-class testNavigationBar {
+class TestNavigationBar {
 @get:Rule
 val rule = createAndroidComposeRule<ComponentActivity>()
 private lateinit var navController: TestNavHostController
@@ -130,8 +119,6 @@ fun setupForNavigationTest() {
             val info = { navController.navigate("Info") }
             val settings = {navController.navigate("Settings")}
 
-
-
             //Arrange
             val apiViewModel = APIViewModel()
             //Arrange
@@ -151,23 +138,13 @@ fun setupForNavigationTest() {
                 val mapViewModel: MapViewModel = viewModel(
                     it,
                     "MapViewModel",
-                    MapViewModelFactory(
-                        LocalContext.current.applicationContext as Application
-                    )
+                    MapViewModelFactory()
                 )
-
                 MultipleScreenApp(favoriteViewModel, mapViewModel, apiViewModel, navController)
                 InfoScreen(map, favorite, settings, info)
-
-
-
             }
-
         }
-
-
     }
-
 }
 
 
@@ -181,30 +158,21 @@ fun testStartDestination () {
     val route = navController.currentBackStackEntry?.destination?.route
     //Assert
     Assert.assertEquals(route,"StartPage" )
-
 }
-
 
 // Tests that the route gets updated with the current wished destination
 // which is initially sett to StartPage in the file MainActivity.kt (declared).
 //Then it is changed to the screen info upon pressing the Navigation bottom bar
 @Test
 fun testThatScreenChangesOnClickOfBottomBar () {
-
-
     //Arrange And Act
     rule.onAllNodesWithText("Innstillinger").onLast().performClick().apply {
         val info = { navController.navigate("Info") }
-
         rule.runOnUiThread(info)
-
-
     }
 
     //Arrange
     val route = navController.currentDestination?.route
-
-
     //Assert
     Assert.assertNotEquals(route, "StartPage")
     Assert.assertEquals(route, "Info")

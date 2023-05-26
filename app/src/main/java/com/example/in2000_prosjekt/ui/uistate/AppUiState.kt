@@ -1,6 +1,6 @@
-package com.example.in2000_prosjekt.ui
+package com.example.in2000_prosjekt.ui.uistate
 
-data class LocationInfo( //gi ting navn med også L på slutten
+data class LocationInfo(
     val temperatureL: Int,
     val fog_area_fractionL: Float,
     val cloud_area_fraction: Float,
@@ -41,11 +41,11 @@ data class LocationInfo( //gi ting navn med også L på slutten
     val cloud_day3: Float,
     val cloud_day4: Float,
 )
-data class NowCastInfo( //sette N eller Now på slutten
+data class NowCastInfo(
     val temperatureNow: Int,
     val windN : Float
 )
-data class AlertInfo( //sett A på slutten
+data class AlertInfo(
     val areaA: String,
     val typeA: String,
     val consequenseA: String,

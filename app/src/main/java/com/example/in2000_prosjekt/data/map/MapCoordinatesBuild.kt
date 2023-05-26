@@ -1,4 +1,4 @@
-package com.example.in2000_prosjekt.data
+package com.example.in2000_prosjekt.data.map
 
 data class MapCoordinatesBuild(
     val type: String?,

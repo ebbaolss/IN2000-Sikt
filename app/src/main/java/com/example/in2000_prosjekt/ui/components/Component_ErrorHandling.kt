@@ -37,7 +37,6 @@ fun FavoriteScreenError (
             Text(text = "Noe gikk galt. Trykk for å laste inn på nytt.")
             Button(
                 onClick = {
-                    //viewModel.update()
                     onNavigateToFav()
                 }
             ){
@@ -68,7 +67,5 @@ fun AppScreenError ( onNavigateToMap: () -> Unit, onNavigateToFav: () -> Unit, o
     }
 }
 
-
-//mapboxscreen error handling når en topp har null i elevation
 
 

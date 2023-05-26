@@ -17,10 +17,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.in2000_prosjekt.database.FavoriteViewModel
+import com.example.in2000_prosjekt.ui.FavoriteViewModel
 import com.example.in2000_prosjekt.database.FavoriteViewModelFactory
-import com.example.in2000_prosjekt.database.MapViewModel
-import com.example.in2000_prosjekt.database.MapViewModelFactory
+import com.example.in2000_prosjekt.ui.MapViewModel
+import com.example.in2000_prosjekt.data.map.MapViewModelFactory
 import com.example.in2000_prosjekt.ui.APIViewModel
 import com.example.in2000_prosjekt.ui.screens.FavoriteScreen
 import com.example.in2000_prosjekt.ui.screens.InfoScreen
@@ -57,9 +57,7 @@ class MainActivity : ComponentActivity() {
                         val mapViewModel: MapViewModel = viewModel(
                             it,
                             "MapViewModel",
-                            MapViewModelFactory(
-                                LocalContext.current.applicationContext as Application
-                            )
+                            MapViewModelFactory()
                         )
                         val navController = rememberNavController()
                         MultipleScreenApp(favoriteViewModel, mapViewModel, apiViewModel,navController)

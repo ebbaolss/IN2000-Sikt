@@ -1,11 +1,10 @@
-package com.example.in2000_prosjekt.database
+package com.example.in2000_prosjekt.ui
 
-import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.in2000_prosjekt.data.ImplementedWeatherRepository
-import com.example.in2000_prosjekt.data.WeatherRepository
+import com.example.in2000_prosjekt.data.repository.ImplementedWeatherRepository
+import com.example.in2000_prosjekt.data.repository.WeatherRepository
 import com.example.in2000_prosjekt.ui.uistate.MapUiState
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
@@ -28,7 +27,7 @@ import com.mapbox.maps.plugin.animation.flyTo
 import com.mapbox.maps.plugin.compass.compass
 import com.mapbox.maps.plugin.scalebar.scalebar
 
-class MapViewModel(application: Application) : ViewModel() {
+class MapViewModel : ViewModel() {
 
     private val _cameraOptionsUiState: MutableStateFlow<MapUiState.MapboxCameraOptions> = MutableStateFlow(MapUiState.MapboxCameraOptions())
     val cameraOptionsUiState: StateFlow<MapUiState.MapboxCameraOptions> = _cameraOptionsUiState.asStateFlow()
@@ -165,7 +164,7 @@ class MapViewModel(application: Application) : ViewModel() {
 
             mapboxMap.loadStyle(
                 // Declares map style
-                style(styleUri = "mapbox://styles/elisabethb/clf6t1z9z00b101pen0rvc1fu/draft") {
+                style(styleUri = "mapbox://styles/elisabethb/clf6t1z9z00b101pen0rvc1fu") {
 
                     // Adding data layer source to rendered map
                     +vectorSource(id = "STREETS_V8") {
