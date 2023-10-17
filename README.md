@@ -10,5 +10,10 @@ Gruppemedlemmer
 - Synne Markmanrud
 - Thea Hermansen Bakke
 
-## Skjermbilder
-![Sikt App All Screens](https://user-images.githubusercontent.com/94843506/235902957-fa3c1559-35fd-4e2b-a8cb-aa8b5a8264f4.jpg)
+## Presentasjon av applikasjon
+![Sikt App All Screens](https://github.com/ebbaolss/IN2000-Sikt/blob/master/Sikt%20app.png?raw=true)
+![Sikt App Profile](https://github.com/ebbaolss/IN2000-Sikt/blob/master/Profil.png?raw=true)
+![Sikt App Kart](https://github.com/ebbaolss/IN2000-Sikt/blob/master/Kart%20teknologi%20og%20søkemotor.png?raw=true)
+![Sikt App Videre Arbeid](https://github.com/ebbaolss/IN2000-Sikt/blob/master/Videre%20arbeid.png?raw=true)
+![Sikt App Design prosess](https://github.com/ebbaolss/IN2000-Sikt/blob/master/Designprosess.png?raw=true)
+![Sikt App Testing](https://github.com/ebbaolss/IN2000-Sikt/blob/master/Testing%20av%20applikasjon.png?raw=true)
