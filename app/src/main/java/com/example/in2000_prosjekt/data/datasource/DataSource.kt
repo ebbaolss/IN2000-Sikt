@@ -30,7 +30,7 @@ class DataSource (val basePath:String) {
     private suspend fun clientProxyServerCall(client: HttpClient, URL: String) : HttpResponse {
         return client.get(URL) {
             headers {
-                append("X-gravitee-api-key", "e4990066-1695-43a6-9ea4-85551da13834")
+                append("X-gravitee-api-key", "b0012e14-178e-4658-babe-6c9f61954952")
             }
         }
     }
